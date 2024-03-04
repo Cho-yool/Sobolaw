@@ -2,7 +2,7 @@ import { Menu, Avatar } from "antd";
 import { UserOutlined, FormOutlined, InboxOutlined } from "@ant-design/icons";
 
 interface RightMenuProps {
-  mode: "horizontal" | "vertical" | "inline" | undefined;
+  mode: "horizontal";
 }
 
 const MypageMenu: React.FC<RightMenuProps> = ({ mode }) => {
