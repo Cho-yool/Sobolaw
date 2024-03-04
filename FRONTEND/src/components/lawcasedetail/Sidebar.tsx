@@ -15,11 +15,7 @@ const Sidebar = () => {
         onClick={() => setIsselected(!isSelected)}
       >
         <img
-          className={
-            isSelected
-              ? `${style["rotate"]} ${style["side-btn-img"]}`
-              : style["side-btn-img"]
-          }
+          className={isSelected ? style["rotate"] : style["side-btn-img"]}
           src={ARROW}
           alt=""
         />

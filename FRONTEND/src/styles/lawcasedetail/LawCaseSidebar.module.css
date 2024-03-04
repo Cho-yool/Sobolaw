@@ -15,7 +15,12 @@
 }
 
 .rotate {
-  transform: rotate(90deg);
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  right: 1rem;
+  transform: translateY(-50%) scaleX(-1);
+  top: 50%;
   transition: all 0.2s;
 }
 
@@ -38,4 +43,5 @@
   right: 1rem;
   transform: translateY(-50%);
   top: 50%;
+  transition: all 0.2s;
 }
