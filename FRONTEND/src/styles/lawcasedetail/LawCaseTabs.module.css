@@ -1,0 +1,27 @@
+.tab-menu {
+  display: flex;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.tab-container {
+  width: 100%;
+}
+
+.tab {
+  width: 33%;
+  cursor: pointer;
+  background-color: #eaa854;
+  color: white;
+  padding: 1rem;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.active {
+  background-color: #bf8438;
+}
+
+.content-box__contents {
+  line-height: 2rem;
+}

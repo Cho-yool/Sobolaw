@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Menu, ConfigProvider, Button } from "antd";
 import type { MenuProps } from "antd";
 import logo from "/NavLogo.png";
@@ -14,7 +14,7 @@ const items: MenuProps["items"] = [
   label: `${key}`,
 }));
 
-const Navbar: React.FC = () => {
+const Navbar = () => {
   // const {
   //   token: { colorBgContainer, borderRadiusLG },
   // } = theme.useToken();

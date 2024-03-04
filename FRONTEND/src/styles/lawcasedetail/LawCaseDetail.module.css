@@ -1,0 +1,27 @@
+.detail-page {
+  position: relative;
+}
+
+.side-btn {
+  position: absolute;
+  width: 10rem;
+  background-color: black;
+  height: 10rem;
+}
+
+.container {
+  width: 55%;
+  padding: 1rem 0;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.container__title {
+  text-align: center;
+  margin: 0;
+}
+
+.content-box {
+  position: relative;
+  min-height: 45rem;
+}

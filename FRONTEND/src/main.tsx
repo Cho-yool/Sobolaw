@@ -5,6 +5,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { ConfigProvider } from "antd";
 import { store, persistor } from "./redux/store/store.tsx";
 import App from "./App.tsx";
+import Navbar from "./components/common/Navbar.tsx";
 
 // ConfigProvider 로 theme 속성에 바로 아래 커스텀할려는 속성 넣어서 색 변경하면 됨
 // 여기 components 아래에 넣고싶은 속성들 colorPrimary 에 색넣으면 되고 algorithm true 처리하면 자동으로 그 색에 맞는 색으로 입혀주는듯? false 하면 파란색
@@ -12,7 +13,7 @@ import App from "./App.tsx";
 
 const theme = {
   token: {
-    fontFamily: "Orbit-Regular",
+    fontFamily: "NPSfontBold",
   },
   components: {
     Button: {
@@ -32,6 +33,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <PersistGate loading={null} persistor={persistor}>
       <BrowserRouter>
         <ConfigProvider theme={theme}>
+          <Navbar></Navbar>
           <App />
         </ConfigProvider>
       </BrowserRouter>
