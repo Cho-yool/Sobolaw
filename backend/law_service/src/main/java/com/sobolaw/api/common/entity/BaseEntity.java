@@ -1,4 +1,4 @@
-package com.sobolaw.api.entity;
+package com.sobolaw.api.common.entity;
 
 import java.time.LocalDateTime;
 

@@ -1,6 +1,6 @@
-package com.sobolaw.statute.service;
+package com.sobolaw.api.statute.service;
 
-import com.sobolaw.statute.repository.StatuteRepository;
+import com.sobolaw.api.statute.repository.StatuteRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

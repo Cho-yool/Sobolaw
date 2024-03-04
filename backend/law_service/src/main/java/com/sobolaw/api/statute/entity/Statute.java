@@ -1,4 +1,4 @@
-package com.sobolaw.statute.entity;
+package com.sobolaw.api.statute.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
