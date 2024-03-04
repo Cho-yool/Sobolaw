@@ -2,15 +2,8 @@
   position: relative;
 }
 
-.side-btn {
-  position: absolute;
-  width: 10rem;
-  background-color: black;
-  height: 10rem;
-}
-
 .container {
-  width: 55%;
+  width: 800px;
   padding: 1rem 0;
   margin-top: 2rem;
   margin-bottom: 2rem;

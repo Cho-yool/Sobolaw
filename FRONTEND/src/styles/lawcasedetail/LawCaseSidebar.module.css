@@ -1,0 +1,41 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 400px;
+  height: 100vh;
+  background-color: aqua;
+  z-index: 10;
+  transition: all 0.2s;
+}
+
+.hide {
+  left: -400px;
+  transition: all 0.2s;
+}
+
+.rotate {
+  transform: rotate(90deg);
+  transition: all 0.2s;
+}
+
+.side-btn {
+  position: absolute;
+  width: 3.5rem;
+  background-color: #eaa854;
+  height: 7rem;
+  right: -3.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 0 3.5rem 3.5rem 0;
+  cursor: pointer;
+}
+
+.side-btn-img {
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  right: 1rem;
+  transform: translateY(-50%);
+  top: 50%;
+}
