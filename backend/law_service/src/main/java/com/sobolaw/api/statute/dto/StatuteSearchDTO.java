@@ -1,4 +1,4 @@
-package com.sobolaw.statute.dto;
+package com.sobolaw.api.statute.dto;
 
 public class StatuteSearchDTO {
 

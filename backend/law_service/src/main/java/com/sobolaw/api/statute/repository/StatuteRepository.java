@@ -1,7 +1,6 @@
-package com.sobolaw.statute.repository;
+package com.sobolaw.api.statute.repository;
 
-import com.sobolaw.statute.dto.StatuteSearchDTO;
-import com.sobolaw.statute.entity.Statute;
+import com.sobolaw.api.statute.entity.Statute;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

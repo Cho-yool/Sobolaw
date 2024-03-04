@@ -1,4 +1,4 @@
-package com.sobolaw.statute.entity;
+package com.sobolaw.api.statute.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
