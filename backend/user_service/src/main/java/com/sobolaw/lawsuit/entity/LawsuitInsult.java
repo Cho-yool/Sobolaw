@@ -15,16 +15,16 @@ import java.time.LocalTime;
 import lombok.Getter;
 
 /**
- * 멤버 작성 소장(명예훼손).                         `
+ * 멤버 작성 소장(모욕죄).                         `
  */
-@Table(name = "lawsuit_defamation")
+@Table(name = "lawsuit_insult")
 @Getter
 @Entity
-public class LawsuitDefamation extends BaseEntity {
+public class LawsuitInsult extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long lawsuitDefamationId;
+    private Long lawsuitInsultId;
 
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
@@ -46,6 +46,9 @@ public class LawsuitDefamation extends BaseEntity {
     // 피고(피고소인) 정보
     @Column
     private String defendantName;  // 이름
+
+    @Column
+    private String defendantNickname;  // ID(닉네임)
 
     @Column
     private String defendantAddress;  // 주소
@@ -82,13 +85,13 @@ public class LawsuitDefamation extends BaseEntity {
     private LocalDate submissionDate;  // 제출날짜
 
     @Column
-    private String policeStationTeam;  // 해당 경찰서 팀
+    private String policeStationTeam;  // 해당 경찰서
 
-    protected LawsuitDefamation() {
+    protected LawsuitInsult() {
     }
 
-    private LawsuitDefamation(String plaintiffName, String plaintiffResidentRegistrationNumber, String plaintiffAddress,
-        String plaintiffPhoneNumber, String defendantName, String defendantAddress,
+    private LawsuitInsult(String plaintiffName, String plaintiffResidentRegistrationNumber, String plaintiffAddress,
+        String plaintiffPhoneNumber, String defendantName, String defendantNickname, String defendantAddress,
         String defendantPhoneNumber, String defendantIdentificationDetails, LocalDate incidentDate,
         LocalTime incidentTime, String location, String defamationContent,
         boolean isFalseAccusation, String relatedPeople, String evidence,
@@ -98,6 +101,7 @@ public class LawsuitDefamation extends BaseEntity {
         this.plaintiffAddress = plaintiffAddress;
         this.plaintiffPhoneNumber = plaintiffPhoneNumber;
         this.defendantName = defendantName;
+        this.defendantNickname = defendantNickname;
         this.defendantAddress = defendantAddress;
         this.defendantPhoneNumber = defendantPhoneNumber;
         this.defendantIdentificationDetails = defendantIdentificationDetails;
@@ -112,16 +116,16 @@ public class LawsuitDefamation extends BaseEntity {
         this.policeStationTeam = policeStationTeam;
     }
 
-    public static LawsuitDefamation of(String plaintiffName, String plaintiffResidentRegistrationNumber, String plaintiffAddress,
-        String plaintiffPhoneNumber, String defendantName, String defendantAddress,
-        String defendantPhoneNumber, String defendantZipCode, LocalDate incidentDate,
+    public static LawsuitInsult of(String plaintiffName, String plaintiffResidentRegistrationNumber, String plaintiffAddress,
+        String plaintiffPhoneNumber, String defendantName, String defendantNickname, String defendantAddress,
+        String defendantPhoneNumber, String defendantIdentificationDetails, LocalDate incidentDate,
         LocalTime incidentTime, String location, String defamationContent,
         boolean isFalseAccusation, String relatedPeople, String evidence,
         LocalDate submissionDate, String policeStationTeam) {
-        return new LawsuitDefamation(plaintiffName, plaintiffResidentRegistrationNumber, plaintiffAddress,
-            plaintiffPhoneNumber, defendantName, defendantAddress, defendantPhoneNumber, defendantZipCode,
-            incidentDate, incidentTime, location, defamationContent, isFalseAccusation, relatedPeople,
-            evidence, submissionDate, policeStationTeam);
+        return new LawsuitInsult(plaintiffName, plaintiffResidentRegistrationNumber, plaintiffAddress,
+            plaintiffPhoneNumber, defendantName, defendantNickname, defendantAddress, defendantPhoneNumber,
+            defendantIdentificationDetails, incidentDate, incidentTime, location, defamationContent,
+            isFalseAccusation, relatedPeople, evidence, submissionDate, policeStationTeam);
     }
 
     @Override
@@ -129,9 +133,9 @@ public class LawsuitDefamation extends BaseEntity {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof LawsuitDefamation lawsuitDefamation)) {
+        if (!(o instanceof LawsuitInsult lawsuitDefamation)) {
             return false;
         }
-        return lawsuitDefamationId != null && lawsuitDefamationId.equals(lawsuitDefamation.getLawsuitDefamationId());
+        return lawsuitInsultId != null && lawsuitInsultId.equals(lawsuitDefamation.getLawsuitInsultId());
     }
 }

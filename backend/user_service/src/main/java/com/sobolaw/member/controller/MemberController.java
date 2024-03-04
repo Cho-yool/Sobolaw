@@ -118,6 +118,7 @@ public class MemberController {
     public BaseResponse<List<MemberDTO>> getAllMembers() {
         return BaseResponse.success(HttpStatus.OK.value(), "멤버 전체 리스트 조회에 성공하였습니다!", memberService.getAllMembers());
     }
+
     /**
      * 저장 판례 전체 조회.
      */
