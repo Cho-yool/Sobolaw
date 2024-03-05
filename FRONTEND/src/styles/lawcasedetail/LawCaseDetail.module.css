@@ -1,0 +1,20 @@
+.detail-page {
+  position: relative;
+}
+
+.container {
+  width: 800px;
+  padding: 1rem 0;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.container__title {
+  text-align: center;
+  margin: 0;
+}
+
+.content-box {
+  position: relative;
+  min-height: 45rem;
+}
