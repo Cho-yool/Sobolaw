@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import ResponsiveNav from "./Navbar";
 import Footer from "./Footer";
+import LawWord from "../../pages/LawWord";
 
 // 리액트 라우터 v6 버전에서 중첩 라우팅을 이용하면
 // 부모 레이아웃은 그대로 두고 자식 레이아웃만 쉽게 교체
@@ -15,6 +16,7 @@ function LayoutPage() {
         flexDirection: "column",
         justifyContent: "center",
         minHeight: "100vh",
+        position: "relative",
       }}
     >
       <ResponsiveNav />
@@ -27,6 +29,7 @@ function LayoutPage() {
       >
         <Outlet />
       </div>
+      <LawWord></LawWord>
       <Footer />
     </div>
   );

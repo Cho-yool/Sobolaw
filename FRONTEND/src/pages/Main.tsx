@@ -141,18 +141,6 @@ export default function MainPage() {
           </div>
         </div>
       </section>
-      <Button
-        style={{
-          borderRadius: "999px",
-          position: "fixed",
-          bottom: "2rem",
-          right: "2rem",
-          backgroundColor: "#FFD600",
-          color: "black",
-        }}
-      >
-        도움받기
-      </Button>
     </div>
   );
 }
