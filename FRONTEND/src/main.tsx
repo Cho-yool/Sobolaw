@@ -12,7 +12,7 @@ import App from "./App.tsx";
 
 const theme = {
   token: {
-    fontFamily: "NPSfontBold",
+    fontFamily: "Orbit-Regular",
   },
   components: {
     Button: {

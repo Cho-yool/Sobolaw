@@ -2,7 +2,7 @@ import { Button, Badge } from "antd";
 
 export default function MainPage() {
   return (
-    <div style={{ backgroundColor: "#FEEFB3", minHeight: "100vh" }}>
+    <div style={{ backgroundColor: "#BF8438", minHeight: "100vh" }}>
       <header style={{ textAlign: "center", padding: "32px 0" }}>
         <h1 style={{ fontSize: "3xl", fontWeight: "bold" }}>
           소소한 조력들로 여기로!
