@@ -1,24 +1,26 @@
 package com.sobolaw.api.statute.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class StatuteSearchDTO {
 
     private Long statuteId;
-    private String statuteName;
-    private String statuteType;
-    private String department;
     private String amendmentType;
-    private String publicationNumber;
-    private String publicationDate;
+    private String department;
     private String enforcementDate;
+    private String publicationDate;
+    private String publicationNumber;
+    private String statuteName;
     private String statuteNumber;
+    private String statuteType;
 
-    // StatuteText 관련 정보는 요약 형태로 제공할 수 있습니다.
-    private Long articleNumber;
-    private String articleTitle;
-    private String articleContent; // 조문 내용은 전문 또는 요약 형태로 제공할 수 있습니다.
-
-    // Getter, Setter, Constructors
-
-    // 필요에 따라 toString, hashCode, equals 메소드 구현
+    // 법령 내용은 추후에 추가 해야함
 
 }
