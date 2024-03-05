@@ -25,3 +25,7 @@
 .content-box__contents {
   line-height: 2rem;
 }
+
+.tab-menu__title {
+  font-size: 1.5rem;
+}
