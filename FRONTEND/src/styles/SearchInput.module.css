@@ -1,0 +1,17 @@
+.customSearchInput {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 500px; /* 가로 너비 고정 */
+    margin: 0 auto; /* 상하 마진 없이 좌우 가운데 정렬 */
+  }
+  
+  .customSearchInput .ant-input-search {
+    width: 100%; /* 부모 요소에 따라 가로 너비 설정 */
+  }
+  
+  .customSearchInput .ant-input-search .ant-input,
+  .customSearchInput .ant-input-search .ant-btn {
+    height: 70px; /* 입력 필드와 버튼의 높이 조정 */
+  }
+  

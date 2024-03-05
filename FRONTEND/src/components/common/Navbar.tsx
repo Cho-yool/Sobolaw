@@ -21,7 +21,7 @@ import logo from "/NavLogo.png";
 
 const { Header } = Layout;
 const items: MenuProps["items"] = [
-  { key: "1", label: <Link to="/intesrch">판례/법령</Link> },
+  { key: "1", label: <Link to="/search">판례/법령</Link> },
   { key: "2", label: <Link to="/recommend">맞춤형판례</Link> },
   { key: "3", label: <Link to="/cal">비용계산</Link> },
   { key: "4", label: <Link to="/plaint">소장작성</Link> },

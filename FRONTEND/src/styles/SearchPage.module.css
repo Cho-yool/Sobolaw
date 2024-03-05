@@ -1,0 +1,20 @@
+/* SearchPage.module.css */
+.searchContainer {
+    background-color: #644419;
+    padding: 2rem;
+    border-radius: 20px;
+    margin: 20px auto;
+}
+
+/* 모바일 화면에서의 스타일 조정 */
+@media screen and (max-width: 768px) {
+    .searchContainer {
+        padding: 1rem;
+        width: 80%; /* 모바일 화면에서 갈색 박스의 가로 길이를 90%로 설정 */
+        margin: 10px auto;
+    }
+
+    .title {
+        font-size: 16px; /* 타이틀 글씨 크기 조정 */
+    }
+}
