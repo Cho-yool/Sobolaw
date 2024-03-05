@@ -1,4 +1,4 @@
-import { Menu, Avatar } from "antd";
+import { Menu } from "antd";
 import { UserOutlined, FormOutlined, InboxOutlined } from "@ant-design/icons";
 
 interface RightMenuProps {
@@ -11,7 +11,6 @@ const MypageMenu: React.FC<RightMenuProps> = ({ mode }) => {
       <Menu.SubMenu
         title={
           <>
-            <Avatar icon={<UserOutlined />} />
             <span className="username">이름이름</span>
           </>
         }

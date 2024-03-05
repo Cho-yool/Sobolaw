@@ -1,23 +1,28 @@
-import { Layout, Typography, Row, Col } from "antd";
-
-const { Content } = Layout;
-const { Title } = Typography;
+import { Button } from "antd";
+import backImg from "/images/loginBg.jpg";
 
 function LoginPage() {
   return (
-    <Layout style={{ minHeight: "80vh" }}>
-      <Content style={{ padding: "0 50px", marginTop: 64 }}>
-        <Row justify="center">
-          <Col xs={24} sm={20} md={16} lg={12} xl={8}>
-            <div style={{ textAlign: "center" }}>
-              <Title level={2} style={{ color: "#644419" }}>
-                로그인
-              </Title>
-            </div>
-          </Col>
-        </Row>
-      </Content>
-    </Layout>
+    <div
+      style={{
+        height: "100vh",
+        backgroundImage: `url(${backImg})`,
+        backgroundSize: "cover", // 이미지를 화면에 최대한 맞추기
+        backgroundPosition: "center", // 이미지를 가운데 정렬
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        textAlign: "center",
+        color: "white", // 텍스트 색상을 흰색으로 지정
+      }}
+    >
+      <div>
+        <p>소송 준비의 첫걸음</p>
+        <p>소보로와 함께</p>
+      </div>
+      <Button>카카오로 계속하기</Button>
+    </div>
   );
 }
 

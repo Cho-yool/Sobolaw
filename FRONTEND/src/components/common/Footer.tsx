@@ -30,7 +30,7 @@ export default function Footer() {
                   </p>
                 </div>
               </Col>
-              <Col flex="1">
+              {/* <Col flex="1">
                 <div>
                   <p style={{ fontSize: "14px" }}>
                     <a href="#">소개</a> | <a href="#">고객센터</a> |{" "}
@@ -38,7 +38,7 @@ export default function Footer() {
                     <a href="#">이용안내</a>
                   </p>
                 </div>
-              </Col>
+              </Col> */}
             </Row>
           </Col>
         </Row>
