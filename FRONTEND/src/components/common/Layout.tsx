@@ -7,7 +7,7 @@ import Footer from "./Footer";
 
 // Outlet이 바뀌는 컴포넌트 자리
 
-function Layout() {
+function LayoutPage() {
   return (
     <div
       style={{
@@ -32,4 +32,4 @@ function Layout() {
   );
 }
 
-export default Layout;
+export default LayoutPage;
