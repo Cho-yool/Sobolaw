@@ -26,7 +26,7 @@ public class MemberPrecedentHighlight extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "member_precedent_id", nullable = false)
-    private MemberPrecedent memberPrecedentId;
+    private MemberPrecedent memberPrecedent;
 
     @Column(nullable = false)
     private String location;

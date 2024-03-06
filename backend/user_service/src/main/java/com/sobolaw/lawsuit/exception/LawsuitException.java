@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 회원 관련 Exception.
+ * 소장 관련 Exception.
  */
 @Getter
 @AllArgsConstructor

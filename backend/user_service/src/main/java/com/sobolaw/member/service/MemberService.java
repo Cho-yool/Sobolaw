@@ -99,7 +99,7 @@ public class MemberService {
     /**
      * 멤버의 저장 판례의 메모.
      *
-     * @param memberId 멤버Id
+     * @param memberId    멤버Id
      * @param precedentId 판례Id
      * @return 저장 판례의 하이라이트들.
      */
@@ -107,7 +107,7 @@ public class MemberService {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
-        MemberPrecedent matchingPrecedent = memberPrecedentRepository.findByMemberIdAndMemberPrecedentId(member, precedentId)
+        MemberPrecedent matchingPrecedent = memberPrecedentRepository.findByMemberAndMemberPrecedentId(member, precedentId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT));
 
         return matchingPrecedent.getHighlights().stream()
@@ -118,7 +118,7 @@ public class MemberService {
     /**
      * 멤버의 특정 저장 판례.
      *
-     * @param memberId 멤버Id
+     * @param memberId    멤버Id
      * @param precedentId 판례Id
      * @return 특정 저장 판례.
      */
@@ -126,7 +126,7 @@ public class MemberService {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
-        MemberPrecedent precedent = memberPrecedentRepository.findByMemberIdAndMemberPrecedentId(member, precedentId)
+        MemberPrecedent precedent = memberPrecedentRepository.findByMemberAndMemberPrecedentId(member, precedentId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT));
 
         return MemberPrecedentDTO.from(precedent);
@@ -143,7 +143,7 @@ public class MemberService {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
-        MemberRecent recent = memberRecentRepository.findByMemberIdAndRecentPrecedentId(member, recentId)
+        MemberRecent recent = memberRecentRepository.findByMemberAndRecentPrecedentId(member, recentId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_RECENT));
 
         return MemberRecentDTO.from(recent);
@@ -167,7 +167,7 @@ public class MemberService {
     /**
      * 멤버의 특정 관심키워드 조회.
      *
-     * @param memberId 멤버 Id
+     * @param memberId  멤버 Id
      * @param keywordId 키워드 Id
      * @return 관심키워드.
      */
@@ -175,12 +175,11 @@ public class MemberService {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
-        MemberKeyword keyword = memberKeywordRepository.findByMemberIdAndMemberKeywordId(member, keywordId)
+        MemberKeyword keyword = memberKeywordRepository.findByMemberAndMemberKeywordId(member, keywordId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_KEYWORD));
 
         return MemberKeywordDTO.from(keyword);
     }
-
 
 
     /**
@@ -192,6 +191,7 @@ public class MemberService {
             .map(MemberDTO::from)
             .collect(Collectors.toList());
     }
+
     /**
      * 저장된 판례 전체 조회.
      */
@@ -201,6 +201,7 @@ public class MemberService {
             .map(MemberPrecedentDTO::from)
             .collect(Collectors.toList());
     }
+
     /**
      * 최근 본 판례 전체 조회.
      */
@@ -210,6 +211,7 @@ public class MemberService {
             .map(MemberRecentDTO::from)
             .collect(Collectors.toList());
     }
+
     /**
      * 관심 키워드 전체 조회.
      */

@@ -33,12 +33,11 @@ public abstract class BaseEntity {
     /**
      * 소프트딜리트 함수.
      */
-    public boolean softDelete() {
+    public void softDelete() {
         if (isDeleted) {
             throw new IllegalStateException();
         }
         this.isDeleted = true;
-        return true;
     }
 
 }

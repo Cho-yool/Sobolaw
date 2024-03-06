@@ -25,7 +25,7 @@ public class MemberKeyword extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
-    private Member memberId;
+    private Member member;
 
     @Column(nullable = false)
     private String word;

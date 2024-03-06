@@ -5,7 +5,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 /**
- * 회원관련 ErrorCode.
+ * 소장 관련 ErrorCode.
  */
 @Getter
 @AllArgsConstructor

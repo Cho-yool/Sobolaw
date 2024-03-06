@@ -17,7 +17,7 @@ public class SwaggerConfig {
 
     @Bean
     public GroupedOpenApi customTestOpenAPi() {
-        String[] paths = {"/api/**"};
+        String[] paths = {"/**"};
 
         return GroupedOpenApi
             .builder()
