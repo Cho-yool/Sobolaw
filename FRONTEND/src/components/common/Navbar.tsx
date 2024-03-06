@@ -18,7 +18,8 @@ import {
   CopyTwoTone,
 } from "@ant-design/icons";
 import logo from "/NavLogo.png";
-// import MypageMenu from "./MypageMenu";
+import MypageMenu from "./MypageMenu";
+import style from "../../styles/Navbar.module.css";
 
 const { Header } = Layout;
 const items: MenuProps["items"] = [
@@ -79,30 +80,33 @@ const ResponsiveNav = () => {
               }}
             />
           </Col>
-
-          <Col xs={0} sm={0} md={8}>
-            <Menu mode="horizontal" items={items} />
-          </Col>
-          {/* 로그인시 활성화 */}
-          {/* <Col xs={0} sm={0} md={2}>
+          <Row className={style["contents"]}>
+            <Col xs={0} sm={0} md={12} lg={16}>
+              <Menu mode="horizontal" items={items} />
+            </Col>
+            <Col xs={0} sm={0} md={4}>
               <MypageMenu mode={"horizontal"} />
-            </Col> */}
+            </Col>
+            <Col xs={0} sm={0} md={2}>
+              <Button
+                type="primary"
+                shape="round"
+                style={{ marginRight: "10px" }}
+                onClick={() => {
+                  navigate("/login");
+                }}
+              >
+                로그인
+              </Button>
+            </Col>
+          </Row>
+          {/* 로그인시 활성화 */}
+          {/* <Col xs={0} sm={0} md={2}></Col>
 
-          <Col xs={0} sm={0} md={2}>
-            <Button
-              type="primary"
-              shape="round"
-              style={{ marginRight: "10px" }}
-              onClick={() => {
-                navigate("/login");
-              }}
-            >
-              로그인
-            </Button>
-          </Col>
+          <Col xs={0} sm={0} md={2}></Col> */}
 
           {/* 핸드폰 사이즈 네브바 */}
-          <Col xs={2} sm={2} md={0}>
+          <Col xs={2} sm={2} md={0} style={{ paddingRight: "30px" }}>
             <Button type="primary" onClick={showDrawer}>
               <MenuOutlined />
             </Button>
@@ -153,6 +157,10 @@ const ResponsiveNav = () => {
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                navigate("/mypage/user");
               }}
             >
               <SmileTwoTone
@@ -167,6 +175,10 @@ const ResponsiveNav = () => {
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                navigate("/mypage/papers");
               }}
             >
               <EditTwoTone
@@ -181,6 +193,10 @@ const ResponsiveNav = () => {
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                navigate("/mypage/case");
               }}
             >
               <CopyTwoTone

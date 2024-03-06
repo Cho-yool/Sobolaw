@@ -1,34 +1,9 @@
 import { Checkbox, Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 
-export default function MyPage() {
+export default function MyInfo() {
   return (
     <div style={{ backgroundColor: "#f3e9d2", minHeight: "80vh" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "1rem",
-          backgroundColor: "#a68b60",
-          color: "white",
-        }}
-      >
-        <div>회원정보</div>
-        <div>고소장 작성</div>
-        <div>파트너 조회</div>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "0.5rem",
-          backgroundColor: "#f3e9d2",
-        }}
-      >
-        <div style={{ color: "#a68b60" }}>회원정보</div>
-        <div style={{ color: "#a68b60" }}>고소장 작성</div>
-        <div style={{ color: "#a68b60" }}>파트너 조회</div>
-      </div>
       <div style={{ padding: "1rem" }}>
         <div style={{ backgroundColor: "white", padding: "1rem" }}>
           <h1 style={{ fontSize: "1.25rem", fontWeight: "bold" }}>
