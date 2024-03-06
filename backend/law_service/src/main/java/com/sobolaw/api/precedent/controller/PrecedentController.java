@@ -35,4 +35,11 @@ public class PrecedentController {
         return BaseResponse.success(HttpStatus.OK.value(), "관심판례 목록 조회 성공!", precedents);
     }
 
+    @GetMapping("/search/{searchKeyword}")
+    @Operation(summary = "판례 검색", description = "키워드를 사용하여 판례 내용을 검색합니다.")
+    public BaseResponse<List<PrecedentDTO>> searchStatutes(@PathVariable String searchKeyword) {
+        List<PrecedentDTO> searchResults = precedentService.searchByKeyword(searchKeyword);
+        return BaseResponse.success(HttpStatus.OK.value(), "판례 검색 성공!",searchResults);
+    }
+
 }

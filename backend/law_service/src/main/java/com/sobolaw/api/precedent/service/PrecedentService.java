@@ -14,6 +14,7 @@ public class PrecedentService {
 
     private final PrecedentRepository precedentRepository;
 
+    // precedentId로 판례 내용 조회
     public PrecedentDTO findPrecedentById(Long precedentId) {
 
         Precedent precedent = precedentRepository.findById(precedentId)
@@ -22,11 +23,26 @@ public class PrecedentService {
         return convertToPrecedentDTO(precedent);
     }
 
+    // precedentIds로 판례 목록 조회
     public List<PrecedentDTO> findPrecedentsById(List<Long> precedentIds) {
         List<Precedent> precedents = precedentRepository.findByPrecedentIdIn(precedentIds);
 
         if (precedents.isEmpty()) {
             throw new IllegalArgumentException("해당 판례가 없습니다. precedentIds = " + precedentIds);
+        }
+
+        return precedents.stream()
+            .map(this::convertToPrecedentDTO)
+            .collect(Collectors.toList());
+    }
+
+    // searchKeyword로 키워드 일치하는 판례 검색 (일단 판례 내용에서만 검색)
+    public List<PrecedentDTO> searchByKeyword(String searchKeyword) {
+
+        List<Precedent> precedents = precedentRepository.findByCaseContentContaining(searchKeyword);
+
+        if (precedents.isEmpty()) {
+            throw new IllegalArgumentException("해당 키워드 관련 판례가 없습니다. searchKeyword=" + searchKeyword);
         }
 
         return precedents.stream()
