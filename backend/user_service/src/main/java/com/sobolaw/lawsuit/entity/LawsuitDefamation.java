@@ -10,10 +10,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
- * 멤버 작성 소장.                         `
+ * 멤버 작성 소장(명예훼손).                         `
  */
 @Table(name = "lawsuit_defamation")
 @Getter
@@ -24,53 +27,117 @@ public class LawsuitDefamation extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long lawsuitDefamationId;
 
+    @Setter
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
-    private Member memberId;
+    private Member member;
 
+    @Setter
     @Column
-    private String delator;  // 고소인
+    private String title; // 소장 저장 제목
 
+    // 원고(고소인) 정보
+    @Setter
     @Column
-    private String delatorAddress;  // 고소인 주소
+    private String plaintiffName;  // 성명
 
+    @Setter
     @Column
-    private String respondent;  // 피고소인
+    private String plaintiffResidentRegistrationNumber;  // 주민등록번호
 
+    @Setter
     @Column
-    private String respondentAddress;  // 피고소인 주소
+    private String plaintiffAddress;  // 주소
 
+    @Setter
     @Column
-    private String content;  // 고소내용
+    private String plaintiffPhoneNumber;  // 전화번호
 
+    // 피고(피고소인) 정보
+    @Setter
     @Column
-    private String policeStation;  // 담당경찰서
+    private String defendantName;  // 이름
 
+    @Setter
     @Column
-    private String prosecutor;  // 담당검사
+    private String defendantAddress;  // 주소
+
+    @Setter
+    @Column
+    private String defendantPhoneNumber;  // 전화번호
+
+    @Setter
+    @Column
+    private String defendantIdentificationDetails;  // 기타(피고소인 식별 특정 사항)
+
+    // 사건 관련 내용
+    @Setter
+    @Column
+    private LocalDate incidentDate;  // 사건 일자
+
+    @Setter
+    @Column
+    private LocalTime incidentTime;  // 사건 시간
+
+    @Setter
+    @Column
+    private String location;  // 장소
+
+    @Setter
+    @Column
+    private String defamationContent;  // 명예훼손 내용
+
+    @Setter
+    @Column
+    private boolean isFalseAccusation;  // 허위 인지 아닌지 여부
+
+    @Setter
+    @Column
+    private String relatedPeople;  // 관련 인원
+
+    @Setter
+    @Column
+    private String evidence;  // 증거자료
+
+    @Setter
+    @Column
+    private LocalDate submissionDate;  // 제출날짜
+
+    @Setter
+    @Column
+    private String policeStationTeam;  // 해당 경찰서 팀
 
     protected LawsuitDefamation() {
     }
 
-    /**
-     * 멤버 파라미터 생성자.
-     */
-    private LawsuitDefamation(String delator, String delatorAddress, String respondent, String respondentAddress, String content, String policeStation, String prosecutor) {
-        this.delator = delator;
-        this.delatorAddress = delatorAddress;
-        this.respondent = respondent;
-        this.respondentAddress = respondentAddress;
-        this.content = content;
-        this.policeStation = policeStation;
-        this.prosecutor = prosecutor;
-
+    private LawsuitDefamation(String title, String plaintiffName, String plaintiffResidentRegistrationNumber, String plaintiffAddress, String plaintiffPhoneNumber, String defendantName,
+        String defendantAddress, String defendantPhoneNumber, String defendantIdentificationDetails, LocalDate incidentDate, LocalTime incidentTime, String location, String defamationContent,
+        boolean isFalseAccusation, String relatedPeople, String evidence, LocalDate submissionDate, String policeStationTeam) {
+        this.title = title;
+        this.plaintiffName = plaintiffName;
+        this.plaintiffResidentRegistrationNumber = plaintiffResidentRegistrationNumber;
+        this.plaintiffAddress = plaintiffAddress;
+        this.plaintiffPhoneNumber = plaintiffPhoneNumber;
+        this.defendantName = defendantName;
+        this.defendantAddress = defendantAddress;
+        this.defendantPhoneNumber = defendantPhoneNumber;
+        this.defendantIdentificationDetails = defendantIdentificationDetails;
+        this.incidentDate = incidentDate;
+        this.incidentTime = incidentTime;
+        this.location = location;
+        this.defamationContent = defamationContent;
+        this.isFalseAccusation = isFalseAccusation;
+        this.relatedPeople = relatedPeople;
+        this.evidence = evidence;
+        this.submissionDate = submissionDate;
+        this.policeStationTeam = policeStationTeam;
     }
 
-    /**
-     * 파라미터로 멤버 엔티티 객체 생성하는 함수.
-     */
-    public static LawsuitDefamation of(String delator, String delatorAddress, String respondent, String respondentAddress, String content, String policeStation, String prosecutor) {
-        return new LawsuitDefamation(delator, delatorAddress, respondent, respondentAddress, content, policeStation, prosecutor);
+    public static LawsuitDefamation of(String title, String plaintiffName, String plaintiffResidentRegistrationNumber, String plaintiffAddress, String plaintiffPhoneNumber, String defendantName,
+        String defendantAddress, String defendantPhoneNumber, String defendantIdentificationDetails, LocalDate incidentDate, LocalTime incidentTime, String location, String defamationContent,
+        boolean isFalseAccusation, String relatedPeople, String evidence, LocalDate submissionDate, String policeStationTeam) {
+        return new LawsuitDefamation(title, plaintiffName, plaintiffResidentRegistrationNumber, plaintiffAddress, plaintiffPhoneNumber, defendantName, defendantAddress, defendantPhoneNumber,
+            defendantIdentificationDetails, incidentDate, incidentTime, location, defamationContent, isFalseAccusation, relatedPeople, evidence, submissionDate, policeStationTeam);
     }
 
     @Override

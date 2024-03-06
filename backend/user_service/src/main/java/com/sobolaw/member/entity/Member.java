@@ -1,6 +1,9 @@
 package com.sobolaw.member.entity;
 
 import com.sobolaw.api.entity.BaseEntity;
+import com.sobolaw.lawsuit.entity.LawsuitDefamation;
+import com.sobolaw.lawsuit.entity.LawsuitFraud;
+import com.sobolaw.lawsuit.entity.LawsuitInsult;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,18 +38,23 @@ public class Member extends BaseEntity {
     @Column
     private LocalDate birthday; // 생일
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "memberId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "member")
     private List<MemberKeyword> memberKeyword; // 관심 키워드 리스트
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "memberId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "member")
     private List<MemberRecent> memberRecents;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "memberId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "member")
     private List<MemberPrecedent> memberPrecedents;
 
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
-//    private List<Lawsuit> lawsuits; // 저장한 소장
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "member")
+    private List<LawsuitFraud> lawsuitFrauds; // 저장한 사기 소장
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "member")
+    private List<LawsuitInsult> lawsuitInsults; // 저장한 모욕 소장
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "member")
+    private List<LawsuitDefamation> lawsuitDefamations; // 저장한 명예훼손 소장
 
 
     protected Member() {

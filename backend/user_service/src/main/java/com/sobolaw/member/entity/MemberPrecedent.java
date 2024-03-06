@@ -28,12 +28,12 @@ public class MemberPrecedent extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
-    private Member memberId;
+    private Member member;
 
     @Column
     private Long precedentId;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "memberPrecedentId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "memberPrecedent")
     private List<MemberPrecedentHighlight> highlights;
 
     protected MemberPrecedent() {

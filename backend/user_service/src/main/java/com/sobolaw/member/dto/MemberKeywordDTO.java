@@ -16,11 +16,8 @@ public record MemberKeywordDTO(Long memberKeywordId, Long memberId, String word)
      * MemberKeyword 엔터티를 MemberKeywordDTO로 변환하는 메소드.
      */
     public static MemberKeywordDTO from(MemberKeyword entity) {
-        return new MemberKeywordDTO(
-            entity.getMemberKeywordId(),
-            MemberDTO.from(entity.getMemberId()).memberId(), // Member 엔터티를 MemberDTO로 변환
-            entity.getWord()
-        );
+        return new MemberKeywordDTO(entity.getMemberKeywordId(), MemberDTO.from(entity.getMember()).memberId(), // Member 엔터티를 MemberDTO로 변환 후 memberId GET
+            entity.getWord());
     }
 
     /**

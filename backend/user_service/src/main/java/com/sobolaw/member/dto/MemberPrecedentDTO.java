@@ -1,13 +1,11 @@
 package com.sobolaw.member.dto;
 
 import com.sobolaw.member.entity.MemberPrecedent;
-import com.sobolaw.member.entity.MemberPrecedentHighlight;
 import java.io.Serializable;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
- * DTO for {@link MemberPrecedent}
+ * DTO for {@link MemberPrecedent}.
  */
 public record MemberPrecedentDTO(Long memberPrecedentId, Long memberId, Long precedentId, List<MemberPrecedentHighlightDTO> highlights) implements Serializable {
 
@@ -19,16 +17,9 @@ public record MemberPrecedentDTO(Long memberPrecedentId, Long memberId, Long pre
      * MemberPrecedent 엔터티를 MemberPrecedentDTO로 변환하는 메소드.
      */
     public static MemberPrecedentDTO from(MemberPrecedent entity) {
-        List<MemberPrecedentHighlightDTO> memberPrecedentHighlightDTOS = entity.getHighlights()
-            .stream()
-            .map(MemberPrecedentHighlightDTO::from)
-            .toList();
-        return new MemberPrecedentDTO(
-            entity.getMemberPrecedentId(),
-            MemberDTO.from(entity.getMemberId()).memberId(), // Member 엔터티를 MemberDTO로 변환
-            entity.getPrecedentId(),
-            memberPrecedentHighlightDTOS
-        );
+        List<MemberPrecedentHighlightDTO> memberPrecedentHighlightDTOS = entity.getHighlights().stream().map(MemberPrecedentHighlightDTO::from).toList();
+        return new MemberPrecedentDTO(entity.getMemberPrecedentId(), MemberDTO.from(entity.getMember()).memberId(), // Member 엔터티를 MemberDTO로 변환 후 memberId GET
+            entity.getPrecedentId(), memberPrecedentHighlightDTOS);
     }
 
     /**

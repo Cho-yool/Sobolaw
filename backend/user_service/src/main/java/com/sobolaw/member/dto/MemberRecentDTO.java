@@ -1,6 +1,5 @@
 package com.sobolaw.member.dto;
 
-import com.sobolaw.member.entity.MemberKeyword;
 import com.sobolaw.member.entity.MemberRecent;
 import java.io.Serializable;
 
@@ -17,11 +16,8 @@ public record MemberRecentDTO(Long recentPrecedentId, Long memberId, Long preced
      * MemberRecent 엔터티를 MemberRecentDTO로 변환하는 메소드.
      */
     public static MemberRecentDTO from(MemberRecent entity) {
-        return new MemberRecentDTO(
-            entity.getRecentPrecedentId(),
-            MemberDTO.from(entity.getMemberId()).memberId(), // Member 엔터티를 MemberDTO로 변환
-            entity.getPrecedentId()
-        );
+        return new MemberRecentDTO(entity.getRecentPrecedentId(), MemberDTO.from(entity.getMember()).memberId(), // Member 엔터티를 MemberDTO로 변환 후 memberId GET
+            entity.getPrecedentId());
     }
 
     /**
