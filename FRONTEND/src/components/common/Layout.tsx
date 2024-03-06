@@ -24,7 +24,7 @@ function LayoutPage() {
         style={{
           display: "flex",
           flexDirection: "column",
-          overflowY: "auto",
+          overflowY: "visible",
         }}
       >
         <Outlet />
