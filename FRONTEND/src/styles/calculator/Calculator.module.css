@@ -1,0 +1,12 @@
+.calculator-box {
+  text-align: center;
+  margin: 1rem;
+  border-radius: 80;
+  background-color: #f3e7c0;
+}
+
+.result-box {
+  margin: 1rem;
+  border-radius: 80;
+  border: #f3e7c0 solid 1px;
+}
