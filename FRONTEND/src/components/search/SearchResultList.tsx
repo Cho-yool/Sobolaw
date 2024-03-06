@@ -1,7 +1,7 @@
 // src/components/SearchResultList.tsx
 import React from 'react';
 import { List } from 'antd';
-import style from '../../styles/SearchResultList.module.css';
+import style from '../../styles/search/SearchResultList.module.css';
 
 interface SearchResult {
   id: number;
