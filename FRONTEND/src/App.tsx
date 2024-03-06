@@ -21,7 +21,7 @@ function App() {
           <Route path="" element={<MainPage />} />
           <Route path="detail" element={<LawCaseDetail />} />
           <Route path="login" element={<LoginPage />} />
-          <Route path="intesrch" element={<SearchPage />} />
+          <Route path="search" element={<SearchPage />} />
           <Route path="recommend" element={<RecommendPage />} />
           <Route path="plaint" element={<FormPage />} />
           <Route path="cal" element={<CalculatorPage />} />
