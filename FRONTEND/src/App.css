@@ -1,23 +1,6 @@
-/* Navbar */
-
-.Navbar {
+.pages {
+  min-height: 80vh;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem 1.5rem 0 1.5rem;
-  border-bottom: solid 1px #e4dfdf;
-  background-color: white;
-  position: sticky;
-  top: 0;
-  margin-bottom: 20px;
-}
-
-.Navbar-tab {
-  display: flex;
-  width: 30rem;
-  align-items: center;
-}
-
-.Navbar-service-logo:hover {
-  cursor: pointer;
+  flex-direction: column;
+  justify-content: center;
 }

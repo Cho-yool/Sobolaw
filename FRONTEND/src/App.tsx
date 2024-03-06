@@ -1,23 +1,36 @@
 import { Route, Routes } from "react-router-dom";
-import Layout from "./components/common/Layout";
+import LayoutPage from "./components/common/Layout";
+import LawCaseDetail from "./pages/lawcasedetail/LawCaseDetail";
 import LoginPage from "./pages/LoginPage";
 import SearchPage from "./pages/SearchPage";
 import RecommendPage from "./pages/RecommendPage";
 import FormPage from "./pages/FormPage";
 import CalculatorPage from "./pages/CalculatorPage";
+import MainPage from "./pages/Main";
+import MyPage from "./pages/mypage/Mypage";
+import MyInfo from "./pages/mypage/UserInfo";
+import Mypaper from "./pages/mypage/MyPaper";
+import MyCase from "./pages/mypage/MyCase";
 
 function App() {
   return (
     <>
       <Routes>
         {/* 레이아웃을 미리 짜놓고, 그 사이에 새로 만든 페이지들이 들어가게 함 */}
-        <Route path="/*" element={<Layout />}> // 모든 페이지에 공통되는 레이아웃을 제공한다.
+        <Route path="/*" element={<LayoutPage />}>
+          <Route path="" element={<MainPage />} />
+          <Route path="detail" element={<LawCaseDetail />} />
           <Route path="login" element={<LoginPage />} />
-          {/* 임의로 이름 써놨는데 알아서 바꾸셈여 */}
-          <Route path="search" element={<SearchPage />} /> // 검색 페이지
-          <Route path="recommend" element={<RecommendPage />} /> // 추천 페이지
-          <Route path="form" element={<FormPage />} /> // 양식 작성 페이지
+          <Route path="intesrch" element={<SearchPage />} />
+          <Route path="recommend" element={<RecommendPage />} />
+          <Route path="plaint" element={<FormPage />} />
           <Route path="cal" element={<CalculatorPage />} />
+          <Route path="mypage/*" element={<MyPage />}>
+            <Route path="" element={<MyInfo />} />
+            <Route path="user" element={<MyInfo />} />
+            <Route path="papers" element={<Mypaper />} />
+            <Route path="case" element={<MyCase />} />
+          </Route>
         </Route>
         {/* 다른 Route도 추가가능~ */}
       </Routes>

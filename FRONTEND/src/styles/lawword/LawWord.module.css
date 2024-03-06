@@ -1,0 +1,51 @@
+.btn-area {
+  width: 100px;
+  position: fixed;
+  right: 0.5rem;
+  bottom: 1rem;
+}
+
+.word-btn {
+  width: 80px;
+  height: 80px;
+  background-color: #bf8538;
+  border-radius: 100%;
+  cursor: pointer;
+  margin: 1rem 0;
+}
+
+.word-btn:hover {
+  opacity: 0.8;
+}
+
+.btn-contents {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+}
+
+.btn-image {
+  position: absolute;
+  top: 0;
+  width: 70px;
+  height: 70px;
+  opacity: 0.9;
+}
+
+.btn-image__second {
+  position: absolute;
+  top: 0.5rem;
+  width: 40px;
+  height: 40px;
+  opacity: 0.9;
+}
+
+.btn-text {
+  font-size: 1.2rem;
+  color: white;
+  z-index: 2;
+  margin-bottom: 0.5rem;
+}
