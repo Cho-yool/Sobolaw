@@ -45,4 +45,11 @@ public class PrecedentController {
         return BaseResponse.success(HttpStatus.OK.value(), "판례 검색 성공!",searchResults);
     }
 
+    @GetMapping("/list")
+    @Operation(summary = "판례 순위 목록 조회", description = "판례를 조회수 높은 순으로 20개 반환")
+    public BaseResponse<?> getPrecedentOrderByHitDesc() {
+        List<PrecedentDTO> precedents = precedentService.findTop20ByOrderByHitDesc();
+        return BaseResponse.success(HttpStatus.OK.value(), "판례 순위 조회 성공!", precedents);
+    }
+
 }

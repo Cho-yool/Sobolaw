@@ -9,11 +9,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PrecedentRepository extends JpaRepository<Precedent, Long> {
 
-    Optional<Precedent> findById(Long precedentId);
+    Optional<Precedent> findByPrecedentId(Long precedentId);
 
     List<Precedent> findByPrecedentIdIn(List<Long> precedentIds);
 
     List<Precedent> findByCaseContentContaining(String searchKeyword);
 
+    List<Precedent> findTop20ByOrderByHitDesc();
 
 }
