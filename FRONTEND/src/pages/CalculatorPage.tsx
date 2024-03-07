@@ -40,16 +40,14 @@ export default function CalculatorPage() {
             display: "flex",
             justifyContent: "space-between",
             padding: "24px",
-          }}
-        >
+          }}>
           <div style={{ display: "flex", gap: "16px" }}>
             <Button
               onClick={() =>
                 window.open(
                   "https://ecfs.scourt.go.kr/ecf/ecf300/ECF304.jsp?msgIdx=&soga=&sogaInput="
                 )
-              }
-            >
+              }>
               소가/인지/송달료
             </Button>
             <Button style={{ backgroundColor: "#dbe4f0", color: "#0047ba" }}>
@@ -70,26 +68,23 @@ export default function CalculatorPage() {
           name="validate_other"
           {...formItemLayout}
           onFinish={onFinish}
-          size="large"
-        >
+          size="large">
           <Form.Item name="radio-group" label="소송 구분">
             <Radio.Group>
-              <Radio value="a">item 1</Radio>
-              <Radio value="b">item 2</Radio>
-              <Radio value="c">item 3</Radio>
+              <Radio value="a">전자소송</Radio>
+              <Radio value="b">종이소송</Radio>
             </Radio.Group>
           </Form.Item>
-          <Form.Item name="select" label="사건 구분">
+          <Form.Item name="case" label="사건 구분">
             <Select placeholder="Please select a country">
-              <Option value="china">China</Option>
-              <Option value="usa">U.S.A</Option>
+              <Option value="소송">소송</Option>
+              <Option value="지급명령신청">지급명령신청</Option>
             </Select>
           </Form.Item>
           <Form.Item
             label="소가"
             hasFeedback
-            rules={[{ required: true, message: "필수 입력해주세요" }]}
-          >
+            rules={[{ required: true, message: "필수 입력해주세요" }]}>
             <Form.Item name="input-number" noStyle>
               <div className={style["calculator-box__money"]}>
                 <span>금</span>
@@ -98,20 +93,19 @@ export default function CalculatorPage() {
               </div>
             </Form.Item>
           </Form.Item>
-          <Form.Item name="select" label="심급">
+          <Form.Item name="judge" label="심급">
             <Select placeholder="Please select a country">
-              <Option value="china">China</Option>
-              <Option value="usa">U.S.A</Option>
+              <Option value="china">1심</Option>
+              <Option value="usa">2심</Option>
             </Select>
           </Form.Item>
           <Form.Item
             name="select"
             label="사건종류"
             hasFeedback
-            rules={[{ required: true, message: "필수 입력해주세요" }]}
-          >
+            rules={[{ required: true, message: "필수 입력해주세요" }]}>
             <Select placeholder="Please select a country">
-              <Option value="china">China</Option>
+              <Option value="china">1심</Option>
               <Option value="usa">U.S.A</Option>
             </Select>
             <Input />
@@ -119,36 +113,39 @@ export default function CalculatorPage() {
           <Form.Item
             label="피고/상대방수"
             hasFeedback
-            rules={[{ required: true, message: "필수 입력해주세요" }]}
-          >
+            rules={[{ required: true, message: "필수 입력해주세요" }]}>
             <Form.Item name="input-number" noStyle>
-              <InputNumber min={1} max={10} />
+              <div className={style["calculator-box__money"]}>
+                <input type="text" />
+                <span>명</span>
+              </div>
             </Form.Item>
-            <span className="ant-form-text" style={{ marginLeft: 8 }}>
-              원
-            </span>
           </Form.Item>
           <Form.Item label="변호사/보수 약정액">
             <Form.Item name="input-number" noStyle>
-              <InputNumber min={1} max={10} />
+              <div className={style["calculator-box__money"]}>
+                <span>금</span>
+                <input type="text" />
+                <span>원</span>
+              </div>
             </Form.Item>
-            <span className="ant-form-text" style={{ marginLeft: 8 }}>
-              원
-            </span>
           </Form.Item>
         </Form>
       </div>
-      <p style={{ fontSize: "0.875rem", marginBottom: "16px" }}>
-        ※ 변호사 부담금의 변동이 있을 경우, 실제 소송비용은 결과와 상이할 수
-        있습니다.
-      </p>
-      <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px" }}>
-        <Button style={{ border: "1px solid #0047ba", color: "#0047ba" }}>
-          초기화
-        </Button>
-        <Button style={{ backgroundColor: "#0047ba", color: "white" }}>
-          제출하기
-        </Button>
+      <div className={style["detail-info"]}>
+        <p style={{ fontSize: "0.875rem", marginBottom: "16px" }}>
+          ※ 변호사 부담금의 변동이 있을 경우, 실제 소송비용은 결과와 상이할 수
+          있습니다.
+        </p>
+        <div
+          style={{ display: "flex", justifyContent: "flex-end", gap: "8px" }}>
+          <Button style={{ border: "1px solid #0047ba", color: "#0047ba" }}>
+            초기화
+          </Button>
+          <Button style={{ backgroundColor: "#0047ba", color: "white" }}>
+            제출하기
+          </Button>
+        </div>
       </div>
 
       {/* 제출했을 때 뜨는 박스, 일단 pages에 같이 적어둠 */}
@@ -159,15 +156,14 @@ export default function CalculatorPage() {
 
         <div className={style["result-box"]}>
           <div style={{ padding: "24px" }}>
-            <div
+            <p
               style={{
                 marginBottom: "16px",
                 fontSize: "1.5rem",
                 fontWeight: "bold",
-              }}
-            >
+              }}>
               계산결과
-            </div>
+            </p>
             <p>인지액:</p>
             <p>송달료:</p>
             <p>법정 보수액 한도:</p>
@@ -179,7 +175,8 @@ export default function CalculatorPage() {
 
       {/* 하위에 떠있을 주의사항 */}
       <Collapse
-        size="small"
+        className={style["notice"]}
+        size="large"
         items={[
           {
             key: "1",
@@ -195,7 +192,7 @@ export default function CalculatorPage() {
                 </div>
                 <div className="mb-4">
                   <h3 className="text-md font-semibold">소장</h3>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-10">
                     <div className="col-span-1">
                       <div className="font-medium">소송물의 가액</div>
                       <div>1,000만원 이하</div>
@@ -205,10 +202,10 @@ export default function CalculatorPage() {
                     </div>
                     <div className="col-span-1">
                       <div className="font-medium">인지액 계산방법</div>
-                      <div>(소송물가액 가액 x 0.50% x 0.9)</div>
-                      <div>(소송물가액 가액 x 0.45% + 5,000원) x 0.9</div>
-                      <div>(소송물가액 가액 x 0.40% + 55,000원) x 0.9</div>
-                      <div>(소송물가액 가액 x 0.35% + 555,000원) x 0.9</div>
+                      <li>(소송물가액 가액 x 0.50% x 0.9)</li>
+                      <li>(소송물가액 가액 x 0.45% + 5,000원) x 0.9</li>
+                      <li>(소송물가액 가액 x 0.40% + 55,000원) x 0.9</li>
+                      <li>(소송물가액 가액 x 0.35% + 555,000원) x 0.9</li>
                     </div>
                   </div>
                   <p className="text-sm mt-2">
