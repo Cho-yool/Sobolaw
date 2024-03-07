@@ -1,12 +1,36 @@
-.calculator-box {
+.calculator {
   text-align: center;
-  margin: 1rem;
+  margin: 1rem auto;
   border-radius: 80;
   background-color: #f3e7c0;
+  display: flex;
+  justify-content: center;
+  width: fit-content;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+.calculator-box {
+  max-width: 600px;
 }
 
 .result-box {
   margin: 1rem;
   border-radius: 80;
   border: #f3e7c0 solid 1px;
+}
+
+.calculator-box__money {
+  display: flex;
+  background-color: white;
+  padding: 7px 11px;
+  font-size: inherit;
+  line-height: 1.5;
+  border-radius: 8px;
+  align-items: center;
+}
+
+.calculator-box__money > input {
+  font-size: 16px;
+  width: 100%;
+  border: none;
 }

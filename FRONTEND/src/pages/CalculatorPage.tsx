@@ -63,19 +63,14 @@ export default function CalculatorPage() {
       </div>
 
       {/* 계산 박스 */}
-      <div className={style["calculator-box"]}>
+      <div className={style["calculator"]}>
         {/* antd Form 예제 갖고왔어요 */}
         <Form
+          className={style["calculator-box"]}
           name="validate_other"
           {...formItemLayout}
           onFinish={onFinish}
-          initialValues={{
-            "input-number": 3,
-            "checkbox-group": ["A", "B"],
-            rate: 3.5,
-            "color-picker": null,
-          }}
-          style={{ maxWidth: 600 }}
+          size="large"
         >
           <Form.Item name="radio-group" label="소송 구분">
             <Radio.Group>
@@ -96,11 +91,12 @@ export default function CalculatorPage() {
             rules={[{ required: true, message: "필수 입력해주세요" }]}
           >
             <Form.Item name="input-number" noStyle>
-              <InputNumber min={1} max={10} />
+              <div className={style["calculator-box__money"]}>
+                <span>금</span>
+                <input type="text" />
+                <span>원</span>
+              </div>
             </Form.Item>
-            <span className="ant-form-text" style={{ marginLeft: 8 }}>
-              원
-            </span>
           </Form.Item>
           <Form.Item name="select" label="심급">
             <Select placeholder="Please select a country">

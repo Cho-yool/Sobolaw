@@ -13,6 +13,7 @@ export default function SearchPage() {
               <Title level={2} style={{ color: "#644419" }}>
                 법령/판례
               </Title>
+              w
             </div>
           </Col>
         </Row>
