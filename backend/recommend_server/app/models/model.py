@@ -14,6 +14,7 @@ class Precedent(BaseModel):
     referencedStatute: str = None
     referencedCase: str = None
     caseContent: str = None
+    hit: int = None
 
 class Situation(BaseModel):
     situation: str = None
