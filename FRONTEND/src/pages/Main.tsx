@@ -43,20 +43,24 @@ export default function MainPage() {
                 <GoLaw size="80" />
                 <div className={style["point-circle"]} />
               </div>
-              <strong>내 상황과 딱 맞는 사건의 판례가 궁금하신가요?</strong>
+              <strong className={style["whitebox-content__strong"]}>
+                내 상황과 딱 맞는 사건의 판례가 궁금하신가요?
+              </strong>
               <p>
                 소보로는 일반 판례 검색은 물론, 내 상황과 사건에 맞는 판례를
                 찾아 도움을 드립니다
               </p>
             </div>
-            <Divider type="vertical" />
+            <div className={style["whitebox-dashed"]}></div>
             <div className={style["whitebox-content"]}>
               <div className={style["point-icon"]}>
                 <FaPencil size="80" />
                 <div className={style["point-circle"]} />
               </div>
 
-              <strong>혼자 고소장을 작성하기 어려우신가요?</strong>
+              <strong className={style["whitebox-content__strong"]}>
+                혼자 고소장을 작성하기 어려우신가요?
+              </strong>
               <p>
                 사건 별 고소장 양식을 확인하시고, 간단한 정보 기입으로 바로 제출
                 가능한 고소장을 완성해보세요!
