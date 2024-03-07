@@ -12,22 +12,39 @@ strong {
 }
 
 .box1-content-title {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
   color: white;
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-top: 5%;
 }
 
 .box1-content-title-left {
-  margin-left: auto;
-  margin-right: auto;
+  align-items: center;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.box1-content-title-left-title {
+  white-space: nowrap;
+  font-size: 4rem;
+  padding-bottom: 2rem;
+}
+
+.box1-content-title-left-content {
+  white-space: pre-line;
+  font-size: 1.5rem;
 }
 
 .box1-content-whitebox {
   position: relative;
-  z-index: 1000;
   display: flex;
   flex-wrap: wrap;
   margin-bottom: -80px;
   border-radius: 20px;
-  background: var(--w-color);
+  background-color: rgb(252, 252, 252);
   box-shadow: 0px 8px 15px #0000001a;
   overflow: hidden;
 }
@@ -54,11 +71,24 @@ strong {
   opacity: 0.4;
 }
 
+.point-green {
+  color: rgb(6, 95, 43);
+}
+
 .box2 {
   background-color: #f3e7c0;
   padding-top: 150px;
   padding-bottom: 100px;
   text-align: center;
+}
+
+.box2-img {
+  background-image: url("/images/main1.png");
+  background-size: cover;
+  background-position: center;
+  margin: auto;
+  width: 700px;
+  height: 400px;
 }
 
 .box3 {
@@ -74,4 +104,82 @@ strong {
   color: var(--info-color);
   letter-spacing: -2.25px;
   padding: 67px 0 53px 0;
+}
+
+.box3-cards {
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.box3-cards-content {
+  display: flex;
+  flex-wrap: wrap;
+  margin: auto;
+  max-width: 80%;
+  gap: 20px;
+}
+
+.image-card {
+  background-color: #eaa854;
+  border-radius: 20px;
+  width: 16rem;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+}
+
+.image-card:hover {
+  cursor: pointer;
+}
+
+.image-detail {
+  object-fit: cover;
+  position: absolute;
+  border-radius: 20px;
+  transition: all 0.2s ease-out;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 1;
+}
+
+.image-card-text {
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  padding: 5%;
+}
+
+.image-detail:hover {
+  transform: scale(1.1);
+}
+
+@media (max-width: 1250px) {
+  .box1-content-title {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 700px) {
+  .box1-content-title-left-title {
+    white-space: nowrap;
+    font-size: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .box1-content-title-left-content {
+    white-space: pre-line;
+    font-size: 1rem;
+  }
+
+  .box2-img {
+    background-image: url("/images/main2.png");
+    background-size: cover;
+    background-position: center;
+    margin: auto;
+    width: 340px;
+    height: 700px;
+  }
 }

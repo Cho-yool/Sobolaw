@@ -106,7 +106,12 @@ const ResponsiveNav = () => {
           <Col xs={0} sm={0} md={2}></Col> */}
 
           {/* 핸드폰 사이즈 네브바 */}
-          <Col xs={2} sm={2} md={0} style={{ paddingRight: "30px" }}>
+          <Col
+            xs={2}
+            sm={2}
+            md={0}
+            style={{ paddingRight: "30px", marginRight: "15px" }}
+          >
             <Button type="primary" onClick={showDrawer}>
               <MenuOutlined />
             </Button>
