@@ -4,7 +4,7 @@ from pymongo import MongoClient
 
 client = None
 database = None
-collection = None
+collections = None
 
 def connect():
     global client
@@ -12,7 +12,7 @@ def connect():
     client = MongoClient('mongodb+srv://S10P22A604:QtMf1U0bzz@ssafy.ngivl.mongodb.net/S10P22A604?authSource=admin')
     database = client.S10P22A604
 
-def collection(db_name):
+def collections(db_name):
     global collection
     global database
     collection = database[db_name]
@@ -63,6 +63,14 @@ def find_keywords(arr):
                 "_id": "$_id",
                 "total": {"$sum": "$keyword.value"}
             }
+        },
+        {
+            "$sort": {
+                "total": -1  # 'total' 필드를 기준으로 내림차순 정렬
+            }
+        },
+        {
+            "$limit": 10  # 상위 10개의 결과만 반환
         }
     ]
     results = collection.aggregate(pipeline)
