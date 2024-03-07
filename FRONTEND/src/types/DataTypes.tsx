@@ -4,4 +4,3 @@ export type UserState = {
   accessToken: string;
   refreshToken: string;
 };
-

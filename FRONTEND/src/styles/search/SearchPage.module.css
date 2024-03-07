@@ -1,59 +1,86 @@
 /* SearchPage.module.css */
+
 .searchContainer {
-    background-color: #644419;
-    padding: 2rem;
-    height: 400px;
-    border-radius: 20px;
-    margin: 20px auto;
+  background-color: #644419;
+  padding: 0rem;
+  height: 400px;
+  width: 60%;
+  border-radius: 20px;
+  margin: 60px auto; /* 하단 간격 추가 */
 }
 
-.iconsBackground {
-  margin: 50px auto;
-  width: 70%;
-  background-color: #f3e7c0; /* Background color */
-  border-radius: 20px; /* Rounded corners */
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* Drop shadow */
-  padding: 20px; /* Padding around icons */
+.middleContainer {
+  background-color: #f3e7c0; /* 새 배경 색상 */
+  width: 100%;
+  padding: 20px; /* 내부 요소와의 간격 */
+  margin: 0px 0; /* 상단 및 하단 마진 추가 */
 }
 
-.iconContainer {
-    display: flex;
-    justify-content: center;
-    gap: 80px; /* 아이콘 간격 */
-    padding: 30px 0px; /* 상하 여백 */
-    margin: 10px 20px;
-  }
-  
-  .iconWrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    background-color: transparent; /* 아이콘 배경색 */
-    border-radius: 10px; /* 배경의 모서리 둥글게 */
-    padding: 15px; /* 배경 패딩 */
-  }
-  
-  .icon {
-    font-size: 50px; /* 아이콘 크기 */
-    color: #644419; /* 아이콘 색상 */
-  }
-  
-  .iconText {
-    margin-top: 10px; /* 아이콘과 텍스트 간격 */
-    color: #644419; /* 텍스트 색상 */
-    font-weight: 700;
-  }
+.categoryCardsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 30px; /* 카드 간의 간격 늘림 */
+  margin: 80px 80px; /* 검색 컨테이너와의 간격 추가 */
+}
+
+.singleCategoryCard {
+  padding: 10px; /* 카드 내부 패딩 조정 */
+  margin: 0 60px;
+  border-radius: 20px; /* 카드의 모서리 둥글게 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 카드에 그림자 추가 */
+  color: #644419;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.recentLawCaseContainer {
+  width: 58%;
+  margin: 40px 0px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+
+
 
 /* 모바일 화면에서의 스타일 조정 */
 @media screen and (max-width: 768px) {
-    .searchContainer {
-        padding: 1rem;
-        width: 80%; /* 모바일 화면에서 갈색 박스의 가로 길이를 90%로 설정 */
-        margin: 10px auto;
-    }
+  .searchContainer {
+    padding: 1rem;
+    width: 80%;
+    margin: 10px auto;
+  }
 
-    .title {
-        font-size: 16px; /* 타이틀 글씨 크기 조정 */
-    }
+  .middleContainer {
+    flex-direction: column; /* 모바일 화면에서는 세로 방향으로 배열 */
+    padding: 40px 0; /* 위, 아래 패딩 조정 */
+    gap: 10px; /* 카테고리 박스와 최근 본 판례 박스 사이의 간격 */
+  }
+
+  .title {
+    font-size: 12px;
+  }
+
+  .categoryCardsBox, .recentLawCaseBox {
+    width: 100%; /* 모바일 화면 폭에 맞춤 */
+    margin: 0; /* 박스 간격 조정 */
+  }
+
+  .categoryCardsContainer, .recentLawCaseContainer {
+    flex-direction: column; /* 카드와 리스트를 세로로 배열 */
+    margin: 0 10px; /* 좌우 마진 조정 */
+  }
+
+  .singleCategoryCard {
+    padding: 10px; /* 모바일 화면에서 카드 패딩 조정 */
+    font-size: 10px;
+  }
+
+  .recentLawCaseBackground, .recentLawCaseTitle {
+    /* 최근 본 판례 배경 및 제목 스타일 조정 */
+    width: 100%; /* 배경 및 제목 폭 조정 */
+    padding: 10px; /* 내부 패딩 조정 */
+    margin-top: 20px; /* 최근 본 판례 컨테이너와의 상단 마진 추가 */
+  }
+
 }
