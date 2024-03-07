@@ -3,7 +3,7 @@ import style from "../../styles/lawword/LawWordChat.module.css";
 import SEND from "../../assets/send.png";
 import LawWordChatCard from "./LawWordChatCard";
 import { useEffect, useRef, useState } from "react";
-import { CodeSandboxCircleFilled } from "@ant-design/icons";
+
 {
   /* <a href="https://www.flaticon.com/kr/free-icons/" title="보내다 아이콘">보내다 아이콘  제작자: feen - Flaticon</a> */
 }
