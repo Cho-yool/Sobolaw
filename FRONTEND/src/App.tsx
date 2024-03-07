@@ -6,7 +6,7 @@ import SearchPage from "./pages/SearchPage";
 import RecommendPage from "./pages/RecommendPage";
 import FormPage from "./pages/FormPage";
 import CalculatorPage from "./pages/CalculatorPage";
-import MainPage from "./pages/Main";
+import MainPage from "./pages/MainPage";
 import MyPage from "./pages/mypage/Mypage";
 import MyInfo from "./pages/mypage/UserInfo";
 import Mypaper from "./pages/mypage/MyPaper";
