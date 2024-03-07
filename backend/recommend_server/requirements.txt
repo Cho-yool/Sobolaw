@@ -6,3 +6,4 @@ pymongo
 konlpy
 scikit-learn
 py-eureka-client
+httpx

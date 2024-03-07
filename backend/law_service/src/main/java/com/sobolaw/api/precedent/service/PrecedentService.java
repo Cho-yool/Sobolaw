@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +18,7 @@ public class PrecedentService {
     // precedentId로 판례 내용 조회
     public PrecedentDTO findPrecedentById(Long precedentId) {
 
-        Precedent precedent = precedentRepository.findById(precedentId)
+        Precedent precedent = precedentRepository.findByPrecedentId(precedentId)
             .orElseThrow(() -> new IllegalArgumentException("해당 판례가 없습니다. precedentId=" + precedentId));
 
         return convertToPrecedentDTO(precedent);
@@ -64,8 +65,24 @@ public class PrecedentService {
             entity.getVerdictSummary(),
             entity.getReferencedStatute(),
             entity.getReferencedCase(),
-            entity.getCaseContent()
+            entity.getCaseContent(),
+                entity.getHit()
         );
+    }
+
+    @Transactional
+    public void updateHit(Long precedentId){
+        Precedent precedent = precedentRepository.findByPrecedentId(precedentId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 판례가 없습니다. precedentId=" + precedentId));
+        precedent.setHit(precedent.getHit()+1);
+    }
+
+    public List<PrecedentDTO> findTop20ByOrderByHitDesc(){
+        List<Precedent> precedents = precedentRepository.findTop20ByOrderByHitDesc();
+
+        return precedents.stream()
+                .map(this::convertToPrecedentDTO)
+                .collect(Collectors.toList());
     }
 
 }

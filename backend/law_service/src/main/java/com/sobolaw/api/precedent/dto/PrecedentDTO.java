@@ -24,7 +24,6 @@ public class PrecedentDTO {
     private String referencedStatute;
     private String referencedCase;
     private String caseContent;
+    private Long hit;
 
-    public PrecedentDTO(String caseName, String caseNumber, String caseName1, String judgmentDate, String judgment, String courtName, String caseName2, String verdictType, String judicialNotice, String verdictSummary, String referencedStatute, String referencedCase) {
-    }
 }
