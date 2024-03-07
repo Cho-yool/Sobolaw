@@ -11,31 +11,31 @@ public class Statute {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "statute_id")
+    @Column
     private Long statuteId;
 
-    @Column(name = "statute_name", length = 21845)
+    @Column(columnDefinition = "TEXT")
     private String statuteName;
 
-    @Column(name = "statute_type", length = 255)
+    @Column
     private String statuteType;
 
-    @Column(name = "department", length = 255)
+    @Column
     private String department;
 
-    @Column(name = "amendment_type", length = 255)
+    @Column
     private String amendmentType;
 
-    @Column(name = "publication_number", length = 255)
+    @Column
     private String publicationNumber;
 
-    @Column(name = "publication_date", length = 255)
+    @Column
     private String publicationDate;
 
-    @Column(name = "enforcement_date", length = 255)
+    @Column
     private String enforcementDate;
 
-    @Column(name = "statute_number", length = 255)
+    @Column
     private String statuteNumber;
 
 }
