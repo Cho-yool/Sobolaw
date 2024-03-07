@@ -5,3 +5,15 @@ export type UserState = {
   refreshToken: string;
 };
 
+export type MypaperWide = {
+  key: string;
+  name: string;
+  target: string;
+  date: string;
+  tags: string[];
+};
+
+export type MypaperNarrow = {
+  key: string;
+  name: string;
+};
