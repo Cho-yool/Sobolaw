@@ -13,4 +13,6 @@ import org.springframework.stereotype.Repository;
 public interface MemberKeywordRepository extends JpaRepository<MemberKeyword, Long> {
 
     Optional<MemberKeyword> findByMemberAndMemberKeywordId(Member member, Long keywordId);
+
+    Optional<MemberKeyword> findByMemberKeywordId(Long memberKeywordId);
 }

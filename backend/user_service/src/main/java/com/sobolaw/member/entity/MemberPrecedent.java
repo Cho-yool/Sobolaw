@@ -13,10 +13,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.List;
 import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.SQLRestriction;
 
 /**
  * 멤버 저장 판례.                         `
  */
+@SQLRestriction("is_deleted = false")
 @Table(name = "member_precedent")
 @Getter
 @Entity
@@ -26,11 +29,12 @@ public class MemberPrecedent extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberPrecedentId;
 
+    @Setter
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Column
+    @Column(nullable = false)
     private Long precedentId;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "memberPrecedent")

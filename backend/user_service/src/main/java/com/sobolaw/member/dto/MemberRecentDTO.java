@@ -16,7 +16,7 @@ public record MemberRecentDTO(Long recentPrecedentId, Long memberId, Long preced
      * MemberRecent 엔터티를 MemberRecentDTO로 변환하는 메소드.
      */
     public static MemberRecentDTO from(MemberRecent entity) {
-        return new MemberRecentDTO(entity.getRecentPrecedentId(), MemberDTO.from(entity.getMember()).memberId(), // Member 엔터티를 MemberDTO로 변환 후 memberId GET
+        return new MemberRecentDTO(entity.getRecentPrecedentId(), entity.getMember().getMemberId(), // Member 엔터티를 MemberDTO로 변환 후 memberId GET
             entity.getPrecedentId());
     }
 

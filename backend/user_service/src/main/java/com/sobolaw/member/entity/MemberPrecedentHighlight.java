@@ -11,10 +11,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.SQLRestriction;
 
 /**
  * 멤버 최근 본 판례.                         `
  */
+@SQLRestriction("is_deleted = false")
 @Table(name = "member_precedent_highlight")
 @Getter
 @Entity
@@ -24,6 +27,7 @@ public class MemberPrecedentHighlight extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberPrecedentHighlightId;
 
+    @Setter
     @ManyToOne
     @JoinColumn(name = "member_precedent_id", nullable = false)
     private MemberPrecedent memberPrecedent;

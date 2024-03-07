@@ -12,5 +12,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MemberPrecedentRepository extends JpaRepository<MemberPrecedent, Long> {
 
-    Optional<MemberPrecedent> findByMemberAndMemberPrecedentId(Member member, Long precedentId);
+    Optional<MemberPrecedent> findByMemberAndPrecedentId(Member member, Long precedentId);
+
 }

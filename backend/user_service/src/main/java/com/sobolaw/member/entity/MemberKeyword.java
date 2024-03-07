@@ -10,10 +10,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.SQLRestriction;
 
 /**
  * 멤버 관심 키워드.                         `
  */
+@SQLRestriction("is_deleted = false")
 @Table(name = "member_keyword")
 @Getter
 @Entity
@@ -23,6 +26,7 @@ public class MemberKeyword extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberKeywordId;
 
+    @Setter
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;

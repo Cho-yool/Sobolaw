@@ -18,7 +18,7 @@ public record MemberPrecedentDTO(Long memberPrecedentId, Long memberId, Long pre
      */
     public static MemberPrecedentDTO from(MemberPrecedent entity) {
         List<MemberPrecedentHighlightDTO> memberPrecedentHighlightDTOS = entity.getHighlights().stream().map(MemberPrecedentHighlightDTO::from).toList();
-        return new MemberPrecedentDTO(entity.getMemberPrecedentId(), MemberDTO.from(entity.getMember()).memberId(), // Member 엔터티를 MemberDTO로 변환 후 memberId GET
+        return new MemberPrecedentDTO(entity.getMemberPrecedentId(), entity.getMember().getMemberId(), // Member 엔터티를 MemberDTO로 변환 후 memberId GET
             entity.getPrecedentId(), memberPrecedentHighlightDTOS);
     }
 

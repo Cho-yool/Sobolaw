@@ -1,11 +1,15 @@
 package com.sobolaw.member.service;
 
+import com.sobolaw.feign.dto.response.PrecedentListResponseDTO;
+import com.sobolaw.feign.dto.response.PrecedentResponseDTO;
 import com.sobolaw.feign.service.LawServiceClient;
 import com.sobolaw.member.dto.MemberDTO;
 import com.sobolaw.member.dto.MemberKeywordDTO;
 import com.sobolaw.member.dto.MemberPrecedentDTO;
 import com.sobolaw.member.dto.MemberPrecedentHighlightDTO;
 import com.sobolaw.member.dto.MemberRecentDTO;
+import com.sobolaw.member.dto.request.KeywordSaveRequestDTO;
+import com.sobolaw.member.dto.request.PrecedentSaveRequestDTO;
 import com.sobolaw.member.entity.Member;
 import com.sobolaw.member.entity.MemberKeyword;
 import com.sobolaw.member.entity.MemberPrecedent;
@@ -17,7 +21,9 @@ import com.sobolaw.member.repository.MemberPrecedentHighlightRepository;
 import com.sobolaw.member.repository.MemberPrecedentRepository;
 import com.sobolaw.member.repository.MemberRecentRepository;
 import com.sobolaw.member.repository.MemberRepository;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -57,13 +63,16 @@ public class MemberService {
      * @param memberId 멤버Id
      * @return 최근 본 판례 리스트.
      */
-    public List<MemberRecentDTO> getMemberRecents(Long memberId) {
+    public List<PrecedentListResponseDTO> getMemberRecents(Long memberId) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
-        return member.getMemberRecents().stream()
-            .map(MemberRecentDTO::from)
+        List<Long> recentIds = member.getMemberRecents().stream()
+            .map(MemberRecent::getPrecedentId)
             .collect(Collectors.toList());
+
+        Map<String, List<Long>> requestBody = Collections.singletonMap("precedentId", recentIds);
+        return lawServiceClient.getPrecedentList(requestBody);
     }
 
     /**
@@ -87,14 +96,18 @@ public class MemberService {
      * @param memberId 멤버Id
      * @return 저장한 판례 리스트.
      */
-    public List<MemberPrecedentDTO> getMemberPrecedents(Long memberId) {
+    public List<PrecedentListResponseDTO> getMemberPrecedents(Long memberId) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
-        return member.getMemberPrecedents().stream()
-            .map(MemberPrecedentDTO::from)
+        List<Long> precedentIds = member.getMemberPrecedents().stream()
+            .map(MemberPrecedent::getPrecedentId)
             .collect(Collectors.toList());
+
+        Map<String, List<Long>> requestBody = Collections.singletonMap("precedentId", precedentIds);
+        return lawServiceClient.getPrecedentList(requestBody);
     }
+
 
     /**
      * 멤버의 저장 판례의 메모.
@@ -107,7 +120,7 @@ public class MemberService {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
-        MemberPrecedent matchingPrecedent = memberPrecedentRepository.findByMemberAndMemberPrecedentId(member, precedentId)
+        MemberPrecedent matchingPrecedent = memberPrecedentRepository.findByMemberAndPrecedentId(member, precedentId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT));
 
         return matchingPrecedent.getHighlights().stream()
@@ -122,14 +135,8 @@ public class MemberService {
      * @param precedentId 판례Id
      * @return 특정 저장 판례.
      */
-    public MemberPrecedentDTO getMemberPrecedentDetail(Long memberId, Long precedentId) {
-        Member member = memberRepository.findById(memberId)
-            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
-
-        MemberPrecedent precedent = memberPrecedentRepository.findByMemberAndMemberPrecedentId(member, precedentId)
-            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT));
-
-        return MemberPrecedentDTO.from(precedent);
+    public PrecedentResponseDTO getMemberPrecedentDetail(Long memberId, Long precedentId) {
+        return lawServiceClient.getPrecedentDetail(precedentId);
     }
 
     /**
@@ -139,30 +146,10 @@ public class MemberService {
      * @param recentId 최근 판례Id
      * @return 특정 최근 본 판례.
      */
-    public MemberRecentDTO getMemberRecentDetail(Long memberId, Long recentId) {
-        Member member = memberRepository.findById(memberId)
-            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
-
-        MemberRecent recent = memberRecentRepository.findByMemberAndRecentPrecedentId(member, recentId)
-            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_RECENT));
-
-        return MemberRecentDTO.from(recent);
+    public PrecedentResponseDTO getMemberRecentDetail(Long memberId, Long recentId) {
+        return lawServiceClient.getPrecedentDetail(recentId);
     }
 
-//    public MemberRecentDTO getMemberRecentDetail(Long memberId, Long recentId) {
-//        Member member = memberRepository.findById(memberId)
-//            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
-//
-//        MemberRecent recent = memberRecentRepository.findByMemberIdAndRecentPrecedentId(member, recentId)
-//            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_RECENT));
-//
-//        // Law 서비스의 Feign Client를 이용하여 판례 데이터 가져오기
-//        Long precedentId = recent.getPrecedentId();
-//        LawDto lawDto = lawServiceClient.getLawById(precedentId);
-//
-//        // LawDto를 사용하여 MemberRecentDTO 생성
-//        return MemberRecentDTO.from(recent, lawDto);
-//    }
 
     /**
      * 멤버의 특정 관심키워드 조회.
@@ -181,7 +168,6 @@ public class MemberService {
         return MemberKeywordDTO.from(keyword);
     }
 
-
     /**
      * 멤버 전체 조회.
      */
@@ -192,24 +178,31 @@ public class MemberService {
             .collect(Collectors.toList());
     }
 
+
     /**
      * 저장된 판례 전체 조회.
      */
-    public List<MemberPrecedentDTO> getAllMemberPrecedents() {
+    public List<PrecedentListResponseDTO> getAllMemberPrecedents() {
         List<MemberPrecedent> allPrecedents = memberPrecedentRepository.findAll();
-        return allPrecedents.stream()
-            .map(MemberPrecedentDTO::from)
+        List<Long> precedentIds = allPrecedents.stream()
+            .map(MemberPrecedent::getPrecedentId)
             .collect(Collectors.toList());
+
+        Map<String, List<Long>> requestBody = Collections.singletonMap("precedentId", precedentIds);
+        return lawServiceClient.getPrecedentList(requestBody);
     }
 
     /**
      * 최근 본 판례 전체 조회.
      */
-    public List<MemberRecentDTO> getAllMemberRecents() {
+    public List<PrecedentListResponseDTO> getAllMemberRecents() {
         List<MemberRecent> allRecents = memberRecentRepository.findAll();
-        return allRecents.stream()
-            .map(MemberRecentDTO::from)
+        List<Long> recentIds = allRecents.stream()
+            .map(MemberRecent::getPrecedentId)
             .collect(Collectors.toList());
+
+        Map<String, List<Long>> requestBody = Collections.singletonMap("precedentId", recentIds);
+        return lawServiceClient.getPrecedentList(requestBody);
     }
 
     /**
@@ -221,4 +214,127 @@ public class MemberService {
             .map(MemberKeywordDTO::from)
             .collect(Collectors.toList());
     }
+
+    /**
+     * 판례 ID를 받아서 멤버 저장 판례를 생성하고 저장.
+     *
+     * @return 저장된 멤버 저장 판례 DTO
+     */
+    public MemberPrecedentDTO saveMemberPrecedent(Long memberId, PrecedentSaveRequestDTO request) {
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
+
+        // 멤버 저장 판례 생성 및 저장
+        MemberPrecedent newMemberPrecedent = MemberPrecedent.of(
+            request.precedentId()
+        );
+        newMemberPrecedent.setMember(member);
+        MemberPrecedent memberPrecedent = memberPrecedentRepository.save(newMemberPrecedent);
+
+        // 저장된 멤버 저장 판례 DTO로 변환
+        return MemberPrecedentDTO.from(memberPrecedent);
+    }
+
+    /**
+     * 판례 ID를 받아서 멤버가 최근 본 판례에 저장.
+     */
+    public MemberRecentDTO saveMemberRecent(Long memberId, PrecedentSaveRequestDTO request) {
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
+
+        // 멤버 저장 판례 생성 및 저장
+        MemberRecent newMemberRecent = MemberRecent.of(
+            request.precedentId()
+        );
+        newMemberRecent.setMember(member);
+        MemberRecent memberRecent = memberRecentRepository.save(newMemberRecent);
+
+        // 저장된 멤버 저장 판례 DTO로 변환
+        return MemberRecentDTO.from(memberRecent);
+    }
+
+    /**
+     * 키워드 저장.
+     */
+    public MemberKeywordDTO saveMemberKeyword(Long memberId, KeywordSaveRequestDTO request) {
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
+
+        // 멤버 저장 판례 생성 및 저장
+        MemberKeyword newMemberKeyword = MemberKeyword.of(
+            request.word()
+        );
+        newMemberKeyword.setMember(member);
+        MemberKeyword memberKeyword = memberKeywordRepository.save(newMemberKeyword);
+
+        // 저장된 멤버 저장 판례 DTO로 변환
+        return MemberKeywordDTO.from(memberKeyword);
+    }
+
+    /**
+     * 멤버의 판례 삭제.
+     *
+     * @param memberId    멤버 ID.
+     * @param precedentId 삭제할 판례 ID.
+     */
+    @Transactional
+    public void deleteMemberPrecedent(Long memberId, Long precedentId) {
+        // 멤버 찾기
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
+
+        // 멤버의 판례 중에서 삭제할 판례 찾기
+        MemberPrecedent precedent = memberPrecedentRepository.findByMemberAndPrecedentId(member, precedentId)
+            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT));
+
+        // 필요한 경우 추가 권한 확인 등의 로직 수행
+
+        // 판례를 삭제 처리
+        precedent.softDelete();
+
+        // 업데이트된 판례 엔티티를 저장하여 삭제되었음을 표시
+        memberPrecedentRepository.save(precedent);
+    }
+
+    /**
+     * 멤버가 본 판례 삭제.
+     *
+     * @param memberId 멤버 ID.
+     * @param recentId 삭제할 조회한 판례 ID.
+     */
+    @Transactional
+    public void deleteMemberRecent(Long memberId, Long recentId) {
+        // 멤버 찾기
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
+
+        // 멤버의 조회한 판례 중에서 삭제할 조회한 판례 찾기
+        MemberRecent recent = memberRecentRepository.findByMemberAndPrecedentId(member, recentId)
+            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_RECENT));
+
+        // 조회한 판례를 삭제 처리
+        recent.softDelete();
+
+        // 업데이트된 조회한 판례 엔티티를 저장하여 삭제되었음을 표시
+        memberRecentRepository.save(recent);
+    }
+
+    /**
+     * 멤버의 키워드 삭제.
+     *
+     * @param keywordId 삭제할 키워드 ID.
+     */
+    @Transactional
+    public void deleteMemberKeyword(Long keywordId) {
+        // 멤버의 키워드 중에서 삭제할 키워드 찾기
+        MemberKeyword keyword = memberKeywordRepository.findByMemberKeywordId(keywordId)
+            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_KEYWORD));
+
+        // 키워드를 삭제 처리
+        keyword.softDelete();
+
+        // 업데이트된 키워드 엔티티를 저장하여 삭제되었음을 표시
+        memberKeywordRepository.save(keyword);
+    }
+
 }
