@@ -12,28 +12,28 @@ import lombok.Setter;
 public class StatuteText {
 
     @Id
-    @Column(name = "statute_id")
+    @Column
     private Long lawId;
 
-    @Column(name = "article_key")
+    @Column
     private Long articleKey;
 
-    @Column(name = "article_number")
+    @Column
     private Long articleNumber;
 
-    @Column(name = "article_type", length = 225)
+    @Column
     private String articleType;
 
-    @Column(name = "article_title", length = 225)
+    @Column
     private String articleTitle;
 
-    @Column(name = "article_content", length = 225)
+    @Column
     private String articleContent;
 
-    @Column(name = "article_sub_content", length = 21845)
+    @Column(columnDefinition = "TEXT")
     private String articleSubContent;
 
-    @Column(name = "article_effective_date", length = 225)
+    @Column
     private String articleEffectiveDate;
 
 }
