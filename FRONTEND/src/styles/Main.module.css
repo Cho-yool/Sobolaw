@@ -27,7 +27,7 @@ strong {
   flex-wrap: wrap;
   margin-bottom: -80px;
   border-radius: 20px;
-  background: var(--w-color);
+  background: white;
   box-shadow: 0px 8px 15px #0000001a;
   overflow: hidden;
 }
