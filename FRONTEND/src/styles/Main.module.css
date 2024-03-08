@@ -53,9 +53,9 @@ strong {
 }
 
 .whitebox-content {
-  padding-top: 50px;
+  padding-top: 90px;
   padding-left: 50px;
-  padding-bottom: 80px;
+  padding-bottom: 110px;
   line-height: 1.5rem;
   width: 45%;
   display: flex;
@@ -136,6 +136,7 @@ strong {
 .point-icon {
   position: absolute;
   width: fit-content;
+  margin-bottom: 15px;
   right: 60px;
   bottom: 60px;
 }
