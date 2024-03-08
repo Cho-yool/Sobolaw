@@ -1,0 +1,91 @@
+/* RecentLawCase.module.css */
+.recentLawCaseContainer {
+  margin: 2cqi auto;
+  position: relative; /* To position the background box */
+  background-color: #f0f0f0;
+  padding: 60px; /* Provide space for the background box */
+  border-radius: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.recentLawCaseTitle {
+  color: #644419;
+  margin: 20px auto;
+  font-size: 30px;
+}
+
+.recentLawCaseList {
+  max-height: 350px;
+  overflow-y: auto;
+  margin: 40px auto;
+  padding: 20px; /* Provide space for the background box */
+  position: relative; /* Ensure proper stacking context */
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between case type box and title */
+  padding: 10px 0; /* Increase item size */
+}
+
+.caseTypeBox {
+  flex-shrink: 0;
+  background-color: #644419; /* Example background color */
+  border-radius: 20px;
+  padding: 5px 15px;
+  font-size: 14px; /* Smaller font for the case/law type */
+  color: #ffffff;
+}
+
+.caseTitle {
+  margin-left: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #644419;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: left;
+  flex-grow: 1;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.caseTitle:hover {
+  color: #bf8438;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.hiddenItem {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .recentLawCaseContainer {
+    width: 80%;
+    margin: 10px 20px;
+  }
+
+  .recentLawCaseTitle {
+    font-size: 20px;
+    margin: 20px auto;
+  }
+
+  .caseTitle {
+    width: calc(100% - 60px); /* Adjust based on actual layout constraints */
+  }
+}
+
+/* Add custom styles for the background box */
+.backgroundBox {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border: 1px solid #ccc; /* Example border style */
+  border-radius: 15px; /* Rounded corners for the box */
+  z-index: -1; /* Ensure it's behind the list items */
+}

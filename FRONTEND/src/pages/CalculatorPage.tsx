@@ -1,16 +1,8 @@
-import {
-  Select,
-  InputNumber,
-  Input,
-  Button,
-  Radio,
-  Collapse,
-  Divider,
-  Form,
-} from "antd";
+import { Select, Button, Radio, Collapse, Divider, Form } from "antd";
 import Title from "antd/es/typography/Title";
 import "../App.css";
 import style from "../styles/calculator/Calculator.module.css";
+import { useState } from "react";
 
 const { Option } = Select;
 
@@ -18,15 +10,51 @@ export default function CalculatorPage() {
   // antd에서 form 설정코드 긁어온 것
   const formItemLayout = {
     labelCol: { span: 6 },
-    wrapperCol: { span: 14 },
+    wrapperCol: { span: 12 },
   };
-  const onFinish = () => {
-    console.log("Received values of form: ");
+  const onSubmit = () => {
+    if (
+      litigationType &&
+      caseClassification &&
+      litigationMoney &&
+      trial &&
+      caseType &&
+      person &&
+      lawyerPay
+    ) {
+      console.log("계산중입니다");
+    } else {
+      alert("입력 값이 누락됐습니다.");
+    }
   };
-  //  여기까지
+
+  function handleLitigationChange(e: string) {
+    const value = e.replace(/[^0-9]/g, "");
+    const test = changeNumber(value);
+    setLitigationMoney(test);
+  }
+
+  function handleLawyerChange(e: string) {
+    const value = e.replace(/[^0-9]/g, "");
+    const test = changeNumber(value);
+    setLawyerPay(test);
+  }
+
+  function changeNumber(num: string) {
+    const newNum = Number(num.split(",").join());
+    return newNum.toLocaleString("ko-KR");
+  }
+
+  const [litigationType, setLitigationType] = useState<string>("");
+  const [caseClassification, setCaseClassification] = useState<string>("");
+  const [litigationMoney, setLitigationMoney] = useState<string>("");
+  const [trial, setTrial] = useState<string>("");
+  const [caseType, setCaseType] = useState<string>("");
+  const [person, setPerson] = useState<string>("");
+  const [lawyerPay, setLawyerPay] = useState<string>("");
 
   return (
-    <div className="pages">
+    <div className={style["pages"]}>
       {/* 페이지 타이틀 */}
       <Title level={2} style={{ color: "#644419", textAlign: "center" }}>
         소송 비용 계산
@@ -63,31 +91,26 @@ export default function CalculatorPage() {
       </div>
 
       {/* 계산 박스 */}
-      <div className={style["calculator-box"]}>
+      <div className={style["calculator"]}>
         {/* antd Form 예제 갖고왔어요 */}
         <Form
+          className={style["calculator-box"]}
           name="validate_other"
           {...formItemLayout}
-          onFinish={onFinish}
-          initialValues={{
-            "input-number": 3,
-            "checkbox-group": ["A", "B"],
-            rate: 3.5,
-            "color-picker": null,
-          }}
-          style={{ maxWidth: 600 }}
+          size="large"
         >
-          <Form.Item name="radio-group" label="소송 구분">
-            <Radio.Group>
-              <Radio value="a">item 1</Radio>
-              <Radio value="b">item 2</Radio>
-              <Radio value="c">item 3</Radio>
+          <Form.Item label="소송 구분">
+            <Radio.Group onChange={(e) => setLitigationType(e.target.value)}>
+              <Radio value="전자소송">전자소송</Radio>
+              <Radio value="종이소송">종이소송</Radio>
             </Radio.Group>
           </Form.Item>
-          <Form.Item name="select" label="사건 구분">
-            <Select placeholder="Please select a country">
-              <Option value="china">China</Option>
-              <Option value="usa">U.S.A</Option>
+          <Form.Item label="사건 구분">
+            <Select
+              placeholder="소송을 선택하세요"
+              onSelect={(e) => setCaseClassification(e)}
+            >
+              <Option value="소송">소송</Option>
             </Select>
           </Form.Item>
           <Form.Item
@@ -95,64 +118,98 @@ export default function CalculatorPage() {
             hasFeedback
             rules={[{ required: true, message: "필수 입력해주세요" }]}
           >
-            <Form.Item name="input-number" noStyle>
-              <InputNumber min={1} max={10} />
+            <Form.Item noStyle={true}>
+              <div className={style["calculator-box__money"]}>
+                <span>금</span>
+                <input
+                  type="text"
+                  value={litigationMoney}
+                  onChange={(e) => handleLitigationChange(e.target.value)}
+                />
+                <span>원</span>
+              </div>
             </Form.Item>
-            <span className="ant-form-text" style={{ marginLeft: 8 }}>
-              원
-            </span>
           </Form.Item>
-          <Form.Item name="select" label="심급">
-            <Select placeholder="Please select a country">
-              <Option value="china">China</Option>
-              <Option value="usa">U.S.A</Option>
+          <Form.Item name="judge" label="심급">
+            <Select
+              placeholder="심을 선택하세요."
+              onSelect={(e) => setTrial(e)}
+            >
+              <Option value="1">1심</Option>
+              <Option value="2">2심</Option>
             </Select>
           </Form.Item>
           <Form.Item
-            name="select"
+            name="casetype"
             label="사건종류"
             hasFeedback
             rules={[{ required: true, message: "필수 입력해주세요" }]}
           >
-            <Select placeholder="Please select a country">
-              <Option value="china">China</Option>
-              <Option value="usa">U.S.A</Option>
+            <Select
+              placeholder="사건 종류를 선택하세요."
+              onSelect={(e) => setCaseType(e)}
+            >
+              <Option value="0">민사제1심합의사건(가합)</Option>
+              <Option value="1">민사제1심단독사건(가단)</Option>
+              <Option value="2">민사소액사건(가소)</Option>
+              <Option value="3">민사항소사건(나)</Option>
+              <Option value="4">민사상고사건(다)</Option>
+              <Option value="5">민사항고사건(라)</Option>
+              <Option value="6">민사재항고사건(마)</Option>
+              <Option value="7">화해사건(자)</Option>
+              <Option value="8">독촉사건(차)</Option>
+              <Option value="9">민사조정사건(머)</Option>
             </Select>
-            <Input />
           </Form.Item>
           <Form.Item
             label="피고/상대방수"
             hasFeedback
             rules={[{ required: true, message: "필수 입력해주세요" }]}
           >
-            <Form.Item name="input-number" noStyle>
-              <InputNumber min={1} max={10} />
+            <Form.Item noStyle={true}>
+              <div className={style["calculator-box__money"]}>
+                <input
+                  type="number"
+                  value={person}
+                  onChange={(e) => setPerson(e.target.value)}
+                />
+                <span>명</span>
+              </div>
             </Form.Item>
-            <span className="ant-form-text" style={{ marginLeft: 8 }}>
-              원
-            </span>
           </Form.Item>
           <Form.Item label="변호사/보수 약정액">
-            <Form.Item name="input-number" noStyle>
-              <InputNumber min={1} max={10} />
+            <Form.Item noStyle={true}>
+              <div className={style["calculator-box__money"]}>
+                <span>금</span>
+                <input
+                  type="text"
+                  value={lawyerPay}
+                  onChange={(e) => handleLawyerChange(e.target.value)}
+                />
+                <span>원</span>
+              </div>
             </Form.Item>
-            <span className="ant-form-text" style={{ marginLeft: 8 }}>
-              원
-            </span>
           </Form.Item>
         </Form>
       </div>
-      <p style={{ fontSize: "0.875rem", marginBottom: "16px" }}>
-        ※ 변호사 부담금의 변동이 있을 경우, 실제 소송비용은 결과와 상이할 수
-        있습니다.
-      </p>
-      <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px" }}>
-        <Button style={{ border: "1px solid #0047ba", color: "#0047ba" }}>
-          초기화
-        </Button>
-        <Button style={{ backgroundColor: "#0047ba", color: "white" }}>
-          제출하기
-        </Button>
+      <div className={style["detail-info"]}>
+        <p style={{ fontSize: "1rem", marginBottom: "16px" }}>
+          ※ 변호사 부담금의 변동이 있을 경우, 실제 소송비용은 결과와 상이할 수
+          있습니다.
+        </p>
+        <div
+          style={{ display: "flex", justifyContent: "flex-end", gap: "8px" }}
+        >
+          <Button style={{ border: "1px solid #0047ba", color: "#0047ba" }}>
+            초기화
+          </Button>
+          <Button
+            style={{ backgroundColor: "#0047ba", color: "white" }}
+            onClick={onSubmit}
+          >
+            제출하기
+          </Button>
+        </div>
       </div>
 
       {/* 제출했을 때 뜨는 박스, 일단 pages에 같이 적어둠 */}
@@ -163,7 +220,7 @@ export default function CalculatorPage() {
 
         <div className={style["result-box"]}>
           <div style={{ padding: "24px" }}>
-            <div
+            <p
               style={{
                 marginBottom: "16px",
                 fontSize: "1.5rem",
@@ -171,7 +228,7 @@ export default function CalculatorPage() {
               }}
             >
               계산결과
-            </div>
+            </p>
             <p>인지액:</p>
             <p>송달료:</p>
             <p>법정 보수액 한도:</p>
@@ -183,89 +240,148 @@ export default function CalculatorPage() {
 
       {/* 하위에 떠있을 주의사항 */}
       <Collapse
-        size="small"
+        className={style["notice"]}
+        size="large"
         items={[
           {
             key: "1",
             label: "인지액 계산 방법",
             children: (
-              <div className="max-w-4xl mx-auto my-8 p-6 bg-white shadow rounded">
-                <div className="mb-4">
-                  <h2 className="text-lg font-semibold">미적에 실시방법</h2>
-                  <p className="text-sm">
-                    2011. 7. 18. 부터 전자소송으로 소송을 제출하는 경우에는
-                    별도의 송달료가 부과되지 않습니다.
+              <div className={style["notice-header"]}>
+                <div className={style["notice-header-box"]}>
+                  <h2 className={style["notice-header-title"]}>
+                    인지액 계산방법
+                  </h2>
+                  <p className={style["notice-header-content"]}>
+                    2011. 7. 18. 부터 전자소송으로 소장을 제출하는 경우에는
+                    종이소송에 비하여 10% 할인된 인지액을 납부하시면 됩니다.
                   </p>
                 </div>
-                <div className="mb-4">
-                  <h3 className="text-md font-semibold">소장</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="col-span-1">
-                      <div className="font-medium">소송물의 가액</div>
-                      <div>1,000만원 이하</div>
-                      <div>1,000만원 이상 ~ 1억원 이하</div>
-                      <div>1억원 이상 ~ 10억원 이하</div>
-                      <div>10억원 이상</div>
+                <div className={style["notice-content"]}>
+                  <h3 className={style["notice-content-title"]}>소장</h3>
+                  <div className={style["notice-content-table"]}>
+                    <div className={style["notice-content-row"]}>
+                      <div className={style["notice-content-header"]}>
+                        소송물의 가액
+                      </div>
+                      <div className={style["notice-content-header"]}>
+                        인지액 계산방법
+                      </div>
                     </div>
-                    <div className="col-span-1">
-                      <div className="font-medium">인지액 계산방법</div>
-                      <div>(소송물가액 가액 x 0.50% x 0.9)</div>
-                      <div>(소송물가액 가액 x 0.45% + 5,000원) x 0.9</div>
-                      <div>(소송물가액 가액 x 0.40% + 55,000원) x 0.9</div>
-                      <div>(소송물가액 가액 x 0.35% + 555,000원) x 0.9</div>
+                    <div className={style["notice-content-row"]}>
+                      <div className={style["notice-content-column"]}>
+                        <li>1,000만원 이하</li>
+                        <li>1,000만원 이상 ~ 1억원 이하</li>
+                        <li>1억원 이상 ~ 10억원 이하</li>
+                        <li className={style["notice-content-column_left"]}>
+                          10억원 이상
+                        </li>
+                      </div>
+                      <div className={style["notice-content-column"]}>
+                        <li>(소송물가액 가액 x 0.50% x 0.9)</li>
+                        <li>(소송물가액 가액 x 0.45% + 5,000원) x 0.9</li>
+                        <li>(소송물가액 가액 x 0.40% + 55,000원) x 0.9</li>
+                        <li className={style["notice-content-column_right"]}>
+                          (소송물가액 가액 x 0.35% + 555,000원) x 0.9
+                        </li>
+                      </div>
                     </div>
                   </div>
                   <p className="text-sm mt-2">
-                    예시: 소송물가액 2억이 3,000만원일 경우, (3,000만원 x 0.45%
-                    + 5,000원) x 0.9 = 126,000원 입니다.
+                    예시: 소송물가액이 3,000만원일 경우, (3,000만원 x 0.45% +
+                    5,000원) x 0.9 = 126,000원 입니다.
                   </p>
                 </div>
-                <div className="mb-4">
-                  <h3 className="text-md font-semibold">소송수수료</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="col-span-1">
-                      <div>변론수수료 : 통상소송 인지액의 1.5배에 0.9배</div>
-                      <div>심결수수료 : 통상소송 인지액의 2배에 0.9배</div>
+
+                <h3 className={style["notice-content-title"]}>상소장</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="col-span-1">
+                    <li className={style["notice-content-list"]}>
+                      항소장 : 종이소장 인지액의 1.5배의 0.9액
+                    </li>
+                    <li className={style["notice-content-list"]}>
+                      상소장 : 종이소장 인지액의 2배의 0.9액
+                    </li>
+                  </div>
+                </div>
+
+                <h3 className={style["notice-content-title"]}>청구변경신청</h3>
+                <div className={style["notice-content-table"]}>
+                  <div className={style["notice-content-row"]}>
+                    <div className={style["notice-content-header"]}>신고</div>
+                    <th className={style["notice-content-header"]}>
+                      공탁금반환신청 인지액 계산법
+                    </th>
+                  </div>
+                  <div className={style["notice-content-row"]}>
+                    <div className={style["notice-content-column"]}>
+                      <li>제1심</li>
+                      <li className={style["notice-content-column_left"]}>
+                        제2심
+                      </li>
+                    </div>
+                    <div className={style["notice-content-column"]}>
+                      <li>
+                        (변경 후 청구에 관한 인지액 - 변경 전 청구에 관한
+                        인지액) x 0.9
+                      </li>
+                      <li className={style["notice-content-column_right"]}>
+                        (변경 후 청구에 관한 인지액 x 1.5 - 변경 전 청구에 관한
+                        인지액) x 0.9
+                      </li>
                     </div>
                   </div>
                 </div>
-                <div className="mb-4">
-                  <h3 className="text-md font-semibold">공탁금반환신청</h3>
-                  <table className="min-w-full table-fixed border-collapse border">
-                    <thead>
-                      <tr>
-                        <th className="w-1/2 border p-2">신고</th>
-                        <th className="w-1/2 border p-2">
-                          공탁금반환신청 인지액 계산법
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td className="border p-2">제1신고</td>
-                        <td className="border p-2">
-                          (변론 중 종국에 갈음한 인지액 - 변론 중 종국에 갈음한
-                          인지액) x 0.9
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="border p-2">제2신고</td>
-                        <td className="border p-2">
-                          (변론 중 종국에 갈음한 인지액 x 1.5 - 변론 중 종국에
-                          갈음한 인지액) x 0.9
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <p className="text-sm">
+                  *민사소송 등 인지법 제5조 각 호에 따라 인지액(변경 후, 변경 전
+                  모두 종이소송 기준)을 먼저 계산한 후 최종적으로 0.9를 곱한
+                  금액이 청구변경신청서의 인지액이 됩니다
+                </p>
+                <h3 className={style["notice-content-title"]}>
+                  송달료 계산방법
+                </h3>
+                <div className={style["notice-content-table"]}>
+                  <div className={style["notice-content-row"]}>
+                    <div className={style["notice-content-header"]}>
+                      소송물의 가액
+                    </div>
+                    <div className={style["notice-content-header"]}>
+                      인지액 계산방법
+                    </div>
+                  </div>
+                  <div className={style["notice-content-row"]}>
+                    <div className={style["notice-content-column"]}>
+                      <li>민사 제1심 소액사건</li>
+                      <li>민사 제1심 단독사건</li>
+                      <li>민사 제1심 합의사건</li>
+                      <li>민사항소사건</li>
+                      <li>민사 상고사건(다)</li>
+                      <li>민사 조정사건(머)</li>
+                      <li>(재)항고사건</li>
+                      <li className={style["notice-content-column_left"]}>
+                        신청사건
+                      </li>
+                    </div>
+                    <div className={style["notice-content-column"]}>
+                      <li>5,200원 x 피고수 x 10회분</li>
+                      <li>5,200원 x 피고수 x 15회분</li>
+                      <li>5,200원 x 피고수 x 15회분</li>
+                      <li>5,200원 x 피항소인수 x 12회분</li>
+                      <li>5,200원 x 피상고인수 x 8회분</li>
+                      <li>5,200원 x (신청인수 + 피신청인수) x 5회분</li>
+                      <li>((재)항고인 + 상대방수) X 송달료 2~5회분</li>
+                      <li className={style["notice-content-column_right"]}>
+                        (신청인수 + 피신청인수) X 송달료 1~5회분 또는 피신청인수
+                        X 송달료 6~8회분
+                      </li>
+                    </div>
+                  </div>
                 </div>
-                <div className="mb-4">
-                  <h3 className="text-md font-semibold">유의사항</h3>
-                  <p className="text-sm">
-                    민사소송 등 이외의 제도로 갈 때에 따라 인지액(변론 중, 변론
-                    전 또는 종국 등)를 다시 계산할 수 있도록 유의해야 하며
-                    공탁금 반환신청시 인지액이 달라집니다.
-                  </p>
-                </div>
+                <p className="text-sm mt-2">
+                  예시 : 민사 제1심 소액 사건 피고가 2명인 경우, 5,200원 x 2명 x
+                  10회분 = 104,000원입니다. 민사 조정사건의 신청인이 2명,
+                  피신청인이 1명인 경우, 5,200원 x 3명 x 5회분 = 78,000원입니다.
+                </p>
               </div>
             ),
           },

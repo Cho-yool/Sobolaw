@@ -1,12 +1,12 @@
-// src/components/SearchResultList.tsx
+// src/components/search/SearchResultList.tsx
 import React from 'react';
 import { List } from 'antd';
-import style from '../../styles/SearchResultList.module.css';
+import style from '../../styles/search/SearchResultList.module.css';
 
-interface SearchResult {
+export interface SearchResult {
   id: number;
   title: string;
-  summary: string;
+  content: string;
 }
 
 interface SearchResultListProps {
@@ -23,7 +23,7 @@ const SearchResultList: React.FC<SearchResultListProps> = ({ searchResults }) =>
         <List.Item key={item.id}>
           <List.Item.Meta
             title={<a href={`/laws/${item.id}`}>{item.title}</a>}
-            description={item.summary}
+            description={item.content}
           />
         </List.Item>
       )}

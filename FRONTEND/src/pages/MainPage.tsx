@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Divider, Button } from "antd";
+import { Button } from "antd";
 import { GoLaw } from "react-icons/go";
 import { FaPencil } from "react-icons/fa6";
 import mainImg from "/images/mainLawyer.png";
@@ -44,7 +44,12 @@ export default function MainPage() {
           </div>
 
           <div className={style["box1-content-whitebox"]}>
-            <div className={style["whitebox-content"]}>
+            <div
+              className={style["whitebox-content"]}
+              onClick={() => {
+                navigate("/recommend");
+              }}
+            >
               <div className={style["point-icon"]}>
                 <GoLaw size="80" />
                 <div className={style["point-circle"]} />
@@ -57,8 +62,14 @@ export default function MainPage() {
                 찾아 도움을 드립니다
               </p>
             </div>
-            <div className={style["whitebox-dashed"]}></div>
-            <div className={style["whitebox-content"]}>
+
+            <div className={style["whitebox-dashed"]} />
+            <div
+              className={style["whitebox-content"]}
+              onClick={() => {
+                navigate("/plaint");
+              }}
+            >
               <div className={style["point-icon"]}>
                 <FaPencil size="80" />
                 <div className={style["point-circle"]} />
@@ -81,9 +92,9 @@ export default function MainPage() {
           <strong>내 주변에서 일어나는 사건의 답을 모르겠을 때</strong>
         </div>
         <div className={style["box2-img"]} />
-        <p className={style["box3-title"]}>
-          과거에는 어떻게 해결했는지 알아보세요
-        </p>
+        <div className={style["box3-title"]}>
+          <strong>과거에는 어떻게 해결했는지 알아보세요</strong>
+        </div>
       </div>
 
       <div className={style["box3"]}>
