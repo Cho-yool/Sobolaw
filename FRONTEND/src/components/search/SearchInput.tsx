@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Input, Tabs } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
-import style from '../../styles/SearchInput.module.css';
+import style from '../../styles/search/SearchInput.module.css';
 
 // Props 타입 정의
 interface SearchInputProps {
