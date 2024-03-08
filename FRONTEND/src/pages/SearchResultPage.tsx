@@ -1,5 +1,5 @@
 // src/pages/SearchResultPage.tsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Pagination, Input, Tabs, Dropdown, Menu } from "antd";
 import { SearchOutlined } from '@ant-design/icons';
@@ -27,7 +27,7 @@ const SearchResultPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const initialPage = 1; // 초기 페이지
-  const [searchResults, setSearchResults] = useState<SearchResult[]>(dummyData);
+  const [searchResults] = useState<SearchResult[]>(dummyData);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [searchTerm, setSearchTerm] = useState<string>(''); // 검색어 상태
   const pageSize = 10; // 한 페이지에 표시할 검색 결과의 수

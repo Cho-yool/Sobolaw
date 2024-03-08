@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { Layout, Row, Col, Card } from 'antd';
 import { BookOutlined, CommentOutlined, StarOutlined } from '@ant-design/icons';
 import SearchInput from '../components/search/SearchInput';
-import SearchResultList from '../components/search/SearchResultList';
 import RecentLawCase from '../components/search/RecentLawCase'; // 최근 본 판례 리스트 컴포넌트를 임포트합니다.
 import pageStyle from '../styles/search/SearchPage.module.css';
 
@@ -13,7 +12,7 @@ const { Content } = Layout;
 const SearchPage: React.FC = () => {
   const navigate = useNavigate();
   // Dummy data for recently viewed law cases, replace with real data as needed
-  const [recentLawCases, setRecentLawCases] = useState([
+  const [recentLawCases, ] = useState([
     { id: 1, title: '서울고등법원 2007. 4. 19. 선고 2007노78 판결 살인·살인미수·살인음모', type: '판례' as '판례' },
     { id: 2, title: '서울고등법원 2020. 8. 27. 선고 2020노927,2020전노73(병합),2020보노35(병합) 판결 살인,살인미수,마약류관리에관한법률위반(향정),절도,부착명령,보호관찰명령', type: '판례' as '판례' },
     { id: 3, title: '서울고등법원 2018. 8. 10. 선고 2018노547,2018전노27(병합) 판결 살인미수,도로교통법위반(음주운전),부착명령', type: '판례' as '판례'},
@@ -25,15 +24,6 @@ const SearchPage: React.FC = () => {
     { id: 9, title: '대법원 1951. 5. 1. 선고 4283형상73 판결 방화살인미수', type: '법령' as '법령'},
     { id: 10, title: '대전고등법원 2019. 1. 18. 선고 2018노485,2018전노32(병합) 판결 살인,살인예비,절도,도로교통법위반(음주측정거부),부착명령', type: '법령' as '법령'},
   ]);
-
-  interface SearchResult {
-    id: number;
-    title: string;
-    summary: string;
-  }
-
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([]); // 검색 결과를 저장할 상태
-
 
   // 검색 함수
 const handleSearch = (searchQuery: string, activeTab: string) => {
