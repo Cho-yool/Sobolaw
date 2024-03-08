@@ -58,7 +58,6 @@
   padding: 5px;
 }
 
-
 .hiddenItem {
   display: none;
 }
@@ -75,7 +74,7 @@
   }
 
   .caseTitle {
-    max-width: calc(100% -60px); /* Adjust based on actual layout constraints */
+    width: calc(100% - 60px); /* Adjust based on actual layout constraints */
   }
 }
 
