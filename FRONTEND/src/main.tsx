@@ -13,6 +13,15 @@ import App from "./App.tsx";
 const theme = {
   token: {
     fontFamily: "Orbit-Regular",
+    Tabs: {
+      itemColor: "#ffffff",
+      itemHoverColor: "#EAA854",
+      itemSelectedColor: "#EAA854",
+      inkBarColor: "#EAA854",
+      titleFontSize: "20px",
+      horizontalMargin: "10px 0 30px 0",
+      algorithm: true,
+    },
   },
   components: {
     Button: {
@@ -23,15 +32,6 @@ const theme = {
       colorPrimary: "#FEDA89",
       algorithm: true, // Enable algorithm
     },
-    Tabs: {
-      itemColor: "#ffffff",
-      itemHoverColor: "#EAA854",
-      itemSelectedColor: "#EAA854",
-      inkBarColor: "#EAA854",
-      titleFontSize: "20px",
-      horizontalMargin: "10px 0 30px 0",
-      algorithm: true,
-    }
   },
 };
 

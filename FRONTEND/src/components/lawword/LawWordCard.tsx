@@ -1,4 +1,4 @@
-import { Card, Flex } from "antd";
+import { Card } from "antd";
 import style from "../../styles/lawword/LawWordCard.module.css";
 
 const LawWordCard = () => {
