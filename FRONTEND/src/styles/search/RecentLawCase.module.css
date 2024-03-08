@@ -74,7 +74,11 @@
   }
 
   .caseTitle {
+<<<<<<< Updated upstream
     width: calc(100% - 60px); /* Adjust based on actual layout constraints */
+=======
+    max-width: calc(100% - 60px); /* Adjust based on actual layout constraints */
+>>>>>>> Stashed changes
   }
 }
 
