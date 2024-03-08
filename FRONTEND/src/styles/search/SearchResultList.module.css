@@ -1,19 +1,58 @@
 /* src/styles/SearchResultList.module.css */
-.searchResultList {
-    margin-top: 20px;
-  }
-  
-  /* 리스트 아이템에 대한 스타일 */
-  .item {
-    padding: 15px;
-    border-bottom: 1px solid #f0f0f0;
-  }
-  
-  /* 리스트 아이템의 메타 데이터(제목, 설명)에 대한 스타일 */
-  .meta {
-    margin-left: 15px;
-  }
-  
+.searchPageContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.searchBox {
+  width: 80%;
+  display: flex;
+  margin-left: 30px;
+  margin-top: 30px;
+  margin-bottom: 50px;
+  justify-content: center;
+}
+
+.searchInput {
+  padding: 20px;
+  border: 1px solid #bbbbbb;;
+  border-radius: 30px;
+  width: 70%;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.searchInput::placeholder {
+  color: #cccccc;
+  font-size: 16px;
+  opacity: 1;
+}
+
+.resultsHeader {
+  width: 70%;
+  margin-bottom: 10px; /* 검색 결과와 리스트 사이의 간격 */
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.searchResultsDivider{
+  border-top: 1px solid #eeeeee;
+  margin: 10px 0;
+}
+
+.item {
+  padding: 15px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.meta {
+  margin-left: 15px;
+}
+
+.pagination {
+  margin-top: 20px;
+}
   /* Ant Design의 List 컴포넌트에 추가 스타일을 적용할 수 있습니다. */
   /* 예를 들어, 아이템 간 간격, 테두리, 호버 효과 등을 조정할 수 있습니다. */
   
