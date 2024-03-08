@@ -6,7 +6,7 @@
   height: 400px;
   width: 60%;
   border-radius: 20px;
-  margin: 60px auto; /* 하단 간격 추가 */
+  margin: 50px auto; /* 하단 간격 추가 */
 }
 
 .middleContainer {
@@ -29,7 +29,7 @@
   border-radius: 20px; /* 카드의 모서리 둥글게 */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 카드에 그림자 추가 */
   color: #644419;
-  font-size: 16px;
+  font-size: 19px;
   font-weight: 600;
 }
 

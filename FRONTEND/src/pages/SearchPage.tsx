@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Layout, Row, Col, Card } from 'antd';
 import { BookOutlined, CommentOutlined, StarOutlined } from '@ant-design/icons';
 import SearchInput from '../components/search/SearchInput';
+import SearchResultList from '../components/search/SearchResultList';
 import RecentLawCase from '../components/search/RecentLawCase'; // 최근 본 판례 리스트 컴포넌트를 임포트합니다.
 import pageStyle from '../styles/search/SearchPage.module.css';
 
@@ -13,23 +14,34 @@ const SearchPage: React.FC = () => {
   const navigate = useNavigate();
   // Dummy data for recently viewed law cases, replace with real data as needed
   const [recentLawCases, setRecentLawCases] = useState([
-    { id: 1, title: 'Law Case 1', summary: 'Summary of Law Case 1' },
-    { id: 2, title: 'Law Case 2', summary: 'Summary of Law Case 2' },
-    { id: 3, title: 'Law Case 3', summary: 'Summary of Law Case 3' },
-    { id: 4, title: 'Law Case 4', summary: 'Summary of Law Case 4' },
-    { id: 5, title: 'Law Case 5', summary: 'Summary of Law Case 5' },
-    { id: 6, title: 'Law Case 6', summary: 'Summary of Law Case 6' },
-    { id: 7, title: 'Law Case 7', summary: 'Summary of Law Case 7' },
-    { id: 8, title: 'Law Case 8', summary: 'Summary of Law Case 8' },
-    { id: 9, title: 'Law Case 9', summary: 'Summary of Law Case 9' },
-    { id: 10, title: 'Law Case 10', summary: 'Summary of Law Case 10' },
+    { id: 1, title: '서울고등법원 2007. 4. 19. 선고 2007노78 판결 살인·살인미수·살인음모', type: '판례' as '판례' },
+    { id: 2, title: '서울고등법원 2020. 8. 27. 선고 2020노927,2020전노73(병합),2020보노35(병합) 판결 살인,살인미수,마약류관리에관한법률위반(향정),절도,부착명령,보호관찰명령', type: '판례' as '판례' },
+    { id: 3, title: '서울고등법원 2018. 8. 10. 선고 2018노547,2018전노27(병합) 판결 살인미수,도로교통법위반(음주운전),부착명령', type: '판례' as '판례'},
+    { id: 4, title: '부산고등법원 2013. 8. 21. 선고 2013노72 판결 살인,유해화학물질관리법위반(환각물질흡입)', type: '판례' as '판례'},
+    { id: 5, title: '부산고등법원 2019. 7. 18. 선고 2019노183 판결 살인미수,출입국관리법', type: '판례' as '판례'},
+    { id: 6, title: '서울고등법원 2014. 12. 18. 선고 2014노1883 판결 살인미수,감금', type: '법령' as '법령' },
+    { id: 7, title: '부산고등법원 2018. 5. 30. 선고 2018노22 판결 살인,살인미수', type: '법령' as '법령'},
+    { id: 8, title: '대전고등법원 2015. 7. 17. 선고 2015노266 판결 살인미수,특정범죄가중처벌등에괸한법률위반(위험운전치사상),도로교통법위반(음주운전)', type: '법령' as '법령' },
+    { id: 9, title: '대법원 1951. 5. 1. 선고 4283형상73 판결 방화살인미수', type: '법령' as '법령'},
+    { id: 10, title: '대전고등법원 2019. 1. 18. 선고 2018노485,2018전노32(병합) 판결 살인,살인예비,절도,도로교통법위반(음주측정거부),부착명령', type: '법령' as '법령'},
   ]);
 
-  const handleSearch = (searchQuery: string, activeTab: string) => {
-    console.log(`검색어: ${searchQuery}, 활성 탭: ${activeTab}`);
-    // 실제 검색 로직은 여기에 구현합니다.
-    // setSearchResults(검색 결과);
-  };
+  interface SearchResult {
+    id: number;
+    title: string;
+    summary: string;
+  }
+
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]); // 검색 결과를 저장할 상태
+
+
+  // 검색 함수
+const handleSearch = (searchQuery: string, activeTab: string) => {
+  console.log(`검색어: ${searchQuery}, 활성 탭: ${activeTab}`);
+  
+  // TODO: 실제 검색 로직으로 검색 결과 업데이트
+  navigate(`/search-results?query=${encodeURIComponent(searchQuery)}`);
+};
 
   return (
     <Layout style={{ backgroundColor: '#F8F0D6' }}>

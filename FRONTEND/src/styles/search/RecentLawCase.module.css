@@ -1,41 +1,92 @@
 /* RecentLawCase.module.css */
 .recentLawCaseContainer {
-  margin: 20px auto;
-  margin-bottom: 30px;
-  font-size: 18px; /* 모바일 화면에서 글자 크기 조정 */
-  font-weight: 700;
+  margin: 2cqi auto;
+  position: relative; /* To position the background box */
+  background-color: #f0f0f0;
+  padding: 60px; /* Provide space for the background box */
+  border-radius: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .recentLawCaseTitle {
-  font-size: 24px; /* 모바일 화면에서 제목 글자 크기 조정 */
-  color: #644419; /* 글씨 색상 유지 */
-  margin: 20px auto; /* 모바일 화면에서 제목과 리스트 사이 간격 조정 */
+  color: #644419;
+  margin: 20px auto;
+  font-size: 30px;
 }
 
 .recentLawCaseList {
-  max-height: 250px; /* 모바일 화면에 맞춰 높이 조정 */
+  max-height: 350px;
   overflow-y: auto;
+  margin: 40px auto;
+  padding: 20px; /* Provide space for the background box */
+  position: relative; /* Ensure proper stacking context */
 }
+
+.listItem {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between case type box and title */
+  padding: 10px 0; /* Increase item size */
+}
+
+.caseTypeBox {
+  flex-shrink: 0;
+  background-color: #644419; /* Example background color */
+  border-radius: 20px;
+  padding: 5px 15px;
+  font-size: 14px; /* Smaller font for the case/law type */
+  color: #ffffff;
+}
+
+.caseTitle {
+  margin-left: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #644419;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: left;
+  flex-grow: 1;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.caseTitle:hover {
+  color: #bf8438;
+  border-radius: 10px;
+  padding: 5px;
+}
+
 
 .hiddenItem {
-  display: none; /* 숨겨진 항목 처리 방식 유지 */
+  display: none;
 }
 
-/* 모바일 화면에서의 추가적인 스타일 조정 */
 @media screen and (max-width: 768px) {
   .recentLawCaseContainer {
-    /* 필요한 경우 모바일 화면 특화 스타일 조정 */
     width: 80%;
     margin: 10px 20px;
   }
 
   .recentLawCaseTitle {
-    /* 모바일 화면에서의 제목 스타일 추가 조정 */
-    font-size: 20px; /* 더 작은 화면에 맞춰 글자 크기 축소 */
-    margin: 20px auto; /* 상하 마진 조정으로 공간 확보 */
+    font-size: 20px;
+    margin: 20px auto;
   }
 
-  .recentLawCaseList {
-    /* 모바일 화면에서 리스트 높이 추가 조정 가능 */
+  .caseTitle {
+    max-width: calc(100% -60px); /* Adjust based on actual layout constraints */
   }
+}
+
+/* Add custom styles for the background box */
+.backgroundBox {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border: 1px solid #ccc; /* Example border style */
+  border-radius: 15px; /* Rounded corners for the box */
+  z-index: -1; /* Ensure it's behind the list items */
 }

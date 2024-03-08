@@ -3,6 +3,7 @@ import LayoutPage from "./components/common/Layout";
 import LawCaseDetail from "./pages/lawcasedetail/LawCaseDetail";
 import LoginPage from "./pages/LoginPage";
 import SearchPage from "./pages/SearchPage";
+import SearchResultPage from "./pages/SearchResultPage";
 import RecommendPage from "./pages/RecommendPage";
 import FormPage from "./pages/FormPage";
 import CalculatorPage from "./pages/CalculatorPage";
@@ -22,6 +23,7 @@ function App() {
           <Route path="detail" element={<LawCaseDetail />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="search" element={<SearchPage />} />
+          <Route path="search-results" element={<SearchResultPage />} />
           <Route path="recommend" element={<RecommendPage />} />
           <Route path="plaint" element={<FormPage />} />
           <Route path="cal" element={<CalculatorPage />} />
