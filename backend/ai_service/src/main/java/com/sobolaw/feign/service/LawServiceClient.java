@@ -1,18 +1,16 @@
 package com.sobolaw.feign.service;
 
-import com.sobolaw.feign.dto.LawDto;
-import com.sobolaw.feign.dto.PrecedentSummaryDto;
+import com.sobolaw.feign.dto.BaseResponse;
+import com.sobolaw.feign.dto.PrecedentDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(name="law-service", path = "/api/law-service")
+//@FeignClient(name="law-service", url = "http://jongbum.site/api/law-service")
 public interface LawServiceClient {
 
-    @GetMapping("/precedents/{precedentId}")
-    LawDto getPrecedent(@PathVariable("precedentId") Long precedentId);
-
-    @GetMapping("/precedents/summarys/{precedentSummaryId}")
-    PrecedentSummaryDto getSummary(@PathVariable("precedentSummaryId") Long precedentSummaryId);
+    @GetMapping("/precedent/detail/{precedentId}")
+    BaseResponse<PrecedentDto> getPrecedent(@PathVariable("precedentId") Long precedentId);
 
 }
