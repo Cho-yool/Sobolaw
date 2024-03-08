@@ -14,10 +14,12 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLRestriction;
 
 /**
  * 멤버 작성 소장(사기죄).
  */
+@SQLRestriction("is_deleted = false")
 @Table(name = "lawsuit_fraud")
 @Getter
 @Entity
