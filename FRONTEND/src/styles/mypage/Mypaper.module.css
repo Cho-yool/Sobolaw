@@ -3,8 +3,15 @@
   padding-right: 7rem;
 }
 
+.button-box {
+  display: flex;
+
+  justify-content: flex-end;
+  align-items: flex-end;
+  margin-top: 2.5rem;
+}
+
 .mypaper-button {
-  margin-top: 3rem;
   margin-bottom: 1rem;
 }
 

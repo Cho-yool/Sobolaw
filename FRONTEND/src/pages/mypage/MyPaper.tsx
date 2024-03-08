@@ -1,10 +1,13 @@
+import { useNavigate } from "react-router-dom";
 import { Space, Table, Tag, Button, Divider, Row, Col } from "antd";
 import type { TableProps } from "antd";
 import { MypaperWide, MypaperNarrow } from "../../types/DataTypes";
-import style from "../../styles/mypase/Mypaper.module.css";
+import style from "../../styles/mypage/Mypaper.module.css";
 import "../../App.css";
 
 export default function Mypaper() {
+  const navigate = useNavigate();
+
   const columnsWide: TableProps<MypaperWide>["columns"] = [
     {
       title: "임시저장명",
@@ -82,77 +85,77 @@ export default function Mypaper() {
       tags: ["명예훼손"],
     },
     {
-      key: "1",
+      key: "2",
       name: "정의란무엇인가",
       target: "김종범",
       date: "2024-03-06",
       tags: ["명예훼손"],
     },
     {
-      key: "1",
+      key: "3",
       name: "정의란무엇인가",
       target: "김종범",
       date: "2024-03-06",
       tags: ["명예훼손"],
     },
     {
-      key: "1",
+      key: "4",
       name: "정의란무엇인가",
       target: "김종범",
       date: "2024-03-06",
       tags: ["명예훼손"],
     },
     {
-      key: "1",
+      key: "5",
       name: "정의란무엇인가",
       target: "김종범",
       date: "2024-03-06",
       tags: ["명예훼손"],
     },
     {
-      key: "1",
+      key: "6",
       name: "정의란무엇인가",
       target: "김종범",
       date: "2024-03-06",
       tags: ["명예훼손"],
     },
     {
-      key: "1",
+      key: "7",
       name: "정의란무엇인가",
       target: "김종범",
       date: "2024-03-06",
       tags: ["명예훼손"],
     },
     {
-      key: "1",
+      key: "8",
       name: "정의란무엇인가",
       target: "김종범",
       date: "2024-03-06",
       tags: ["명예훼손"],
     },
     {
-      key: "1",
+      key: "9",
       name: "정의란무엇인가",
       target: "김종범",
       date: "2024-03-06",
       tags: ["명예훼손"],
     },
     {
-      key: "1",
+      key: "10",
       name: "정의란무엇인가",
       target: "김종범",
       date: "2024-03-06",
       tags: ["명예훼손"],
     },
     {
-      key: "1",
+      key: "11",
       name: "정의란무엇인가",
       target: "김종범",
       date: "2024-03-06",
       tags: ["명예훼손"],
     },
     {
-      key: "1",
+      key: "12",
       name: "정의란무엇인가",
       target: "김종범",
       date: "2024-03-06",
@@ -163,13 +166,18 @@ export default function Mypaper() {
   return (
     <div className="pages">
       <div className={style["mypaper-box"]}>
-        <Button
-          shape="round"
-          type="primary"
-          className={style["mypaper-button"]}
-        >
-          새로작성하기
-        </Button>
+        <div className={style["button-box"]}>
+          <Button
+            shape="round"
+            type="primary"
+            className={style["mypaper-button"]}
+            onClick={() => {
+              navigate("/plaint");
+            }}
+          >
+            새로작성하기
+          </Button>
+        </div>
         <Divider />
         <Row>
           <Col xs={0} sm={0} md={24} lg={24}>

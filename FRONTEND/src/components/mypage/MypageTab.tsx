@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import style from "../../styles/mypase/MypageTabs.module.css";
+import style from "../../styles/mypage/MypageTabs.module.css";
 
 interface MyTabContent {
   id: number;

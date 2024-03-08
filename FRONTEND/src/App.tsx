@@ -8,7 +8,7 @@ import FormPage from "./pages/FormPage";
 import CalculatorPage from "./pages/CalculatorPage";
 import MainPage from "./pages/MainPage";
 import MyPage from "./pages/mypage/Mypage";
-import MyInfo from "./pages/mypage/UserInfo";
+import MyInfo from "./pages/mypage/MyInfo";
 import Mypaper from "./pages/mypage/MyPaper";
 import MyCase from "./pages/mypage/MyCase";
 
