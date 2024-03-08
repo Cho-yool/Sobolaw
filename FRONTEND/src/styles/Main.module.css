@@ -1,0 +1,358 @@
+strong {
+  font-weight: bold;
+}
+
+.box1 {
+  background-color: #eaa854;
+}
+
+.box1-content {
+  padding-left: 21px;
+  padding-right: 21px;
+}
+
+.box1-content-title {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  color: white;
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-top: 5%;
+}
+
+.box1-content-title-left {
+  align-items: center;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.box1-content-title-left-title {
+  white-space: nowrap;
+  font-size: 4rem;
+  padding-bottom: 2rem;
+}
+
+.box1-content-title-left-content {
+  white-space: pre-line;
+  font-size: 1.5rem;
+}
+
+/* 이 아래부분 수정함 */
+
+.box1-content-whitebox {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: -80px;
+  border-radius: 20px;
+  background-color: rgb(252, 252, 252);
+  box-shadow: 0px 8px 15px #0000001a;
+  overflow: hidden;
+}
+
+.whitebox-content {
+  padding-top: 90px;
+  padding-left: 50px;
+  padding-bottom: 110px;
+  line-height: 1.5rem;
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  cursor: pointer;
+}
+
+/* 화살표 호버시 속성 */
+
+.whitebox-content:hover .whitebox-content__strong::after {
+  width: 162px;
+  background-color: black;
+}
+
+.whitebox-content:hover .whitebox-content__strong::before {
+  left: 142px;
+  background-color: black;
+}
+
+/* 여기가 실선 부분 건들이는거 셜록은 이미지 처리했는데 여기선 div border 처리함 */
+
+.whitebox-dashed {
+  position: absolute;
+  border-left: 2px dashed gray;
+  height: calc(50% - 10px);
+  left: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  content: " ";
+}
+
+/* 여기로 strong 속성 건들임 */
+
+.whitebox-content__strong {
+  font-size: 1.5rem;
+  position: relative;
+  cursor: pointer;
+}
+
+/* 화살표 머리 */
+
+.whitebox-content__strong::before {
+  position: absolute;
+  content: "";
+  left: 122px;
+  bottom: -32px;
+  width: 22px;
+  height: 2px;
+  border-radius: 6px;
+  background: #bcbcbc;
+  transform: rotate(45deg);
+  transition: all 0.3s ease;
+}
+
+/* 화살표 몸통 */
+
+.whitebox-content__strong::after {
+  content: " ";
+  position: absolute;
+  left: 0;
+  bottom: -40px;
+  width: 142px;
+  height: 2px;
+  background: #bcbcbc;
+  transition: all 0.3s ease;
+}
+
+/* 텍스트 공간이 너무 좁아보여서 이거로 건들임 */
+
+.whitebox-content > p {
+  padding-top: 80px;
+  width: 70%;
+}
+
+/* 셜록사이트 비슷하게 오른쪽 아래 위치하게함 */
+
+.point-icon {
+  position: absolute;
+  width: fit-content;
+  margin-bottom: 15px;
+  right: 60px;
+  bottom: 60px;
+}
+/* 여기까지 */
+
+.point-circle {
+  position: absolute;
+  width: 40%;
+  height: 40%;
+  bottom: 0px;
+  right: 0px;
+  background: rgb(6, 95, 43);
+  border-radius: 100%;
+  opacity: 0.4;
+}
+
+.point-green {
+  color: rgb(6, 95, 43);
+}
+
+.box2 {
+  background-color: #f3e7c0;
+  padding-top: 150px;
+  padding-bottom: 100px;
+  text-align: center;
+}
+
+.box2-img {
+  background-image: url("/images/main1.png");
+  background-size: cover;
+  background-position: center;
+  margin: auto;
+  width: 700px;
+  height: 400px;
+}
+
+.box3 {
+  background-color: white;
+  text-align: center;
+  padding-bottom: 80px;
+}
+
+.box3-title {
+  text-align: center;
+  font-size: 45px;
+  line-height: 60px;
+  color: var(--info-color);
+  letter-spacing: -2.25px;
+  padding: 67px 0 53px 0;
+}
+
+.box3-cards {
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.box3-cards-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin: auto;
+  max-width: 80%;
+  gap: 20px;
+}
+
+.image-card {
+  background-color: #eaa854;
+  border-radius: 20px;
+  width: 23rem;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  position: relative;
+  display: block;
+}
+
+.image-card:hover {
+  cursor: pointer;
+}
+
+.image-detail {
+  object-fit: cover;
+  position: relative;
+  border-radius: 20px;
+  transition: all 0.2s ease-out;
+  opacity: 1;
+  width: 100%;
+}
+
+.image-detail:hover {
+  transform: scale(1.1);
+}
+
+.image-card-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex; /* 텍스트를 수직 및 수평 가운데로 정렬하기 위해 사용 */
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  background-color: rgba(34, 34, 34, 0.5); /* 배경 색상과 투명도 조절 */
+  z-index: 5;
+  padding: 40px;
+  opacity: 1;
+  transition: opacity 0.2s ease; /* 투명도 전환 효과 추가 */
+}
+
+/* .image-card에 hover될 때 .image-card-text의 투명도를 1로 설정하여 텍스트 표시 */
+.image-card:hover .image-detail {
+  transform: scale(1.1);
+}
+
+#image-card-title {
+  font-size: 24px;
+  color: white;
+}
+
+#image-card-content {
+  font-size: 15px;
+  color: white;
+}
+
+@media (max-width: 1250px) {
+  .box1-content-title {
+    justify-content: center;
+  }
+
+  .point-icon {
+    position: relative;
+    right: 0;
+    bottom: 0;
+  }
+
+  .whitebox-content > p {
+    padding-top: 0;
+    width: 80%;
+  }
+  .whitebox-content__strong {
+    font-size: 1.3rem;
+  }
+  .whitebox-content__strong::before {
+    bottom: -96px;
+  }
+  .whitebox-content__strong::after {
+    bottom: -104px;
+  }
+}
+
+@media (max-width: 1060px) {
+  .box1-content-whitebox {
+    width: 100%;
+  }
+  .whitebox-content {
+    width: 100%;
+  }
+  .whitebox-dashed {
+    border-left: none;
+    border-top: 2px dashed gray;
+    width: 100%;
+    height: 0;
+    left: 0;
+    top: 50%;
+
+    content: " ";
+  }
+  .whitebox-content__strong::before {
+    bottom: -72px;
+  }
+  .whitebox-content__strong::after {
+    bottom: -80px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .box3-title {
+    font-size: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 2rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .box1-content-title-left-title {
+    white-space: nowrap;
+    font-size: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .box1-content-title-left-content {
+    white-space: pre-line;
+    font-size: 1rem;
+  }
+
+  .box2-img {
+    background-image: url("/images/main2.png");
+    background-size: cover;
+    background-position: center;
+    margin: auto;
+    width: 340px;
+    height: 700px;
+  }
+  .whitebox-content__strong {
+    font-size: 1.1rem;
+  }
+  .whitebox-content > p {
+    padding-top: 0;
+    font-size: 0.9rem;
+    width: 90%;
+  }
+  .whitebox-content__strong::before {
+    bottom: -96px;
+  }
+  .whitebox-content__strong::after {
+    bottom: -104px;
+  }
+}

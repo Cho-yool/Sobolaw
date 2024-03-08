@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import ResponsiveNav from "./Navbar";
 import Footer from "./Footer";
 import LawWord from "../../pages/LawWord";
+import "../../App.css";
 
 // 리액트 라우터 v6 버전에서 중첩 라우팅을 이용하면
 // 부모 레이아웃은 그대로 두고 자식 레이아웃만 쉽게 교체
@@ -24,7 +25,7 @@ function LayoutPage() {
         style={{
           display: "flex",
           flexDirection: "column",
-          overflowY: "auto",
+          overflowY: "visible",
         }}
       >
         <Outlet />

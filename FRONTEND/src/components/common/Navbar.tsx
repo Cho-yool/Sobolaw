@@ -23,7 +23,7 @@ import style from "../../styles/Navbar.module.css";
 
 const { Header } = Layout;
 const items: MenuProps["items"] = [
-  { key: "1", label: <Link to="/intesrch">판례/법령</Link> },
+  { key: "1", label: <Link to="/search">판례/법령</Link> },
   { key: "2", label: <Link to="/recommend">맞춤형판례</Link> },
   { key: "3", label: <Link to="/cal">비용계산</Link> },
   { key: "4", label: <Link to="/plaint">소장작성</Link> },
@@ -106,7 +106,12 @@ const ResponsiveNav = () => {
           <Col xs={0} sm={0} md={2}></Col> */}
 
           {/* 핸드폰 사이즈 네브바 */}
-          <Col xs={2} sm={2} md={0} style={{ paddingRight: "30px" }}>
+          <Col
+            xs={2}
+            sm={2}
+            md={0}
+            style={{ paddingRight: "30px", marginRight: "15px" }}
+          >
             <Button type="primary" onClick={showDrawer}>
               <MenuOutlined />
             </Button>

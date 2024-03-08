@@ -6,9 +6,9 @@ import SearchPage from "./pages/SearchPage";
 import RecommendPage from "./pages/RecommendPage";
 import FormPage from "./pages/FormPage";
 import CalculatorPage from "./pages/CalculatorPage";
-import MainPage from "./pages/Main";
+import MainPage from "./pages/MainPage";
 import MyPage from "./pages/mypage/Mypage";
-import MyInfo from "./pages/mypage/UserInfo";
+import MyInfo from "./pages/mypage/MyInfo";
 import Mypaper from "./pages/mypage/MyPaper";
 import MyCase from "./pages/mypage/MyCase";
 
@@ -21,7 +21,7 @@ function App() {
           <Route path="" element={<MainPage />} />
           <Route path="detail" element={<LawCaseDetail />} />
           <Route path="login" element={<LoginPage />} />
-          <Route path="intesrch" element={<SearchPage />} />
+          <Route path="search" element={<SearchPage />} />
           <Route path="recommend" element={<RecommendPage />} />
           <Route path="plaint" element={<FormPage />} />
           <Route path="cal" element={<CalculatorPage />} />
