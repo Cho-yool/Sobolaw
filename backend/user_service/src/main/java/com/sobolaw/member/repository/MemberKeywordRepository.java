@@ -15,4 +15,6 @@ public interface MemberKeywordRepository extends JpaRepository<MemberKeyword, Lo
     Optional<MemberKeyword> findByMemberAndMemberKeywordId(Member member, Long keywordId);
 
     Optional<MemberKeyword> findByMemberKeywordId(Long memberKeywordId);
+
+    MemberKeyword findByMemberPrecedent_MemberPrecedentId(Long precedentId);
 }
