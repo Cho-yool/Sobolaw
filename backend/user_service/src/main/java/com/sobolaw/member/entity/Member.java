@@ -16,10 +16,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import lombok.Getter;
+import org.hibernate.annotations.SQLRestriction;
 
 /**
  * 멤버 엔티티.
  */
+@SQLRestriction("is_deleted = false")
 @Table(name = "member")
 @Getter
 @Entity

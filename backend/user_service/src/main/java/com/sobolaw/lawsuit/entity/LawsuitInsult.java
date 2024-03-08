@@ -14,10 +14,12 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLRestriction;
 
 /**
  * 멤버 작성 소장(모욕죄).
  */
+@SQLRestriction("is_deleted = false")
 @Table(name = "lawsuit_insult")
 @Getter
 @Entity
@@ -172,7 +174,7 @@ public class LawsuitInsult extends BaseEntity {
         this.evidence = evidence;
         this.submissionDate = submissionDate;
         this.policeStationTeam = policeStationTeam;
-    }
+    }@SQLRestriction("is_deleted is false")
 
     public static LawsuitInsult of(String title, String plaintiffName, String plaintiffResidentRegistrationNumber, String plaintiffAddress, String plaintiffPhoneNumber, String plaintiffNickname,
         String defendantName, String defendantNickname, String defendantAddress, String defendantPhoneNumber, LocalDate incidentDate, LocalTime incidentTime, String onlineServiceType,

@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 소장 Service.
@@ -179,6 +180,7 @@ public class LawsuitService {
      * @param request  새로운 명예훼손 소장 정보.
      * @return 추가된 명예훼손 소장 정보.
      */
+    @Transactional
     public LawsuitDefamationDTO createDefamation(Long memberId, LawsuitDefamationCreateUpdateRequestDTO request) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
@@ -221,7 +223,7 @@ public class LawsuitService {
      * @param request  새로운 사기죄 소장 정보.
      * @return 추가된 사기죄 소장 정보.
      */
-
+    @Transactional
     public LawsuitFraudDTO createFraud(Long memberId, LawsuitFraudCreateUpdateRequestDTO request) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
@@ -263,6 +265,7 @@ public class LawsuitService {
      * @param request  새로운 모욕죄 소장 정보.
      * @return 추가된 모욕죄 소장 정보.
      */
+    @Transactional
     public LawsuitInsultDTO createInsult(Long memberId, LawsuitInsultCreateUpdateRequestDTO request) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
@@ -312,6 +315,7 @@ public class LawsuitService {
      * @param memberId 멤버 ID.
      * @param insultId 삭제할 모욕죄 소장 ID.
      */
+    @Transactional
     public void deleteInsult(Long memberId, Long insultId) {
         // 멤버 찾기
         Member member = memberRepository.findById(memberId)
@@ -336,6 +340,7 @@ public class LawsuitService {
      * @param memberId 멤버 ID.
      * @param fraudId  삭제할 사기죄 소장 ID.
      */
+    @Transactional
     public void deleteFraud(Long memberId, Long fraudId) {
         // 멤버 찾기
         Member member = memberRepository.findById(memberId)
@@ -360,6 +365,7 @@ public class LawsuitService {
      * @param memberId     멤버 ID.
      * @param defamationId 삭제할 명예훼손 소장 ID.
      */
+    @Transactional
     public void deleteDefamation(Long memberId, Long defamationId) {
         // 멤버 찾기
         Member member = memberRepository.findById(memberId)
@@ -386,6 +392,7 @@ public class LawsuitService {
      * @param request      수정할 명예훼손 소장 정보.
      * @return 수정된 명예훼손 소장 정보.
      */
+    @Transactional
     public LawsuitDefamationDTO updateDefamation(Long memberId, Long defamationId, LawsuitDefamationCreateUpdateRequestDTO request) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
@@ -462,6 +469,7 @@ public class LawsuitService {
      * @param request  수정할 모욕죄 소장 정보.
      * @return 수정된 모욕죄 소장 정보.
      */
+    @Transactional
     public LawsuitInsultDTO updateInsult(Long memberId, Long insultId, LawsuitInsultCreateUpdateRequestDTO request) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
@@ -558,6 +566,7 @@ public class LawsuitService {
      * @param request  수정할 사기죄 소장 정보.
      * @return 수정된 사기죄 소장 정보.
      */
+    @Transactional
     public LawsuitFraudDTO updateFraud(Long memberId, Long fraudId, LawsuitFraudCreateUpdateRequestDTO request) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));

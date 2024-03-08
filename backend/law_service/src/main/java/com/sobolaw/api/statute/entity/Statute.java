@@ -10,9 +10,8 @@ import lombok.Setter;
 public class Statute {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Long statuteId;
+    private Long statuteNumber;
 
     @Column(columnDefinition = "TEXT")
     private String statuteName;
@@ -34,8 +33,5 @@ public class Statute {
 
     @Column
     private String enforcementDate;
-
-    @Column
-    private String statuteNumber;
 
 }
