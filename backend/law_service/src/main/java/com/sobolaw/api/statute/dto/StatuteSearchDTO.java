@@ -18,9 +18,6 @@ public class StatuteSearchDTO {
     private String publicationDate;
     private String publicationNumber;
     private String statuteName;
-    private String statuteNumber;
     private String statuteType;
-
-    // 법령 내용은 추후에 추가 해야함
 
 }

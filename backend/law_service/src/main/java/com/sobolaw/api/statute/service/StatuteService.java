@@ -29,14 +29,13 @@ public class StatuteService {
 
     private StatuteSearchDTO convertToStatuteSearchDTO(Statute statute) {
         return new StatuteSearchDTO(
-            statute.getStatuteId(),
+            statute.getStatuteNumber(),
             statute.getAmendmentType(),
             statute.getDepartment(),
             statute.getEnforcementDate(),
             statute.getPublicationDate(),
             statute.getPublicationNumber(),
             statute.getStatuteName(),
-            statute.getStatuteNumber(),
             statute.getStatuteType()
         );
     }
