@@ -4,11 +4,18 @@ import { UserOutlined, FormOutlined, InboxOutlined } from "@ant-design/icons";
 
 interface RightMenuProps {
   mode: "horizontal";
+  selectedSubKeys: string[];
+  setSelectedKeys:React.Dispatch<React.SetStateAction<string[]>>;
+  setSelectedSubKeys:React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-const MypageMenu: React.FC<RightMenuProps> = ({ mode }) => {
+const MypageMenu: React.FC<RightMenuProps> = ({ mode, setSelectedKeys, selectedSubKeys, setSelectedSubKeys }) => {
+  const subClickHandler = ({key}:  { key: string }) => {
+    setSelectedKeys([""])
+    setSelectedSubKeys([key])
+  }
   return (
-    <Menu mode={mode}>
+    <Menu mode={mode} selectedKeys={selectedSubKeys} onSelect={subClickHandler}>
       <Menu.SubMenu
         key="userMenu"
         title={

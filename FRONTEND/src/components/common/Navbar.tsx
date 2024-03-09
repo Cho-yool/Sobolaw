@@ -32,6 +32,12 @@ const items: MenuProps["items"] = [
 const ResponsiveNav = () => {
   const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([""]);
+  const [selectedSubKeys, setSelectedSubKeys] = useState<string[]>([""]);
+  const handleSelect = ({ key }: { key: string }) => {
+    setSelectedKeys([key])
+    setSelectedSubKeys([""])
+  };
 
   const showDrawer = () => {
     setVisible(true);
@@ -82,10 +88,10 @@ const ResponsiveNav = () => {
           </Col>
           <Row className={style["contents"]}>
             <Col xs={0} sm={0} md={12} lg={16}>
-              <Menu mode="horizontal" items={items} />
+              <Menu mode="horizontal" selectedKeys={selectedKeys} onSelect={handleSelect} items={items} />
             </Col>
             <Col xs={0} sm={0} md={4}>
-              <MypageMenu mode={"horizontal"} />
+              <MypageMenu mode={"horizontal"} setSelectedKeys={setSelectedKeys} selectedSubKeys={selectedSubKeys} setSelectedSubKeys={setSelectedSubKeys} />
             </Col>
             <Col xs={0} sm={0} md={2}>
               <Button
