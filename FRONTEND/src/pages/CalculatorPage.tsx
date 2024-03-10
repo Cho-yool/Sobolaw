@@ -2,7 +2,7 @@ import { Select, Button, Radio, Collapse, Divider, Form } from "antd";
 import Title from "antd/es/typography/Title";
 import "../App.css";
 import style from "../styles/calculator/Calculator.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const { Option } = Select;
 
@@ -22,7 +22,58 @@ export default function CalculatorPage() {
       person &&
       lawyerPay
     ) {
-      console.log("계산중입니다");
+      const numLitigationMoney = Number(litigationMoney.split(",").join(""))
+      const numLawyerPay = Number(lawyerPay.split(",").join(""))
+      if (numLitigationMoney <= 10000000) {
+        const checkValue = numLitigationMoney * 0.005 * 0.9
+        if (checkValue <= 1000) {
+          setRenderRecognition(1000)
+        } else {
+          setRenderRecognition(checkValue)
+        }
+      } else if (numLitigationMoney <= 100000000) {
+        const checkValue = (numLitigationMoney * 0.0045 + 5000) * 0.9
+        setRenderRecognition(checkValue)
+      } else if (numLitigationMoney <= 1000000000) {
+        const checkValue = (numLitigationMoney * 0.004 + 55000) * 0.9
+        setRenderRecognition(checkValue)
+      } else if (numLitigationMoney > 1000000000) {
+        const checkValue = (numLitigationMoney * 0.0035 + 555000) * 0.9
+        setRenderRecognition(checkValue)
+      }
+
+      if (numLawyerPay <= 3000000) {
+        setRenderLawyerPay(300000)
+      } else if (numLawyerPay <= 20000000) {
+        setRenderLawyerPay(300000 + (numLawyerPay - 3000000) * 0.1)
+      } else if (numLawyerPay <= 50000000) {
+        setRenderLawyerPay(2000000 + (numLawyerPay - 20000000) * 0.08)
+      } else if (numLawyerPay <= 100000000) {
+        setRenderLawyerPay(4400000 + (numLawyerPay - 50000000) * 0.06)
+      } else if (numLawyerPay <= 150000000) {
+        setRenderLawyerPay(7400000 + (numLawyerPay - 100000000) * 0.04)
+      } else if (numLawyerPay <= 200000000) {
+        setRenderLawyerPay(9400000 + (numLawyerPay - 150000000) * 0.02)
+      } else if (numLawyerPay <= 500000000) {
+        setRenderLawyerPay(10400000 + (numLawyerPay - 200000000) * 0.01)
+      } else {
+        setRenderLawyerPay(13400000 + (numLawyerPay - 500000000) * 0.005)
+      }
+
+      if (caseType === "0") {
+        setRenderDelivery(5200 * person * 10)
+      } else if (caseType === "1") {
+        setRenderDelivery(5200 * person * 15)
+      } else if (caseType === "2") {
+        setRenderDelivery(5200 * person * 15)
+      } else if (caseType === "3") {
+        setRenderDelivery(5200 * person * 12)
+      } else if (caseType === "4") {
+        setRenderDelivery(5200 * person * 8)
+      } else if (caseType === "5") {
+        setRenderDelivery(5200 * person * 5)
+      }
+      
     } else {
       alert("입력 값이 누락됐습니다.");
     }
@@ -50,8 +101,22 @@ export default function CalculatorPage() {
   const [litigationMoney, setLitigationMoney] = useState<string>("");
   const [trial, setTrial] = useState<string>("");
   const [caseType, setCaseType] = useState<string>("");
-  const [person, setPerson] = useState<string>("");
+  const [person, setPerson] = useState<number>();
   const [lawyerPay, setLawyerPay] = useState<string>("");
+  const [renderRecognition, setRenderRecognition] = useState<number>();
+  const [renderDelivery, setRenderDelivery] = useState<number>();
+  const [renderLawyerPay, setRenderLawyerPay] = useState<number>();
+  const [renderTotal, setRenderTotal] = useState<string>();
+
+  useEffect(() => {
+    if (renderLawyerPay && renderDelivery && renderRecognition) {
+      const changeValue = changeNumber(String(renderLawyerPay + renderDelivery + renderRecognition))
+      setRenderTotal(changeValue)
+      // const changeLawyerPay = changeNumber(String(renderLawyerPay))
+      // const changeDelivery = changeNumber(String(renderDelivery))
+      // const changeRecognition = changeNumber(String(renderRecognition))
+    }
+  },[renderRecognition, renderLawyerPay, renderDelivery])
 
   return (
     <div className={style["pages"]}>
@@ -149,21 +214,17 @@ export default function CalculatorPage() {
               placeholder="사건 종류를 선택하세요."
               onSelect={(e) => setCaseType(e)}
             >
-              <Option value="0">민사제1심합의사건(가합)</Option>
-              <Option value="1">민사제1심단독사건(가단)</Option>
-              <Option value="2">민사소액사건(가소)</Option>
-              <Option value="3">민사항소사건(나)</Option>
-              <Option value="4">민사상고사건(다)</Option>
-              <Option value="5">민사항고사건(라)</Option>
-              <Option value="6">민사재항고사건(마)</Option>
-              <Option value="7">화해사건(자)</Option>
-              <Option value="8">독촉사건(차)</Option>
-              <Option value="9">민사조정사건(머)</Option>
+              <Option value="0">민사 제1심 소액사건</Option>
+              <Option value="1">민사 제1심 단독사건</Option>
+              <Option value="2">민사 제1심 합의사건</Option>
+              <Option value="3">민사항소사건</Option>
+              <Option value="4">민사 상고사건(다)</Option>
+              <Option value="5">민사 조정사건(머)</Option>
+
             </Select>
           </Form.Item>
           <Form.Item
             label="피고/상대방수"
-            hasFeedback
             rules={[{ required: true, message: "필수 입력해주세요" }]}
           >
             <Form.Item noStyle={true}>
@@ -171,13 +232,13 @@ export default function CalculatorPage() {
                 <input
                   type="number"
                   value={person}
-                  onChange={(e) => setPerson(e.target.value)}
+                  onChange={(e) => setPerson(Number(e.target.value))}
                 />
                 <span>명</span>
               </div>
             </Form.Item>
           </Form.Item>
-          <Form.Item label="변호사/보수 약정액">
+          <Form.Item label="변호사보수 약정액">
             <Form.Item noStyle={true}>
               <div className={style["calculator-box__money"]}>
                 <span>금</span>
@@ -229,11 +290,11 @@ export default function CalculatorPage() {
             >
               계산결과
             </p>
-            <p>인지액:</p>
-            <p>송달료:</p>
-            <p>법정 보수액 한도:</p>
+            <p>인지액: {renderRecognition ? <span>{renderRecognition} 원</span> : null}</p>
+            <p>송달료: {renderDelivery ? <span>{renderDelivery} 원</span> : null}</p>
+            <p>법정 변호사보수액 한도: {renderLawyerPay ? <span>{renderLawyerPay} 원</span> : null}</p>
             <Divider />
-            <p>합계:</p>
+            <p>합계: {renderTotal ? <span>{renderTotal} 원</span> : null}</p>
           </div>
         </div>
       </div>
@@ -252,6 +313,7 @@ export default function CalculatorPage() {
                   <h2 className={style["notice-header-title"]}>
                     인지액 계산방법
                   </h2>
+
                   <p className={style["notice-header-content"]}>
                     2011. 7. 18. 부터 전자소송으로 소장을 제출하는 경우에는
                     종이소송에 비하여 10% 할인된 인지액을 납부하시면 됩니다.
@@ -337,6 +399,45 @@ export default function CalculatorPage() {
                   모두 종이소송 기준)을 먼저 계산한 후 최종적으로 0.9를 곱한
                   금액이 청구변경신청서의 인지액이 됩니다
                 </p>
+                <h3 className={style["notice-content-title"]}>
+                    변호사 보수 비용
+                </h3>
+                <div className={style["notice-content-table"]}>
+                  <div className={style["notice-content-row"]}>
+                    <div className={style["notice-content-header"]}>
+                      소송목적 또는 피보전권리의 값
+                    </div>
+                    <div className={style["notice-content-header"]}>
+                      소송비용에 산입되는 비율 또는 산입액
+                    </div>
+                  </div>
+                  <div className={style["notice-content-row"]}>
+                    <div className={style["notice-content-column"]}>
+                      <li>300만원</li>
+                      <li>300 ~ 2,000만원</li>
+                      <li>2,000 ~ 5,000만원</li>
+                      <li>5,000 ~ 1억원</li>
+                      <li>1 ~ 1.5억원</li>
+                      <li>1.5 ~ 2억원</li>
+                      <li>2 ~ 5억원</li>
+                      <li className={style["notice-content-column_left"]}>
+                        5억 초과
+                      </li>
+                    </div>
+                    <div className={style["notice-content-column"]}>
+                      <li>30만원</li>
+                      <li>30만원 + (소송목적의 값 - 300만원) * 0.1</li>
+                      <li>200만원 + (소송목적의 값 - 2,000만원) * 0.08</li>
+                      <li>440만원 + (소송목적의 값 - 5,000만원) * 0.06</li>
+                      <li>740만원 + (소송목적의 값 - 1억원) * 0.04</li>
+                      <li>940만원 + (소송목적의 값 - 1.5억원) * 0.02</li>
+                      <li>1,040만원 + (소송목적의 값 - 2억원) * 0.01</li>
+                      <li className={style["notice-content-column_right"]}>
+                        1,340만원 + (소송목적의 값 - 5억원) * 0.005
+                      </li>
+                    </div>
+                  </div>
+                </div>
                 <h3 className={style["notice-content-title"]}>
                   송달료 계산방법
                 </h3>
