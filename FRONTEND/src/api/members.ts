@@ -25,7 +25,14 @@ async function getRecentPrecedents(params: { memberId: number }) {
   return response.data.data;
 }
 
-export { getUserInfo, getPrecedents, getRecentPrecedents };
+// 관리자용 API
+// 멤버 전체 리스트 조회
+async function getMemberList() {
+  const response = await http.get(url);
+  return response.data.data;
+}
+
+export { getUserInfo, getPrecedents, getRecentPrecedents, getMemberList };
 
 // async function getUserInfo(
 //   params: {
