@@ -15,7 +15,7 @@
 
 .box-content {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 
 .box4 {
@@ -27,9 +27,13 @@
   margin-bottom: 2.5rem;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 768px) {
   .myinfo-box {
     padding-left: 2rem;
     padding-right: 2rem;
+  }
+
+  .box-content {
+    justify-content: space-between;
   }
 }
