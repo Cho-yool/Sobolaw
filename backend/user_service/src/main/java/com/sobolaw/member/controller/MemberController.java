@@ -169,8 +169,8 @@ public class MemberController {
      */
     @PostMapping("/{memberId}/keywords")
     @Operation(summary = "키워드 저장", description = "관심 키워드를 저장합니다.", tags = {"키워드"})
-    public BaseResponse<MemberKeywordDTO> saveMemberKeyword(@PathVariable Long memberId, @RequestBody KeywordSaveRequestDTO keywordSaveRequestDTO) {
-        return BaseResponse.success(HttpStatus.OK.value(), "키워드를 저장합니다.", memberService.saveMemberKeyword(memberId, keywordSaveRequestDTO));
+    public BaseResponse<List<MemberKeywordDTO>> saveMemberKeyword(@PathVariable Long memberId, @RequestBody KeywordSaveRequestDTO keywordSaveRequestDTO) {
+        return BaseResponse.success(HttpStatus.OK.value(), "키워드를 저장합니다.", memberService.saveMemberKeywords(memberId, keywordSaveRequestDTO));
     }
 
     /**

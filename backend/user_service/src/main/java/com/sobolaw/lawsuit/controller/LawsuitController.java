@@ -40,7 +40,7 @@ public class LawsuitController {
     /**
      * 전체 소장 리스트 조회.
      */
-    @GetMapping("{memberId}")
+    @GetMapping("/{memberId}")
     @Operation(summary = "멤버의 전체 소장 리스트 조회", description = "멤버가 저장한 전체 소장 리스트를 조회합니다.", tags = {"소장"})
     public BaseResponse<List<LawsuitListResponseDTO>> getAllLawsuits(@PathVariable Long memberId) {
         return BaseResponse.success(HttpStatus.OK.value(), "멤버의 전체 소장 리스트 조회에 성공하였습니다.", lawsuitService.getAllLawsuits(memberId));
@@ -52,7 +52,7 @@ public class LawsuitController {
      * @param memberId 멤버 Id
      * @return 멤버의 명예훼손 소장 리스트.
      */
-    @GetMapping("/defamation/{memberId}")
+    @GetMapping("/defamations/{memberId}")
     @Operation(summary = "멤버의 명예훼손 소장 리스트 조회", description = "멤버에 속한 명예훼손 소장 리스트를 조회합니다.", tags = {"소장"})
     public BaseResponse<List<LawsuitDefamationListResponseDTO>> getDefamations(@PathVariable Long memberId) {
         return BaseResponse.success(HttpStatus.OK.value(), "멤버의 명예훼손 소장 리스트 조회에 성공하였습니다!", lawsuitService.getDefamations(memberId));
@@ -65,7 +65,7 @@ public class LawsuitController {
      * @param defamationId 멤버가 조회할 명예훼손 소장 Id
      * @return 특정 명예훼손 소장 내용.
      */
-    @GetMapping("/defamation/{memberId}/{defamationId}")
+    @GetMapping("/defamations/{memberId}/{defamationId}")
     @Operation(summary = "멤버의 특정 명예훼손 소장 조회", description = "멤버에 속한 특정 명예훼손 소장을 조회합니다.", tags = {"소장"})
     public BaseResponse<LawsuitDefamationDTO> getDefamtion(@PathVariable Long memberId, @PathVariable Long defamationId) {
         return BaseResponse.success(HttpStatus.OK.value(), "멤버의 특정 명예훼손 소장 조회에 성공하였습니다!", lawsuitService.getDefamtion(memberId, defamationId));
@@ -76,7 +76,7 @@ public class LawsuitController {
      *
      * @return 전체 명예훼손 소장 리스트.
      */
-    @GetMapping("/defamation")
+    @GetMapping("/defamations")
     @Operation(summary = "전체 명예훼손 소장 리스트 조회", description = "전체 명예훼손 소장 리스트를 조회합니다.", tags = {"소장"})
     public BaseResponse<List<LawsuitDefamationDTO>> getAllDefamations() {
         return BaseResponse.success(HttpStatus.OK.value(), "전체 명예훼손 소장 리스트 조회에 성공하였습니다!", lawsuitService.getAllDefamations());
@@ -89,7 +89,7 @@ public class LawsuitController {
      * @param request  추가할 명예훼손 소장 정보.
      * @return 추가된 명예훼손 소장 정보.
      */
-    @PostMapping("/defamation/{memberId}")
+    @PostMapping("/defamations/{memberId}")
     @Operation(summary = "멤버의 명예훼손 소장 추가", description = "멤버에 속한 명예훼손 소장을 추가합니다.", tags = {"소장"})
     public BaseResponse<LawsuitDefamationDTO> createDefamation(
         @PathVariable Long memberId,
@@ -104,7 +104,7 @@ public class LawsuitController {
      * @param memberId     멤버 ID
      * @param defamationId 삭제할 명예훼손 소장 ID
      */
-    @DeleteMapping("/defamation/{memberId}/{defamationId}")
+    @DeleteMapping("/defamations/{memberId}/{defamationId}")
     @Operation(summary = "멤버의 명예훼손 소장 삭제", description = "멤버에 속한 명예훼손 소장을 삭제합니다.", tags = {"소장"})
     public BaseResponse<Void> deleteDefamation(
         @PathVariable Long memberId,
@@ -121,7 +121,7 @@ public class LawsuitController {
      * @param request      수정할 명예훼손 소장 정보
      * @return 수정된 명예훼손 소장 정보
      */
-    @PatchMapping("/defamation/{memberId}/{defamationId}")
+    @PatchMapping("/defamations/{memberId}/{defamationId}")
     @Operation(summary = "멤버의 명예훼손 소장 수정", description = "멤버에 속한 명예훼손 소장을 수정합니다.", tags = {"소장"})
     public BaseResponse<LawsuitDefamationDTO> updateDefamation(
         @PathVariable Long memberId,
@@ -137,7 +137,7 @@ public class LawsuitController {
      * @param memberId 멤버 Id
      * @return 멤버의 모욕죄 리스트.
      */
-    @GetMapping("/insult/{memberId}")
+    @GetMapping("/insults/{memberId}")
     @Operation(summary = "멤버의 모욕죄 소장 리스트 조회", description = "멤버에 속한 모욕죄 소장 리스트를 조회합니다.", tags = {"소장"})
     public BaseResponse<List<LawsuitInsultListResponseDTO>> getInsults(@PathVariable Long memberId) {
         return BaseResponse.success(HttpStatus.OK.value(), "멤버의 모욕죄 소장 리스트 조회에 성공하였습니다!", lawsuitService.getInsults(memberId));
@@ -150,7 +150,7 @@ public class LawsuitController {
      * @param insultId 멤버가 조회할 모욕죄 Id
      * @return 특정 모욕죄 내용.
      */
-    @GetMapping("/insult/{memberId}/{insultId}")
+    @GetMapping("/insults/{memberId}/{insultId}")
     @Operation(summary = "멤버의 모욕죄 소장 특정 소장 조회", description = "멤버에 속한 특정 모욕죄 소장을 조회합니다.", tags = {"소장"})
     public BaseResponse<LawsuitInsultDTO> getInsult(@PathVariable Long memberId, @PathVariable Long insultId) {
         return BaseResponse.success(HttpStatus.OK.value(), "멤버의 특정 모욕죄 소장 조회에 성공하였습니다!", lawsuitService.getInsult(memberId, insultId));
@@ -161,7 +161,7 @@ public class LawsuitController {
      *
      * @return 전체 모욕죄 리스트.
      */
-    @GetMapping("/insult")
+    @GetMapping("/insults")
     @Operation(summary = "전체 모욕죄 소장 리스트 조회", description = "전체 모욕죄 소장 리스트를 조회합니다.", tags = {"소장"})
     public BaseResponse<List<LawsuitInsultDTO>> getAllInsults() {
         return BaseResponse.success(HttpStatus.OK.value(), "전체 모욕죄 리스트 조회에 성공하였습니다!", lawsuitService.getAllInsults());
@@ -174,7 +174,7 @@ public class LawsuitController {
      * @param request  추가할 모욕죄 소장 정보.
      * @return 추가된 모욕죄 소장 정보.
      */
-    @PostMapping("/insult/{memberId}")
+    @PostMapping("/insults/{memberId}")
     @Operation(summary = "멤버의 모욕죄 소장 추가", description = "멤버에 속한 사기죄 소장을 추가합니다.", tags = {"소장"})
     public BaseResponse<LawsuitInsultDTO> createInsult(
         @PathVariable Long memberId,
@@ -189,7 +189,7 @@ public class LawsuitController {
      * @param memberId 멤버 ID
      * @param insultId 삭제할 모욕죄 소장 ID
      */
-    @DeleteMapping("/insult/{memberId}/{insultId}")
+    @DeleteMapping("/insults/{memberId}/{insultId}")
     @Operation(summary = "멤버의 모욕죄 소장 삭제", description = "멤버에 속한 모욕죄 소장을 삭제합니다.", tags = {"소장"})
     public BaseResponse<Void> deleteInsult(
         @PathVariable Long memberId,
@@ -198,7 +198,7 @@ public class LawsuitController {
         return BaseResponse.success(HttpStatus.OK.value(), "모욕죄 소장이 삭제되었습니다.", null);
     }
 
-    @PatchMapping("/insult/{memberId}/{insultId}")
+    @PatchMapping("/insults/{memberId}/{insultId}")
     @Operation(summary = "멤버의 모욕죄 소장 수정", description = "멤버에 속한 모욕죄 소장을 수정합니다.", tags = {"소장"})
     public BaseResponse<LawsuitInsultDTO> updateInsult(
         @PathVariable Long memberId,
@@ -214,7 +214,7 @@ public class LawsuitController {
      * @param memberId 멤버 Id
      * @return 멤버의 사기죄 리스트.
      */
-    @GetMapping("/fraud/{memberId}")
+    @GetMapping("/frauds/{memberId}")
     @Operation(summary = "멤버의 사기죄 소장 리스트 조회", description = "멤버에 속한 사기죄 소장 리스트를 조회합니다.", tags = {"소장"})
     public BaseResponse<List<LawsuitFraudListResponseDTO>> getFrauds(@PathVariable Long memberId) {
         return BaseResponse.success(HttpStatus.OK.value(), "멤버의 사기죄 소장 리스트 조회에 성공하였습니다!", lawsuitService.getFrauds(memberId));
@@ -227,7 +227,7 @@ public class LawsuitController {
      * @param fraudId  멤버가 조회할 사기죄 Id
      * @return 특정 사기죄 내용.
      */
-    @GetMapping("/fraud/{memberId}/{fraudId}")
+    @GetMapping("/frauds/{memberId}/{fraudId}")
     @Operation(summary = "멤버의 사기죄 소장 특정 소장 조회", description = "멤버에 속한 특정 사기죄 소장을 조회합니다.", tags = {"소장"})
     public BaseResponse<LawsuitFraudDTO> getFraud(@PathVariable Long memberId, @PathVariable Long fraudId) {
         return BaseResponse.success(HttpStatus.OK.value(), "멤버의 특정 사기죄 소장 조회에 성공하였습니다!", lawsuitService.getFraud(memberId, fraudId));
@@ -238,7 +238,7 @@ public class LawsuitController {
      *
      * @return 전체 사기죄 리스트.
      */
-    @GetMapping("/fraud")
+    @GetMapping("/frauds")
     @Operation(summary = "전체 사기죄 소장 리스트 조회", description = "전체 사기죄 소장 리스트를 조회합니다.", tags = {"소장"})
     public BaseResponse<List<LawsuitFraudDTO>> getAllFrauds() {
         return BaseResponse.success(HttpStatus.OK.value(), "전체 사기죄 리스트 조회에 성공하였습니다!", lawsuitService.getAllFrauds());
@@ -251,7 +251,7 @@ public class LawsuitController {
      * @param request  추가할 사기죄 소장 정보.
      * @return 추가된 사기죄 소장 정보.
      */
-    @PostMapping("/fraud/{memberId}")
+    @PostMapping("/frauds/{memberId}")
     @Operation(summary = "멤버의 사기죄 소장 추가", description = "멤버에 속한 사기죄 소장을 추가합니다.", tags = {"소장"})
     public BaseResponse<LawsuitFraudDTO> createFraud(
         @PathVariable Long memberId,
@@ -266,7 +266,7 @@ public class LawsuitController {
      * @param memberId 멤버 ID
      * @param fraudId  삭제할 사기죄 소장 ID
      */
-    @DeleteMapping("/fraud/{memberId}/{fraudId}")
+    @DeleteMapping("/frauds/{memberId}/{fraudId}")
     @Operation(summary = "멤버의 사기죄 소장 삭제", description = "멤버에 속한 사기죄 소장을 삭제합니다.", tags = {"소장"})
     public BaseResponse<Void> deleteFraud(
         @PathVariable Long memberId,
@@ -283,7 +283,7 @@ public class LawsuitController {
      * @param request  수정할 사기죄 소장 정보
      * @return 수정된 사기죄 소장 정보
      */
-    @PatchMapping("/fraud/{memberId}/{fraudId}")
+    @PatchMapping("/frauds/{memberId}/{fraudId}")
     @Operation(summary = "멤버의 사기죄 소장 수정", description = "멤버에 속한 사기죄 소장을 수정합니다.", tags = {"소장"})
     public BaseResponse<LawsuitFraudDTO> updateFraud(
         @PathVariable Long memberId,

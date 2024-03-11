@@ -28,6 +28,7 @@ import com.sobolaw.member.repository.MemberPrecedentHighlightRepository;
 import com.sobolaw.member.repository.MemberPrecedentRepository;
 import com.sobolaw.member.repository.MemberRecentRepository;
 import com.sobolaw.member.repository.MemberRepository;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -259,20 +260,23 @@ public class MemberService {
     }
 
     /**
-     * 키워드 저장.
+     * 키워드들 저장.
      */
     @Transactional
-    public MemberKeywordDTO saveMemberKeyword(Long memberId, KeywordSaveRequestDTO request) {
+    public List<MemberKeywordDTO> saveMemberKeywords(Long memberId, KeywordSaveRequestDTO request) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
-        // 멤버 저장 판례 생성 및 저장
-        MemberKeyword newMemberKeyword = MemberKeyword.of(request.word(), KeywordType.DIRECT);
-        newMemberKeyword.setMember(member);
-        MemberKeyword memberKeyword = memberKeywordRepository.save(newMemberKeyword);
-        // 저장된 멤버 저장 판례 DTO로 변환
-        log.info(String.valueOf(memberKeyword));
-        return MemberKeywordDTO.from(memberKeyword);
-    }
 
+        List<MemberKeywordDTO> result = new ArrayList<>();
+
+        for (String word : request.words()) {
+            MemberKeyword newMemberKeyword = MemberKeyword.of(word, KeywordType.DIRECT);
+            newMemberKeyword.setMember(member);
+            MemberKeyword memberKeyword = memberKeywordRepository.save(newMemberKeyword);
+            result.add(MemberKeywordDTO.from(memberKeyword));
+        }
+
+        return result;
+    }
     /**
      * 멤버의 판례 삭제.
      *
