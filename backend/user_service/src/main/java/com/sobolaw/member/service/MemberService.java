@@ -14,6 +14,7 @@ import com.sobolaw.member.dto.MemberRecentDTO;
 import com.sobolaw.member.dto.request.HighlightCreateUpdateRequestDTO;
 import com.sobolaw.member.dto.request.KeywordSaveRequestDTO;
 import com.sobolaw.member.dto.request.PrecedentSaveRequestDTO;
+import com.sobolaw.member.dto.response.MemberResponseDTO;
 import com.sobolaw.member.entity.Member;
 import com.sobolaw.member.entity.MemberKeyword;
 import com.sobolaw.member.entity.MemberPrecedent;
@@ -60,10 +61,10 @@ public class MemberService {
      * @param memberId 멤버Id
      * @return 멤버 정보들.
      */
-    public MemberDTO getMember(Long memberId) {
+    public MemberResponseDTO getMember(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
-        return MemberDTO.from(member);
+        return MemberResponseDTO.from(member);
     }
 
     /**
@@ -136,10 +137,7 @@ public class MemberService {
      */
     public PrecedentResponseDTO getMemberPrecedentDetail(Long memberId, Long precedentId) {
         MemberPrecedent memberPrecedent = memberPrecedentRepository.findById(precedentId).orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_RECENT));
-        // lawServiceClient.getPrecedentDetail이 BaseResponse<PrecedentDTO>를 반환한다고 가정합니다.
         BaseResponse<PrecedentResponseDTO> baseResponse = lawServiceClient.getPrecedentDetail(memberPrecedent.getPrecedentId());
-
-        // BaseResponse에서 PrecedentDTO를 추출하여 반환합니다.
         return baseResponse.getData();
     }
 
@@ -221,6 +219,7 @@ public class MemberService {
      *
      * @return 저장된 멤버 저장 판례 DTO
      */
+    @Transactional
     public MemberPrecedentDTO saveMemberPrecedent(Long memberId, PrecedentSaveRequestDTO request) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
@@ -246,6 +245,7 @@ public class MemberService {
     /**
      * 판례 ID를 받아서 멤버가 최근 본 판례에 저장.
      */
+    @Transactional
     public MemberRecentDTO saveMemberRecent(Long memberId, PrecedentSaveRequestDTO request) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
@@ -343,6 +343,7 @@ public class MemberService {
     /**
      * 하이라이트 저장.
      */
+    @Transactional
     public MemberPrecedentHighlightDTO saveMemberPrecedentHighlight(Long precedentId, HighlightCreateUpdateRequestDTO request) {
         MemberPrecedent precedent = memberPrecedentRepository.findById(precedentId).orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT));
 
@@ -356,6 +357,7 @@ public class MemberService {
     /**
      * 하이라이트 삭제.
      */
+    @Transactional
     public void deleteMemberPrecedentHighlight(Long highlightId) {
         MemberPrecedentHighlight highlight = memberPrecedentHighlightRepository.findById(highlightId).orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_HIGHLIGHT));
 
@@ -367,6 +369,7 @@ public class MemberService {
     /**
      * 하이라이트 수정.
      */
+    @Transactional
     public MemberPrecedentHighlightDTO updateMemberPrecedentHighlgiht(Long highlightId, HighlightCreateUpdateRequestDTO request) {
         MemberPrecedentHighlight highlight = memberPrecedentHighlightRepository.findById(highlightId).orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_HIGHLIGHT));
         if (request.location() != null) {
