@@ -9,6 +9,7 @@ import com.sobolaw.lawsuit.dto.request.LawsuitInsultCreateUpdateRequestDTO;
 import com.sobolaw.lawsuit.dto.response.LawsuitDefamationListResponseDTO;
 import com.sobolaw.lawsuit.dto.response.LawsuitFraudListResponseDTO;
 import com.sobolaw.lawsuit.dto.response.LawsuitInsultListResponseDTO;
+import com.sobolaw.lawsuit.dto.response.LawsuitListResponseDTO;
 import com.sobolaw.lawsuit.entity.LawsuitDefamation;
 import com.sobolaw.lawsuit.entity.LawsuitFraud;
 import com.sobolaw.lawsuit.entity.LawsuitInsult;
@@ -21,6 +22,7 @@ import com.sobolaw.member.entity.Member;
 import com.sobolaw.member.exception.MemberErrorCode;
 import com.sobolaw.member.exception.MemberException;
 import com.sobolaw.member.repository.MemberRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
@@ -40,17 +42,43 @@ public class LawsuitService {
     private LawsuitFraudRepository lawsuitFraudRepository;
 
     /**
+     * 멤버 전체 소장 리스트 조회.
+     */
+    public List<LawsuitListResponseDTO> getAllLawsuits(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
+
+        List<LawsuitListResponseDTO> lawsuits = new ArrayList<>();
+
+        List<LawsuitDefamation> defamations = lawsuitDefamationRepository.findByMember(member);
+        lawsuits.addAll(defamations.stream()
+            .map(LawsuitDefamationListResponseDTO::from)
+            .toList());
+
+        List<LawsuitInsult> insults = lawsuitInsultRepository.findByMember(member);
+        lawsuits.addAll(insults.stream()
+            .map(LawsuitInsultListResponseDTO::from)
+            .toList());
+
+        List<LawsuitFraud> frauds = lawsuitFraudRepository.findByMember(member);
+        lawsuits.addAll(frauds.stream()
+            .map(LawsuitFraudListResponseDTO::from)
+            .toList());
+
+        return lawsuits;
+    }
+    /**
      * 멤버의 명예훼손 소장 리스트 조회.
      *
      * @param memberId 멤버 아이디.
      * @return 멤버의 명예훼손 소장 리스트.
      */
-    public List<LawsuitDefamationListResponseDTO> getDefamationsByMemberId(Long memberId) {
+    public List<LawsuitDefamationListResponseDTO> getDefamations(Long memberId) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
-        List<LawsuitDefamation> lawsuits = lawsuitDefamationRepository.findByMember(member);
-        return lawsuits.stream()
+        List<LawsuitDefamation> defamations = lawsuitDefamationRepository.findByMember(member);
+        return defamations.stream()
             .map(LawsuitDefamationListResponseDTO::from)
             .collect(Collectors.toList());
     }
@@ -90,7 +118,7 @@ public class LawsuitService {
      * @param memberId 회원 ID.
      * @return 회원과 연관된 모욕 소장 목록.
      */
-    public List<LawsuitInsultListResponseDTO> getInsultsByMemberId(Long memberId) {
+    public List<LawsuitInsultListResponseDTO> getInsults(Long memberId) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
@@ -134,7 +162,7 @@ public class LawsuitService {
      * @param memberId 회원 ID.
      * @return 회원과 연관된 사기 소장 목록.
      */
-    public List<LawsuitFraudListResponseDTO> getFraudsByMemberId(Long memberId) {
+    public List<LawsuitFraudListResponseDTO> getFrauds(Long memberId) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
@@ -642,5 +670,6 @@ public class LawsuitService {
 
         return LawsuitFraudDTO.from(updatedFraud);
     }
+
 
 }
