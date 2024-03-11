@@ -1,16 +1,14 @@
 // src/pages/SearchResultPage.tsx
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Pagination, Input, Tabs, Dropdown, Menu } from "antd";
+import { Pagination, Input, Tabs, Select } from "antd";
 import { SearchOutlined } from '@ant-design/icons';
 import SearchResultList, { SearchResult } from "../components/search/SearchResultList";
 import style from "../styles/search/SearchResultList.module.css";
 
-const { TabPane } = Tabs;
-
 const dummyData: SearchResult[] = [
-  { id: 1, title: "판례 제목 1", content: "판례 내용 1" },
-  { id: 2, title: "판례 제목 2", content: "판례 내용 1" },
+  { id: 1, title: "판례 제목 판례 제목판례 제목판례 제목판례 제목판례 제목판례 제목판례 제목 1", content: "판례 내용 1판례 내용 1판례 내용 1판례 내용판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1" },
+  { id: 2, title: "판례 제목 2판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1", content: "판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1판례 내용 1" },
   { id: 3, title: "판례 제목 3", content: "판례 내용 1" },
   { id: 4, title: "판례 제목 4", content: "판례 내용 1" },
   { id: 5, title: "판례 제목 5", content: "판례 내용 1" },
@@ -23,6 +21,14 @@ const dummyData: SearchResult[] = [
 
 ];
 
+const { Option } = Select;
+
+interface FilterOptions {
+  court: string[];
+  instance: string[];
+  date: string[];
+}
+
 const SearchResultPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -30,13 +36,25 @@ const SearchResultPage = () => {
   const [searchResults] = useState<SearchResult[]>(dummyData);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [searchTerm, setSearchTerm] = useState<string>(''); // 검색어 상태
+  const [selectedCourt, setSelectedCourt] = useState<string>(''); // 선택된 법원 상태
+  const [selectedInstance, setSelectedInstance] = useState<string>(''); // 선택된 심급 상태
+  const [selectedDate, setSelectedDate] = useState<string>(''); // 선택된 기간 상태
   const pageSize = 10; // 한 페이지에 표시할 검색 결과의 수
 
   useEffect(() => {
     // URL에서 검색 쿼리 파라미터를 추출
     const queryParams = new URLSearchParams(location.search);
     const searchQuery = queryParams.get('query');
+    const filteredResults = (): SearchResult[] => {
+      let filtered = dummyData.filter(result =>
+        (selectedCourt ? result.court === selectedCourt : true) &&
+        (selectedInstance ? result.instance === selectedInstance : true)
+      );
+      return filtered;
+    };
 
+    setSearchTerm
+    
     if (searchQuery) {
       setSearchTerm(searchQuery); // 검색어 상태를 URL 쿼리에서 가져온 값으로 설정
       // 검색 쿼리를 사용하여 검색 결과를 가져오는 로직
@@ -54,79 +72,76 @@ const SearchResultPage = () => {
     navigate(`/search-results?query=${encodeURIComponent(searchTerm)}`);
   };
 
-  // 드롭다운 메뉴
-  const courtMenu = (
-    <Menu>
-      <Menu.Item key="1">대법원</Menu.Item>
-      <Menu.Item key="2">고등법원/특허법원/고등군사법원</Menu.Item>
-      <Menu.Item key="3">지방법원/행정법원/가정법원/회생법원</Menu.Item>
-    </Menu>
-  );
+   // Handler functions
+   const onCourtChange = (value: string): void => setSelectedCourt(value);
+   const onInstanceChange = (value: string): void => setSelectedInstance(value);
+   const onDateChange = (value: string): void => setSelectedDate(value);
 
-  const levelMenu = (
-    <Menu>
-      <Menu.Item key="1">1심</Menu.Item>
-      <Menu.Item key="2">2심</Menu.Item>
-      <Menu.Item key="3">3심</Menu.Item>
-    </Menu>
-  );
-
-  const periodMenu = (
-    <Menu>
-      <Menu.Item key="1">전체</Menu.Item>
-      <Menu.Item key="2">1년</Menu.Item>
-      <Menu.Item key="3">3년</Menu.Item>
-      <Menu.Item key="4">5년</Menu.Item>
-    </Menu>
-  );
+  const tabsItems = [
+    {
+      label: '판례',
+      key: '1',
+      children: (
+        <>
+          <div className={style.selectContainer}>
+            <Select defaultValue="법원" style={{ width: 100 }} onChange={onCourtChange} className={style.singleSelect}>
+              <Option value="1">대법원</Option>
+              <Option value="2">고등법원</Option>
+              <Option value="3">지방법원</Option>
+            </Select>
+            <Select defaultValue="심급" style={{ width: 70 }} onChange={onInstanceChange} className={style.singleSelect}>
+              <Option value="1">1심</Option>
+              <Option value="2">2심</Option>
+              <Option value="3">3심</Option>
+            </Select>
+            <Select defaultValue="기간" style={{ width: 70 }} onChange={onDateChange} className={style.singleSelect}>
+              <Option value="1">전체</Option>
+              <Option value="2">1년</Option>
+              <Option value="3">3년</Option>
+              <Option value="4">5년</Option>
+            </Select>
+          </div>
+          <div className={style.searchResultList}>
+            <SearchResultList searchResults={searchResults.slice((currentPage - 1) * pageSize, currentPage * pageSize)} />
+          </div>
+        </>
+      ),
+    },
+    {
+      label: '법령',
+      key: '2',
+      children: (
+        // 법령 탭 내용
+        <div>법령 관련 내용</div>
+      ),
+    },
+  ];
 
   return (
     <div className={style.searchPageContainer}>
-      <div className={style.searchBox}>
-        {/* 검색창 */}
-        <Input
-          prefix={<SearchOutlined style={{ color: 'rgba(0,0,0,.45)', fontSize: '24px', padding: '0 20px', fontWeight: '600'  }} />}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          onPressEnter={handleSearch}
-          className={style.searchInput}
-          placeholder="키워드를 검색하세요"
+      <Input
+        prefix={<SearchOutlined />}
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        onPressEnter={handleSearch}
+        className={style.searchInput}
+        placeholder="키워드를 검색하세요"
+      />
+      <div className={style.tabs}>
+        <Tabs
+          items={tabsItems}
+          tabBarGutter={40}
         />
       </div>
-      <Tabs defaultActiveKey="1">
-        {/* 판례 탭 */}
-        <TabPane tab="판례" key="1">
-          <div className={style.resultsHeader}>
-            검색 결과 {searchResults.length} 건
-          </div>
-          <Dropdown overlay={courtMenu}>
-            <span style={{ color: '#cccccc', marginRight: '10px' }}>법원</span>
-          </Dropdown>
-          <Dropdown overlay={levelMenu}>
-            <span style={{ color: '#cccccc', marginRight: '10px' }}>심급</span>
-          </Dropdown>
-          <Dropdown overlay={periodMenu}>
-            <span style={{ color: '#cccccc', marginRight: '10px' }}>기간</span>
-          </Dropdown>
-          <hr className={style.searchResultsDivider} />
-          <SearchResultList searchResults={paginatedResults} />
-        </TabPane>
-        {/* 법령 탭 */}
-        <TabPane tab="법령" key="2">
-          {/* 법령 탭 컴포넌트 */}
-        </TabPane>
-      </Tabs>
-      {/* 페이지네이션 */}
       <Pagination
-        className={style.pagination}
         current={currentPage}
-        pageSize={pageSize}
+        pageSize={10} // 페이지 사이즈, 필요에 따라 조정
         total={searchResults.length}
-        onChange={page => setCurrentPage(page)} />
+        onChange={(page) => setCurrentPage(page)}
+        className={style.pagination}
+      />
     </div>
   );
 };
-
-
 
 export default SearchResultPage;

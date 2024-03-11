@@ -49,6 +49,7 @@
     padding: 1rem;
     width: 80%;
     margin: 10px auto;
+    height: 350px; /* 높이 조정 */
   }
 
   .middleContainer {
@@ -56,6 +57,7 @@
     padding: 40px 0; /* 위, 아래 패딩 조정 */
     gap: 10px; /* 카테고리 박스와 최근 본 판례 박스 사이의 간격 */
   }
+
 
   .title {
     font-size: 12px;
@@ -72,8 +74,8 @@
   }
 
   .singleCategoryCard {
-    padding: 10px; /* 모바일 화면에서 카드 패딩 조정 */
-    font-size: 10px;
+    padding: 0px; /* 모바일 화면에서 카드 패딩 조정 */
+    font-size: 12px;
   }
 
   .recentLawCaseBackground, .recentLawCaseTitle {
