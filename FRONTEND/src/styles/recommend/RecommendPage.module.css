@@ -1,0 +1,33 @@
+/* src/styles/RecommendPage.module.css */
+.recommendBackground {
+    position: relative; /* 오버레이를 위한 포지셔닝 컨텍스트 설정 */
+    background-image: url('../../public/images/recommend-background.png');
+    background-size: cover;
+    background-position: center;
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .recommendBackground::before {
+    content: ''; /* 가상 요소의 내용을 비워둠 */
+    position: absolute; /* 부모 요소(recommendBackground)를 기준으로 위치 지정 */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* 검정색 배경에 투명도를 적용하여 어두운 오버레이 생성 */
+    z-index: 0; /* 오버레이를 배경 이미지와 텍스트 사이에 위치시킴 */
+  }
+  
+  .titleContainer {
+    width: 100%;
+    margin-top: 40px;
+    position: relative; /* z-index를 적용하기 위한 포지셔닝 컨텍스트 설정 */
+    z-index: 1; /* 텍스트가 오버레이 위에 보이도록 z-index 설정 */
+  }
+
+
+  
