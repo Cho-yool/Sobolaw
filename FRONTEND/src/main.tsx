@@ -14,7 +14,7 @@ const theme = {
   token: {
     fontFamily: "Orbit-Regular",
     Tabs: {
-      itemColor: "#ffffff",
+      itemColor: "#bbbbbb",
       itemHoverColor: "#EAA854",
       itemSelectedColor: "#EAA854",
       inkBarColor: "#EAA854",

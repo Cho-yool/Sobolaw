@@ -41,6 +41,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearch }) => {
         onChange={onTabChange}
         items={tabItems}
         tabBarGutter={40}
+        className={style.tabContainer}
       />
       <Input
         prefix={<SearchOutlined style={{ fontSize: '20px', padding: '0px 20px'}}/>}
