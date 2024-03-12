@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * 다른 프로젝트와 통신.
  */
 @FeignClient(name = "law-service", path = "/api/law-service")
-//@FeignClient(name="law-service", url = "http://jongbum.site/api/law-service")
+//@FeignClient(name="law-service", url = "https://j10a604.p.ssafy.io/api/law-service")
 public interface LawServiceClient {
 
     /**
