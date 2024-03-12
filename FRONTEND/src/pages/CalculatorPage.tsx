@@ -153,7 +153,10 @@ export default function CalculatorPage() {
   return (
     <div className={style["pages"]}>
       {/* 페이지 타이틀 */}
-      <Title level={2} style={{ color: "#644419", textAlign: "center" }}>
+      <Title
+        level={2}
+        style={{ color: "#644419", textAlign: "center", marginTop: "64px" }}
+      >
         소송 비용 계산
       </Title>
       <div style={{ display: "flex", gap: "16px" }}></div>

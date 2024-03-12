@@ -15,27 +15,26 @@ import MyCase from "./pages/mypage/MyCase";
 
 function App() {
   return (
-
-      <Routes>
-        {/* 레이아웃을 미리 짜놓고, 그 사이에 새로 만든 페이지들이 들어가게 함 */}
-        <Route element={<LayoutPage />}>
-          <Route path="" element={<MainPage />} />
-          <Route path="/detail" element={<LawCaseDetail />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/search" element={<SearchPage />} />
-          <Route path="/search-results" element={<SearchResultPage />} />
-          <Route path="/recommend" element={<RecommendPage />} />
-          <Route path="/plaint" element={<FormPage />} />
-          <Route path="/cal" element={<CalculatorPage />} />
-          <Route path="/mypage/*" element={<MyPage />}>
-            <Route path="" element={<MyInfo />} />
-            <Route path="user" element={<MyInfo />} />
-            <Route path="papers" element={<Mypaper />} />
-            <Route path="case" element={<MyCase />} />
-          </Route>
+    <Routes>
+      {/* 레이아웃을 미리 짜놓고, 그 사이에 새로 만든 페이지들이 들어가게 함 */}
+      <Route element={<LayoutPage />}>
+        <Route path="" element={<MainPage />} />
+        <Route path="/detail" element={<LawCaseDetail />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/search" element={<SearchPage />} />
+        <Route path="/search-results" element={<SearchResultPage />} />
+        <Route path="/recommend" element={<RecommendPage />} />
+        <Route path="/plaint" element={<FormPage />} />
+        <Route path="/cal" element={<CalculatorPage />} />
+        <Route path="/mypage/*" element={<MyPage />}>
+          <Route path="" element={<MyInfo />} />
+          <Route path="user" element={<MyInfo />} />
+          <Route path="papers" element={<Mypaper />} />
+          <Route path="case" element={<MyCase />} />
         </Route>
-        {/* 다른 Route도 추가가능~ */}
-      </Routes>
+      </Route>
+      {/* 다른 Route도 추가가능~ */}
+    </Routes>
   );
 }
 

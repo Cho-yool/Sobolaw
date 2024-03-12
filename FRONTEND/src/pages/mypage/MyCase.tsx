@@ -21,8 +21,6 @@ export default function MyCase() {
     // }, [user.accessToken]
   }, []);
 
-  console.log(paperList);
-
   return (
     <>
       <div className="pages">
