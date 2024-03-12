@@ -11,6 +11,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
+/**
+ * 엔티티 공통.
+ */
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)

@@ -77,7 +77,7 @@ public class MemberService {
     public List<PrecedentListResponseDTO> getMemberRecents(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
-        List<Long> recentIds = member.getMemberRecents().stream().map(MemberRecent::getPrecedentId).collect(Collectors.toList());
+        List<Long> recentIds = member.getMemberRecents().stream().map(MemberRecent::getPrecedentId).toList();
 
         Map<String, List<Long>> requestBody = Collections.singletonMap("precedentId", recentIds);
         BaseResponse<List<PrecedentListResponseDTO>> baseResponse = lawServiceClient.getPrecedentList(requestBody);
@@ -106,7 +106,7 @@ public class MemberService {
     public List<PrecedentListResponseDTO> getMemberPrecedents(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
-        List<Long> precedentIds = member.getMemberPrecedents().stream().map(MemberPrecedent::getPrecedentId).collect(Collectors.toList());
+        List<Long> precedentIds = member.getMemberPrecedents().stream().map(MemberPrecedent::getPrecedentId).toList();
 
         Map<String, List<Long>> requestBody = Collections.singletonMap("precedentId", precedentIds);
         BaseResponse<List<PrecedentListResponseDTO>> baseResponse = lawServiceClient.getPrecedentList(requestBody);
@@ -188,7 +188,7 @@ public class MemberService {
      */
     public List<PrecedentListResponseDTO> getAllMemberPrecedents() {
         List<MemberPrecedent> allPrecedents = memberPrecedentRepository.findAll();
-        List<Long> precedentIds = allPrecedents.stream().map(MemberPrecedent::getPrecedentId).collect(Collectors.toList());
+        List<Long> precedentIds = allPrecedents.stream().map(MemberPrecedent::getPrecedentId).toList();
 
         Map<String, List<Long>> requestBody = Collections.singletonMap("precedentId", precedentIds);
         BaseResponse<List<PrecedentListResponseDTO>> baseResponse = lawServiceClient.getPrecedentList(requestBody);
@@ -200,7 +200,7 @@ public class MemberService {
      */
     public List<PrecedentListResponseDTO> getAllMemberRecents() {
         List<MemberRecent> allRecents = memberRecentRepository.findAll();
-        List<Long> recentIds = allRecents.stream().map(MemberRecent::getPrecedentId).collect(Collectors.toList());
+        List<Long> recentIds = allRecents.stream().map(MemberRecent::getPrecedentId).toList();
 
         Map<String, List<Long>> requestBody = Collections.singletonMap("precedentId", recentIds);
         BaseResponse<List<PrecedentListResponseDTO>> baseResponse = lawServiceClient.getPrecedentList(requestBody);
