@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { ConfigProvider } from "antd";
 import { store, persistor } from "./redux/store/store.tsx";
+import { QueryClient, QueryClientProvider } from "react-query";
 import App from "./App.tsx";
 
 // ConfigProvider 로 theme 속성에 바로 아래 커스텀할려는 속성 넣어서 색 변경하면 됨
@@ -34,16 +35,18 @@ const theme = {
     },
   },
 };
-
+const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById("root")!).render(
-      <BrowserRouter>
-  <Provider store={store}>
-    {/* PersisGate를 통해 리액트가 로딩되기 전에 반드시 로딩되어야 할 컴포넌트가 있는 경우 loading에 해당 컴포넌트를 넣어준다 */}
-    <PersistGate loading={null} persistor={persistor}>
-        <ConfigProvider theme={theme}>
-          <App />
-        </ConfigProvider>
-    </PersistGate>
-  </Provider>
-      </BrowserRouter>
+  <QueryClientProvider client={queryClient}>
+    <BrowserRouter>
+      <Provider store={store}>
+        {/* PersisGate를 통해 리액트가 로딩되기 전에 반드시 로딩되어야 할 컴포넌트가 있는 경우 loading에 해당 컴포넌트를 넣어준다 */}
+        <PersistGate loading={null} persistor={persistor}>
+          <ConfigProvider theme={theme}>
+            <App />
+          </ConfigProvider>
+        </PersistGate>
+      </Provider>
+    </BrowserRouter>
+  </QueryClientProvider>
 );
