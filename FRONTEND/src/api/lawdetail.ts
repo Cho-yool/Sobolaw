@@ -1,8 +1,7 @@
-import { userAxios } from "./http";
+import { mainAxios } from "./http";
 import { AxiosHeaders } from "axios";
-import { useQuery } from "react-query";
 
-const http = userAxios();
+const http = mainAxios();
 const headers = new AxiosHeaders();
 headers.set("Content-Type", "application/json;charset=utf-8");
 
