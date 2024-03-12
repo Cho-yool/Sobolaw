@@ -58,6 +58,7 @@
   padding: 5px;
 }
 
+
 .hiddenItem {
   display: none;
 }
@@ -74,7 +75,7 @@
   }
 
   .caseTitle {
-    width: calc(100% - 60px); /* Adjust based on actual layout constraints */
+    max-width: calc(100% - 60px); /* Adjust based on actual layout constraints */
   }
 }
 
@@ -88,4 +89,34 @@
   border: 1px solid #ccc; /* Example border style */
   border-radius: 15px; /* Rounded corners for the box */
   z-index: -1; /* Ensure it's behind the list items */
+}
+
+@media screen and (max-width: 768px) {
+  .recentLawCaseContainer {
+    width: 150%; /* 너비를 화면 전체로 설정 */
+    margin: 20px 20px; /* 상하 마진을 유지하고 좌우 마진을 auto로 설정 */
+    padding: 20px; /* 양쪽 패딩을 추가하여 내용이 화면 가장자리에 닿지 않도록 조정 */
+  }
+
+  .recentLawCaseTitle {
+    font-size: 20px; /* 제목의 글꼴 크기를 줄임 */
+    margin-top: 20px;
+    margin-left: 20px;
+  }
+  
+  .recentLawCaseList {
+    max-height: 250px; /* 최대 높이를 줄임 */
+    margin: 20px auto; /* 상하 여백을 줄임 */
+    padding: 10px; /* 패딩을 줄임 */
+  }
+
+  .caseTypeBox {
+    padding: 5px 10px; /* caseTypeBox의 패딩을 줄임 */
+    font-size: 8px; /* caseTypeBox의 글꼴 크기를 줄임 */
+  }
+
+  .caseTitle {
+    max-width: calc(100% - 35px); /* caseTypeBox와의 간격을 고려하여 조정 */
+    font-size: 12px; /* 글꼴 크기를 줄임 */
+  }
 }

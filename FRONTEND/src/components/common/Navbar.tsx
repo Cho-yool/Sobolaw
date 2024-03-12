@@ -29,16 +29,21 @@ const items: MenuProps["items"] = [
   { key: "4", label: <Link to="/plaint">소장작성</Link> },
 ];
 
-const ResponsiveNav = () => {
+interface ResponsiveNavProps {
+  selectedKeys: string[];
+  selectedSubKeys: string[];
+  setSelectedKeys: React.Dispatch<React.SetStateAction<string[]>>;
+  setSelectedSubKeys: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+const ResponsiveNav = ({
+  selectedKeys,
+  selectedSubKeys,
+  setSelectedKeys,
+  setSelectedSubKeys,
+}: ResponsiveNavProps) => {
   const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
-  const [selectedKeys, setSelectedKeys] = useState<string[]>([""]);
-  const [selectedSubKeys, setSelectedSubKeys] = useState<string[]>([""]);
-  const handleSelect = ({ key }: { key: string }) => {
-    setSelectedKeys([key])
-    setSelectedSubKeys([""])
-  };
-
   const showDrawer = () => {
     setVisible(true);
   };
@@ -88,10 +93,19 @@ const ResponsiveNav = () => {
           </Col>
           <Row className={style["contents"]}>
             <Col xs={0} sm={0} md={12} lg={16}>
-              <Menu mode="horizontal" selectedKeys={selectedKeys} onSelect={handleSelect} items={items} />
+              <Menu
+                mode="horizontal"
+                selectedKeys={selectedKeys}
+                items={items}
+              />
             </Col>
             <Col xs={0} sm={0} md={4}>
-              <MypageMenu mode={"horizontal"} setSelectedKeys={setSelectedKeys} selectedSubKeys={selectedSubKeys} setSelectedSubKeys={setSelectedSubKeys} />
+              <MypageMenu
+                mode={"horizontal"}
+                setSelectedKeys={setSelectedKeys}
+                selectedSubKeys={selectedSubKeys}
+                setSelectedSubKeys={setSelectedSubKeys}
+              />
             </Col>
             <Col xs={0} sm={0} md={2}>
               <Button

@@ -35,12 +35,18 @@
 
 /* 모바일 화면 크기에서 스타일 조정 */
 @media (max-width: 768px) {
+
   .title {
     font-size: 15px; /* 모바일 화면에서 글씨 크기 줄임 */
   }
 
   .searchInput, .searchInput::placeholder {
-    font-size: 12px; /* 모바일 화면에서 입력과 placeholder 폰트 크기 줄임 */
+    font-size: 10px; /* 모바일 화면에서 입력과 placeholder 폰트 크기 줄임 */
+    width: 90%;
+  }
+
+  .tabContainer {
+    font-size: 12px;
   }
 }
 

@@ -27,7 +27,7 @@ const TableTransfer = ({
   rightColumns,
   ...restProps
 }: TableTransferProps) => (
-  <Transfer {...restProps}>
+  <Transfer pagination={{ showSizeChanger: true }} {...restProps}>
     {({
       direction,
       filteredItems,
