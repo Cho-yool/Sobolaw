@@ -2,7 +2,7 @@ import { Select, Button, Radio, Collapse, Divider, Form } from "antd";
 import Title from "antd/es/typography/Title";
 import "../App.css";
 import style from "../styles/calculator/Calculator.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const { Option } = Select;
 
@@ -22,61 +22,85 @@ export default function CalculatorPage() {
       person &&
       lawyerPay
     ) {
-      const numLitigationMoney = Number(litigationMoney.split(",").join(""))
-      const numLawyerPay = Number(lawyerPay.split(",").join(""))
+      const numLitigationMoney = Number(litigationMoney.split(",").join(""));
+      const numLawyerPay = Number(lawyerPay.split(",").join(""));
+
       if (numLitigationMoney <= 10000000) {
-        const checkValue = numLitigationMoney * 0.005 * 0.9
+        const checkValue = numLitigationMoney * 0.005 * 0.9;
         if (checkValue <= 1000) {
-          setRenderRecognition(1000)
+          setRenderRecognition(1000);
         } else {
-          setRenderRecognition(checkValue)
+          setRenderRecognition(Math.round(checkValue));
         }
       } else if (numLitigationMoney <= 100000000) {
-        const checkValue = (numLitigationMoney * 0.0045 + 5000) * 0.9
-        setRenderRecognition(checkValue)
+        const checkValue = (numLitigationMoney * 0.0045 + 5000) * 0.9;
+        setRenderRecognition(Math.round(checkValue));
       } else if (numLitigationMoney <= 1000000000) {
-        const checkValue = (numLitigationMoney * 0.004 + 55000) * 0.9
-        setRenderRecognition(checkValue)
+        const checkValue = (numLitigationMoney * 0.004 + 55000) * 0.9;
+        setRenderRecognition(Math.round(checkValue));
       } else if (numLitigationMoney > 1000000000) {
-        const checkValue = (numLitigationMoney * 0.0035 + 555000) * 0.9
-        setRenderRecognition(checkValue)
+        const checkValue = (numLitigationMoney * 0.0035 + 555000) * 0.9;
+        setRenderRecognition(Math.round(checkValue));
       }
 
       if (numLawyerPay <= 3000000) {
-        setRenderLawyerPay(300000)
+        setRenderLawyerPay(300000);
       } else if (numLawyerPay <= 20000000) {
-        setRenderLawyerPay(300000 + (numLawyerPay - 3000000) * 0.1)
+        setRenderLawyerPay(Math.round(300000 + (numLawyerPay - 3000000) * 0.1));
       } else if (numLawyerPay <= 50000000) {
-        setRenderLawyerPay(2000000 + (numLawyerPay - 20000000) * 0.08)
+        setRenderLawyerPay(
+          Math.round(2000000 + (numLawyerPay - 20000000) * 0.08)
+        );
       } else if (numLawyerPay <= 100000000) {
-        setRenderLawyerPay(4400000 + (numLawyerPay - 50000000) * 0.06)
+        setRenderLawyerPay(
+          Math.round(4400000 + (numLawyerPay - 50000000) * 0.06)
+        );
       } else if (numLawyerPay <= 150000000) {
-        setRenderLawyerPay(7400000 + (numLawyerPay - 100000000) * 0.04)
+        setRenderLawyerPay(
+          Math.round(7400000 + (numLawyerPay - 100000000) * 0.04)
+        );
       } else if (numLawyerPay <= 200000000) {
-        setRenderLawyerPay(9400000 + (numLawyerPay - 150000000) * 0.02)
+        setRenderLawyerPay(
+          Math.round(9400000 + (numLawyerPay - 150000000) * 0.02)
+        );
       } else if (numLawyerPay <= 500000000) {
-        setRenderLawyerPay(10400000 + (numLawyerPay - 200000000) * 0.01)
+        setRenderLawyerPay(
+          Math.round(10400000 + (numLawyerPay - 200000000) * 0.01)
+        );
       } else {
-        setRenderLawyerPay(13400000 + (numLawyerPay - 500000000) * 0.005)
+        setRenderLawyerPay(
+          Math.round(13400000 + (numLawyerPay - 500000000) * 0.005)
+        );
       }
 
       if (caseType === "0") {
-        setRenderDelivery(5200 * person * 10)
+        setRenderDelivery(Math.round(5200 * Number(person) * 10));
       } else if (caseType === "1") {
-        setRenderDelivery(5200 * person * 15)
+        setRenderDelivery(Math.round(5200 * Number(person) * 15));
       } else if (caseType === "2") {
-        setRenderDelivery(5200 * person * 15)
+        setRenderDelivery(Math.round(5200 * Number(person) * 15));
       } else if (caseType === "3") {
-        setRenderDelivery(5200 * person * 12)
+        setRenderDelivery(Math.round(5200 * Number(person) * 12));
       } else if (caseType === "4") {
-        setRenderDelivery(5200 * person * 8)
+        setRenderDelivery(Math.round(5200 * Number(person) * 8));
       } else if (caseType === "5") {
-        setRenderDelivery(5200 * person * 5)
+        setRenderDelivery(Math.round(5200 * Number(person) * 5));
       }
-      
+      setIsResults(true);
     } else {
       alert("입력 값이 누락됐습니다.");
     }
+  };
+
+  const onReset = () => {
+    setLitigationType("");
+    setCaseClassification(null);
+    setLitigationMoney("");
+    setTrial(null);
+    setCaseType(null);
+    setPerson("");
+    setLawyerPay("");
+    setIsResults(false);
   };
 
   function handleLitigationChange(e: string) {
@@ -97,31 +121,42 @@ export default function CalculatorPage() {
   }
 
   const [litigationType, setLitigationType] = useState<string>("");
-  const [caseClassification, setCaseClassification] = useState<string>("");
+  const [caseClassification, setCaseClassification] = useState<string | null>(
+    null
+  );
   const [litigationMoney, setLitigationMoney] = useState<string>("");
-  const [trial, setTrial] = useState<string>("");
-  const [caseType, setCaseType] = useState<string>("");
-  const [person, setPerson] = useState<number>();
+  const [trial, setTrial] = useState<string | null>(null);
+  const [caseType, setCaseType] = useState<string | null>(null);
+  const [person, setPerson] = useState<string>("");
   const [lawyerPay, setLawyerPay] = useState<string>("");
   const [renderRecognition, setRenderRecognition] = useState<number>();
   const [renderDelivery, setRenderDelivery] = useState<number>();
   const [renderLawyerPay, setRenderLawyerPay] = useState<number>();
   const [renderTotal, setRenderTotal] = useState<string>();
+  const [reRenderRecognition, setReRenderRecognition] = useState<string>("");
+  const [reRenderDelivery, setReRenderDelivery] = useState<string>("");
+  const [reRenderLawyerPay, setReRenderLawyerPay] = useState<string>("");
+  const [isResults, setIsResults] = useState<boolean>(false);
 
   useEffect(() => {
     if (renderLawyerPay && renderDelivery && renderRecognition) {
-      const changeValue = changeNumber(String(renderLawyerPay + renderDelivery + renderRecognition))
-      setRenderTotal(changeValue)
-      // const changeLawyerPay = changeNumber(String(renderLawyerPay))
-      // const changeDelivery = changeNumber(String(renderDelivery))
-      // const changeRecognition = changeNumber(String(renderRecognition))
+      const changeValue = changeNumber(
+        String(renderLawyerPay + renderDelivery + renderRecognition)
+      );
+      setReRenderRecognition(changeNumber(String(renderRecognition)));
+      setReRenderDelivery(changeNumber(String(renderDelivery)));
+      setReRenderLawyerPay(changeNumber(String(renderLawyerPay)));
+      setRenderTotal(changeValue);
     }
-  },[renderRecognition, renderLawyerPay, renderDelivery])
+  }, [renderRecognition, renderLawyerPay, renderDelivery]);
 
   return (
     <div className={style["pages"]}>
       {/* 페이지 타이틀 */}
-      <Title level={2} style={{ color: "#644419", textAlign: "center" }}>
+      <Title
+        level={2}
+        style={{ color: "#644419", textAlign: "center", marginTop: "64px" }}
+      >
         소송 비용 계산
       </Title>
       <div style={{ display: "flex", gap: "16px" }}></div>
@@ -155,9 +190,7 @@ export default function CalculatorPage() {
         </div>
       </div>
 
-      {/* 계산 박스 */}
       <div className={style["calculator"]}>
-        {/* antd Form 예제 갖고왔어요 */}
         <Form
           className={style["calculator-box"]}
           name="validate_other"
@@ -165,7 +198,10 @@ export default function CalculatorPage() {
           size="large"
         >
           <Form.Item label="소송 구분">
-            <Radio.Group onChange={(e) => setLitigationType(e.target.value)}>
+            <Radio.Group
+              onChange={(e) => setLitigationType(e.target.value)}
+              value={litigationType}
+            >
               <Radio value="전자소송">전자소송</Radio>
               <Radio value="종이소송">종이소송</Radio>
             </Radio.Group>
@@ -174,12 +210,14 @@ export default function CalculatorPage() {
             <Select
               placeholder="소송을 선택하세요"
               onSelect={(e) => setCaseClassification(e)}
+              value={caseClassification}
             >
               <Option value="소송">소송</Option>
             </Select>
           </Form.Item>
           <Form.Item
             label="소가"
+            name="litigation"
             hasFeedback
             rules={[{ required: true, message: "필수 입력해주세요" }]}
           >
@@ -195,24 +233,21 @@ export default function CalculatorPage() {
               </div>
             </Form.Item>
           </Form.Item>
-          <Form.Item name="judge" label="심급">
+          <Form.Item label="심급">
             <Select
               placeholder="심을 선택하세요."
               onSelect={(e) => setTrial(e)}
+              value={trial}
             >
               <Option value="1">1심</Option>
               <Option value="2">2심</Option>
             </Select>
           </Form.Item>
-          <Form.Item
-            name="casetype"
-            label="사건종류"
-            hasFeedback
-            rules={[{ required: true, message: "필수 입력해주세요" }]}
-          >
+          <Form.Item label="사건종류" hasFeedback>
             <Select
               placeholder="사건 종류를 선택하세요."
               onSelect={(e) => setCaseType(e)}
+              value={caseType}
             >
               <Option value="0">민사 제1심 소액사건</Option>
               <Option value="1">민사 제1심 단독사건</Option>
@@ -220,19 +255,15 @@ export default function CalculatorPage() {
               <Option value="3">민사항소사건</Option>
               <Option value="4">민사 상고사건(다)</Option>
               <Option value="5">민사 조정사건(머)</Option>
-
             </Select>
           </Form.Item>
-          <Form.Item
-            label="피고/상대방수"
-            rules={[{ required: true, message: "필수 입력해주세요" }]}
-          >
+          <Form.Item label="피고/상대방수" hasFeedback>
             <Form.Item noStyle={true}>
               <div className={style["calculator-box__money"]}>
                 <input
                   type="number"
                   value={person}
-                  onChange={(e) => setPerson(Number(e.target.value))}
+                  onChange={(e) => setPerson(e.target.value)}
                 />
                 <span>명</span>
               </div>
@@ -261,7 +292,10 @@ export default function CalculatorPage() {
         <div
           style={{ display: "flex", justifyContent: "flex-end", gap: "8px" }}
         >
-          <Button style={{ border: "1px solid #0047ba", color: "#0047ba" }}>
+          <Button
+            style={{ border: "1px solid #0047ba", color: "#0047ba" }}
+            onClick={onReset}
+          >
             초기화
           </Button>
           <Button
@@ -274,30 +308,43 @@ export default function CalculatorPage() {
       </div>
 
       {/* 제출했을 때 뜨는 박스, 일단 pages에 같이 적어둠 */}
-      <div>
-        <Title level={2} style={{ color: "#644419", textAlign: "center" }}>
-          결과
-        </Title>
+      {isResults ? (
+        <div>
+          <Title level={2} style={{ color: "#644419", textAlign: "center" }}>
+            결과
+          </Title>
 
-        <div className={style["result-box"]}>
-          <div style={{ padding: "24px" }}>
-            <p
-              style={{
-                marginBottom: "16px",
-                fontSize: "1.5rem",
-                fontWeight: "bold",
-              }}
-            >
-              계산결과
-            </p>
-            <p>인지액: {renderRecognition ? <span>{renderRecognition} 원</span> : null}</p>
-            <p>송달료: {renderDelivery ? <span>{renderDelivery} 원</span> : null}</p>
-            <p>법정 변호사보수액 한도: {renderLawyerPay ? <span>{renderLawyerPay} 원</span> : null}</p>
-            <Divider />
-            <p>합계: {renderTotal ? <span>{renderTotal} 원</span> : null}</p>
+          <div className={style["result-box"]}>
+            <div style={{ padding: "24px" }}>
+              <p
+                style={{
+                  marginBottom: "16px",
+                  fontSize: "1.5rem",
+                  fontWeight: "bold",
+                }}
+              >
+                계산결과
+              </p>
+              <p>
+                인지액:
+                {reRenderRecognition ? (
+                  <span>{reRenderRecognition} 원</span>
+                ) : null}
+              </p>
+              <p>
+                송달료:
+                {reRenderDelivery ? <span>{reRenderDelivery} 원</span> : null}
+              </p>
+              <p>
+                법정 변호사보수액 한도:
+                {reRenderLawyerPay ? <span>{reRenderLawyerPay} 원</span> : null}
+              </p>
+              <Divider />
+              <p>합계: {renderTotal ? <span>{renderTotal} 원</span> : null}</p>
+            </div>
           </div>
         </div>
-      </div>
+      ) : null}
 
       {/* 하위에 떠있을 주의사항 */}
       <Collapse
@@ -400,7 +447,7 @@ export default function CalculatorPage() {
                   금액이 청구변경신청서의 인지액이 됩니다
                 </p>
                 <h3 className={style["notice-content-title"]}>
-                    변호사 보수 비용
+                  변호사 보수 비용
                 </h3>
                 <div className={style["notice-content-table"]}>
                   <div className={style["notice-content-row"]}>
