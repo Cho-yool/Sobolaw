@@ -57,13 +57,3 @@ eureka:
       defaultZone: http://localhost:8761/eureka
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-
-openai:
-  api-key: "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"
-  base-url: "https://api.openai.com/v1/engines/gpt-3.5-turbo-0125/completions"
-#  https://api.openai.com/v1/chat/completions
-  model: "gpt-3.5-turbo-0125"
-  url:
-    prompt=https://api:
-      openai:
-        com/v1/chat/completions:
