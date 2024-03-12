@@ -9,13 +9,13 @@ import { dummydata2 } from "../../dummy";
 export default function MyCase() {
   const navigate = useNavigate();
   // const user = useSelector((state: RootState) => state.user);
-  const [paperList, setpaperList] = useState<MemberPrecedent>();
+  const [caseList, setCaseList] = useState<MemberPrecedent>();
 
   useEffect(() => {
     const fetchData = async () => {
       //     const response = await getUserInfo({}, user.accessToken);
       //     setUserInfo(response);
-      setpaperList(dummydata2);
+      setCaseList(dummydata2);
     };
     fetchData();
     // }, [user.accessToken]
@@ -37,7 +37,7 @@ export default function MyCase() {
               판례 추천받기
             </Button>
           </div>
-          <MyCaseList />
+          <MyCaseList cases={caseList} />
         </div>
       </div>
     </>

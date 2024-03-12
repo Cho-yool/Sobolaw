@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Table, Tag, Transfer } from "antd";
+import React, { useState, useEffect } from "react";
+import { Button, Table, Tag, Transfer } from "antd";
 import type {
   GetProp,
   TableColumnsType,
@@ -7,7 +7,10 @@ import type {
   TransferProps,
 } from "antd";
 import difference from "lodash/difference";
-import { KeywordType } from "../../types/DataTypes";
+import style from "../../styles/mypage/Mycase.module.css";
+import { KeywordType, MemberKeyword } from "../../types/DataTypes";
+import { dataSource } from "../../types/KeywordList";
+import { postMyKeyword } from "../../api/members";
 
 type TransferItem = GetProp<TransferProps, "dataSource">[number];
 type TableRowSelection<T extends object> = TableProps<T>["rowSelection"];
@@ -17,63 +20,6 @@ interface TableTransferProps extends TransferProps<TransferItem> {
   leftColumns: TableColumnsType<KeywordType>;
   rightColumns: TableColumnsType<KeywordType>;
 }
-
-const keywordList: Array<string> = [
-  "강제추행",
-  "강간",
-  "공무집행방해",
-  "개인정보보호법위반",
-  "누수",
-  "농지법",
-  "뇌물",
-  "도주치상",
-  "대여금",
-  "도로교통",
-  "리그오브레전드",
-  "랜덤채팅",
-  "라인",
-  "통신매체음란",
-  "명예훼손",
-  "무고",
-  "미성년자의제강간",
-  "모욕죄",
-  "보이스피싱",
-  "부당이득",
-  "보험금",
-  "사기",
-  "비트코인",
-  "손해배상",
-  "살인",
-  "스토킹",
-  "음주운전",
-  "업무방해",
-  "의제강간",
-  "이혼",
-  "업무상횡령",
-  "준강간",
-  "주거침입",
-  "절도",
-  "재산분할",
-  "전자금융거래법위반",
-  "차용사기",
-  "추행",
-  "층간소움",
-  "촬영물등이용협박",
-  "처분문서",
-  "카메라등이용촬영",
-  "컴퓨터등사용사기",
-  "통신매체이용음란",
-  "토렌트",
-  "통매음",
-  "폭행",
-  "폭행치상",
-  "포괄일죄",
-  "횡령",
-  "협박",
-  "학교폭력",
-  "허위사실",
-  "확인의이익",
-];
 
 // Customize Table Transfer
 const TableTransfer = ({
@@ -133,19 +79,14 @@ const TableTransfer = ({
   </Transfer>
 );
 
-const mockData: KeywordType[] = Array.from({ length: 20 }).map((_, i) => ({
-  key: i.toString(),
-  title: keywordList[i],
-}));
-
-const originTargetKeys = mockData
-  .filter((item) => Number(item.key) % 3 > 1)
-  .map((item) => item.key);
+interface MemberKeywordProps {
+  keywords: MemberKeyword[] | undefined;
+}
 
 const leftTableColumns: TableColumnsType<KeywordType> = [
   {
     dataIndex: "title",
-    title: "Name",
+    title: "이름",
     render: (Name) => <Tag>{Name}</Tag>,
   },
 ];
@@ -153,31 +94,65 @@ const leftTableColumns: TableColumnsType<KeywordType> = [
 const rightTableColumns: TableColumnsType<KeywordType> = [
   {
     dataIndex: "title",
-    title: "Name",
+    title: "이름",
+    render: (Name) => <Tag color="volcano">{Name}</Tag>,
   },
 ];
 
-export default function MyKeyword() {
-  const [targetKeys, setTargetKeys] = useState<string[]>(originTargetKeys);
+const MyKeyword: React.FC<MemberKeywordProps> = ({ keywords }) => {
+  const [targetKeys, setTargetKeys] = useState<string[]>([]);
+  const [isDisabled, setIsDisabled] = useState(true);
+
+  useEffect(() => {
+    const originTargetKeys =
+      keywords?.filter((item) => item.word).map((item) => item.word) ?? [];
+    setTargetKeys(originTargetKeys);
+  }, [keywords]);
+
+  useEffect(() => {
+    setIsDisabled(false);
+  }, [targetKeys]);
 
   const onChange = (nextTargetKeys: string[]) => {
     setTargetKeys(nextTargetKeys);
   };
 
+  const handleCheck = () => {
+    postMyKeyword(1, targetKeys)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <>
       <TableTransfer
-        dataSource={mockData}
+        dataSource={dataSource}
         targetKeys={targetKeys}
         showSearch={true}
         onChange={onChange}
         filterOption={(inputValue, item) =>
-          item.title!.indexOf(inputValue) !== -1 ||
-          item.tag.indexOf(inputValue) !== -1
+          item.title!.indexOf(inputValue) !== -1
         }
         leftColumns={leftTableColumns}
         rightColumns={rightTableColumns}
       />
+      <div className={style["button-box"]}>
+        <Button
+          shape="round"
+          type="primary"
+          className={style["mypaper-button"]}
+          onClick={handleCheck}
+          disabled={isDisabled}
+        >
+          저장하기
+        </Button>
+      </div>
     </>
   );
-}
+};
+
+export default MyKeyword;

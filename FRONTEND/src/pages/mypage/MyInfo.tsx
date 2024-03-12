@@ -31,21 +31,21 @@ export default function MyInfo() {
             <div className={style["box-title"]}>기본정보</div>
             <div className={style["box-content"]}>
               <div>
-                <SmileTwoTone twoToneColor="#de9159" /> 이름
+                <SmileTwoTone twoToneColor="#de9159" /> 이름:
               </div>
               <div>{userInfo?.name}</div>
             </div>
             <Divider />
             <div className={style["box-content"]}>
               <div>
-                <MailTwoTone twoToneColor="#de9159" /> 이메일
+                <MailTwoTone twoToneColor="#de9159" /> 이메일:
               </div>
               <div>{userInfo?.email}</div>
             </div>
             <Divider />
             <div className={style["box-content"]}>
               <div>
-                <HeartTwoTone twoToneColor="#de9159" /> 생일
+                <HeartTwoTone twoToneColor="#de9159" /> 생일:
               </div>
               <div>{userInfo?.birthday}</div>
             </div>
@@ -53,7 +53,7 @@ export default function MyInfo() {
 
           <div className={style["box2"]}>
             <div className={style["box-title"]}>관심 키워드</div>
-            <MyKeyword />
+            <MyKeyword keywords={userInfo?.memberKeyword} />
           </div>
 
           <div className={style["box3"]}>

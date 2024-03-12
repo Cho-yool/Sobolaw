@@ -12,6 +12,9 @@ import MyPage from "./pages/mypage/Mypage";
 import MyInfo from "./pages/mypage/MyInfo";
 import Mypaper from "./pages/mypage/MyPaper";
 import MyCase from "./pages/mypage/MyCase";
+import DefamatinoPage from "./pages/lawsuit/defamation";
+import FraudPage from "./pages/lawsuit/fraud";
+import InsultPage from "./pages/lawsuit/insult";
 
 function App() {
   return (
@@ -33,6 +36,9 @@ function App() {
           <Route path="case" element={<MyCase />} />
         </Route>
       </Route>
+      <Route path="/plaint/1" element={<DefamatinoPage />} />
+      <Route path="/plaint/2" element={<FraudPage />} />
+      <Route path="/plaint/3" element={<InsultPage />} />
       {/* 다른 Route도 추가가능~ */}
     </Routes>
   );

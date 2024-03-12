@@ -1,0 +1,24 @@
+.container {
+  max-width: 96vw;
+  height: 3rem;
+  border-bottom: 0.5px solid rgb(206, 206, 206);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem 0 2rem;
+}
+
+.container-mini {
+  display: flex;
+  align-items: center;
+}
+
+.container-title {
+  font-size: larger;
+  font-weight: bold;
+}
+
+.container-button {
+  color: rgb(75, 16, 8);
+  margin-left: 1rem;
+}
