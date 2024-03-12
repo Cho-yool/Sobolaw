@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+}
+
+.left-menu {
+  width: 30%;
+  min-height: 80vh;
+  background-color: rgb(240, 240, 240);
+  resize: horizontal;
+}
+
+.right-menu {
+  width: 70%;
+}
