@@ -3,6 +3,7 @@ import Character from "../assets/character.png";
 import TOP from "../assets/toparrow.png";
 import LawWordModal from "../components/lawword/LawWordModal";
 import { useState } from "react";
+
 {
   // <a href="https://www.flaticon.com/kr/free-icons/" title="하위 아이콘">하위 아이콘  제작자: Freepik - Flaticon</a>
 }
