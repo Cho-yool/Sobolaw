@@ -6,8 +6,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name="law-service", path = "/api/law-service")
-//@FeignClient(name="law-service", url = "http://jongbum.site/api/law-service")
+@FeignClient(name = "law-service", path = "/api/law-service")
+//@FeignClient(name="law-service", url = "https://j10a604.p.ssafy.io/api/law-service")
 public interface LawServiceClient {
 
     @GetMapping("/precedent/detail/{precedentId}")
