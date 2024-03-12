@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Typography, Row, Col } from 'antd';
+import { Layout, Row, Tooltip } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import style from '../../styles/recommend/RecommendPage.module.css';
 
 const { Content } = Layout;
-const { Title } = Typography;
 
-const words = ['사기', '명예훼손', '살인', '폭행', '강제추행']; // 변화할 단어 목록
+const words = ['사기', '명예훼손', '살인', '폭행', '강제추행', '상해', '모욕']; // 변화할 단어 목록
+const tooltipMessage = (
+  <>
+    <span>판례를 분석하기 위해 한국어 형태소 분석기인 konlpy를 사용하여 텍스트를 단어로 나누고,</span>
+    <br />
+    <span>가장 중요한 단어를 찾아내기 위해 TF-IDF 방식을 활용했습니다.</span>
+    <br />
+    <br />
+    <span>TF-IDF는 각 단어의 중요도를 가중치로 계산하여, 판례별로 가장 중요한 10개의 단어를 선정합니다. 이 정보를 바탕으로 사용자의 검색어와 비슷한 판례를 추천해 드립니다.</span>
+  </>
+);
 
 const RecommendPage: React.FC = () => {
   const [currentWord, setCurrentWord] = useState('');
@@ -13,45 +23,58 @@ const RecommendPage: React.FC = () => {
   const [letterIndex, setLetterIndex] = useState(0);
 
   useEffect(() => {
-    // 모든 글자가 타이핑된 후 다음 단어로 넘어가기 전 지연을 주는 로직
     if (letterIndex > words[wordIndex].length) {
       const timeout = setTimeout(() => {
         setWordIndex((prevIndex) => (prevIndex + 1) % words.length);
         setLetterIndex(0);
-      }, 1000); // 단어가 완성된 후 다음 단어로 넘어가기 전의 지연 시간
+      }, 1000);
 
       return () => clearTimeout(timeout);
     }
 
-    // 글자를 타이핑하는 로직
     const timer = setTimeout(() => {
       setLetterIndex((prev) => prev + 1);
       setCurrentWord(words[wordIndex].substring(0, letterIndex));
-    }, 100); // 글자가 타이핑되는 속도
+    }, 100);
 
     return () => clearTimeout(timer);
   }, [letterIndex, wordIndex]);
 
   return (
-    <Layout className={style.recommendBackground}>
-      <Content style={{ padding: '0 50px', marginTop: 64 }}>
-        <Row justify="center">
-          <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+    <>
+      <Layout className={style.recommendBackground}>
+        <Content style={{ padding: '0 50px', marginTop: 64 }}>
+          <Row justify="center">
             <div className={style.titleContainer}>
               <div className={style.title}>
-                <Title level={2} style={{ color: '#ffffff', fontSize: 40 }}>내 상황에 맞는</Title>
+                <h3>내 상황에 맞는</h3>
               </div>
               <div className={style.title}>
-                <Title level={2} style={{ color: '#ffffff', fontSize: 40 }}>{currentWord} 사건을 찾는</Title>
+                <h3>{currentWord} 판례를 찾는</h3>
               </div>
               <div className={style.title}>
-                <Title level={2} style={{ color: '#ffffff', fontSize: 40 }}>가장 확실한 방법</Title>
+                <h3>가장 확실한 방법.</h3>
+              </div>
+              <div className={style.subtitle}>
+                <h3>
+                  <span style={{ color: '#F3E7C0', fontSize: 20 }}>소보로</span>만의 추천 알고리즘으로 지금 바로 검색해보세요
+                  <Tooltip title={tooltipMessage} placement='right' overlayInnerStyle={{ backgroundColor: '#644419', color: '#F3E7C0', fontSize: 15 }}>
+                    <QuestionCircleOutlined style={{ color: '#ffffff', marginLeft: 15 }} />
+                  </Tooltip>
+                </h3>
+                {/* '추천 검색 시작하기' 버튼 추가 */}
+                <button className={style.startSearchButton}>추천 검색 시작하기</button>
               </div>
             </div>
-          </Col>
-        </Row>
-      </Content>
-    </Layout>
+          </Row>
+        </Content>
+      </Layout>
+      <div className={style.recommendSection}>
+
+      </div>
+    </>
+
+
   );
 };
 
