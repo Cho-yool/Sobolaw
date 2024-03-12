@@ -8,6 +8,9 @@ export interface SearchResult {
   id: number;
   title: string;
   content: string;
+  court?: string;
+  instance?: string;
+  date?: string;
 }
 
 interface SearchResultListProps {

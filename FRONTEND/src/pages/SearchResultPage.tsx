@@ -45,16 +45,6 @@ const SearchResultPage = () => {
     // URL에서 검색 쿼리 파라미터를 추출
     const queryParams = new URLSearchParams(location.search);
     const searchQuery = queryParams.get('query');
-    const filteredResults = (): SearchResult[] => {
-      let filtered = dummyData.filter(result =>
-        (selectedCourt ? result.court === selectedCourt : true) &&
-        (selectedInstance ? result.instance === selectedInstance : true)
-      );
-      return filtered;
-    };
-
-    setSearchTerm
-    
     if (searchQuery) {
       setSearchTerm(searchQuery); // 검색어 상태를 URL 쿼리에서 가져온 값으로 설정
       // 검색 쿼리를 사용하여 검색 결과를 가져오는 로직
@@ -62,6 +52,21 @@ const SearchResultPage = () => {
       // 예시: setSearchResults(검색 결과);
     }
   }, [location]);
+
+  // 필터링 로직
+  const filterResults = () => {
+    const filtered = dummyData.filter(result =>
+      (selectedCourt ? result.court === selectedCourt : true) &&
+      (selectedInstance ? result.instance === selectedInstance : true) &&
+      (selectedDate ? result.date === selectedDate : true)
+    );
+
+    console.log(selectedCourt, selectedInstance, selectedDate, filtered)
+    return filtered
+  };
+
+  // 필터링된 검색 결과
+  const filteredResults = filterResults();
 
   // 검색 결과를 현재 페이지에 맞게 필터링합니다.
   const paginatedResults = searchResults.slice((currentPage - 1) * pageSize, currentPage * pageSize);
@@ -72,10 +77,10 @@ const SearchResultPage = () => {
     navigate(`/search-results?query=${encodeURIComponent(searchTerm)}`);
   };
 
-   // Handler functions
-   const onCourtChange = (value: string): void => setSelectedCourt(value);
-   const onInstanceChange = (value: string): void => setSelectedInstance(value);
-   const onDateChange = (value: string): void => setSelectedDate(value);
+  // 필터링된 검색 결과를 현재 페이지에 맞게 필터링합니다.
+  const onCourtChange = (value: string): void => setSelectedCourt(value);
+  const onInstanceChange = (value: string): void => setSelectedInstance(value);
+  const onDateChange = (value: string): void => setSelectedDate(value);
 
   const tabsItems = [
     {
@@ -84,25 +89,25 @@ const SearchResultPage = () => {
       children: (
         <>
           <div className={style.selectContainer}>
-            <Select defaultValue="법원" style={{ width: 100 }} onChange={onCourtChange} className={style.singleSelect}>
-              <Option value="1">대법원</Option>
-              <Option value="2">고등법원</Option>
-              <Option value="3">지방법원</Option>
+            <Select defaultValue="법원" style={{ width: 95 }} onChange={onCourtChange} className={style.singleSelect}>
+              <Option value="대법원">대법원</Option>
+              <Option value="고등법원">고등법원</Option>
+              <Option value="지방법원">지방법원</Option>
             </Select>
             <Select defaultValue="심급" style={{ width: 70 }} onChange={onInstanceChange} className={style.singleSelect}>
-              <Option value="1">1심</Option>
-              <Option value="2">2심</Option>
-              <Option value="3">3심</Option>
+              <Option value="1심">1심</Option>
+              <Option value="2심">2심</Option>
+              <Option value="3심">3심</Option>
             </Select>
             <Select defaultValue="기간" style={{ width: 70 }} onChange={onDateChange} className={style.singleSelect}>
-              <Option value="1">전체</Option>
-              <Option value="2">1년</Option>
-              <Option value="3">3년</Option>
-              <Option value="4">5년</Option>
+              <Option value="전체">전체</Option>
+              <Option value="1년">1년</Option>
+              <Option value="3년">3년</Option>
+              <Option value="5년">5년</Option>
             </Select>
           </div>
           <div className={style.searchResultList}>
-            <SearchResultList searchResults={searchResults.slice((currentPage - 1) * pageSize, currentPage * pageSize)} />
+            <SearchResultList searchResults={paginatedResults} />
           </div>
         </>
       ),
@@ -135,8 +140,8 @@ const SearchResultPage = () => {
       </div>
       <Pagination
         current={currentPage}
-        pageSize={10} // 페이지 사이즈, 필요에 따라 조정
-        total={searchResults.length}
+        pageSize={pageSize} // 페이지 사이즈, 필요에 따라 조정
+        total={filteredResults.length}
         onChange={(page) => setCurrentPage(page)}
         className={style.pagination}
       />
