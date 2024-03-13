@@ -28,9 +28,14 @@ spring:
             - Path=/api/law-service/**
           uri: lb://LAW-SERVICE
 
+        - id: recommend-service
+          predicates:
+            - Path=/api/recommend-service/**
+          uri: lb://RECOMMEND-SERVICE
+
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://172.17.0.1:8761/eureka

@@ -11,16 +11,18 @@ router = APIRouter()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await eureka_client.init_async(eureka_server="http://localhost:8761/eureka",
-                        app_name="recommend-server",
+    await eureka_client.init_async(eureka_server="http://172.17.0.1:8761/eureka",
+                        app_name="recommend-service",
                         instance_port=8004)
     yield
 
 app = FastAPI(
-    title="Recommend-Server",
+    title="Recommend-Service",
     description="판례 추천, 판례의 주요 키워드 관련 서버",
     version="0.0.1",
-    # lifespan=lifespan
+    lifespan=lifespan,
+    docs_url="/api/recommend-service/swagger-ui.html",
+    openapi_url="/api/recommend-service/openapi.json"
 )
 
 # -------------------------------------------------------------------------------------------------------------------------------------------
@@ -153,7 +155,7 @@ async def getKeyword(precedentsId: int):
 # -------------------------------------------------------------------------------------------------------------------------------------------
 
 
-app.include_router(router, prefix="/api/recommend-server")
+app.include_router(router, prefix="/api/recommend-service")
 
 # uvicorn main:app --reload --host localhost --port 8004
 

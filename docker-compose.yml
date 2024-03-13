@@ -1,0 +1,59 @@
+version: '3'
+
+services:
+  frontend:
+    container_name: frontend
+    image: frontend
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+    ports:
+      - "80:80"
+      - "443:443"
+    user: root
+
+  eureka_server:
+    container_name: eureka_server
+    image: eureka_server
+    ports:
+      - "8761:8761"
+
+  api_gateway:
+    container_name: api_gateway
+    image: api_gateway
+    depends_on:
+      - eureka_server
+    ports:
+      - "8000:8000"
+
+  user_service:
+    container_name: user_service
+    image: user_service
+    depends_on:
+      - api_gateway
+    ports:
+      - "8001:8001"
+  
+  ai_service:
+    container_name: ai_service
+    image: ai_service
+    depends_on:
+      - api_gateway
+    ports:
+      - "8002:8002"
+
+  law_service:
+    container_name: law_service
+    image: law_service
+    depends_on:
+      - api_gateway
+    ports:
+      - "8003:8003"
+  
+  recommend_service:
+    container_name: recommend_service
+    image: recommend_service
+    depends_on:
+      - api_gateway
+    ports:
+      - "8004:8004"
+

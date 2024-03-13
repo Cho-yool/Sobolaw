@@ -50,11 +50,11 @@ logging:
 eureka:
   client:
     # disable eureka discovery client
-    enabled: false
+#    enabled: false
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://172.17.0.1:8761/eureka
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 

@@ -1,0 +1,114 @@
+pipeline {
+
+    agent any 
+
+    stages {
+
+            stage('Git Checkout') {
+                steps {
+                    script {
+                        checkout([$class: 'GitSCM', branches: [[name: 'deploy']],
+                                userRemoteConfigs: [[credentialsId: 'bum', url: 'https://lab.ssafy.com/s10-bigdata-recom-sub2/S10P22A604.git']]
+                                ])
+                    }
+                    sh 'docker-compose down --rmi all || true'
+                    sh 'docker image prune -f || true'
+                }
+            }
+           
+            stage('frontend') { 
+                steps {
+                    echo 'frontend build!'
+                    dir('FRONTEND'){
+                        sh 'docker build -t frontend .'
+                    }
+                }
+            }
+            
+            stage('eureka_server'){
+                steps {
+                    echo 'eureka_server build!'
+                    dir('backend/eureka_server'){
+                        sh 'docker build -t eureka_server .'
+                    }
+                }
+            }   
+            
+            stage('api_gateway'){
+                steps {
+                    echo 'api_gateway build!'
+                    dir('backend/api_gateway'){
+                        sh 'docker build -t api_gateway .'
+                    }
+                }
+            }
+
+            stage('user_service'){
+                steps {
+                    echo 'user_service build!'
+                    dir('backend/user_service'){
+                        sh 'docker build -t user_service .'
+                    }
+                }
+            }
+
+            stage('ai_service'){
+                steps {
+                    echo 'ai_service build!'
+                    dir('backend/ai_service'){
+                        sh 'docker build -t ai_service .'
+                    }
+                }
+            }
+
+            stage('law_service'){
+                steps {
+                    echo 'law_service build!'
+                    dir('backend/law_service'){
+                        sh 'docker build -t law_service .'
+                    }
+                }
+            }
+
+            stage('recommend_service'){
+                steps {
+                    echo 'recommend_service build!'
+                    dir('backend/recommend_service'){
+                        sh 'docker build -t recommend_service .'
+                    }
+                }
+            }
+            
+            stage('start container'){
+                steps{
+                    echo 'start container~!'
+                    dir(''){
+                        sh 'docker-compose up -d'
+                    }
+                }
+            }
+        
+    }
+
+    post {
+        success {
+        	script {
+                sleep(30)
+                def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
+                def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
+                mattermostSend (color: 'good', 
+                    message: ":white_check_mark: [빌드 성공] ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name}) \n(<${env.BUILD_URL}|Details>)"
+                    )
+            }
+        }
+        failure {
+        	script {
+                def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
+                def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
+                mattermostSend (color: 'danger', 
+                    message: ":angry_hyunji_gun: [빌드 실패] ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name}) \n(<${env.BUILD_URL}|Details>)"
+                    )
+            }
+        }
+    }
+}

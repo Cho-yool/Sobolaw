@@ -3,6 +3,7 @@ package com.sobolaw;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -24,6 +25,7 @@ public class SobolawApplication {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
+                .addServersItem(new Server().url("https://j10a604.p.ssafy.io/api/ai-service").description("요청 서버"))
                 .info(new Info()
                         .title("AI-Service")
                         .version("1.0")
