@@ -78,7 +78,7 @@
   border-radius: 1rem;
   width: 80%;
   height: 150px;
-  overflow: scroll;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   padding: 1rem;
@@ -91,9 +91,9 @@
 }
 
 .sidebar__content__box__content > li {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.5rem;
+  height: fit-content;
+  margin: 1rem 0;
 }
 
 .select_color_1 {

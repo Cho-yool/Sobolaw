@@ -23,7 +23,7 @@ interface getDataProps {
 
 const LawCaseDetail = () => {
   const { Title } = Typography;
-  const [getData, setGetData] = useState<getDataProps>();
+  const [getData, setGetData] = useState<getDataProps>(Object());
 
   useQuery("lawDetail", () => getLawDetail(), {
     onSuccess: (response) => {
@@ -33,10 +33,12 @@ const LawCaseDetail = () => {
       console.log(error);
     },
   });
-
   return (
     <Flex className={style["detail-page"]} justify="center">
-      <Sidebar></Sidebar>
+      <Sidebar
+        referencedStatute={getData.referencedStatute}
+        referencedCase={getData.referencedCase}
+      ></Sidebar>
       <Flex className={style["container"]} vertical>
         <Title className={style["container__title"]}>
           {getData ? getData.caseName : null}

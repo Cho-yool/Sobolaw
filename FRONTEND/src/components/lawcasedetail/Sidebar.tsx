@@ -3,9 +3,13 @@ import ARROW from "../../assets/arrow.png"; /* <a href="https://www.flaticon.com
 import { useState } from "react";
 import { Flex } from "antd";
 
-const Sidebar = () => {
-  const [isSelected, setIsselected] = useState<boolean>(false);
+interface SidebarProps {
+  referencedStatute: string;
+  referencedCase: string;
+}
 
+const Sidebar = ({ referencedStatute, referencedCase }: SidebarProps) => {
+  const [isSelected, setIsselected] = useState<boolean>(false);
   return (
     <article
       className={
@@ -34,11 +38,11 @@ const Sidebar = () => {
         >
           <p className={style["sidebar__content__box__title"]}>참조 조문</p>
           <div className={style["sidebar__content__box__content"]}>
-            <li>형법 제70조</li>
-            <li>
-              형법 제69조 수원지방법원 평택지원 2021. 9. 9. 선고 2021고정113
-              판결 [성폭력범죄의처벌등에관한특례법위반(비밀준수등)]
-            </li>
+            <li
+              dangerouslySetInnerHTML={{
+                __html: referencedStatute,
+              }}
+            ></li>
           </div>
         </Flex>
         <Flex
@@ -48,11 +52,15 @@ const Sidebar = () => {
         >
           <p className={style["sidebar__content__box__title"]}>참조 판례</p>
           <div className={style["sidebar__content__box__content"]}>
-            <li>
-              수원지방법원평택지원 2021고정113 수원지방법원 평택지원 2021. 9. 9.
-              선고 2021고정113 판결
-              [성폭력범죄의처벌등에관한특례법위반(비밀준수등)]
-            </li>
+            {referencedCase ? (
+              <li
+                dangerouslySetInnerHTML={{
+                  __html: referencedCase,
+                }}
+              ></li>
+            ) : (
+              <p>참조 판례가 없습니다</p>
+            )}
           </div>
         </Flex>
         <Flex

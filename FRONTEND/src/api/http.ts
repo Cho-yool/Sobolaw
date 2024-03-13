@@ -22,11 +22,11 @@ function mainAxios() {
 function userAxios() {
   return axios.create({
     // baseURL: "https://" + BASEURL,
-    baseURL: "http://" + BASEURL + "user-service/",
+    baseURL: "https://" + BASEURL + "user-service/",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
     },
-    withCredentials: credential,
+    // withCredentials: credential,
   });
 }
 
