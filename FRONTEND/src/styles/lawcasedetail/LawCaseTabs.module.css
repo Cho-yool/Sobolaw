@@ -22,6 +22,19 @@
   background-color: #bf8438;
 }
 
+.tab-menu__summary {
+  position: relative;
+}
+
+.tab-menu__summary__btn {
+  position: absolute;
+  right: 0;
+  top: -5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .content-box__contents {
   line-height: 2rem;
 }
