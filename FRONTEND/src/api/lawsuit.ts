@@ -5,7 +5,7 @@ const http = userAxios();
 const headers = new AxiosHeaders();
 headers.set("Content-Type", "application/json;charset=utf-8");
 
-const url = "lawsuit/";
+const url = "lawsuit";
 
 // // 모욕죄
 // const insult = "insult";

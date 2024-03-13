@@ -1,12 +1,29 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Space, Table, Tag, Button, Divider, Row, Col } from "antd";
 import type { TableProps } from "antd";
-import { MypaperWide, MypaperNarrow } from "../../types/DataTypes";
+import {
+  MypaperWide,
+  MypaperNarrow,
+  MemberLawsuit,
+} from "../../types/DataTypes";
+import { getLawsuitList } from "../../api/lawsuit";
 import style from "../../styles/mypage/Mypaper.module.css";
 import "../../App.css";
 
 export default function Mypaper() {
   const navigate = useNavigate();
+  const [lawsuitList, setLawsuitList] = useState<MemberLawsuit>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await getLawsuitList(1);
+      setLawsuitList(response);
+    };
+    fetchData();
+  }, []);
+
+  console.log(lawsuitList);
 
   const columnsWide: TableProps<MypaperWide>["columns"] = [
     {
