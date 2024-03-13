@@ -1,21 +1,20 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "antd";
+import { getPrecedents } from "../../api/members";
 import MyCaseList from "../../components/mypage/MyCaseList";
 import { MemberPrecedent } from "../../types/DataTypes";
 import style from "../../styles/mypage/Mycase.module.css";
-import { dummydata2 } from "../../dummy";
 
 export default function MyCase() {
   const navigate = useNavigate();
   // const user = useSelector((state: RootState) => state.user);
-  const [caseList, setCaseList] = useState<MemberPrecedent>();
+  const [caseList, setCaseList] = useState<MemberPrecedent[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      //     const response = await getUserInfo({}, user.accessToken);
-      //     setUserInfo(response);
-      setCaseList(dummydata2);
+      const response = await getPrecedents(2);
+      setCaseList(response);
     };
     fetchData();
     // }, [user.accessToken]

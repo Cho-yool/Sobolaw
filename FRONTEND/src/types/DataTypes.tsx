@@ -44,19 +44,29 @@ export type MemberInfo = {
   memberRecents: MemberRecent[];
 };
 
-interface Highlight {
-  memberPrecedentHighlightId: number;
-  memberPrecedent: string;
-  location: string;
-  highlightType: string;
-  content: number;
-}
+// interface Highlight {
+//   memberPrecedentHighlightId: number;
+//   memberPrecedent: string;
+//   location: string;
+//   highlightType: string;
+//   content: number;
+// }
 
 export type MemberPrecedent = {
-  memberPrecedentId: number;
-  memberId: number;
   precedentId: number;
-  highlights: Highlight[];
+  caseName: string;
+  caseNumber: string;
+  judgmentDate: string;
+  judgment: string;
+  courtName: string;
+  caseType: string;
+  verdictType: string;
+  judicialNotice: string;
+  verdictSummary: string;
+  referencedStatute: string;
+  referencedCase: string;
+  caseContent: string;
+  hit: number;
 };
 
 export type MemberLawsuit = {

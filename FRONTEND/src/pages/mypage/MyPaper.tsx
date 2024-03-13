@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Divider, Row, Col } from "antd";
+import { Button, Divider } from "antd";
 import { MemberLawsuit } from "../../types/DataTypes";
 import { getLawsuitList } from "../../api/lawsuit";
 import style from "../../styles/mypage/Mypaper.module.css";
@@ -9,7 +9,7 @@ import MyLawcaseTable from "../../components/mypage/MyLawcaseList";
 
 export default function Mypaper() {
   const navigate = useNavigate();
-  const [lawsuitList, setLawsuitList] = useState<MemberLawsuit[]>();
+  const [lawsuitList, setLawsuitList] = useState<MemberLawsuit[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,16 +46,7 @@ export default function Mypaper() {
           </Button>
         </div>
         <Divider />
-        <Row>
-          <Col xs={0} sm={0} md={24} lg={24}>
-            <div className={style["table"]}>
-              <MyLawcaseTable lawsuitList={lawsuitList} />
-            </div>
-          </Col>
-          <Col xs={24} sm={24} md={0}>
-            <MyLawcaseTable lawsuitList={lawsuitList} />
-          </Col>
-        </Row>
+        <MyLawcaseTable lawsuitList={lawsuitList} />
       </div>
     </div>
   );
