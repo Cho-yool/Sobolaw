@@ -9,7 +9,7 @@ import MyLawcaseTable from "../../components/mypage/MyLawcaseList";
 
 export default function Mypaper() {
   const navigate = useNavigate();
-  const [lawsuitList, setLawsuitList] = useState<MemberLawsuit[]>();
+  const [lawsuitList, setLawsuitList] = useState<MemberLawsuit[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -17,8 +17,8 @@ export default function Mypaper() {
       setLawsuitList(response);
     };
     fetchData();
+    console.log(lawsuitList);
   }, []);
-
   // useEffect(() => {
   //   getLawsuitList(1)
   //     .then((res) => {
