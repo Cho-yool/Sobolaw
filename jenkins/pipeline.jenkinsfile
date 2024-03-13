@@ -7,7 +7,7 @@ pipeline {
             stage('Git Checkout') {
                 steps {
                     script {
-                        checkout([$class: 'GitSCM', branches: [[name: 'deploy']],
+                        checkout([$class: 'GitSCM', branches: [[name: 'develop']],
                                 userRemoteConfigs: [[credentialsId: 'bum', url: 'https://lab.ssafy.com/s10-bigdata-recom-sub2/S10P22A604.git']]
                                 ])
                     }
