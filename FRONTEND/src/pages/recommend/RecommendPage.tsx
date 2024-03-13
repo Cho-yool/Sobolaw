@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Row, Tooltip } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
+import RecommendCards from '../../components/recommend/RecommendCard';
 import style from '../../styles/recommend/RecommendPage.module.css';
 
 const { Content } = Layout;
@@ -69,8 +70,9 @@ const RecommendPage: React.FC = () => {
           </Row>
         </Content>
       </Layout>
-      <div className={style.recommendSection}>
-
+      <div className={style.recommendCardSection}>
+        <h2 style={{fontSize: 30, margin: '60px 120px', fontWeight: 'bold'}}>왜 소보로 추천 검색이 좋을까요?</h2>
+        <RecommendCards />
       </div>
     </>
 

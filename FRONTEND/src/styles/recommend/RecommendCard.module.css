@@ -1,0 +1,45 @@
+  .cardsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 30px 60px; /* 조정된 컨테이너 상하 여백 */
+  }
+  
+  .cardContainer {
+    flex: 1;
+    max-width: calc(33.333% - 40px); /* 3개의 카드가 한 줄에 배치될 수 있도록 최대 너비 설정 */
+    margin: 20px 50px; /* 카드 간의 여백 조정 */
+    background-size: cover;
+    position: relative; /* 오버레이를 위해 relative 포지셔닝 설정 */
+    height: 300px; /* 카드 높이 조정하여 배경 이미지가 전부 보이도록 함 */
+    display: flex; /* 내부 컨텐츠를 가운데 정렬하기 위해 flex 사용 */
+    justify-content: space-around; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    border-radius: 20px;
+  }
+
+  .cardContainer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* 어두운 오버레이 적용 */
+    z-index: 1; /* 오버레이를 내용보다 아래에 위치하도록 z-index 설정 */
+    border-radius: 20px;
+  }
+  
+  .customCard {
+    border-radius: 20px ;
+    margin: 0 25px;
+    background: transparent; /* 기본 배경 제거 */
+    color: #ffffff; /* 내부 텍스트 색상을 흰색으로 변경 */
+    font-size: 20px; /* 제목 크기 키우기 */
+    font-weight: 600;
+    width: 100%; /* 카드 너비를 부모 컨테이너에 맞춤 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    position: relative; /* z-index를 적용하기 위한 포지셔닝 컨텍스트 설정 */
+    z-index: 2; /* 텍스트가 오버레이 위에 보이도록 z-index 설정 */
+    border: none; /* 테두리 제거 */
+  }
+  

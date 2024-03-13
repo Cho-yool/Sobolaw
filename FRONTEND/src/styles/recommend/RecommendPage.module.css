@@ -69,15 +69,13 @@
   }
 
   /* styles/recommend/RecommendPage.module.css에 추가 */
-  .recommendSection {
-    background-color: #ffffff; /* 배경색 */
-    margin: 20px auto; /* 상하 마진과 자동 가로 정렬 */
+  .recommendCardSection {
+    background-color: #f5f5f5; /* 배경색 */
+    margin: 0px auto; /* 상하 마진과 자동 가로 정렬 */
     padding: 20px; /* 안쪽 여백 */
     border-radius: 8px; /* 테두리 둥글기 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
-    width: 80%; /* 전체 너비의 80% */
-    max-width: 1200px; /* 최대 너비 */
-    height: 800px;
+    width: 100%; /* 전체 너비의 80% */
+    height: 600px;
   }
 
   /* 모바일 화면에서 적용될 스타일 */
