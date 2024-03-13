@@ -26,6 +26,12 @@ const LawWordChat = () => {
     setKeyCounter((prevCounter) => prevCounter + 1);
   };
 
+  const enterHandler = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.code === "Enter" || e.code === "NumpadEnter") {
+      textHandler();
+    }
+  };
+
   useEffect(() => {
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -53,6 +59,7 @@ const LawWordChat = () => {
           rows={1}
           className={style["chat-body__input__area"]}
           onChange={(e) => setInputText(e.target.value)}
+          onKeyUpCapture={(e) => enterHandler(e)}
         />
         <div className={style["chat-body__input__image"]} onClick={textHandler}>
           <img src={SEND} alt="" />
