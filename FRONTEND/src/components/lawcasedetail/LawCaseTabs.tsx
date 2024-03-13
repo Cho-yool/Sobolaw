@@ -1,5 +1,8 @@
 import { useRef, useState } from "react";
 import style from "../../styles/lawcasedetail/LawCaseTabs.module.css";
+import { Switch } from "antd";
+import { getLawDetailSummary } from "../../api/lawdetail";
+import { useQuery } from "react-query";
 
 interface TabMenusProps {
   id: number;
@@ -40,9 +43,24 @@ const TABMENUS: TabMenusProps[] = [
 
 const LawCaseTabs = ({ getData }: getDataProps) => {
   const [activeTab, setActiveTab] = useState(0);
+  const [isSummary, setIsSummary] = useState<boolean>(false);
   const judgmentRef = useRef<HTMLDivElement>(null);
   const rulingRef = useRef<HTMLDivElement>(null);
   const precedentRef = useRef<HTMLDivElement>(null);
+  const [summaryData, setSummaryData] = useState<string>("");
+  const onChange = () => {
+    setIsSummary(!isSummary);
+  };
+
+  useQuery("detailSummary", () => getLawDetailSummary(), {
+    onSuccess: (response) => {
+      setSummaryData(response.data.summary);
+    },
+
+    onError: (error) => {
+      console.error(error);
+    },
+  });
 
   const handleTabClick = (id: number) => {
     setActiveTab(id);
@@ -123,12 +141,28 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
       </p>
       <br />
       <br />
-      <p
-        className={style["content-box__contents"]}
-        dangerouslySetInnerHTML={{
-          __html: getData.caseContent,
-        }}
-      ></p>
+      <div className={style["tab-menu__summary"]}>
+        <div className={style["tab-menu__summary__btn"]}>
+          <p>요약 보기</p>
+          <Switch onChange={onChange} />
+        </div>
+
+        {isSummary ? (
+          <p
+            className={style["content-box__contents"]}
+            dangerouslySetInnerHTML={{
+              __html: summaryData,
+            }}
+          ></p>
+        ) : (
+          <p
+            className={style["content-box__contents"]}
+            dangerouslySetInnerHTML={{
+              __html: getData.caseContent,
+            }}
+          ></p>
+        )}
+      </div>
     </div>
   );
 };

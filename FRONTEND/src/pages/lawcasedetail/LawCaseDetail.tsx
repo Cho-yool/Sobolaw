@@ -1,10 +1,10 @@
-import { Flex, Typography } from "antd";
+import { Flex, Typography, Switch } from "antd";
 import style from "../../styles/lawcasedetail/LawCaseDetail.module.css";
 import LawCaseTabs from "../../components/lawcasedetail/LawCaseTabs";
 import Sidebar from "../../components/lawcasedetail/Sidebar";
 import { getLawDetail } from "../../api/lawdetail";
 import { useQuery } from "react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface getDataProps {
   caseContent: string;
@@ -25,7 +25,7 @@ const LawCaseDetail = () => {
   const { Title } = Typography;
   const [getData, setGetData] = useState<getDataProps>(Object());
 
-  useQuery("lawDetail", () => getLawDetail(), {
+  const onChange = useQuery("lawDetail", () => getLawDetail(), {
     onSuccess: (response) => {
       setGetData(response.data.data);
     },
@@ -33,6 +33,7 @@ const LawCaseDetail = () => {
       console.log(error);
     },
   });
+
   return (
     <Flex className={style["detail-page"]} justify="center">
       <Sidebar

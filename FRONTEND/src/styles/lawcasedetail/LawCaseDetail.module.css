@@ -19,3 +19,9 @@
   position: relative;
   min-height: 45rem;
 }
+
+.content-box__summary {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
