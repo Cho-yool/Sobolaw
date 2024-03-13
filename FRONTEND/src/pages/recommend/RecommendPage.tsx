@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Layout, Row, Tooltip } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import RecommendCards from '../../components/recommend/RecommendCard';
+import RecommendSearch from '../../components/recommend/RecommendSearch';
 import style from '../../styles/recommend/RecommendPage.module.css';
 
 const { Content } = Layout;
@@ -22,27 +23,40 @@ const RecommendPage: React.FC = () => {
   const [currentWord, setCurrentWord] = useState('');
   const [wordIndex, setWordIndex] = useState(0);
   const [letterIndex, setLetterIndex] = useState(0);
+  const [isCardsVisible, setIsCardsVisible] = useState(false);
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
+
+  const checkScroll = () => {
+    const cardsShowPoint = 365; // `recommendCardSection`을 표시할 스크롤 위치
+    const searchShowPoint = 1100; // `recommendSearchSection`을 표시할 스크롤 위치
+    const currentScroll = window.scrollY;
+    
+    setIsCardsVisible(currentScroll > cardsShowPoint);
+    setIsSearchVisible(currentScroll > searchShowPoint);
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', checkScroll);
+    return () => window.removeEventListener('scroll', checkScroll);
+  }, []);
 
   useEffect(() => {
     if (letterIndex > words[wordIndex].length) {
-      const timeout = setTimeout(() => {
+      setTimeout(() => {
         setWordIndex((prevIndex) => (prevIndex + 1) % words.length);
         setLetterIndex(0);
       }, 1000);
-
-      return () => clearTimeout(timeout);
+    } else {
+      const timer = setTimeout(() => {
+        setLetterIndex(letterIndex + 1);
+        setCurrentWord(words[wordIndex].substring(0, letterIndex));
+      }, 100);
+      return () => clearTimeout(timer);
     }
-
-    const timer = setTimeout(() => {
-      setLetterIndex((prev) => prev + 1);
-      setCurrentWord(words[wordIndex].substring(0, letterIndex));
-    }, 100);
-
-    return () => clearTimeout(timer);
   }, [letterIndex, wordIndex]);
 
   return (
-    <>
+    <div className={style.recommendContainer}>
       <Layout className={style.recommendBackground}>
         <Content style={{ padding: '0 50px', marginTop: 64 }}>
           <Row justify="center">
@@ -70,13 +84,15 @@ const RecommendPage: React.FC = () => {
           </Row>
         </Content>
       </Layout>
-      <div className={style.recommendCardSection}>
-        <h2 style={{fontSize: 30, margin: '60px 120px', fontWeight: 'bold'}}>왜 소보로 추천 검색이 좋을까요?</h2>
-        <RecommendCards />
-      </div>
-    </>
-
-
+        <div className={`${style.recommendCardSection} ${isCardsVisible ? style.visible : ''}`}>
+          <h2>소보로 추천 검색은 무엇이 다를까요?</h2>
+          <RecommendCards />
+        </div>
+        <div className={`${style.recommendSearchSection} ${isSearchVisible ? style.visible : ''}`}>
+          <h2>소보로 추천 검색 이용하기</h2>
+          <RecommendSearch />
+        </div>
+    </div>
   );
 };
 

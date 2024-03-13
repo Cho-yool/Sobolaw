@@ -34,7 +34,7 @@ const handleSearch = (searchQuery: string, activeTab: string) => {
 };
 
   return (
-    <Layout style={{ backgroundColor: '#F8F0D6' }}>
+    <Layout style={{ backgroundColor: '#F3E7C0' }}>
       <Content style={{ padding: '0rem' }}>
         <Row justify="center" gutter={[16, 16]}>
           <Col span={24}>

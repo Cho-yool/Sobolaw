@@ -1,6 +1,6 @@
 /* RecentLawCase.module.css */
 .recentLawCaseContainer {
-  margin: 2cqi auto;
+  margin: 20px auto;
   position: relative; /* To position the background box */
   background-color: #ffffff;
   padding: 60px; /* Provide space for the background box */
@@ -10,7 +10,7 @@
 
 .recentLawCaseTitle {
   color: #644419;
-  margin: 20px auto;
+  margin: 10px 20px;
   font-size: 30px;
 }
 
