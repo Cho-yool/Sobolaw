@@ -22,7 +22,7 @@ function App() {
       {/* 레이아웃을 미리 짜놓고, 그 사이에 새로 만든 페이지들이 들어가게 함 */}
       <Route element={<LayoutPage />}>
         <Route path="" element={<MainPage />} />
-        <Route path="/detail" element={<LawCaseDetail />} />
+        <Route path="/laws/:id" element={<LawCaseDetail />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/search-results" element={<SearchResultPage />} />
