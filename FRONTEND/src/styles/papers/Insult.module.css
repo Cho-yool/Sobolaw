@@ -19,7 +19,7 @@
 }
 
 .menu {
-  width: 20vw;
+  width: 25rem;
   height: 94vh;
   overflow: auto;
   padding: 1rem;
@@ -31,11 +31,15 @@
   width: 70vw;
   height: 94vh;
   justify-content: center;
+  overflow: auto;
 }
 
 .contents-center {
+  display: flex;
+  flex-direction: column;
   width: auto;
-  overflow: auto;
+
+  align-items: center;
 }
 
 .pages {
@@ -73,4 +77,10 @@
 .menu-title {
   font-weight: bold;
   margin-bottom: 5px;
+}
+
+.menu-mini {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 1rem;
+  margin-bottom: 1rem;
 }

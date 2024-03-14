@@ -195,10 +195,10 @@ export default function LawsuitInsult() {
     }
   };
 
-  // 해야됨해야됨해야됨해야됨!!!!!!!!!!!!!
-  const onChange: CheckboxProps["onChange"] = (e) => {
-    console.log(`checked = ${e.target.checked}`);
-  };
+  // // 해야됨해야됨해야됨해야됨!!!!!!!!!!!!!
+  // const onChange: CheckboxProps["onChange"] = (e) => {
+  //   console.log(`checked = ${e.target.checked}`);
+  // };
 
   // 저장 제출 함수
   async function onSubmit(event: React.SyntheticEvent): Promise<void> {
@@ -250,158 +250,170 @@ export default function LawsuitInsult() {
   return (
     <div className={style["container"]}>
       <div className={style["menu"]}>
-        <div className={style["menu-title"]}>사건경위</div>
-        <Tooltip
-          // placement="bottom"
-          placement="top"
-          title={"날짜는 필수! 시간대는 모르면 대략적인 '시'만 체크해주세요"}
-          arrow={true}
-        >
-          <p>발생한 날과 시간대</p>
-          <DatePicker
-            defaultValue={defaultValue}
-            showTime
-            locale={locale}
-            onChange={onChangeDate}
+        <div className={style["menu-mini"]}>
+          <div className={style["menu-title"]}>사건경위</div>
+          <Tooltip
+            // placement="bottom"
+            placement="top"
+            title={"날짜는 필수! 시간대는 모르면 대략적인 '시'만 체크해주세요"}
+            arrow={true}
+          >
+            <p>발생한 날과 시간대</p>
+            <DatePicker
+              defaultValue={defaultValue}
+              showTime
+              locale={locale}
+              onChange={onChangeDate}
+            />
+          </Tooltip>
+          <p>온라인 서비스 유형</p>
+          <Cascader
+            options={options}
+            onChange={onChangeOnline}
+            placeholder="사건이 발생한 웹서비스 유형"
           />
-        </Tooltip>
-        <p>온라인 서비스 유형</p>
-        <Cascader
-          options={options}
-          onChange={onChangeOnline}
-          placeholder="사건이 발생한 웹서비스 유형"
-        />
-        {showWebDetailInput == true && (
-          <>
-            <p>상세 URL 혹은 채팅방 이름</p>
-            <Input
-              placeholder="웹서비스의 이름이나 주소 등"
-              value={webServiceDetails}
-              onChange={(e) => setWebServiceDetails(e.target.value)}
-            />
-          </>
-        )}
-        <p>공연성: 불특정 또는 다수인이 인식할 수 있는 상태</p>
-        <p>웹사이트의 이용자 수</p>
-        <InputNumber
-          addonBefore={
-            <Select
-              defaultValue="모름"
-              style={{ width: 200 }}
-              onChange={handleOptionChange}
-            >
-              <Option value="알고있음">알고있음</Option>
-              <Option value="모름">모름</Option>
-            </Select>
-          }
-          addonAfter="명"
-          disabled={selectedOption === "모름"}
-          value={relatedPeopleCount}
-          onChange={onChangeUser}
-        />
-        <p>목격자여부</p>
-        <Cascader
-          options={[
-            {
-              value: "알고있음",
-              label: "알고있음",
-            },
-            {
-              value: "모름",
-              label: "모름",
-            },
-          ]}
-          onChange={onChangeWitness}
-          placeholder="목격자들의 ID를 알고계신가요?"
-        />
-        {showWitness1 == true && (
-          <>
-            <p>목격자 ID 1</p>
-            <Input
-              placeholder="예시: ssafy123"
-              value={witness1}
-              onChange={handleWitness1Change}
-            />
-            <p>목격자 ID 2 </p>
-            <Input
-              placeholder="예시: 루찌털이범"
-              value={witness2}
-              onChange={handleWitness2Change}
-            />
-            <p>목격자 ID 3</p>
-            <Input
-              placeholder="예시: 잔나랑듀오할래"
-              value={witness3}
-              onChange={handleWitness3Change}
-            />
-          </>
-        )}
+          {showWebDetailInput == true && (
+            <>
+              <p>상세 URL 혹은 채팅방 이름</p>
+              <Input
+                placeholder="웹서비스의 이름이나 주소 등"
+                value={webServiceDetails}
+                onChange={(e) => setWebServiceDetails(e.target.value)}
+              />
+            </>
+          )}
+        </div>
+        <div className={style["menu-mini"]}>
+          <p className={style["menu-title"]}>
+            공연성: 불특정 또는 다수인이 인식할 수 있는 상태
+          </p>
+          <p>웹사이트의 이용자 수</p>
+          <InputNumber
+            addonBefore={
+              <Select
+                defaultValue="모름"
+                style={{ width: 200 }}
+                onChange={handleOptionChange}
+              >
+                <Option value="알고있음">알고있음</Option>
+                <Option value="모름">모름</Option>
+              </Select>
+            }
+            addonAfter="명"
+            disabled={selectedOption === "모름"}
+            value={relatedPeopleCount}
+            onChange={onChangeUser}
+          />
+          <p>목격자여부</p>
+          <Cascader
+            options={[
+              {
+                value: "알고있음",
+                label: "알고있음",
+              },
+              {
+                value: "모름",
+                label: "모름",
+              },
+            ]}
+            onChange={onChangeWitness}
+            placeholder="목격자들의 ID를 알고계신가요?"
+          />
+          {showWitness1 == true && (
+            <>
+              <p>목격자 ID 1</p>
+              <Input
+                placeholder="예시: ssafy123"
+                value={witness1}
+                onChange={handleWitness1Change}
+              />
+              <p>목격자 ID 2 </p>
+              <Input
+                placeholder="예시: 루찌털이범"
+                value={witness2}
+                onChange={handleWitness2Change}
+              />
+              <p>목격자 ID 3</p>
+              <Input
+                placeholder="예시: 잔나랑듀오할래"
+                value={witness3}
+                onChange={handleWitness3Change}
+              />
+            </>
+          )}
+        </div>
+        <div className={style["menu-mini"]}>
+          <p className={style["menu-title"]}>
+            모욕성: 사실을 적시하지 아니하고 사람의 사회적 평가를 저하시킬 만한
+            추상적 판단 또는 경멸적 감정을 표현하는 것
+          </p>
+          <p>문제발언</p>
+          <Input
+            placeholder="예시: 한심한 꼬맹이녀석 게임접어라"
+            value={problemSpeech}
+            onChange={(e) => {
+              setProblemSpeech(e.target.value);
+            }}
+          />
+          <p>가해자가 모욕한 이유</p>
+          <Input
+            placeholder="예시: 자신과 정치색이 다르다"
+            addonAfter="는 이유"
+            value={reasonsForInsult}
+            onChange={(e) => {
+              setReasonsForInsult(e.target.value);
+            }}
+          />
+          <p>모욕이 지속된 시간</p>
+          <Cascader
+            options={[
+              {
+                value: "수 분 동안 수 차례 모욕행위가 지속됨",
+                label: "수 분 동안 수 차례 모욕행위가 지속됨",
+              },
+              {
+                value: "어느 정도 모욕 행위가 지속됨",
+                label: "어느 정도 모욕 행위가 지속됨",
+              },
+            ]}
+            onChange={onChangeDuration}
+            defaultValue={["어느 정도 모욕 행위가 지속됨"]}
+          />
+          {showDuration == true && (
+            <>
+              <Input
+                placeholder="15분"
+                addonAfter="동안"
+                value={insultDuration}
+                onChange={(e) => {
+                  setInsultDuration(e.target.value);
+                }}
+              />
+              <Input
+                placeholder="20"
+                addonAfter="회"
+                value={insultFrequency}
+                onChange={(e) => {
+                  setInsultFrequency(e.target.value);
+                }}
+              />
+            </>
+          )}
+        </div>
 
-        <p>
-          모욕성: 사실을 적시하지 아니하고 사람의 사회적 평가를 저하시킬 만한
-          추상적 판단 또는 경멸적 감정을 표현하는 것
-        </p>
-        <p>문제발언</p>
-        <Input
-          placeholder="예시: 한심한 꼬맹이녀석 게임접어라"
-          value={problemSpeech}
-          onChange={(e) => {
-            setProblemSpeech(e.target.value);
-          }}
-        />
-        <p>가해자가 모욕한 이유</p>
-        <Input
-          placeholder="예시: 자신과 정치색이 다르다"
-          addonAfter="는 이유"
-          value={reasonsForInsult}
-          onChange={(e) => {
-            setReasonsForInsult(e.target.value);
-          }}
-        />
-        <p>모욕이 지속된 시간</p>
-        <Cascader
-          options={[
-            {
-              value: "수 분 동안 수 차례 모욕행위가 지속됨",
-              label: "수 분 동안 수 차례 모욕행위가 지속됨",
-            },
-            {
-              value: "어느 정도 모욕 행위가 지속됨",
-              label: "어느 정도 모욕 행위가 지속됨",
-            },
-          ]}
-          onChange={onChangeDuration}
-          defaultValue={["어느 정도 모욕 행위가 지속됨"]}
-        />
-        {showDuration == true && (
-          <>
-            <Input
-              placeholder="15분"
-              addonAfter="동안"
-              value={insultDuration}
-              onChange={(e) => {
-                setInsultDuration(e.target.value);
-              }}
-            />
-            <Input
-              placeholder="20"
-              addonAfter="회"
-              value={insultFrequency}
-              onChange={(e) => {
-                setInsultFrequency(e.target.value);
-              }}
-            />
-          </>
-        )}
-
-        <p> 특정성: '피해자가 누구인지를 알 수 있는가'</p>
-        {/* <Checkbox value={"신상"} onChange={setShowCircumInput1(true)}>
+        <div className={style["menu-mini"]}>
+          <p className={style["menu-title"]}>
+            {" "}
+            특정성: '피해자가 누구인지를 알 수 있는가'
+          </p>
+          {/* <Checkbox value={"신상"} onChange={setShowCircumInput1(true)}>
           신상정보를 포함한 닉네임
-        </Checkbox>
-        <Checkbox onChange={}>증명사진이 있는 온라인 프로필</Checkbox>
-        <Checkbox onChange={}>얼굴이 공개된 방송</Checkbox>
-        <Checkbox onChange={}>고소인의 정보가 포함된 내용</Checkbox>
+          </Checkbox>
+          <Checkbox onChange={}>증명사진이 있는 온라인 프로필</Checkbox>
+          <Checkbox onChange={}>얼굴이 공개된 방송</Checkbox>
+          <Checkbox onChange={}>고소인의 정보가 포함된 내용</Checkbox>
         <Checkbox onChange={}>나를 특정할 만한 상황</Checkbox> */}
+        </div>
       </div>
 
       <div className={style["contents"]}>
