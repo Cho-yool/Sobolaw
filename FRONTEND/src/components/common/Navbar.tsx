@@ -19,7 +19,7 @@ import {
 } from "@ant-design/icons";
 import logo from "/NavLogo.png";
 import MypageMenu from "./MypageMenu";
-import style from "../../styles/Navbar.module.css";
+import style from "../../styles/common/Navbar.module.css";
 
 const { Header } = Layout;
 const items: MenuProps["items"] = [

@@ -7,71 +7,16 @@ import locale from "antd/es/date-picker/locale/ko_KR";
 import style from "../../styles/papers/InputMenu.module.css";
 
 export default function DefamationMenu() {
-  const [victim, setVictim] = useState<string>("개인");
   const [offender, setOffender] = useState<string>("확실함");
-  const [prefixText, setPrefixText] = useState<string>("성명");
   const [evidence, setEvidence] = useState<string>("없음");
 
   const defaultValue = dayjs("2024-01-01");
-
-  const handleVictimChange = (value: string) => {
-    setVictim(value);
-    switch (value) {
-      case "법인":
-        setPrefixText("법인명");
-        break;
-      case "단체":
-        setPrefixText("단체명");
-        break;
-      case "개인":
-      default:
-        setPrefixText("성명");
-        break;
-    }
-  };
-
-  const getInputPlaceholder = () => {
-    switch (victim) {
-      case "법인":
-        return "예시: (주)싸피";
-      case "단체":
-        return "예시: 싸피";
-      case "개인":
-      default:
-        return "김OO";
-    }
-  };
-
-  const getInputPlaceholder2 = () => {
-    switch (victim) {
-      case "법인":
-        return "대표이사";
-      case "단체":
-        return "대표자";
-      case "개인":
-      default:
-        return "주민등록번호";
-    }
-  };
-
-  const handleOffenderChange = (value: string) => {
-    setOffender(value);
-    switch (value) {
-      case "법인":
-        setPrefixText("법인명");
-        break;
-      case "단체":
-        setPrefixText("단체명");
-        break;
-      case "개인":
-      default:
-        setPrefixText("성명");
-        break;
-    }
-  };
-
   const onChange: DatePickerProps["onChange"] = (_, dateStr) => {
     console.log("onChange:", dateStr);
+  };
+
+  const handleoffenderChange = (value: string) => {
+    setOffender(value);
   };
 
   return (
@@ -79,20 +24,15 @@ export default function DefamationMenu() {
       <div className={style["box"]}>
         <Typography.Title level={3}>당사자 정보</Typography.Title>
 
-        <Radio.Group
-          value={victim}
-          onChange={(e) => handleVictimChange(e.target.value)}
-        >
-          <Radio.Button value="법인">법인</Radio.Button>
-          <Radio.Button value="단체">단체</Radio.Button>
+        <Radio.Group>
           <Radio.Button value="개인">개인</Radio.Button>
         </Radio.Group>
-        <Input placeholder={getInputPlaceholder()} prefix={prefixText} />
+        <Input placeholder="김종범" prefix="성명   " />
 
         <Typography.Title level={3}>고소인(본인) 상세정보</Typography.Title>
-        <Typography.Title level={5}>{prefixText}</Typography.Title>
+        <Typography.Title level={5}>성명</Typography.Title>
         <Input />
-        <Typography.Title level={5}>{getInputPlaceholder2()}</Typography.Title>
+        <Typography.Title level={5}>주민등록번호</Typography.Title>
         <Input />
         <Typography.Title level={5}>주소</Typography.Title>
         <Input placeholder="클릭해서 주소 검색하기" />
@@ -106,7 +46,7 @@ export default function DefamationMenu() {
         <Typography.Title level={5}>명예훼손을 한 사람</Typography.Title>
         <Radio.Group
           value={offender}
-          onChange={(e) => handleOffenderChange(e.target.value)}
+          onChange={(e) => handleoffenderChange(e.target.value)}
         >
           <Radio.Button value="확실함">확실함</Radio.Button>
           <Radio.Button value="일부알고있음">일부알고있음</Radio.Button>

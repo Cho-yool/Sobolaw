@@ -43,7 +43,7 @@ export default function FormPage() {
               color: "white",
             }}
           >
-            모욕
+            중고거래 사기
           </Link>
           <Link
             to="/plaint/3"
@@ -55,7 +55,7 @@ export default function FormPage() {
               color: "white",
             }}
           >
-            사기
+            온라인 모욕
           </Link>
         </div>
       </div>

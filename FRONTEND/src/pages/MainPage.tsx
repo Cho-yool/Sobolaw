@@ -8,7 +8,7 @@ import sosongjunbi from "/images/checking-contract-terms.jpg";
 import jaryojiwon from "/images/hand-using.jpg";
 import yongeo from "/images/close-up-hands-holding-open-book.jpg";
 import LawWordModal from "../components/lawword/LawWordModal";
-import style from "../styles/Main.module.css";
+import style from "../styles/common/Main.module.css";
 import "../App.css";
 
 export default function MainPage() {

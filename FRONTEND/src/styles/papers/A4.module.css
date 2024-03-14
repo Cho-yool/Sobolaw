@@ -34,8 +34,13 @@
   width: 100%;
   justify-content: flex-end;
   align-items: flex-end;
-  margin: 2rem 0 2rem 0;
-  padding-right: 4rem;
+}
+
+.button {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  margin: 2rem 2rem 2rem 0;
 }
 
 .title {
