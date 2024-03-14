@@ -1,6 +1,6 @@
 .container {
   max-width: 96vw;
-  height: 3rem;
+  height: 6vh;
   border-bottom: 0.5px solid rgb(206, 206, 206);
   display: flex;
   align-items: center;
