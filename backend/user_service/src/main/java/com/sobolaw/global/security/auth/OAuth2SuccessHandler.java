@@ -20,8 +20,12 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     private static final String URI = "/auth/success";
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-        Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(
+        HttpServletRequest request,
+        HttpServletResponse response,
+        Authentication authentication
+    ) throws IOException, ServletException {
+
         // accessToken, refreshToken 발급
         String accessToken = tokenProvider.createAccessToken(authentication);
         tokenProvider.generateRefreshToken(authentication, accessToken);

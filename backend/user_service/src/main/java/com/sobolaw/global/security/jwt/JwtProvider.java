@@ -14,15 +14,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtProvider {
 
-//    @Value("${jwt.secret}")
-//    private final String secretKey;
-
     @Value("${jwt.expiration}")
     private long accessExpiration;
 
     private final SecretKey secretKey;
 
-    public JwtProvider(@Value("${jwt.secret-key}") String secretKey) {
+    private JwtProvider(@Value("${jwt.secret-key}") String secretKey) {
         this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(secretKey));
     }
 
