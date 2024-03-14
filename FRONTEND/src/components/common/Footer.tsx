@@ -6,7 +6,7 @@ import JB from "/images/footer/JongBum.png";
 import JS from "/images/footer/jaesung.png";
 import SH from "/images/footer/seongho.png";
 import SY from "/images/footer/SoYoung.png";
-import style from "../../styles/Footer.module.css";
+import style from "../../styles/common/Footer.module.css";
 
 export default function Footer() {
   return (

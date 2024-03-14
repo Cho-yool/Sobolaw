@@ -2,72 +2,18 @@ import { useState } from "react";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
 import type { DatePickerProps } from "antd";
-import { Button, Input, DatePicker, Cascader } from "antd";
+import { Button, Input, InputNumber, DatePicker, Cascader } from "antd";
 import locale from "antd/es/date-picker/locale/ko_KR";
+import { postInsult } from "../../api/lawsuit";
 import { InsultForm } from "../../types/DataTypes";
+import { options, initialInsultContent } from "../../types/LawsuitTypes";
 import style from "../../styles/papers/A4.module.css";
 
-interface OnlineOption {
-  value: string | number;
-  label: string;
-  children?: OnlineOption[];
-}
-
-const options: OnlineOption[] = [
-  {
-    value: "인터넷 커뮤니티 사이트",
-    label: "인터넷 커뮤니티 사이트",
-    children: [
-      {
-        value: "디시인사이드",
-        label: "디시인사이드",
-      },
-      {
-        value: "에펨코리아",
-        label: "에펨코리아",
-      },
-      {
-        value: "인벤",
-        label: "인벤",
-      },
-      {
-        value: "루리웹",
-        label: "루리웹",
-      },
-      {
-        value: "뽐뿌",
-        label: "뽐뿌",
-      },
-      {
-        value: "더쿠",
-        label: "더쿠",
-      },
-      {
-        value: "기타",
-        label: "기타",
-      },
-    ],
-  },
-  {
-    value: "카카오톡",
-    label: "카카오톡",
-  },
-  {
-    value: "네이버",
-    label: "네이버",
-  },
-  {
-    value: "페이스북",
-    label: "페이스북",
-  },
-  {
-    value: "웹페이지",
-    label: "웹페이지",
-  },
-];
-
 export default function InsultA4() {
-  const [insultContent, setInsultContent] = useState<InsultForm[]>([]);
+  const [insultContent, setInsultContent] =
+    useState<InsultForm>(initialInsultContent);
+
+  // 데이터 입력용
   // 소장 임시저장명
   const [title, setTitle] = useState("");
   // 피해자
@@ -106,45 +52,18 @@ export default function InsultA4() {
   const [evidence, setEvidence] = useState("");
   const [submissionDate, setSubmissionDate] = useState("");
   const [policeStationTeam, setPoliceStationTeam] = useState("");
+  // 여기까지
 
   // 서류에 들어갈 문장
   const [paperIDate, setPaperIDate] = useState("");
   const [paperITime, setPaperITime] = useState("");
 
-  // function handleUsername(e: React.ChangeEvent<HTMLInputElement>) {
-  //   const inputValue = e.target.value;
-  //   const cleanedValue = inputValue.replace(/[^A-Za-z0-9]/g, "");
-  //   // 한글 입력 제한
-  //   if (/[ㄱ-ㅎㅏ-ㅣ가-힣]/.test(inputValue)) {
-  //     setValidMessage({
-  //       ...validMessage,
-  //       idMessage: "한글을 입력할 수 없습니다.",
-  //     });
-  //     return;
-  //   }
-  //   // 특문 제한
-  //   if (/[~!@#$%";'^,&*()_+|</>=>`?:{[\]}]/g.test(inputValue)) {
-  //     setValidMessage({
-  //       ...validMessage,
-  //       idMessage: "특수문자를 입력할 수 없습니다.",
-  //     });
-  //     return;
-  //   }
-  //   // 글자 수 제한
-  //   const limitedValue = cleanedValue.substring(0, 10);
-  //   if (cleanedValue.length > 10) {
-  //     setValidMessage({
-  //       ...validMessage,
-  //       idMessage: "아이디는 최대 10자까지 가능합니다.",
-  //     });
-  //     return;
-  //   }
-  //   setValidMessage({ ...validMessage, idMessage: "" });
-  //   setUsername(limitedValue);
-  // }
+  // input 효과들
+  const [showWebDetailInput, setShowWebDetailInput] = useState(false);
 
   const defaultValue = dayjs("2024-01-01");
 
+  // handle 함수들
   const onChangeDate: DatePickerProps["onChange"] = (_, dateStr) => {
     // dateStr이 string 타입인지 확인합니다.
     if (typeof dateStr === "string") {
@@ -177,38 +96,122 @@ export default function InsultA4() {
   };
 
   const onChangeOnline = (value: (string | number)[]) => {
-    console.log(value);
+    const majorCate = value[0] as string;
+    const middleCate = value[1] as string;
+    if (middleCate === undefined) {
+      setOnlineServiceType(majorCate);
+      setShowWebDetailInput(true);
+    } else {
+      setOnlineServiceType(majorCate + " " + middleCate);
+    }
   };
+
+  // 저장 제출 함수
+  async function onSubmit(event: React.SyntheticEvent): Promise<void> {
+    event.preventDefault();
+    // TODO: 소장작성 비동기 통신
+    // 모든 조건이 True일 때 제출 가능 (필수입력 공백확인)
+    if (title === "") {
+      alert("소장 저장명을 확인해주세요!");
+    } else {
+      setInsultContent({
+        title: title,
+        plaintiffName: plaintiffName,
+        plaintiffResidentRegistrationNumber: plaintiffRRNumber,
+        plaintiffAddress: plaintiffAddress,
+        plaintiffPhoneNumber: plaintiffPhoneNumber,
+        plaintiffNickname: plaintiffNickname,
+        defendantName: defendantName,
+        defendantNickname: defendantNickname,
+        defendantAddress: defendantAddress,
+        defendantPhoneNumber: defendantPhoneNumber,
+        incidentDate: incidentDate,
+        incidentTime: incidentTime,
+        onlineServiceType: onlineServiceType,
+        webServiceDetails: webServiceDetails,
+        problemSpeech: problemSpeech,
+        reasonsForInsult: reasonsForInsult,
+        relatedPeopleCount: relatedPeopleCount,
+        witness1: witness1,
+        witness2: witness2,
+        witness3: witness3,
+        insultDuration: insultDuration,
+        insultFrequency: insultFrequency,
+        circumstancesForIdentification: circumstance,
+        evidence: evidence,
+        submissionDate: submissionDate,
+        policeStationTeam: policeStationTeam,
+      });
+      // const response = await postInsult(1, insultContent);
+      await postInsult(1, insultContent);
+      // if (response === 1) {
+      alert("소장 저장이 완료되었습니다");
+      //     navigate('')
+      // } else if (response === 33) {
+      //     alert("소장 저장 실패")
+      // }
+    }
+  }
 
   return (
     <div className={style["container"]}>
       <div className={style["button-box"]}>
-        <Button type="primary">저장하기</Button>
+        <Button
+          className={style["button"]}
+          type="primary"
+          onClick={() => onSubmit}
+        >
+          저장하기
+        </Button>
       </div>
-      <div style={{ width: "20rem" }}>
-        <Input
-          placeholder="title"
-          value={title}
-          // onChange={handleUsername}
-        />
 
+      <div
+        style={{
+          width: "20rem",
+          padding: "1rem",
+          backgroundColor: "lightgreen",
+        }}
+      >
+        <p>소장 저장명</p>
+        <Input placeholder="title" value={title} />
+        <p>사건경위</p>
+        <p>발생일자</p>
         <DatePicker
           defaultValue={defaultValue}
           showTime
           locale={locale}
           onChange={onChangeDate}
         />
+        <p>웹서비스 주소</p>
         <Cascader
           options={options}
           onChange={onChangeOnline}
           placeholder="사건이 발생한 웹서비스 유형"
         />
-
+        {showWebDetailInput == true && (
+          <>
+            <p>상세 URL 혹은 채팅방 이름</p>
+            <Input
+              placeholder="웹서비스의 이름이나 주소 등"
+              value={webServiceDetails}
+              onChange={(e) => setWebServiceDetails(e.target.value)}
+            />
+          </>
+        )}
+        <p>공연성</p>
         <Input
-          placeholder="웹서비스의 이름이나 주소 등"
-          value={title}
-          // onChange={handleUsername}
+          placeholder="이용자 수"
+          value={relatedPeopleCount}
+          onChange={(e) => setRelatedPeopleCount(e.target.value)}
+        />{" "}
+        몇명인지 모르면 다수처리
+        <InputNumber
+          addonBefore={
+            <Cascader placeholder="cascader" style={{ width: 150 }} />
+          }
+          defaultValue={100}
         />
+        <p>목격자여부</p>
       </div>
 
       {/* 아래는 A4 용지 */}
@@ -238,8 +241,7 @@ export default function InsultA4() {
         <div>
           <p>
             1. 고소인과 피고소인은 사건이 발생한 {paperIDate} {paperITime}
-            (온라인서비스 유형) (웹서비스의 이름이나 주소(단체카톡방명 혹은
-            SNS내 페이지 명 등))의 이용자들 입니다.
+            {onlineServiceType} {webServiceDetails}의 이용자들 입니다.
           </p>
           <p>
             2. 당시 피고소인은 (관련 인원수 or 다수)명의 이용자들이 접속하고

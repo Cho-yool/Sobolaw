@@ -139,8 +139,8 @@ export type FraudForm = {
 };
 
 export type InsultForm = {
-  plaintiffName: string;
   title: string;
+  plaintiffName: string;
   plaintiffResidentRegistrationNumber: string;
   plaintiffAddress: string;
   plaintiffPhoneNumber: string;

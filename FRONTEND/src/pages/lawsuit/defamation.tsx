@@ -4,8 +4,9 @@ import style from "../../styles/papers/Lawsuit.module.css";
 import LawsuitTab from "../../components/lawsuit/lawsuitTab";
 import DefamationMenu from "../../components/lawsuit/defamationMenu";
 import DefamatinoA4 from "../../components/lawsuit/defamationA4";
+import { Button } from "antd";
 
-//지워라
+// post test용으로 임시로 가져왔음 다른 파일에서 쓰시면 됨
 import { postDefamation } from "../../api/lawsuit";
 import { DefamationForm } from "../../types/DataTypes";
 
@@ -69,17 +70,20 @@ export default function DefamatinoPage() {
 
   return (
     <div className="pages">
-      <button
-        onClick={() => {
-          postDefamation(2, requestbody);
-        }}
-      ></button>
       <LawsuitTab cates={cates} />
       <div className={style["container"]}>
         <div className={style["left-menu"]}>
           <DefamationMenu />
         </div>
         <div className={style["right-menu"]}>
+          <Button
+            onClick={() => {
+              postDefamation(2, requestbody);
+            }}
+          >
+            post 테스트용 버튼 : Bad Request 뜨는 이유 알아야함 ㅜㅜ payload에
+            바디 있음
+          </Button>
           <DefamatinoA4 />
         </div>
       </div>
