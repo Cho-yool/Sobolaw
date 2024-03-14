@@ -5,12 +5,12 @@ const http = mainAxios();
 const headers = new AxiosHeaders();
 headers.set("Content-Type", "application/json;charset=utf-8");
 
-export async function getChatAnswer({ message }: { message: string }) {
+export async function getChatAnswer(message: string) {
   const data = {
     messages: [
       {
         role: "system",
-        content: "물어보는 질문에 자세히 답변해줘",
+        content: "반말로 대답해줘",
       },
       {
         role: "user",
