@@ -7,7 +7,7 @@ import style from '../../styles/recommend/RecommendPage.module.css';
 
 const { Content } = Layout;
 
-const words = ['사기', '명예훼손', '살인', '폭행', '강제추행', '상해', '모욕']; // 변화할 단어 목록
+const words = ['손해배상', '사기', '횡령', '계약위반', '고용법', '청구이의', '소유권분쟁']; // 변화할 단어 목록
 const tooltipMessage = (
   <>
     <span>판례를 분석하기 위해 한국어 형태소 분석기인 konlpy를 사용하여 텍스트를 단어로 나누고,</span>
@@ -16,6 +16,12 @@ const tooltipMessage = (
     <br />
     <br />
     <span>TF-IDF는 각 단어의 중요도를 가중치로 계산하여, 판례별로 가장 중요한 10개의 단어를 선정합니다. 이 정보를 바탕으로 사용자의 검색어와 비슷한 판례를 추천해 드립니다.</span>
+  </>
+);
+
+const tooltipSearchMessage = (
+  <>
+    <span>사건분류를 입력하거나, 사건 번호, 관련 법률, 판결 날짜를 입력하여 검색하세요.</span>
   </>
 );
 
@@ -55,6 +61,10 @@ const RecommendPage: React.FC = () => {
     }
   }, [letterIndex, wordIndex]);
 
+  const scrollToSearchSection = () => {
+    window.scrollTo({ top: 1500, behavior: 'smooth' });
+  }
+
   return (
     <div className={style.recommendContainer}>
       <Layout className={style.recommendBackground}>
@@ -78,7 +88,7 @@ const RecommendPage: React.FC = () => {
                   </Tooltip>
                 </h3>
                 {/* '추천 검색 시작하기' 버튼 추가 */}
-                <button className={style.startSearchButton}>추천 검색 시작하기</button>
+                <button className={style.startSearchButton} onClick={scrollToSearchSection}>추천 검색 시작하기</button>
               </div>
             </div>
           </Row>

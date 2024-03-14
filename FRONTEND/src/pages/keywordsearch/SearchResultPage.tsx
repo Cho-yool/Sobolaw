@@ -123,28 +123,30 @@ const SearchResultPage = () => {
   ];
 
   return (
-    <div className={style.searchPageContainer}>
-      <Input
-        prefix={<SearchOutlined />}
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        onPressEnter={handleSearch}
-        className={style.searchInput}
-        placeholder="키워드를 검색하세요"
-      />
-      <div className={style.tabs}>
-        <Tabs
-          items={tabsItems}
-          tabBarGutter={40}
+    <div className={style.searchPageBackground}>
+      <div className={style.searchPageContainer}>
+        <Input
+          prefix={<SearchOutlined />}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onPressEnter={handleSearch}
+          className={style.searchInput}
+          placeholder="키워드를 검색하세요"
+        />
+        <div className={style.tabs}>
+          <Tabs
+            items={tabsItems}
+            tabBarGutter={40}
+          />
+        </div>
+        <Pagination
+          current={currentPage}
+          pageSize={pageSize} // 페이지 사이즈, 필요에 따라 조정
+          total={filteredResults.length}
+          onChange={(page) => setCurrentPage(page)}
+          className={style.pagination}
         />
       </div>
-      <Pagination
-        current={currentPage}
-        pageSize={pageSize} // 페이지 사이즈, 필요에 따라 조정
-        total={filteredResults.length}
-        onChange={(page) => setCurrentPage(page)}
-        className={style.pagination}
-      />
     </div>
   );
 };
