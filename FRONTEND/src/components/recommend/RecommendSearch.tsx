@@ -43,11 +43,6 @@ const RecommendSearch: React.FC = () => {
     }
   };
 
-  const handleSubmit = () => {
-    console.log("Submitting", { selectedCaseType, stepTwoValue, stepThreeValue, stepFourValue });
-    // 여기에 제출 로직을 추가하세요
-  };
-
   // Tooltip 내용을 별도의 함수로 정의합니다.
   const placeTooltipContent = (
     <>
@@ -74,7 +69,7 @@ const RecommendSearch: React.FC = () => {
 
   const personTooltipContent = (
     <>
-          <span style={{ fontWeight: 'bold', color: '#FF0000' }}>6자 이상 입력해주세요.</span><br />
+      <span style={{ fontWeight: 'bold', color: '#FF0000' }}>6자 이상 입력해주세요.</span><br />
       예: 채무자, 채권자, 근로자, 참가인, 조합원, 피해자, 소유자 등<br /><br />
       인물의 실명보다 <span style={{ fontWeight: 'bold', color: '#644419' }}>인물의 역할, 관계</span>를 입력하는 것이 좋습니다.<br />
       이를 통해 추천 검색 결과의 정확도를 높일 수 있습니다.<br /><br />
@@ -83,6 +78,19 @@ const RecommendSearch: React.FC = () => {
       황OO씨(X) ⭢ <span style={{ fontWeight: 'bold', color: '#644419' }}>피해자(O)</span>
     </>
   );
+
+  const handleSubmit = () => {
+    const submissionData = [{
+      selectedCaseType,
+      stepTwoValue,
+      stepThreeValue,
+      stepFourValue,
+    }];
+    console.log('Submitting', submissionData);
+    // 여기에 제출 로직을 추가하세요, 예를 들어:
+    // fetch('/api/submit', { method: 'POST', body: JSON.stringify(submissionData), headers: { 'Content-Type': 'application/json' } })
+
+  }
 
   return (
     <div className={style.searchContainer}>
@@ -112,7 +120,7 @@ const RecommendSearch: React.FC = () => {
         <div className={`${style.searchItem} ${style.fadeInUp}`}>
           <h4>
             2단계 : 사건 관련 장소를 입력하세요.
-            <Tooltip title={placeTooltipContent} placement='right' overlayInnerStyle={{ backgroundColor: '#F3E7C0', color: '#000000'}}>
+            <Tooltip title={placeTooltipContent} placement='right' overlayInnerStyle={{ backgroundColor: '#F3E7C0', color: '#000000' }}>
               <InfoCircleOutlined style={{ marginLeft: 10, color: '#595959' }} />
             </Tooltip>
           </h4>
@@ -129,7 +137,7 @@ const RecommendSearch: React.FC = () => {
         <div className={`${style.searchItem} ${style.fadeInUp}`}>
           <h4>
             3단계 : 사건 관련 대상을 입력하세요.
-            <Tooltip title={objectTooltipContent} placement='right' overlayInnerStyle={{ backgroundColor: '#F3E7C0', color: '#000000'}}>
+            <Tooltip title={objectTooltipContent} placement='right' overlayInnerStyle={{ backgroundColor: '#F3E7C0', color: '#000000' }}>
               <InfoCircleOutlined style={{ marginLeft: 10, color: '#595959' }} />
             </Tooltip>
           </h4>
@@ -146,7 +154,7 @@ const RecommendSearch: React.FC = () => {
         <div className={`${style.searchItem} ${style.fadeInUp}`}>
           <h4>
             4단계 : 사건 관련 주요 인물을 입력하세요.
-            <Tooltip title={personTooltipContent} placement='right' overlayInnerStyle={{ backgroundColor: '#F3E7C0', color: '#000000'}}>
+            <Tooltip title={personTooltipContent} placement='right' overlayInnerStyle={{ backgroundColor: '#F3E7C0', color: '#000000' }}>
               <InfoCircleOutlined style={{ marginLeft: 10, color: '#595959' }} />
             </Tooltip>
           </h4>
@@ -161,7 +169,7 @@ const RecommendSearch: React.FC = () => {
       )}
       {currentStep > 4 && (
         <div className={`${style.searchItem} ${style.fadeInUp}`}>
-          <Button type="primary" onClick={handleSubmit}>제출</Button>
+          <Button type="primary" onClick={handleSubmit} style={{ width: 100, height: 40, fontSize: 18, marginLeft: '83%' }}>제출</Button>
         </div>
       )}
     </div>
