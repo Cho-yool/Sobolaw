@@ -1,8 +1,9 @@
+import { Flex } from "antd";
 import { useState } from "react";
 
 interface CheckBoxProps {
   boxList: string[];
-  onChange: () => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const CheckBox = ({ boxList, onChange }: CheckBoxProps) => {
@@ -10,14 +11,19 @@ const CheckBox = ({ boxList, onChange }: CheckBoxProps) => {
 
   const newLists = boxList.map((list) => {
     return (
-      <>
-        <input type="checkbox" id={list} name={list} onChange={onChange} />
+      <Flex>
+        <input
+          type="checkbox"
+          id={list}
+          name={list}
+          onChange={(e) => onChange(e)}
+        />
         <label htmlFor={list}>{list}</label>
-      </>
+      </Flex>
     );
   });
 
-  return <div>{newLists ? newLists : <p>없다</p>}</div>;
+  return <Flex vertical>{newLists ? newLists : <p>없다</p>}</Flex>;
 };
 
 export default CheckBox;
