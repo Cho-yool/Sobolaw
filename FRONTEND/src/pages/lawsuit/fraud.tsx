@@ -1,9 +1,11 @@
-import "../../App.css";
+import LawsuitTab from "../../components/lawsuit/lawsuitTab";
+import LawsuitInsult from "../../components/lawsuit/fraudA4";
 
 export default function FraudPage() {
   return (
-    <div className="pages">
-      <div>사기</div>
+    <div>
+      <LawsuitTab cates="사기죄" />
+      <LawsuitInsult />
     </div>
   );
 }

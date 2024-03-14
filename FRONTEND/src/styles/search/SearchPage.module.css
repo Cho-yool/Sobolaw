@@ -10,17 +10,17 @@
 }
 
 .middleContainer {
-  background-color: #f3e7c0; /* 새 배경 색상 */
+  background-color: #F8F0D6; /* 새 배경 색상 */
   width: 100%;
   padding: 20px; /* 내부 요소와의 간격 */
-  margin: 0px 0; /* 상단 및 하단 마진 추가 */
+  margin: 40px 0; /* 상단 및 하단 마진 추가 */
 }
 
 .categoryCardsContainer {
   display: flex;
   flex-direction: column;
   gap: 30px; /* 카드 간의 간격 늘림 */
-  margin: 80px 80px; /* 검색 컨테이너와의 간격 추가 */
+  margin: 60px 80px; /* 검색 컨테이너와의 간격 추가 */
 }
 
 .singleCategoryCard {
@@ -29,7 +29,7 @@
   border-radius: 20px; /* 카드의 모서리 둥글게 */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 카드에 그림자 추가 */
   color: #644419;
-  font-size: 19px;
+  font-size: 18px;
   font-weight: 600;
 }
 
@@ -48,7 +48,8 @@
   .searchContainer {
     padding: 1rem;
     width: 80%;
-    margin: 10px auto;
+    margin: 0px auto;
+    margin-top: 30px;
     height: 350px; /* 높이 조정 */
   }
 

@@ -2,9 +2,9 @@ import { Route, Routes } from "react-router-dom";
 import LayoutPage from "./components/common/Layout";
 import LawCaseDetail from "./pages/lawcasedetail/LawCaseDetail";
 import LoginPage from "./pages/LoginPage";
-import SearchPage from "./pages/SearchPage";
-import SearchResultPage from "./pages/SearchResultPage";
-import RecommendPage from "./pages/RecommendPage";
+import SearchPage from "./pages/keywordsearch/SearchPage";
+import SearchResultPage from "./pages/keywordsearch/SearchResultPage";
+import RecommendPage from "./pages/recommend/RecommendPage";
 import FormPage from "./pages/FormPage";
 import CalculatorPage from "./pages/CalculatorPage";
 import MainPage from "./pages/MainPage";
@@ -22,7 +22,7 @@ function App() {
       {/* 레이아웃을 미리 짜놓고, 그 사이에 새로 만든 페이지들이 들어가게 함 */}
       <Route element={<LayoutPage />}>
         <Route path="" element={<MainPage />} />
-        <Route path="/detail" element={<LawCaseDetail />} />
+        <Route path="/laws/:id" element={<LawCaseDetail />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/search-results" element={<SearchResultPage />} />

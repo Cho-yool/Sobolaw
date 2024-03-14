@@ -1,10 +1,15 @@
 /* src/styles/SearchResultList.module.css */
+.searchPageBackground {
+  background-color: #ffffff;
+}
+
 .searchPageContainer {
   display: flex;
   flex-direction: column;
   margin-top: 20px;
   margin-right: 20%;
   margin-left: 10%;
+  background-color: #ffffff;
 }
 
 .searchResultHeader {

@@ -5,23 +5,23 @@ const http = userAxios();
 const headers = new AxiosHeaders();
 headers.set("Content-Type", "application/json;charset=utf-8");
 
-const url = "members/";
+const url = "members";
 
 // 멤버 정보 조회
-async function getUserInfo(params: { memberId: number }) {
-  const response = await http.get(url + { params });
+async function getUserInfo(memberId: number) {
+  const response = await http.get(`${url}/${memberId}`);
   return response.data.data;
 }
 
 // 멤버가 저장한 판례 조회
-async function getPrecedents(params: { memberId: number }) {
-  const response = await http.get(url + { params } + "precedents");
+async function getPrecedents(memberId: number) {
+  const response = await http.get(`${url}/${memberId}/precedents`);
   return response.data.data;
 }
 
 // 멤버가 최근 본 판례
-async function getRecentPrecedents(params: { memberId: number }) {
-  const response = await http.get(url + { params } + "recent");
+async function getRecentPrecedents(memberId: number) {
+  const response = await http.get(`${url}/${memberId}/recent`);
   return response.data.data;
 }
 
@@ -29,6 +29,7 @@ async function getRecentPrecedents(params: { memberId: number }) {
 async function postMyKeyword(memberId: number, keywords: string[]) {
   await http.post(`${url}/${memberId}/keywords`, { keywords });
 }
+
 // async function postMyKeyword(memberId: number, accessToken: string) {
 //   await http.post(`${url}/${blockedId}`, {
 //       headers: {

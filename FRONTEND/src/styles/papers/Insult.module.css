@@ -1,0 +1,86 @@
+@import url(//fonts.googleapis.com/earlyaccess/nanummyeongjo.css);
+
+@font-face {
+  font-family: "NotoSerifKR";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/NotoSerifKR.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.container {
+  background-color: aliceblue;
+  width: 100%;
+  height: 94vh;
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  align-items: center;
+}
+
+.menu {
+  width: 25rem;
+  height: 94vh;
+  overflow: auto;
+  padding: 1rem;
+  background-color: #fff6c5;
+  line-height: 40px;
+}
+
+.contents {
+  width: 70vw;
+  height: 94vh;
+  justify-content: center;
+  overflow: auto;
+}
+
+.contents-center {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+
+  align-items: center;
+}
+
+.pages {
+  width: 21cm;
+  height: 29.7cm;
+  padding: 2rem;
+  border: 0.5px solid darkgray;
+  font-family: "NotoSerifKR", serif;
+  letter-spacing: 1px;
+  line-height: 30px;
+  background-color: white;
+}
+
+.button-box {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.button {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  margin: 2rem 2rem 2rem 0;
+}
+
+.title {
+  text-align: center;
+  font-weight: 1000;
+  font-size: 1.5rem;
+  margin: 2rem 0 2rem 0;
+}
+
+.menu-title {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.menu-mini {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
