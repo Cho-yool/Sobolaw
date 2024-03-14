@@ -1,22 +1,16 @@
 package com.sobolaw.global.security.jwt;
 
-import com.sobolaw.api.member.entity.Member;
 import com.sobolaw.api.member.repository.MemberRepository;
+import com.sobolaw.global.security.auth.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -27,43 +21,35 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
     private final MemberRepository memberRepository;
+    private final CustomUserDetailsService customUserDetailsService;
 
-    @Override
+    /**
+     * JWT 토큰 검증 수행.
+     */
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
         throws ServletException, IOException {
+        String authorizationHeader = request.getHeader("Authorization");
 
-        try {
-            String token = parseBearerToken(request);
-            if (token == null) {
-                filterChain.doFilter(request, response);
-                return;
+        //JWT 헤더가 있는 경우
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String token = authorizationHeader.substring(7);
+            // JWT 유효성 검증
+            if (jwtProvider.validateToken(token)) {
+                Long memberId = jwtProvider.getMemberId(token);
+
+                // 유저와 토큰 일치시 userDetail 생성
+                UserDetails userDetails = customUserDetailsService.loadUserByUsername(Long.toString(memberId));
+
+                if (userDetails != null) {
+                    // UserDetails, Password, Role -> 접근 권한 인증 Token 생성
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+                    // 현재 Request의 Security Context에 접근 권한 설정
+                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                }
             }
-
-            String memberName = jwtProvider.validateToken(token);
-            if (memberName == null) {
-                filterChain.doFilter(request, response);
-                return;
-            }
-
-            Member member = memberRepository.findByName(memberName);
-            String role = member.getRole().toString();
-
-            List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority(role));
-
-            SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-            AbstractAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(memberName, null, authorities);
-            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-            securityContext.setAuthentication(authenticationToken);
-            SecurityContextHolder.setContext(securityContext);
-
-        } catch (Exception e) {
-//            e.printStackTrace();
-            e.fillInStackTrace();
         }
-
         filterChain.doFilter(request, response);
     }
 

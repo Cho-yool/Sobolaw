@@ -1,6 +1,7 @@
 package com.sobolaw.global.security.jwt;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -28,8 +29,8 @@ public class JwtProvider {
     /**
      * JWT 토큰 생성.
      */
-    public String createAccessToken(String memberName) {
-        Claims claims = (Claims) Jwts.claims().subject(memberName);
+    public String createAccessToken(String memberId) {
+        Claims claims = (Claims) Jwts.claims().subject(memberId);
         Date now = new Date();
         Date validity = new Date(now.getTime() + accessExpiration);
 
@@ -42,25 +43,26 @@ public class JwtProvider {
     }
 
     /**
-     *  JWT 토큰에서 사용자 이름 추출.
+     *  JWT 토큰에서 사용자 Id 추출.
      */
-    public String getUsername(String jwtToken) {
+    public Long getMemberId(String jwtToken) {
         return Jwts.parser()
             .verifyWith(secretKey)
             .build()
             .parseSignedClaims(jwtToken)
             .getPayload()
-            .getSubject();
+            .get("memberId", Long.class);
+//            .getSubject();
     }
 
     /**
      *  JWT 토큰 유효성 검사.
      *  반환값 Boolean 시 try 내 return ture;
       */
-    public String validateToken(String jwtToken) {
+    public boolean validateToken(String jwtToken) {
         try {
             Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(jwtToken);
-            return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(jwtToken).getPayload().getSubject();
+            return true;
 
         } catch (JwtException | IllegalArgumentException e) {
             throw new IllegalArgumentException("Expired or invalid JWT token");

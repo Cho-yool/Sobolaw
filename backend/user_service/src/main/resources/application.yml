@@ -26,15 +26,15 @@ spring:
       client:
         registration:
           kakao:
-            client-id: 클라이언트아이디
-            client-secret: 시크릿키
+            client-id: ef322d7307420955f2517d792e85a41b
+            client-secret: Rmct0Pj9dNMDgjGwt9gDuu1KSOaq8fUu
             redirect-uri: "{baseUrl}/oauth2/callback/{registrationId}"
             authorization-grant-type: authorization_code
             client-authentication-method: client_secret_post
             scope: profile_nickname
           naver:
-            client-id: 클라이언트아이디
-            client-secret: 시크릿키
+            client-id: zrnSAK6f3mzqWn2Nos_o
+            client-secret: HdH2s7s9ci
             redirect-uri: "{baseUrl}/oauth2/callback/{registrationId}"
             authorization-grant-type: authorization_code
             scope: email
@@ -90,6 +90,6 @@ eureka:
 
 # jwt
 jwt:
-  secret-key: "나만의 시크릿 키값"
+  secret-key: "123testKeyValue123456testKeyValue456789testKeyValue789123testKeyValue123456testKeyValue456789testKeyValue789123testKeyValue123456testKeyValue456789testKeyValue789"
   expiration: "604800000" # 7일
 

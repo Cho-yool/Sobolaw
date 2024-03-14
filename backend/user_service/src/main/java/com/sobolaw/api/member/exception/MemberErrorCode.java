@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum MemberErrorCode {
     NOT_FOUND_MEMBER(HttpStatus.BAD_REQUEST, "존재하지 않는 사용자입니다."),
+    DUPLICATED_EMAIL(HttpStatus.CONFLICT, "이미 가입된 이메일 입니다."),
     NOT_FOUND_PRECEDENT(HttpStatus.BAD_REQUEST, "존재하지 않는 저장 판례입니다."),
     NOT_FOUND_RECENT(HttpStatus.BAD_REQUEST, "존재하지 않는 최근 판례입니다."),
     NOT_FOUND_KEYWORD(HttpStatus.BAD_REQUEST, "존재하지 않는 키워드입니다."),
