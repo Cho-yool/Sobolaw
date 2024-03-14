@@ -1,0 +1,61 @@
+.container {
+  height: 95vh;
+  background-image: ("./images/formBackground.png");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  position: relative;
+}
+
+/* 
+1. div의 가상요소를 생성한다.
+2. background 속성을 통해 가상요소에 배경이미지를 설정한다.
+3. 가상요소를 뒤쪽으로 밀어준다.
+4. 원본과 그 자식요소가 화면에 나타난다.
+5. 가상요소에 opacity를 적용하면 원본과 자식을 제외한 배경이미지만 흐려진다. 
+*/
+
+.container::after {
+  width: 100%;
+  height: 100%;
+  content: "";
+  background-image: url("./images/formBackground.png");
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  opacity: 0.4;
+}
+
+.select-box {
+  width: 400px;
+  height: auto;
+  border-radius: 8px;
+  background-color: white;
+  padding: 32px;
+  text-align: center;
+  align-items: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.select-button {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.link-detail {
+  display: block;
+  border-radius: 8px;
+  background-color: beige;
+  padding: 12px 24px;
+  color: white;
+}

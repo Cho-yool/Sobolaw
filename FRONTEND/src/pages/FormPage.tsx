@@ -1,22 +1,64 @@
-import { Layout, Typography, Row, Col } from "antd";
+import { Link } from "react-router-dom";
+import style from "../styles/papers/Select.module.css";
+import "../App.css";
 
-const { Content } = Layout;
-const { Title } = Typography;
+<div
+  style={{
+    display: "flex",
+    height: "100vh",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#f7cac9",
+  }}
+></div>;
 
 export default function FormPage() {
   return (
-    <Layout style={{ minHeight: "80vh" }}>
-      <Content style={{ padding: "0 50px", marginTop: 64 }}>
-        <Row justify="center">
-          <Col xs={24} sm={20} md={16} lg={12} xl={8}>
-            <div style={{ textAlign: "center" }}>
-              <Title level={2} style={{ color: "#644419" }}>
-                고소장 작성
-              </Title>
-            </div>
-          </Col>
-        </Row>
-      </Content>
-    </Layout>
+    <div className={style["container"]}>
+      <div className={style["select-box"]}>
+        <h1 style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
+          문서를 선택해주세요
+        </h1>
+        <div className={style["select-button"]}>
+          <Link
+            to="/plaint/1"
+            style={{
+              display: "block",
+              borderRadius: "8px",
+              backgroundColor: "#bf8438",
+              padding: "12px 24px",
+              color: "white",
+            }}
+          >
+            명예훼손
+          </Link>
+          <Link
+            to="/plaint/2"
+            style={{
+              display: "block",
+              borderRadius: "8px",
+              backgroundColor: "#bf8438",
+              padding: "12px 24px",
+              color: "white",
+            }}
+          >
+            모욕
+          </Link>
+          <Link
+            to="/plaint/3"
+            style={{
+              display: "block",
+              borderRadius: "8px",
+              backgroundColor: "#bf8438",
+              padding: "12px 24px",
+              color: "white",
+            }}
+          >
+            사기
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 }

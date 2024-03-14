@@ -182,3 +182,9 @@ service-worker.js: 서비스워커 스크립트 파일
 Redux Persist는 Redux 상태를 지속적으로 저장하고 복원할 수 있도록 도와주는 라이브러리입니다. 이를 사용하면 앱을 새로고침하거나 다시 열었을 때 Redux 상태를 초기 상태가 아닌 이전에 저장한 상태로 복원할 수 있습니다. Redux Persist는 주로 로컬 스토리지나 AsyncStorage와 같은 저장소에 상태를 저장하는 데 사용됩니다.
 
 ![Alt text](image.png)
+
+## React Query
+
+- src/api/example.ts 파일에 react query 에 관해서 사용법 간단히 정리해둠
+- react query는 고유 키를 통해서 그 값을 저장해둔 후 기존의 값에 변화가 없으면 cache에 저장된 값을 불러온다
+- 자잘한 기능들은 노션에 정리한거 옮겨야함

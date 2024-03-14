@@ -58,3 +58,10 @@ export type MemberPrecedent = {
   precedentId: number;
   highlights: Highlight[];
 };
+
+export type MemberLawsuit = {
+  type: "Insult" | "Fraud" | "Defamation";
+  title: string | null;
+  createdTime: string;
+  defendantName: string | null;
+};

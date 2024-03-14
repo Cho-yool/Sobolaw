@@ -82,3 +82,25 @@ export default LoginPage;
 //     )
 // }
 // export default KakaoCallback;
+
+// // 카카오 로그인
+// const kakaoLogin = function () {
+//   let temp = localStorage.getItem('token')
+
+//   // 로그인버튼을 누르면 카카오 로그인 창으로 간다
+//   window.location.href = 'https://i10a810.p.ssafy.io/login/oauth2/authorization/kakao';
+// }
+
+// // 토큰 가져오는 useEffect
+// useEffect(() => {
+//   // 현재 url에서 토큰을 가져와서 저장하자
+//   let token = new URL(window.location.href).searchParams.get('Authorization')
+//   if (token) {
+//       // 세션에 accessToken을 저장해주자
+//       dispatch(saveAccessToken(token))
+//   }
+//   if (accessToken) {
+//       loadUserInfo()
+//   }
+
+// }, [accessToken])

@@ -5,7 +5,7 @@ const http = userAxios();
 const headers = new AxiosHeaders();
 headers.set("Content-Type", "application/json;charset=utf-8");
 
-const url = "lawsuit/";
+const url = "lawsuit";
 
 // // 모욕죄
 // const insult = "insult";
@@ -15,8 +15,8 @@ const url = "lawsuit/";
 // const defamation = "defamation";
 
 // 멤버의 소장 리스트 조회
-async function getLawsuitList(params: { memberId: number }) {
-  const response = await http.get(url + "" + { params });
+async function getLawsuitList(memberId: number) {
+  const response = await http.get(`${url}/${memberId}`);
   return response.data.data;
 }
 

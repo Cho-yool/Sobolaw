@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASEURL = "jongbum.site/api/";
+const BASEURL = "j10a604.p.ssafy.io/api/";
 // withCredentials의 디폴트는 false
 // true로 변경하면 1. CORS 요청을 허용 2. 쿠키값을 전달 할 수 있게 됨
 const credential = true;
@@ -9,11 +9,11 @@ const credential = true;
 function mainAxios() {
   return axios.create({
     // baseURL: "https://" + BASEURL,
-    baseURL: "http://" + BASEURL,
+    baseURL: "https://" + BASEURL,
     headers: {
       "Content-Type": "application/json;charset=utf-8",
     },
-    withCredentials: credential,
+    // withCredentials: credential,
   });
 }
 
@@ -22,11 +22,11 @@ function mainAxios() {
 function userAxios() {
   return axios.create({
     // baseURL: "https://" + BASEURL,
-    baseURL: "http://" + BASEURL + "user-service/",
+    baseURL: "https://" + BASEURL + "user-service/",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
     },
-    withCredentials: credential,
+    // withCredentials: credential,
   });
 }
 

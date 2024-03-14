@@ -1,72 +1,54 @@
-import { useState } from "react";
-import type { Key } from "react";
-import { ProList } from "@ant-design/pro-components";
-import CaseDetail from "../../components/mypage/MyCaseDetail";
+// import { useState } from "react";
+import { Avatar, List, Space } from "antd";
+// import { BookTwoTone } from "@ant-design/icons";
+// import CaseDetail from "../../components/mypage/MyCaseDetail";
+import { MemberPrecedent } from "../../types/DataTypes";
 
-export default function MyCaseList() {
-  const dataSource = [
-    {
-      title:
-        "아파트 매매계약서에 인도일과 실제 명도일 약정이 별도로 있는 경우 매도인의 현실인도의무 인정 여부가 문제된 사건",
-    },
-    {
-      title: "[도로교통법위반(음주운전)]",
-    },
-  ];
+const data = [
+  {
+    title: "Ant Design Title 1",
+  },
+  {
+    title: "Ant Design Title 2",
+  },
+  {
+    title: "Ant Design Title 3",
+  },
+  {
+    title: "Ant Design Title 4",
+  },
+];
 
-  const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
-  const [expandedRowKeys, setExpandedRowKeys] = useState<readonly Key[]>([]);
-  const [split] = useState<0 | 1>(1);
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: (keys: Key[]) => setSelectedRowKeys(keys),
-  };
+interface caseProps {
+  cases: MemberPrecedent | undefined;
+}
 
+export default function MyCaseList({ cases }: caseProps) {
+  console.log(cases);
   return (
     <>
-      <br />
-      <br />
-      <ProList<{ title: string }>
-        split={split === 1}
-        metas={{
-          title: {},
-          description: {
-            render: () => {
-              return <CaseDetail />;
-            },
-          },
-          content: {
-            render: () => (
-              <div
-                style={{
-                  minWidth: 200,
-                  flex: 1,
-                  display: "flex",
-                  justifyContent: "flex-end",
-                }}
-              >
-                <div
-                  style={{
-                    width: "200px",
-                  }}
-                ></div>
-              </div>
-            ),
-          },
-          actions: {
-            render: () => {
-              return [<a key="init">삭제</a>];
-            },
-          },
-        }}
-        expandable={{
-          expandedRowKeys,
-          defaultExpandAllRows: false,
-          onExpandedRowsChange: setExpandedRowKeys,
-        }}
-        rowKey="title"
-        rowSelection={rowSelection}
-        dataSource={dataSource}
+      <Space
+        direction="vertical"
+        style={{ marginBottom: "20px" }}
+        size="middle"
+      ></Space>
+      <List
+        pagination={{ position: "bottom", align: "center" }}
+        dataSource={data}
+        renderItem={(item, index) => (
+          <List.Item>
+            <List.Item.Meta
+              // avatar={<BookTwoTone />}
+              avatar={
+                <Avatar
+                  src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`}
+                />
+              }
+              title={<a href="https://ant.design">{item.title}</a>}
+              description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+            />
+          </List.Item>
+        )}
       />
     </>
   );
