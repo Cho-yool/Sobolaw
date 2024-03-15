@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Select, Input, Button, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import style from '../../styles/recommend/RecommendSearch.module.css';
+import LoadingImage from './LoadingImage';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -13,6 +14,8 @@ const RecommendSearch: React.FC = () => {
   const [stepThreeValue, setStepThreeValue] = useState<string>('');
   const [stepFourValue, setStepFourValue] = useState<string>('');
   const [currentStep, setCurrentStep] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState(false); // 새로운 상태로 로딩 상태를 추가합니다.
+  const [progress, setProgress] = useState(0); // 새로운 상태로 로딩 진행률을 추가합니다.
 
   const handleCaseTypeChange = (value: string) => {
     setSelectedCaseType(value);
@@ -79,6 +82,28 @@ const RecommendSearch: React.FC = () => {
     </>
   );
 
+  const simulateProgress = () => {
+    setIsLoading(true); // 로딩 시작
+    setProgress(0); // 진행률 초기화
+    const intervalTime = 7000 / 100; // 총 7초 동안 매 0.07초마다 진행
+    const interval = setInterval(() => {
+      setProgress((prevProgress) => {
+        const newProgress = prevProgress + 1;
+        if (newProgress > 100) {
+          clearInterval(interval); // 100%를 초과하면 인터벌 중지
+          // 로딩 완료 후 1.5초 대기
+          setTimeout(() => {
+            setIsLoading(false); // 로딩 상태를 false로 변경
+            setCurrentStep(1); // 현재 단계 초기화
+          }, 2000); // 2초 후에 실행
+          return 100; // 진행률은 100%로 설정
+        }
+        return newProgress;
+      });
+    }, intervalTime);
+  };
+  
+
   const handleSubmit = () => {
     const submissionData = [{
       selectedCaseType,
@@ -87,9 +112,13 @@ const RecommendSearch: React.FC = () => {
       stepFourValue,
     }];
     console.log('Submitting', submissionData);
+    simulateProgress();
     // 여기에 제출 로직을 추가하세요, 예를 들어:
     // fetch('/api/submit', { method: 'POST', body: JSON.stringify(submissionData), headers: { 'Content-Type': 'application/json' } })
+  }
 
+  if(isLoading) {
+    return <LoadingImage progress={progress} />
   }
 
   return (
@@ -121,7 +150,11 @@ const RecommendSearch: React.FC = () => {
           <h4>
             2단계 : 사건 관련 장소를 입력하세요.
             <Tooltip title={placeTooltipContent} placement='right' overlayInnerStyle={{ backgroundColor: '#F3E7C0', color: '#000000' }}>
-              <InfoCircleOutlined style={{ marginLeft: 10, color: '#595959' }} />
+              <InfoCircleOutlined 
+              style={{ marginLeft: 10, color: '#595959' }} 
+              onPointerEnterCapture={() => {}}
+              onPointerLeaveCapture={() => {}}
+              />
             </Tooltip>
           </h4>
           <TextArea
@@ -138,7 +171,11 @@ const RecommendSearch: React.FC = () => {
           <h4>
             3단계 : 사건 관련 대상을 입력하세요.
             <Tooltip title={objectTooltipContent} placement='right' overlayInnerStyle={{ backgroundColor: '#F3E7C0', color: '#000000' }}>
-              <InfoCircleOutlined style={{ marginLeft: 10, color: '#595959' }} />
+              <InfoCircleOutlined
+               style={{ marginLeft: 10, color: '#595959' }}
+               onPointerEnterCapture={() => {}}
+               onPointerLeaveCapture={() => {}}
+               />
             </Tooltip>
           </h4>
           <TextArea
@@ -155,7 +192,12 @@ const RecommendSearch: React.FC = () => {
           <h4>
             4단계 : 사건 관련 주요 인물을 입력하세요.
             <Tooltip title={personTooltipContent} placement='right' overlayInnerStyle={{ backgroundColor: '#F3E7C0', color: '#000000' }}>
-              <InfoCircleOutlined style={{ marginLeft: 10, color: '#595959' }} />
+              <InfoCircleOutlined 
+              style={{ marginLeft: 10, color: '#595959'}}
+              onPointerEnterCapture={() => {}}
+              onPointerLeaveCapture={() => {}}
+              />
+              
             </Tooltip>
           </h4>
           <TextArea
