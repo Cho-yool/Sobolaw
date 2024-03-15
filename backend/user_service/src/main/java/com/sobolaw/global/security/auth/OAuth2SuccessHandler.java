@@ -27,7 +27,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     ) throws IOException, ServletException {
 
         // accessToken, refreshToken 발급
-        String accessToken = tokenProvider.createAccessToken(authentication);
+        String accessToken = tokenProvider.generateAccessToken(authentication);
         tokenProvider.generateRefreshToken(authentication, accessToken);
 
         // 토큰 전달을 위한 redirect

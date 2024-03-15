@@ -37,11 +37,17 @@ public class OAuth2MemberService extends DefaultOAuth2UserService {
             e.printStackTrace();
         }
 
+        String userNameAttributeName = request.getClientRegistration().getProviderDetails()
+            .getUserInfoEndpoint().getUserNameAttributeName();
+        System.out.println("userNameAttributeName = " + userNameAttributeName);
+
         OAuth2UserInfoDTO oAuth2UserInfoDTO = OAuth2UserInfoDTO.of(oauthClientName, oAuth2UserAttributes);
+        System.out.println("oAuth2UserInfoDTO = " + oAuth2UserInfoDTO);
 
         Member member = getOrSave(oAuth2UserInfoDTO);
+        System.out.println("member = " + member);
 
-        return (OAuth2User) new CustomUserDetails(member);
+        return new CustomUserDetails(member, oAuth2UserAttributes, userNameAttributeName);
     }
 
     private Member getOrSave(OAuth2UserInfoDTO oAuth2UserInfo) {

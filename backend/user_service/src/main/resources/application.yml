@@ -20,7 +20,7 @@ spring:
       password: qlpoh4yX1A
     url: jdbc:mariadb://stg-yswa-kr-practice-db-master.mariadb.database.azure.com:3306/S10P22A604?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
 
-# social security
+  # social security
   security:
     oauth2:
       client:
@@ -67,7 +67,7 @@ spring:
     redis:
       host: localhost
       port: 6379
-#      open-in-view: false
+
 
 #logging
 logging:
@@ -97,5 +97,7 @@ eureka:
 # jwt
 jwt:
   secret-key: "123testKeyValue123456testKeyValue456789testKeyValue789123testKeyValue123456testKeyValue456789testKeyValue789123testKeyValue123456testKeyValue456789testKeyValue789"
-  expiration: "604800000" # 7일
-
+  access:
+    expiration: "604800000" # 7일
+  refresh:
+    expiration: "360000" # 1시간

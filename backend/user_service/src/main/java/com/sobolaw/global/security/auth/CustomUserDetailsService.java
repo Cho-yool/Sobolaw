@@ -33,7 +33,8 @@ public class CustomUserDetailsService implements UserDetailsService {
             .orElseThrow(() ->
                 new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
-        return new CustomUserDetails(member);
+//        return new CustomUserDetails(member);
+        return null;
     }
 
 }

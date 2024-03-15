@@ -3,39 +3,39 @@ package com.sobolaw.global.security.auth;
 import com.sobolaw.api.member.entity.Member;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 /**
  * User 정보(권한, 이름, 비밀번호 등)를 관리하는 구현체.
  */
-@Getter
-@RequiredArgsConstructor
-public class CustomUserDetails implements UserDetails {
+public record CustomUserDetails(Member member,
+                                Map<String, Object> attributes,
+                                String attributeKey)
+    implements OAuth2User, UserDetails {
 
-    private final Member member;
+    @Override
+    public String getName() {
+        return attributes.get(attributeKey).toString();
+    }
 
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        Collection<GrantedAuthority> collection = new ArrayList<>();
-//        collection.add(new SimpleGrantedAuthority(member.getRole().name()));
-//        return collection;
-//    }
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<String> roles = new ArrayList<>();
-        roles.add(member.getRole().name());
-
-        return roles.stream()
-            .map(SimpleGrantedAuthority::new)
-            .toList();
+        return Collections.singletonList(
+            new SimpleGrantedAuthority(member.getRole().name()));
     }
-
 
     @Override
     public String getPassword() {
@@ -44,26 +44,26 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return null;
+        return member.getName();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }
