@@ -19,6 +19,7 @@
 }
 
 .menu {
+  box-sizing: border-box;
   width: 25rem;
   height: 94vh;
   overflow: auto;
@@ -28,7 +29,8 @@
 }
 
 .contents {
-  width: 70vw;
+  box-sizing: border-box;
+  width: calc(100% - 27rem);
   height: 94vh;
   justify-content: center;
   overflow: auto;
@@ -51,6 +53,7 @@
   letter-spacing: 1px;
   line-height: 30px;
   background-color: white;
+  margin-bottom: 0.5rem;
 }
 
 .button-box {

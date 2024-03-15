@@ -2,7 +2,7 @@ import { useState } from "react";
 import { josa } from "josa";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
-import type { DatePickerProps } from "antd";
+import type { DatePickerProps, CheckboxProps } from "antd";
 import {
   Button,
   Input,
@@ -11,7 +11,9 @@ import {
   Cascader,
   Tooltip,
   Select,
-  // Checkbox,
+  Radio,
+  Checkbox,
+  Flex,
 } from "antd";
 import locale from "antd/es/date-picker/locale/ko_KR";
 import { postInsult } from "../../api/lawsuit";
@@ -20,6 +22,31 @@ import { options, initialInsultContent } from "../../types/LawsuitTypes";
 import style from "../../styles/papers/Insult.module.css";
 
 const { Option } = Select;
+
+interface CheckBoxProps {
+  boxList: string[];
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const ChecklistBox = ({ boxList, onChange }: CheckBoxProps) => {
+  const [renderBox, setRenderBox] = useState<string[]>([]);
+
+  const newLists = boxList.map((list) => {
+    return (
+      <Flex>
+        <input
+          type="checkbox"
+          id={list}
+          name={list}
+          onChange={(e) => onChange(e)}
+        />
+        <label htmlFor={list}>{list}</label>
+      </Flex>
+    );
+  });
+
+  return <Flex vertical>{newLists ? newLists : <p>없다</p>}</Flex>;
+};
 
 export default function LawsuitInsult() {
   const [insultContent, setInsultContent] =
@@ -64,25 +91,36 @@ export default function LawsuitInsult() {
   const [evidence, setEvidence] = useState("");
   const [submissionDate, setSubmissionDate] = useState("");
   const [policeStationTeam, setPoliceStationTeam] = useState("");
-  // 여기까지
 
-  // 서류에 들어갈 문장
+  // 예시 소장에 들어갈 문장 변환
   const [paperIDate, setPaperIDate] = useState("");
   const [paperITime, setPaperITime] = useState("");
   const [paperRPCount, setPaperRPCount] = useState("다수");
   const [paperWitness, setPaperWitness] = useState("의 ");
+  const [paperCircum, setPaperCircum] = useState("나를 특정할만한 상황을");
 
   // input 효과들
   const defaultValue = dayjs("2024-01-01");
+  const [showDefendant, setShowDefendant] = useState("모름");
   const [showWebDetailInput, setShowWebDetailInput] = useState(false);
   const [selectedOption, setSelectedOption] = useState("모름");
   const [showWitness1, setShowWitness1] = useState(false);
   const [showDuration, setShowDuration] = useState(false);
+
   const [showCircumInput1, setShowCircumInput1] = useState(false);
   const [showCircumInput2, setShowCircumInput2] = useState(false);
   const [showCircumInput3, setShowCircumInput3] = useState(false);
   const [showCircumInput4, setShowCircumInput4] = useState(false);
   const [showCircumInput5, setShowCircumInput5] = useState(false);
+
+  const [circum1, setCircum1] = useState("");
+  const [circum2, setCircum2] = useState("");
+  const [circum3, setCircum3] = useState("");
+  const [circum4, setCircum4] = useState("");
+  const [circum5, setCircum5] = useState("");
+  const [circums, setCircums] = useState<string[]>([]);
+
+  const [evidenceList, setEvidenceList] = useState<string[]>([]);
 
   const handleOptionChange = (value: string) => {
     setSelectedOption(value);
@@ -195,10 +233,64 @@ export default function LawsuitInsult() {
     }
   };
 
-  // // 해야됨해야됨해야됨해야됨!!!!!!!!!!!!!
-  // const onChange: CheckboxProps["onChange"] = (e) => {
-  //   console.log(`checked = ${e.target.checked}`);
-  // };
+  const onchangeSpecific1: CheckboxProps["onChange"] = (e) => {
+    setShowCircumInput1(e.target.checked);
+  };
+
+  const onchangeSpecific2: CheckboxProps["onChange"] = (e) => {
+    setShowCircumInput2(e.target.checked);
+  };
+
+  const onchangeSpecific3: CheckboxProps["onChange"] = (e) => {
+    setShowCircumInput3(e.target.checked);
+  };
+
+  const onchangeSpecific4: CheckboxProps["onChange"] = (e) => {
+    setShowCircumInput4(e.target.checked);
+  };
+
+  const onchangeSpecific5: CheckboxProps["onChange"] = (e) => {
+    setShowCircumInput5(e.target.checked);
+  };
+
+  const onchangeCircum1 = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCircum1(e.target.value);
+    setCircums([...circums, circum1]);
+  };
+
+  // 입력된 인풋 값을 기반으로 문장을 생성하는 함수
+  const generateSentence = (inputs: string[]): string => {
+    // 인풋이 없으면 빈 문자열 반환
+    if (inputs.length === 0) return "";
+
+    // 인풋이 하나일 때
+    if (inputs.length === 1) return `<${inputs[0]}>`;
+
+    // 인풋이 두 개일 때
+    if (inputs.length === 2) return `<${inputs[0]}, ${inputs[1]}>`;
+
+    // 인풋이 세 개 이상일 때
+    let sentence = `<${inputs[0]}, ${inputs[1]}`;
+
+    // 마지막 인풋은 "및"을 붙여줌
+    for (let i = 2; i < inputs.length; i++) {
+      sentence += `, ${inputs[i]}`;
+    }
+    sentence += " 및 " + inputs[inputs.length - 1] + ">";
+    return sentence;
+  };
+
+  const [checkedList, setCheckList] = useState<string[]>([]);
+  const boxList = [
+    "위 사건 대화내용이 기록된 스크린샷",
+    "위 사건 대화내용이 기록된 녹음파일",
+    "위 사건을 캡쳐하여 저장한 pdf파일",
+    "목격자의 진술서",
+    "자필 사과문, 카카오톡 대화내역 등",
+  ];
+  const onchangeEvidence = (e) => {
+    setCheckList(e.target.name);
+  };
 
   // 저장 제출 함수
   async function onSubmit(event: React.SyntheticEvent): Promise<void> {
@@ -250,6 +342,83 @@ export default function LawsuitInsult() {
   return (
     <div className={style["container"]}>
       <div className={style["menu"]}>
+        <div className={style["menu-mini"]}>
+          <div className={style["menu-title"]}>당사자</div>
+          <p>고소하는 사람</p>
+          <Input
+            placeholder="김싸피"
+            addonBefore="성명"
+            value={plaintiffName}
+            onChange={(e) => {
+              setPlaintiffName(e.target.value);
+            }}
+          />
+          <p>고소할 사람(상대방)</p>
+          <Radio.Group
+            value={showDefendant}
+            onChange={(e) => setShowDefendant(e.target.value)}
+          >
+            <Radio.Button value="알고있음">알고있음</Radio.Button>
+            <Radio.Button value="일부알고있음">일부알고있음</Radio.Button>
+            <Radio.Button value="모름">모름</Radio.Button>
+          </Radio.Group>
+          {showDefendant === "알고있음" && (
+            <>
+              <Input
+                placeholder="이름"
+                value={defendantName}
+                onChange={(e) => setDefendantName(e.target.value)}
+              />
+              <Input
+                placeholder="닉네임"
+                value={defendantNickname}
+                onChange={(e) => setDefendantNickname(e.target.value)}
+              />
+              <Input
+                placeholder="주소"
+                value={defendantAddress}
+                onChange={(e) => setDefendantAddress(e.target.value)}
+              />
+              <Input
+                placeholder="전화번호"
+                value={defendantPhoneNumber}
+                onChange={(e) => setDefendantPhoneNumber(e.target.value)}
+              />
+            </>
+          )}
+          {showDefendant === "일부알고있음" && (
+            <>
+              <Input
+                placeholder="이름"
+                value={defendantName}
+                onChange={(e) => setDefendantName(e.target.value)}
+              />
+              <Input
+                placeholder="닉네임"
+                value={defendantNickname}
+                onChange={(e) => setDefendantNickname(e.target.value)}
+              />
+              <Input
+                placeholder="주소"
+                value={defendantAddress}
+                onChange={(e) => setDefendantAddress(e.target.value)}
+              />
+              <Input
+                placeholder="전화번호"
+                value={defendantPhoneNumber}
+                onChange={(e) => setDefendantPhoneNumber(e.target.value)}
+              />
+            </>
+          )}
+          {showDefendant === "모름" && (
+            <Input
+              placeholder="닉네임"
+              value={defendantNickname}
+              onChange={(e) => setDefendantNickname(e.target.value)}
+            />
+          )}
+        </div>
+
         <div className={style["menu-mini"]}>
           <div className={style["menu-title"]}>사건경위</div>
           <Tooltip
@@ -403,16 +572,94 @@ export default function LawsuitInsult() {
 
         <div className={style["menu-mini"]}>
           <p className={style["menu-title"]}>
-            {" "}
             특정성: '피해자가 누구인지를 알 수 있는가'
           </p>
-          {/* <Checkbox value={"신상"} onChange={setShowCircumInput1(true)}>
-          신상정보를 포함한 닉네임
+          <Checkbox onChange={onchangeSpecific1}>
+            닉네임 외 피해자 특정 가능 내용
           </Checkbox>
-          <Checkbox onChange={}>증명사진이 있는 온라인 프로필</Checkbox>
-          <Checkbox onChange={}>얼굴이 공개된 방송</Checkbox>
-          <Checkbox onChange={}>고소인의 정보가 포함된 내용</Checkbox>
-        <Checkbox onChange={}>나를 특정할 만한 상황</Checkbox> */}
+          {showCircumInput1 && (
+            <Input
+              placeholder="신상정보를 포함한 닉네임"
+              value={circum1}
+              onChange={onchangeCircum1}
+            />
+          )}
+          <Checkbox onChange={onchangeSpecific2}>온라인 프로필</Checkbox>
+          {showCircumInput2 == true && (
+            <Input
+              placeholder="증명사진이 있는 온라인 프로필"
+              value={circum2}
+              onChange={(e) => {
+                setCircum2(e.target.value);
+              }}
+            />
+          )}
+          <Checkbox onChange={onchangeSpecific3}>
+            인터넷 스트리밍(방송)
+          </Checkbox>
+          {showCircumInput3 == true && (
+            <Input
+              placeholder="얼굴이 공개된 방송"
+              value={circum3}
+              onChange={(e) => {
+                setCircum3(e.target.value);
+              }}
+            />
+          )}
+          <Checkbox onChange={onchangeSpecific4}>가해자와의 대화과정</Checkbox>
+          {showCircumInput4 == true && (
+            <Input
+              placeholder="고소인의 정보가 포함된 대화과정"
+              value={circum4}
+              onChange={(e) => {
+                setCircum4(e.target.value);
+              }}
+            />
+          )}
+          <Checkbox onChange={onchangeSpecific5}>기타</Checkbox>
+          {showCircumInput5 == true && (
+            <Input
+              placeholder="오프라인 모임(정모) 등"
+              value={circum5}
+              onChange={(e) => {
+                setCircum5(e.target.value);
+              }}
+            />
+          )}
+        </div>
+
+        <div className={style["menu-mini"]}>
+          <p className={style["menu-title"]}>첨부할 증거</p>
+          <ChecklistBox onChange={onchangeEvidence} boxList={boxList} />
+        </div>
+
+        <div className={style["menu-mini"]}>
+          <div className={style["menu-title"]}>고소인(본인) 상세 정보</div>
+
+          <Input
+            value={plaintiffName}
+            onChange={(e) => setPlaintiffName(e.target.value)}
+          />
+          <Input
+            placeholder="주민등록번호"
+            value={plaintiffRRNumber}
+            onChange={(e) => setPlaintiffRRNumber(e.target.value)}
+          />
+          <Input
+            placeholder="닉네임"
+            value={plaintiffNickname}
+            onChange={(e) => setPlaintiffNickname(e.target.value)}
+          />
+          <Input
+            placeholder="주소"
+            value={plaintiffAddress}
+            onChange={(e) => setPlaintiffAddress(e.target.value)}
+          />
+          <Input
+            placeholder="전화번호"
+            value={plaintiffPhoneNumber}
+            onChange={(e) => setPlaintiffPhoneNumber(e.target.value)}
+          />
         </div>
       </div>
 
@@ -540,13 +787,11 @@ export default function LawsuitInsult() {
           <div className={style["pages"]}>
             <div>
               나. 이에 비추어 피고소인의 행위가 모욕죄의 구성요건인 특정성을
-              충족하는지 여부를 판단하여보면, (사건 당시 고소인의 인적사항이
-              신상정보를 포함한 닉네임, 증명사진이 있는 온라인 프로필, 얼굴이
-              공개된 방송 및 고소인의 정보가 포함된 내용(나를 특정할 만한
-              상황))을 통해 공개되어 당시 사건을 목격한 다른 이용자들이 고소인의
-              닉네임(ID)을 통하여 고소인을 현실에서 특정하여 인식할 수 있는
-              충분한 가능성이 있었던 상태였음이 인정된다할 것이므로, 피고소인의
-              모욕행위는 특정성 또한 충족하고 있습니다..
+              충족하는지 여부를 판단하여보면, {paperCircum} 통해 공개되어 당시
+              사건을 목격한 다른 이용자들이 고소인의 닉네임(ID)을 통하여
+              고소인을 현실에서 특정하여 인식할 수 있는 충분한 가능성이 있었던
+              상태였음이 인정된다할 것이므로, 피고소인의 모욕행위는 특정성 또한
+              충족하고 있습니다..
             </div>
 
             <p>4. 고소인의 피해내용</p>
