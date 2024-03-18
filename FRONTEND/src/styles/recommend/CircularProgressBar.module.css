@@ -1,0 +1,34 @@
+/* CircularProgressBar.module.css */
+.progressCircle {
+    transform: rotate(-90deg);
+    margin-right: 3%;
+  }
+  
+  .progressBar {
+    transition: stroke-dashoffset 0.1s ease-out;
+  }
+  
+  .progressText {
+    fill: #BF8438;
+    font-size: 0.9em; /* 폰트 크기 조정 */
+    font-weight: bold; /* 폰트 굵기 */
+    /* 텍스트의 회전 축을 SVG의 중심으로 설정 */
+    transform-origin: center center;
+    /* 텍스트를 중심축 기준으로 90도 회전 */
+    transform: rotate(90deg);
+  }
+  
+  /* 모바일 화면을 위한 미디어 쿼리 추가 */
+@media (max-width: 768px) {
+    .progressCircle {
+      margin-right: 5%; /* 모바일 화면에서 오른쪽 마진 조정 */
+      /* 원형 프로그레스 바의 크기를 줄이는 추가 스타일링이 필요할 수 있습니다. */
+      color: #f2b25f
+    }
+
+  
+    .progressText {
+      font-size: 0.7em; /* 모바일 화면에서 폰트 크기를 더 작게 조정 */
+      /* 필요한 경우 텍스트의 위치 조정을 위한 추가 스타일링 */
+    }
+  }

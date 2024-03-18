@@ -1,73 +1,122 @@
-/* RecommendResultList.module.css */
-.resultSection {
-  background-color: #ffffff;
-  padding: 20px;
-  margin-right: 20%;
-  margin-left: 10%;
+.resultListContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
 }
 
-.resultsHeader {
-  background-color: #f3e7c0;
+.resultItem {
+  width: 70%;
+  display: flex;
+  align-items: center;
   padding: 20px;
-  font-size: 24px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  margin-left: 5%;
+  margin-right: 5%;
+  background-color: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 0px;
+  position: relative;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.rankBox {
+  background-color: #644419; /* 색상은 원하는 색으로 조정하세요 */
+  padding: 10px 16px;
+  border-radius: 0px;
+  font-weight: bold;
+  text-align: center;
+  position: absolute;
+  left: -2%;
+  top: 50%;
+  transform: translateY(-50%); /* 수직 가운데 정렬 */
+  margin-right: 5%; /* 제목과의 간격 */
+  flex-shrink: 0; /* 순위 박스의 크기가 유지되도록 함 */
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  box-shadow: 0 5px 5px 0px rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  font-size: 20px;
   font-weight: bold;
 }
 
-.item {
-  background-color: #4caf50;
-  color: white;
-  margin: 30px auto;
-  padding: 20px;
-  border-radius: 8px;
-  width: 80%;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 3% 15%; /* 제목과 순위 박스와의 간격 */
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  transition: color 0.3s ease-in-out;
 }
 
-.itemTitle {
-  font-size: 1em;
-  margin-right: 15px;
-  white-space: nowrap;
+.title:hover {
+  color: #1890ff; /* 마우스를 올렸을 때 색상 변경 */
+}
+
+.content {
+  font-size: 16px;
+  color: #000000;
+  margin-top: 3%;
+  margin-bottom: 3%;
+  margin-left: 15%;
+  margin-right: 7%;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: white;
-  text-decoration: none; /* Removes default anchor tag underline */
-}
-
-.itemTitle:hover {
-  color: #EAA854;
-}
-
-.itemContent {
-  flex-grow: 1;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 0.9em;
-  line-height: 1.4;
-  height: 4.2em;
+  -webkit-line-clamp: 3; /* 최대 3줄까지 표시 */
+  line-height: 1.5;
 }
 
 .similarity {
-  min-width: 50px;
+  border-radius: 4px;
   text-align: center;
-  background-color: #fff;
-  border: 3px solid #4caf50;
-  border-radius: 50%;
-  color: #4caf50;
-  font-size: 0.8em;
-  font-weight: bold;
-  line-height: 40px;
-  height: 40px;
-  width: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: auto;
+  width: auto;
+  margin-right: 5%;
 }
 
-/* Media queries and other styles... */
+/* 기존 CSS 스타일 위에 추가 */
+@media (max-width: 768px) {
+  .resultListContainer {
+    margin-top: 10px;
+  }
+
+  .resultItem {
+    flex-direction: column;
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    padding: 15px;
+  }
+
+  .rankBox {
+    left: 50%;
+    top: -20px;
+    transform: translate(-50%, 0%); /* 좌우 가운데 정렬 및 상단으로 이동 */
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 16px;
+  }
+
+  .title {
+    margin: 20px 0 10px; /* 순위 박스와의 간격 조정 */
+    font-size: 20px;
+    text-align: center; /* 모바일 화면에서 제목을 중앙 정렬 */
+  }
+
+  .content {
+    margin: 0 5%; /* 좌우 마진 조정 */
+    font-size: 14px;
+  }
+
+  .similarity {
+    margin: 20px 0; /* 유사도 박스와 다른 내용 사이의 간격 조정 */
+    width: 60px; /* 유사도 박스 크기 조정 */
+    align-self: center; /* 유사도 박스를 중앙에 배치 */
+  }
+}
