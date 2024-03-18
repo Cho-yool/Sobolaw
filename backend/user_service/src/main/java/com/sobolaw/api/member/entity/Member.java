@@ -3,6 +3,7 @@ package com.sobolaw.api.member.entity;
 import com.sobolaw.api.lawsuit.entity.LawsuitDefamation;
 import com.sobolaw.api.lawsuit.entity.LawsuitFraud;
 import com.sobolaw.api.lawsuit.entity.LawsuitInsult;
+import com.sobolaw.api.member.entity.Type.RoleType;
 import com.sobolaw.global.common.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -34,8 +35,11 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String name; // 유저 이름
 
-    @Column
+    @Column(unique = true)
     private String email; // 이메일
+    
+    @Column
+    private RoleType role; // 관리자 여부
 
     @Column
     private LocalDate birthday; // 생일
@@ -69,6 +73,7 @@ public class Member extends BaseEntity {
         this.name = name;
         this.email = email;
         this.birthday = birthday;
+        this.role = RoleType.ROLE_USER;
     }
 
     /**
