@@ -11,7 +11,7 @@ const CheckBox = ({ boxList, onChange }: CheckBoxProps) => {
 
   const newLists = boxList.map((list) => {
     return (
-      <Flex>
+      <Flex key={list} gap={5}>
         <input
           type="checkbox"
           id={list}
@@ -23,7 +23,11 @@ const CheckBox = ({ boxList, onChange }: CheckBoxProps) => {
     );
   });
 
-  return <Flex vertical>{newLists ? newLists : <p>없다</p>}</Flex>;
+  return (
+    <Flex vertical gap={10}>
+      {newLists ? newLists : <p>없다</p>}
+    </Flex>
+  );
 };
 
 export default CheckBox;

@@ -1,21 +1,28 @@
 .fraud-menu {
   width: 400px;
-  background-color: white;
+  background-color: rgb(221, 221, 221);
   height: 100%;
+  overflow-y: scroll;
+}
+
+.fraud-menu::-webkit-scrollbar {
+  display: none;
+}
+
+.fraud-menu__first,
+.fraud-menu__second {
+  width: 90%;
+  background-color: rgba(128, 128, 128, 0.208);
+  padding-bottom: 1rem;
+  margin: 1rem 0;
 }
 
 .fraud-menu__title {
-  border: 1px solid black;
-  background-color: #9e9e9e44;
-  width: 90%;
+  background-color: #ffffff;
+  width: 100%;
   padding: 1rem 0.5rem;
   font-weight: bold;
-}
-
-.fraud-menu__first {
-  width: 90%;
-  background-color: transparent;
-  padding: 1rem;
+  box-sizing: border-box;
 }
 
 .fraud-menu-box {
@@ -23,11 +30,11 @@
   padding: 1rem 0.5rem;
 }
 
-.fraud-menu-input {
-  margin-bottom: 1rem;
-}
-
 .fraud-menu-input__title {
   margin-bottom: 0.8rem;
   font-size: 1rem;
+}
+
+.fraud-menu-checkbox {
+  width: 90%;
 }
