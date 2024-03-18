@@ -1,0 +1,73 @@
+/* RecommendResultList.module.css */
+.resultSection {
+  background-color: #ffffff;
+  padding: 20px;
+  margin-right: 20%;
+  margin-left: 10%;
+}
+
+.resultsHeader {
+  background-color: #f3e7c0;
+  padding: 20px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.item {
+  background-color: #4caf50;
+  color: white;
+  margin: 30px auto;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.itemTitle {
+  font-size: 1em;
+  margin-right: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: white;
+  text-decoration: none; /* Removes default anchor tag underline */
+}
+
+.itemTitle:hover {
+  color: #EAA854;
+}
+
+.itemContent {
+  flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.9em;
+  line-height: 1.4;
+  height: 4.2em;
+}
+
+.similarity {
+  min-width: 50px;
+  text-align: center;
+  background-color: #fff;
+  border: 3px solid #4caf50;
+  border-radius: 50%;
+  color: #4caf50;
+  font-size: 0.8em;
+  font-weight: bold;
+  line-height: 40px;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Media queries and other styles... */

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Select, Input, Button, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import style from '../../styles/recommend/RecommendSearch.module.css';
 import LoadingImage from './LoadingImage';
 
@@ -16,6 +17,7 @@ const RecommendSearch: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [isLoading, setIsLoading] = useState(false); // 새로운 상태로 로딩 상태를 추가합니다.
   const [progress, setProgress] = useState(0); // 새로운 상태로 로딩 진행률을 추가합니다.
+  const navigate = useNavigate();
 
   const handleCaseTypeChange = (value: string) => {
     setSelectedCaseType(value);
@@ -113,6 +115,7 @@ const RecommendSearch: React.FC = () => {
     }];
     console.log('Submitting', submissionData);
     simulateProgress();
+    navigate('/recommend-results', { state: { searchResults: submissionData, showResults: true } });
     // 여기에 제출 로직을 추가하세요, 예를 들어:
     // fetch('/api/submit', { method: 'POST', body: JSON.stringify(submissionData), headers: { 'Content-Type': 'application/json' } })
   }
