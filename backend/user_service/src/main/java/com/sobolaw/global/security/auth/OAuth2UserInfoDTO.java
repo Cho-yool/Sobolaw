@@ -6,10 +6,12 @@ import com.sobolaw.api.member.exception.MemberException;
 import java.time.LocalDate;
 import java.util.Map;
 import lombok.Builder;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 소셜 로그인 입력 DTO.
  */
+@Slf4j
 @Builder
 public record OAuth2UserInfoDTO(String name, String email, LocalDate birthday) {
 
@@ -24,10 +26,10 @@ public record OAuth2UserInfoDTO(String name, String email, LocalDate birthday) {
     }
 
     private static OAuth2UserInfoDTO ofNaver(Map<String, Object> attributes) {
-        System.out.println("naver");
-        System.out.println("attributes = " + attributes);
+        log.info("naver");
+        log.info("attributes = " + attributes);
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
-        System.out.println("response = " + response);
+        log.info("response = " + response);
         LocalDate birthday = LocalDate.parse(
             response.get("birthyear") + "-" + response.get("birthday"));
         return OAuth2UserInfoDTO.builder()
@@ -38,12 +40,12 @@ public record OAuth2UserInfoDTO(String name, String email, LocalDate birthday) {
     }
 
     private static OAuth2UserInfoDTO ofKakao(Map<String, Object> attributes) {
-        System.out.println("kakao");
-        System.out.println("attributes = " + attributes);
+        log.info("kakao");
+        log.info("attributes = " + attributes);
         Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
-        System.out.println("account = " + account);
+        log.info("account = " + account);
         Map<String, Object> profile = (Map<String, Object>) account.get("profile");
-        System.out.println("profile = " + profile);
+        log.info("profile = " + profile);
 
         return OAuth2UserInfoDTO.builder()
             .name((String) profile.get("nickname"))

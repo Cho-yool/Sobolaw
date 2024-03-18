@@ -7,6 +7,7 @@ import com.sobolaw.global.security.auth.OAuth2UserInfoDTO;
 import java.time.LocalDate;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -14,6 +15,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OAuth2MemberService extends DefaultOAuth2UserService {
@@ -25,13 +27,14 @@ public class OAuth2MemberService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest request) throws OAuth2AuthenticationException {
 
         OAuth2User oAuth2User = super.loadUser(request);
-
+        log.info("oAuth2User = " + oAuth2User);
         Map<String, Object> oAuth2UserAttributes = oAuth2User.getAttributes();
+        log.info("oAuth2UserAttributes = " + oAuth2UserAttributes);
 
         String oauthClientName = request.getClientRegistration().getClientName();
 
         try {
-            System.out.println(" oAuth2User = " + new ObjectMapper().writeValueAsString(oAuth2User.getAttributes()));
+            log.info(" oAuth2User = " + new ObjectMapper().writeValueAsString(oAuth2User.getAttributes()));
         } catch (Exception e) {
 //            throw new RuntimeException(e);
             e.printStackTrace();
@@ -39,13 +42,13 @@ public class OAuth2MemberService extends DefaultOAuth2UserService {
 
         String userNameAttributeName = request.getClientRegistration().getProviderDetails()
             .getUserInfoEndpoint().getUserNameAttributeName();
-        System.out.println("userNameAttributeName = " + userNameAttributeName);
+        log.info ("userNameAttributeName = " + userNameAttributeName);
 
         OAuth2UserInfoDTO oAuth2UserInfoDTO = OAuth2UserInfoDTO.of(oauthClientName, oAuth2UserAttributes);
-        System.out.println("oAuth2UserInfoDTO = " + oAuth2UserInfoDTO);
+        log.info("oAuth2UserInfoDTO = " + oAuth2UserInfoDTO);
 
         Member member = getOrSave(oAuth2UserInfoDTO);
-        System.out.println("member = " + member);
+        log.info("member = " + member);
 
         return new CustomUserDetails(member, oAuth2UserAttributes, userNameAttributeName);
     }
