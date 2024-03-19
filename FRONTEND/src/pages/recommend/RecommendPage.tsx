@@ -4,6 +4,7 @@ import { QuestionCircleOutlined } from '@ant-design/icons';
 import RecommendCards from '../../components/recommend/RecommendCard';
 import RecommendSearch from '../../components/recommend/RecommendSearch';
 import style from '../../styles/recommend/RecommendPage.module.css';
+import backgroundImage from '/images/recommend-background.png';
 
 const { Content } = Layout;
 
@@ -67,7 +68,7 @@ const RecommendPage: React.FC = () => {
 
   return (
     <div className={style.recommendContainer}>
-      <Layout className={style.recommendBackground}>
+      <Layout className={style.recommendBackground} style={{ backgroundImage: `url(${backgroundImage})`}}>
         <Content style={{ padding: '0 50px', marginTop: 64 }}>
           <Row justify="center">
             <div className={style.titleContainer}>
