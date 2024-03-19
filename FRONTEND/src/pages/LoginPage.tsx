@@ -1,10 +1,66 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../redux/store/store";
+import { saveAccessToken } from "../redux/reducers/user/userSlice";
 import backImg from "/images/loginBg.jpg";
-import LoginBtn from "/images/KAKAO_LOGIN.png";
+import LoginBtnKaKao from "/images/KAKAO_LOGIN.png";
+import LoginBtnNaver from "/images/NAVER_LOGIN.png";
+
+// // 토큰을 통해 회원가입이 되어있는지 / 아닌지 판단하고 load해오는 함수
+// const loadUserInfo = () => {
+//   // 토큰이 있는지 확인하고, 서버에 user info를 확인하자
+//   if (accessToken) {
+//     axios
+//       .get("링크링크링크", {
+//         headers: { Authorization: `Bearer ${accessToken}` },
+//       })
+//       .then((res) => {
+//         // 불러온 유저정보에서 job이 null이라면 -> 추가 정보 입력이 필요함
+//         let tmpUser = res.data.result;
+//         // 회원가입
+//         if (tmpUser.job == null) {
+//           dispatch(login());
+//           dispatch(saveUser(tmpUser));
+//           navigate("/additionalinfo");
+//         } else {
+//           // console.log(res.data)
+//           dispatch(saveUser(tmpUser));
+//           dispatch(login());
+//         }
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
+//   }
+// };
 
 function LoginPage() {
-  const CLIENT_ID = `${import.meta.env.VITE_KAKAO_REST_API_KEY}`;
-  const REDIRECT_URI = `${import.meta.env.VITE_KAKAO_REDIRECT_UR}`;
-  const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+  const navigate = useNavigate();
+  const dispatch: AppDispatch = useDispatch();
+  const accessToken = useSelector((state: RootState) => state.user.accessToken);
+  const kakaoURL = `https://j10a604.p.ssafy.io/api/user-service/oauth2/authorization/kakao`;
+  const naverURL = `https://j10a604.p.ssafy.io/api/user-service/oauth2/authorization/naver`;
+
+  const kakaoLogin = function () {
+    // 로그인버튼을 누르면 카카오 로그인 창으로 간다
+    window.location.href = kakaoURL;
+  };
+
+  // 토큰 가져오는 useEffect
+  useEffect(() => {
+    // 현재 url에서 토큰을 가져와서 저장하자
+    const token = new URL(window.location.href).searchParams.get("accessToken");
+    // const token = new URL(window.location.href).searchParams.get("Authorization");
+    if (token) {
+      // 세션에 accessToken을 저장해주자
+      dispatch(saveAccessToken(token));
+    }
+    if (accessToken) {
+      // loadUserInfo();
+      navigate("/");
+    }
+  }, [accessToken]);
 
   return (
     <div
@@ -27,8 +83,13 @@ function LoginPage() {
         <p>소보로와 함께</p>
       </div>
       <img
-        src={LoginBtn}
-        onClick={() => (window.location.href = kakaoURL)}
+        src={LoginBtnKaKao}
+        onClick={kakaoLogin}
+        style={{ cursor: "pointer" }}
+      />
+      <img
+        src={LoginBtnNaver}
+        onClick={() => (window.location.href = naverURL)}
         style={{ cursor: "pointer" }}
       />
     </div>
@@ -82,25 +143,3 @@ export default LoginPage;
 //     )
 // }
 // export default KakaoCallback;
-
-// // 카카오 로그인
-// const kakaoLogin = function () {
-//   let temp = localStorage.getItem('token')
-
-//   // 로그인버튼을 누르면 카카오 로그인 창으로 간다
-//   window.location.href = 'https://i10a810.p.ssafy.io/login/oauth2/authorization/kakao';
-// }
-
-// // 토큰 가져오는 useEffect
-// useEffect(() => {
-//   // 현재 url에서 토큰을 가져와서 저장하자
-//   let token = new URL(window.location.href).searchParams.get('Authorization')
-//   if (token) {
-//       // 세션에 accessToken을 저장해주자
-//       dispatch(saveAccessToken(token))
-//   }
-//   if (accessToken) {
-//       loadUserInfo()
-//   }
-
-// }, [accessToken])
