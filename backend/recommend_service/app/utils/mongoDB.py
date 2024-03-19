@@ -40,6 +40,39 @@ def disconnect():
 
 def find_keywords(arr):
     global collection
+    # pipeline = [
+    #     {
+    #         "$match": {
+    #             "keyword": {
+    #                 "$elemMatch": {
+    #                     "word": {"$in": arr}
+    #                 }
+    #             }
+    #         }
+    #     },
+    #     {
+    #         "$unwind": "$keyword"
+    #     },
+    #     {
+    #         "$match": {
+    #             "keyword.word": {"$in": arr}
+    #         }
+    #     },
+    #     {
+    #         "$group": {
+    #             "_id": "$_id",
+    #             "total": {"$sum": "$keyword.value"}
+    #         }
+    #     },
+    #     {
+    #         "$sort": {
+    #             "total": -1  # 'total' 필드를 기준으로 내림차순 정렬
+    #         }
+    #     },
+    #     {
+    #         "$limit": 10  # 상위 10개의 결과만 반환
+    #     }
+    # ]
     pipeline = [
         {
             "$match": {
@@ -65,12 +98,14 @@ def find_keywords(arr):
             }
         },
         {
-            "$sort": {
-                "total": -1  # 'total' 필드를 기준으로 내림차순 정렬
+            "$match": {
+                "total": {"$gte": 0.5}  # 'total' 필드의 값이 0.5 이상인 문서만 필터링
             }
         },
         {
-            "$limit": 10  # 상위 10개의 결과만 반환
+            "$sort": {
+                "total": -1  # 'total' 필드를 기준으로 내림차순 정렬
+            }
         }
     ]
     results = collection.aggregate(pipeline)

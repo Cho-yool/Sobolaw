@@ -29,10 +29,10 @@ async def recommend_precedent(situation: Situation):
     for item in list:
         id = item['_id']
         data = await http.get_precedent(id)
+        data['similarity'] = item['total']*70
         precedents.append(data)
         
     return {
-            "winRate": 31,
             "precedents":precedents
         }
 
