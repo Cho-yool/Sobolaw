@@ -212,7 +212,12 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
         <Flex className={style["fraud-menu-box"]} vertical>
           <Flex className={style["fraud-menu-input"]} vertical>
             <p className={style["fraud-menu-input__title"]}>피고소인(상대방)</p>
-            <Input placeholder="성명" size="large" type="text" />
+            <Input
+              placeholder="성명"
+              size="large"
+              type="text"
+              onChange={(e) => fraudDetails.setDefendantName(e.target.value)}
+            />
           </Flex>
         </Flex>
         <Flex className={style["fraud-menu-checkbox"]} vertical gap={15}>

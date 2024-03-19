@@ -40,21 +40,38 @@ const FraudA4 = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
                 ) : null}
               </div>
             </div>
+            <br />
             <div>
               <div>
-                <p>피고(피고소인) 이름:</p>
-                <p>주소:</p>
-                <p>전화번호:</p>
+                {fraudDetails.defendantName ? (
+                  <p>피고(피고소인) 이름: {fraudDetails.defendantName}</p>
+                ) : null}
+
+                {fraudDetails.defendantMainAddress ||
+                fraudDetails.defendantSubAddress ? (
+                  <p>
+                    주소:{" "}
+                    {fraudDetails.defendantMainAddress +
+                      fraudDetails.defendantSubAddress}
+                  </p>
+                ) : null}
+                {fraudDetails.defendantPhoneNumber ? (
+                  <p>전화번호: {fraudDetails.defendantPhoneNumber}</p>
+                ) : null}
               </div>
             </div>
-            <div className={style["title"]}>고소취지</div>
-            <div>
-              <p>
-                위 사건에 관하여 본 고소인은 아래와 같은 이유로 피고소인을 형법
-                제347조 제1항의 사기죄로 고소하오니, 수사하여 엄히 처벌하여
-                주시기 바랍니다.
-              </p>
-            </div>
+            {fraudDetails.plaintiffName ? (
+              <>
+                <div className={style["title"]}>고소취지</div>
+                <div>
+                  <p>
+                    위 사건에 관하여 본 고소인은 아래와 같은 이유로 피고소인을
+                    형법 제347조 제1항의 사기죄로 고소하오니, 수사하여 엄히
+                    처벌하여 주시기 바랍니다.
+                  </p>
+                </div>
+              </>
+            ) : null}
             <div className={style["title"]}>범죄사실</div>
             <div>
               <p>
