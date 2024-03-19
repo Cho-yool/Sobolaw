@@ -4,7 +4,7 @@ import LawsuitTab from "../../components/lawsuit/lawsuitTab";
 import FraudA4 from "../../components/lawsuit/fraudA4";
 import FraudMenu from "../../components/lawsuit/fraudMenu";
 import { useState } from "react";
-import { FraudDetails } from "../../types/DataTypes";
+import { FraudDetails, TimeContent } from "../../types/DataTypes";
 
 export default function FraudPage() {
   const [title, setTitle] = useState<string>(""); // 제목
@@ -25,21 +25,17 @@ export default function FraudPage() {
   const [defendantMainAddress, setDefendantMainAddress] = useState<string>(""); // 피고소인 주소
   const [defendantSubAddress, setDefendantSubAddress] = useState<string>(""); // 피고소인 상세주소
   const [defendantPhoneNumber, setDefendantPhoneNumber] = useState<string>(""); // 피고소인 전화번호
-
-  const [incidentDate, setIncidentDate] = useState("");
-  const [incidentTime, setIncidentTime] = useState({
+  const [incidentDate, setIncidentDate] = useState<string>("");
+  const [incidentTime, setIncidentTime] = useState<TimeContent>({
     hour: 0,
     minute: 0,
     second: 0,
     nano: 0,
   });
-  const [paperIDate, setPaperIDate] = useState("");
-  const [paperITime, setPaperITime] = useState("");
+  const [paperIDate, setPaperIDate] = useState<string>("");
+  const [paperITime, setPaperITime] = useState<string>("");
   const [tradedItem, setTradedItem] = useState<string>(""); // 물건
   const [tradeSite, setTradeSite] = useState<number>(); // 사이트명
-  const [contactDate, setContactDate] = useState<string>(""); // 연락 일자
-  const [contactTime, setContactTime] = useState<object>({}); // 연락 시간
-
   const [contact, setContact] = useState<string[]>([]); // 연락방법
   const [disposalMethod, setDisposalMethod] = useState<number>(); // 처분방법
   const [bankName, setBankName] = useState<string>(""); // 은행 이름
@@ -80,14 +76,18 @@ export default function FraudPage() {
     setDefendantSubAddress: setDefendantSubAddress,
     defendantPhoneNumber: defendantPhoneNumber,
     setDefendantPhoneNumber: setDefendantPhoneNumber,
+    incidentDate: incidentDate,
+    setIncidentDate: setIncidentDate,
+    incidentTime: incidentTime,
+    setIncidentTime: setIncidentTime,
+    paperIDate: paperIDate,
+    setPaperIDate: setPaperIDate,
+    paperITime: paperITime,
+    setPaperITime: setPaperITime,
     tradedItem: tradedItem,
     setTradedItem: setTradedItem,
     tradeSite: tradeSite,
     setTradeSite: setTradeSite,
-    contactDate: contactDate,
-    setContactDate: setContactDate,
-    contactTime: contactTime,
-    setContactTime: setContactTime,
     contact: contact,
     setContact: setContact,
     disposalMethod: disposalMethod,

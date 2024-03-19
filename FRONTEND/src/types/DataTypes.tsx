@@ -170,6 +170,14 @@ export type InsultForm = {
   submissionDate: string;
   policeStationTeam: string;
 };
+
+export interface TimeContent {
+  hour: number;
+  minute: number;
+  second: number;
+  nano: number;
+}
+
 export interface FraudDetails {
   title: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
@@ -201,14 +209,18 @@ export interface FraudDetails {
   setDefendantSubAddress: React.Dispatch<React.SetStateAction<string>>;
   defendantPhoneNumber: string;
   setDefendantPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
+  incidentDate: string;
+  setIncidentDate: React.Dispatch<React.SetStateAction<string>>;
+  incidentTime: TimeContent
+  setIncidentTime: React.Dispatch<React.SetStateAction<TimeContent>>;
+  paperIDate: string
+  setPaperIDate: React.Dispatch<React.SetStateAction<string>>;
+  paperITime: string
+  setPaperITime: React.Dispatch<React.SetStateAction<string>>;
   tradedItem: string;
   setTradedItem: React.Dispatch<React.SetStateAction<string>>;
   tradeSite: number | undefined;
   setTradeSite: React.Dispatch<React.SetStateAction<number | undefined>>;
-  contactDate: string;
-  setContactDate: React.Dispatch<React.SetStateAction<string>>;
-  contactTime: Object;
-  setContactTime: React.Dispatch<React.SetStateAction<object>>;
   contact: string[];
   setContact: React.Dispatch<React.SetStateAction<string[]>>;
   disposalMethod: number | undefined;

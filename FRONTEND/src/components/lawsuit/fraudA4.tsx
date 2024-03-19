@@ -19,7 +19,7 @@ const FraudA4 = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
             <div>
               <div>
                 {fraudDetails.plaintiffName ? (
-                  <p>원고(고소인) 성명: {fraudDetails.plaintiffName} </p>
+                  <p>원고(고소인) 성명 : {fraudDetails.plaintiffName} </p>
                 ) : null}
                 {fraudDetails.plaintiffResidentRegistrationNumber ? (
                   <p>
@@ -30,13 +30,13 @@ const FraudA4 = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
                 {fraudDetails.plaintiffMainAddress ||
                 fraudDetails.plaintiffSubAddress ? (
                   <p>
-                    주소:{" "}
+                    주소 :{" "}
                     {fraudDetails.plaintiffMainAddress +
                       fraudDetails.plaintiffSubAddress}
                   </p>
                 ) : null}
                 {fraudDetails.plaintiffPhoneNumber ? (
-                  <p>전화번호: {fraudDetails.plaintiffPhoneNumber}</p>
+                  <p>전화번호 : {fraudDetails.plaintiffPhoneNumber}</p>
                 ) : null}
               </div>
             </div>
@@ -44,19 +44,19 @@ const FraudA4 = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
             <div>
               <div>
                 {fraudDetails.defendantName ? (
-                  <p>피고(피고소인) 이름: {fraudDetails.defendantName}</p>
+                  <p>피고(피고소인) 이름 : {fraudDetails.defendantName}</p>
                 ) : null}
 
                 {fraudDetails.defendantMainAddress ||
                 fraudDetails.defendantSubAddress ? (
                   <p>
-                    주소:{" "}
+                    주소 :{" "}
                     {fraudDetails.defendantMainAddress +
                       fraudDetails.defendantSubAddress}
                   </p>
                 ) : null}
                 {fraudDetails.defendantPhoneNumber ? (
-                  <p>전화번호: {fraudDetails.defendantPhoneNumber}</p>
+                  <p>전화번호 : {fraudDetails.defendantPhoneNumber}</p>
                 ) : null}
               </div>
             </div>
@@ -72,11 +72,14 @@ const FraudA4 = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
                 </div>
               </>
             ) : null}
+            {
+              fraudDetails.tradedItem || fraudDetails.paperIDate || fraudDetails.paperITime ?
+              <>
             <div className={style["title"]}>범죄사실</div>
             <div>
               <p>
-                1. 고소인과 피고소인은 (연락날짜) (연락시간) 중고거래 사이트인
-                (중고거래 사이트명)에서, (거래 물건) (이하 '본 중고거래
+                1. 고소인과 피고소인은 {fraudDetails.paperIDate} {fraudDetails.paperITime} 중고거래 사이트인
+                (중고거래 사이트명)에서, {fraudDetails.tradedItem} (이하 '본 중고거래
                 대상물')를 판매한다는 글을 보고 연락해온 고소인에게 정상적인 본
                 중고거래 대상물을 판매하겠다고 아래와 같이 거짓말을 하였습니다.
               </p>
@@ -91,6 +94,9 @@ const FraudA4 = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
                 피고소인의 계좌로 이체받았습니다.
               </p>
             </div>
+            </>
+              : null
+            }
           </div>
           <div className={style["pages"]}>
             <div className={style["title"]}>고소이유</div>

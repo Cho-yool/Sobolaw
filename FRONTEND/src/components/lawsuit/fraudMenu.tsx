@@ -1,25 +1,16 @@
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
 import locale from "antd/es/date-picker/locale/ko_KR";
-import { Flex, Input, DatePicker, Tooltip, Radio, Space } from "antd";
+import { Flex, Input, DatePicker, Tooltip, Radio  } from "antd";
+import type { DatePickerProps } from "antd";
 import style from "../../styles/papers/FraudMenu.module.css";
 import CheckBox from "../common/CheckBox";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FraudDetails } from "../../types/DataTypes";
+
 
 const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
   const defaultValue = dayjs("2024-01-01");
-  console.log(fraudDetails);
-  const [productName, setProductName] = useState<string>(""); // 상품 명
-  const [incidentDate, setIncidentDate] = useState("");
-  const [incidentTime, setIncidentTime] = useState({
-    hour: 0,
-    minute: 0,
-    second: 0,
-    nano: 0,
-  });
-  const [paperIDate, setPaperIDate] = useState("");
-  const [paperITime, setPaperITime] = useState("");
   const respondentCheck = ["주소를 알고있습니다.", "전화번호를 알고있습니다."];
   const contactMethod = [
     "전화통화",
@@ -100,36 +91,36 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
       );
     }
   };
-
-  // const onChangeDate: DatePickerProps["onChange"] = (_, dateStr) => {
-  //   // dateStr이 string 타입인지 확인합니다.
-  //   if (typeof dateStr === "string") {
-  //     // dateStr을 공백을 기준으로 분리하여 날짜 부분과 시간 부분을 구합니다.
-  //     const [datePart, timePart] = dateStr.split(" ");
-  //     // incidentDate 상태 변수에 날짜 부분을 할당합니다.
-  //     setIncidentDate(datePart);
-  //     // 시간 부분을 콜론을 기준으로 분리하여 각 시간 요소를 구합니다.
-  //     const [hourStr, minuteStr, secondStr] = timePart.split(":");
-  //     const hour = parseInt(hourStr, 10);
-  //     const minute = parseInt(minuteStr, 10);
-  //     const second = parseInt(secondStr, 10);
-  //     // incidentTime 상태 변수에 시간 요소를 할당합니다.
-  //     setIncidentTime({ hour, minute, second, nano: 0 });
-  //     // 고소장에 파싱될 용도의 날짜/시간도 할당합니다
-  //     // 용도에 맞게 날짜 형식을 변경합니다.
-  //     const modifiedDatePart = datePart.replace(/-/g, ".");
-  //     // 용도에 맞게 시간 형식을 변경합니다.
-  //     if (minuteStr == "00") {
-  //       const modifiedTimePart = `${hourStr}시 경`;
-  //       setPaperITime(modifiedTimePart);
-  //     } else {
-  //       const modifiedTimePart = `${hourStr}시 ${minuteStr}분 경`;
-  //       setPaperITime(modifiedTimePart);
-  //     }
-  //     // 변경된 날짜와 시간을 상태 변수에 할당합니다.
-  //     setPaperIDate(modifiedDatePart);
-  //   }
-  // };
+  const onChangeDate: DatePickerProps["onChange"] = (_, dateStr) => {
+    // dateStr이 string 타입인지 확인합니다.
+    console.log(dateStr)
+    if (typeof dateStr === "string" && dateStr.trim() !== "") {
+      // dateStr을 공백을 기준으로 분리하여 날짜 부분과 시간 부분을 구합니다.
+      const [datePart, timePart] = dateStr.split(" ");
+      // incidentDate 상태 변수에 날짜 부분을 할당합니다.
+      fraudDetails.setIncidentDate(datePart);
+      // 시간 부분을 콜론을 기준으로 분리하여 각 시간 요소를 구합니다.
+      const [hourStr, minuteStr, secondStr] = timePart.split(":");
+      const hour = parseInt(hourStr, 10);
+      const minute = parseInt(minuteStr, 10);
+      const second = parseInt(secondStr, 10);
+      // incidentTime 상태 변수에 시간 요소를 할당합니다.
+      fraudDetails.setIncidentTime({ hour, minute, second, nano: 0 });
+      // 고소장에 파싱될 용도의 날짜/시간도 할당합니다
+      // 용도에 맞게 날짜 형식을 변경합니다.
+      const modifiedDatePart = datePart.replace(/-/g, ".");
+      // 용도에 맞게 시간 형식을 변경합니다.
+      if (minuteStr == "00") {
+        const modifiedTimePart = `${hourStr}시 경`;
+        fraudDetails.setPaperITime(modifiedTimePart);
+      } else {
+        const modifiedTimePart = `${hourStr}시 ${minuteStr}분 경`;
+        fraudDetails.setPaperITime(modifiedTimePart);
+      }
+      // 변경된 날짜와 시간을 상태 변수에 할당합니다.
+      fraudDetails.setPaperIDate(modifiedDatePart);
+    }
+  };
   useEffect(() => {
     console.log(fraudDetails);
   }, [fraudDetails]);
@@ -296,20 +287,11 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
                 defaultValue={defaultValue}
                 locale={locale}
                 size="large"
+                showTime
+                onChange={onChangeDate}
+                style={{ width : "100%"}}
               />
             </Tooltip>
-          </Flex>
-          <Flex vertical style={{ width: "100%" }}>
-            <p className={style["fraud-menu-input__title"]}>연락 일시</p>
-            <Input
-              placeholder="오전 10시 경"
-              size="large"
-              type="text"
-              value={fraudDetails.defendantSubAddress}
-              onChange={(e) =>
-                fraudDetails.setDefendantSubAddress(e.target.value)
-              }
-            />
           </Flex>
         </Flex>
         <Flex className={style["fraud-menu-checkbox"]} gap={15}>
