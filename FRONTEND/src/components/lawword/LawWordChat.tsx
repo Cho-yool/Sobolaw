@@ -21,9 +21,19 @@ const LawWordChat = () => {
       <LawWordChatCard key={keyCounter} question={inputText} />
     );
     const newChatList = [...chatList, newChatItem];
-    setChatList(newChatList);
     setInputText("");
+    setChatList(newChatList);
     setKeyCounter((prevCounter) => prevCounter + 1);
+  };
+
+  const enterHandler = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.code === "Enter" || e.code === "NumpadEnter") {
+      e.preventDefault();
+      if (e.nativeEvent.isComposing) {
+        return;
+      }
+      textHandler();
+    }
   };
 
   useEffect(() => {
@@ -53,6 +63,7 @@ const LawWordChat = () => {
           rows={1}
           className={style["chat-body__input__area"]}
           onChange={(e) => setInputText(e.target.value)}
+          onKeyDown={enterHandler}
         />
         <div className={style["chat-body__input__image"]} onClick={textHandler}>
           <img src={SEND} alt="" />

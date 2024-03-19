@@ -17,8 +17,8 @@ export default function Mypaper() {
       setLawsuitList(response);
     };
     fetchData();
+    console.log(lawsuitList);
   }, []);
-
   // useEffect(() => {
   //   getLawsuitList(1)
   //     .then((res) => {

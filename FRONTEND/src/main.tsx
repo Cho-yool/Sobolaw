@@ -15,7 +15,7 @@ const theme = {
   token: {
     fontFamily: "Orbit-Regular",
     Tabs: {
-      itemColor: "#bbbbbb",
+      itemColor: "#aaaaaa",
       itemHoverColor: "#EAA854",
       itemSelectedColor: "#EAA854",
       inkBarColor: "#EAA854",
@@ -25,11 +25,12 @@ const theme = {
     },
   },
   components: {
-    Radio: {
-      buttonColor: "#BF8438",
+    Switch: {
       colorPrimary: "#BF8438",
-      buttonSolidCheckedHoverBg: "#EAA854",
       algorithm: true,
+      handleSize: 25,
+      trackHeight: 29,
+      trackMinWidth: 60,
     },
     Button: {
       colorPrimary: "#BF8438",
