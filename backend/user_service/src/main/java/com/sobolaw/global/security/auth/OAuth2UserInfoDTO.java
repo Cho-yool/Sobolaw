@@ -9,7 +9,7 @@ import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 소셜 로그인 입력 DTO.
+ * 소셜 로그인 받은 입력 처리 DTO.
  */
 @Slf4j
 @Builder

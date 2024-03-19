@@ -8,6 +8,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+/**
+ * 토큰 예외처리 필터.
+ */
 public class JwtExceptionFilter extends OncePerRequestFilter {
 
     @Override

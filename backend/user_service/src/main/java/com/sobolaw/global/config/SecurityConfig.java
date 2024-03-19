@@ -62,12 +62,14 @@ public class SecurityConfig {
             )
 
             .authorizeHttpRequests(request -> request
-                    .requestMatchers("/", "/api", "/oauth2/**").permitAll()
-//                    .requestMatchers("/api/user-service/lawsuit/**").authenticated()
-//                    .requestMatchers("/api/user-service/members/**").authenticated()
+                    .requestMatchers("/", "/api", "/api/user-service/oauth2/**").permitAll()
+                    .requestMatchers("/api/user-service/swagger-ui/**").permitAll()
+                    .requestMatchers("/api/user-service/swagger-ui/index.html").permitAll()
+                    .requestMatchers("/api/user-service/lawsuit/**").authenticated()
+                    .requestMatchers("/api/user-service/members/**").authenticated()
 //                    .requestMatchers("/api/user-service/**").hasRole("ROLE_USER")
 //                    .requestMatchers("/api/user-service/members/**").hasRole("ROLE_ADMIN")
-                    .anyRequest().authenticated()
+                    .anyRequest().permitAll()
             )
             // 인증 예외 처리
             .exceptionHandling(exceptionHandling -> exceptionHandling
