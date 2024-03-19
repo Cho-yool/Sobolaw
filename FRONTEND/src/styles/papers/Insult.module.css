@@ -40,7 +40,6 @@
   display: flex;
   flex-direction: column;
   width: auto;
-
   align-items: center;
 }
 
@@ -86,4 +85,15 @@
   background-color: rgba(255, 255, 255, 0.8);
   padding: 1rem;
   margin-bottom: 1rem;
+}
+
+.date {
+  text-align: center;
+  margin: 5rem 0 2rem 0;
+}
+
+.signature {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
 }

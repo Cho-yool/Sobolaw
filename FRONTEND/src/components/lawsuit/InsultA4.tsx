@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { josa } from "josa";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
-import type { DatePickerProps, CheckboxProps } from "antd";
+import type { DatePickerProps, CheckboxProps, GetProp } from "antd";
 import {
   Button,
   Input,
@@ -52,7 +52,11 @@ export default function LawsuitInsult() {
   const [insultContent, setInsultContent] =
     useState<InsultForm>(initialInsultContent);
 
-  // 데이터 입력용
+  // 데이터 입력용 인풋모음들
+  // 추후 아래로 전환하세요!!!!
+  // const [product, setProduct] = useState({});
+  // setProduct({...product, [e.target.name]: e.target.value})
+
   // 소장 임시저장명
   const [title, setTitle] = useState("");
   // 피해자
@@ -86,7 +90,7 @@ export default function LawsuitInsult() {
   const [insultDuration, setInsultDuration] = useState("");
   const [insultFrequency, setInsultFrequency] = useState("");
   // 나를 특정할만한 상황
-  const [circumstance, setCircumstance] = useState("");
+  const [circumstance, setCircumstance] = useState("나를 특정할만한 상황을");
   // 제출서류
   const [evidence, setEvidence] = useState("");
   const [submissionDate, setSubmissionDate] = useState("");
@@ -97,7 +101,8 @@ export default function LawsuitInsult() {
   const [paperITime, setPaperITime] = useState("");
   const [paperRPCount, setPaperRPCount] = useState("다수");
   const [paperWitness, setPaperWitness] = useState("의 ");
-  const [paperCircum, setPaperCircum] = useState("나를 특정할만한 상황을");
+  const [paperEvidence, setPaperEvidence] = useState<string[]>([]);
+  const [agreements, setAgreements] = useState(false);
 
   // input 효과들
   const defaultValue = dayjs("2024-01-01");
@@ -118,9 +123,24 @@ export default function LawsuitInsult() {
   const [circum3, setCircum3] = useState("");
   const [circum4, setCircum4] = useState("");
   const [circum5, setCircum5] = useState("");
-  const [circums, setCircums] = useState<string[]>([]);
 
-  const [evidenceList, setEvidenceList] = useState<string[]>([]);
+  const evidenceList = [
+    "위 사건 대화내용이 기록된 스크린샷",
+    "위 사건 대화내용이 기록된 녹음파일",
+    "위 사건을 캡쳐하여 저장한 pdf파일",
+    "목격자의 진술서",
+    "자필 사과문, 카카오톡 대화내역 등",
+  ];
+  const evidenceOptions = evidenceList.map((evidence) => ({
+    label: evidence,
+    value: evidence,
+  }));
+
+  const onChangeCheck: GetProp<typeof Checkbox.Group, "onChange"> = (
+    checkedValues
+  ) => {
+    console.log("checked = ", checkedValues);
+  };
 
   const handleOptionChange = (value: string) => {
     setSelectedOption(value);
@@ -253,43 +273,35 @@ export default function LawsuitInsult() {
     setShowCircumInput5(e.target.checked);
   };
 
+  useEffect(() => {
+    const newText = [circum1, circum2, circum3, circum4, circum5]
+      .filter(Boolean)
+      .join(", ");
+    const finalText = newText.replace(/,([^,]*)$/, " 및 $1");
+    if (finalText !== "") {
+      const final = josa(`${finalText}#{을}`);
+      setCircumstance(final);
+    }
+  }, [circum1, circum2, circum3, circum4, circum5]);
+
   const onchangeCircum1 = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCircum1(e.target.value);
-    setCircums([...circums, circum1]);
+  };
+  const onchangeCircum2 = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCircum2(e.target.value);
+  };
+  const onchangeCircum3 = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCircum3(e.target.value);
+  };
+  const onchangeCircum4 = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCircum4(e.target.value);
+  };
+  const onchangeCircum5 = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCircum5(e.target.value);
   };
 
-  // 입력된 인풋 값을 기반으로 문장을 생성하는 함수
-  const generateSentence = (inputs: string[]): string => {
-    // 인풋이 없으면 빈 문자열 반환
-    if (inputs.length === 0) return "";
-
-    // 인풋이 하나일 때
-    if (inputs.length === 1) return `<${inputs[0]}>`;
-
-    // 인풋이 두 개일 때
-    if (inputs.length === 2) return `<${inputs[0]}, ${inputs[1]}>`;
-
-    // 인풋이 세 개 이상일 때
-    let sentence = `<${inputs[0]}, ${inputs[1]}`;
-
-    // 마지막 인풋은 "및"을 붙여줌
-    for (let i = 2; i < inputs.length; i++) {
-      sentence += `, ${inputs[i]}`;
-    }
-    sentence += " 및 " + inputs[inputs.length - 1] + ">";
-    return sentence;
-  };
-
-  const [checkedList, setCheckList] = useState<string[]>([]);
-  const boxList = [
-    "위 사건 대화내용이 기록된 스크린샷",
-    "위 사건 대화내용이 기록된 녹음파일",
-    "위 사건을 캡쳐하여 저장한 pdf파일",
-    "목격자의 진술서",
-    "자필 사과문, 카카오톡 대화내역 등",
-  ];
-  const onchangeEvidence = (e) => {
-    setCheckList(e.target.name);
+  const onchangeAgree: CheckboxProps["onChange"] = (e) => {
+    setAgreements(e.target.checked);
   };
 
   // 저장 제출 함수
@@ -589,9 +601,7 @@ export default function LawsuitInsult() {
             <Input
               placeholder="증명사진이 있는 온라인 프로필"
               value={circum2}
-              onChange={(e) => {
-                setCircum2(e.target.value);
-              }}
+              onChange={onchangeCircum2}
             />
           )}
           <Checkbox onChange={onchangeSpecific3}>
@@ -601,9 +611,7 @@ export default function LawsuitInsult() {
             <Input
               placeholder="얼굴이 공개된 방송"
               value={circum3}
-              onChange={(e) => {
-                setCircum3(e.target.value);
-              }}
+              onChange={onchangeCircum3}
             />
           )}
           <Checkbox onChange={onchangeSpecific4}>가해자와의 대화과정</Checkbox>
@@ -611,9 +619,7 @@ export default function LawsuitInsult() {
             <Input
               placeholder="고소인의 정보가 포함된 대화과정"
               value={circum4}
-              onChange={(e) => {
-                setCircum4(e.target.value);
-              }}
+              onChange={onchangeCircum4}
             />
           )}
           <Checkbox onChange={onchangeSpecific5}>기타</Checkbox>
@@ -621,16 +627,14 @@ export default function LawsuitInsult() {
             <Input
               placeholder="오프라인 모임(정모) 등"
               value={circum5}
-              onChange={(e) => {
-                setCircum5(e.target.value);
-              }}
+              onChange={onchangeCircum5}
             />
           )}
         </div>
 
         <div className={style["menu-mini"]}>
           <p className={style["menu-title"]}>첨부할 증거</p>
-          <ChecklistBox onChange={onchangeEvidence} boxList={boxList} />
+          <Checkbox.Group options={evidenceOptions} onChange={onChangeCheck} />
         </div>
 
         <div className={style["menu-mini"]}>
@@ -660,6 +664,22 @@ export default function LawsuitInsult() {
             value={plaintiffPhoneNumber}
             onChange={(e) => setPlaintiffPhoneNumber(e.target.value)}
           />
+        </div>
+
+        <div className={style["menu-mini"]}>
+          <p className={style["menu-title"]}>관할경찰서</p>
+          <Input
+            placeholder="@@경찰서 형사팀/사이버수사팀"
+            value={policeStationTeam}
+            onChange={(e) => setPoliceStationTeam(e.target.value)}
+          />
+        </div>
+
+        <div className={style["menu-mini"]}>
+          <p className={style["menu-title"]}>제출 전 주의사항</p>
+          <Checkbox onChange={onchangeAgree}>
+            허위사실에 근거한 고소는 무고죄로 처벌받을 수 있음을 잘 알고 있음
+          </Checkbox>
         </div>
       </div>
 
@@ -787,7 +807,7 @@ export default function LawsuitInsult() {
           <div className={style["pages"]}>
             <div>
               나. 이에 비추어 피고소인의 행위가 모욕죄의 구성요건인 특정성을
-              충족하는지 여부를 판단하여보면, {paperCircum} 통해 공개되어 당시
+              충족하는지 여부를 판단하여보면, {circumstance} 통해 공개되어 당시
               사건을 목격한 다른 이용자들이 고소인의 닉네임(ID)을 통하여
               고소인을 현실에서 특정하여 인식할 수 있는 충분한 가능성이 있었던
               상태였음이 인정된다할 것이므로, 피고소인의 모욕행위는 특정성 또한
@@ -815,20 +835,28 @@ export default function LawsuitInsult() {
             </div>
             <div className={style["title"]}>첨부서류</div>
             <div>
-              <p>1. 위 사건 대화내용이 기록된 스크린샷</p>
-              <p>2. 위 사건 대화내용이 기록된 녹음파일</p>
-              <p>3. 위 사건을 캡쳐하여 저장한 pdf파일</p>
-              <p>4. 목격자의 진술서</p>
-              <p>5. 자필 사과문, 카카오톡 대화내역 등</p>
+              {paperEvidence.map((item, index) => {
+                return (
+                  <p>
+                    {index}. {item}
+                  </p>
+                );
+              })}
             </div>
             <div className={style["title"]}>증거 자료</div>
             <div>
               <p>위 첨부서류 - 각 1부</p>
             </div>
             <div className={style["date"]}>2024년 03월 04일</div>
-            <div className={style["signature"]}>위 고소인</div>
-            <div className={style["signature"]}>(원고 이름)(서명 또는 인)</div>
-            <div className={style["title"]}>@@경찰서 @@팀 귀중</div>
+            {agreements && (
+              <>
+                <div className={style["signature"]}>위 고소인</div>
+                <div className={style["signature"]}>
+                  {plaintiffName} (서명 또는 인)
+                </div>
+              </>
+            )}
+            <div className={style["date"]}>{policeStationTeam} 귀중</div>
           </div>
         </div>
       </div>

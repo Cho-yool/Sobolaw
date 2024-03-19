@@ -33,6 +33,10 @@ const theme = {
       colorPrimary: "#FEDA89",
       algorithm: true, // Enable algorithm
     },
+    Checkbox: {
+      colorPrimary: "#BF8438",
+      algorithm: true, // Enable algorithm
+    },
   },
 };
 const queryClient = new QueryClient();

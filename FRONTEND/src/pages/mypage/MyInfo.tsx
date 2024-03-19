@@ -5,9 +5,8 @@ import "../../App.css";
 import style from "../../styles/mypage/MyInfo.module.css";
 import MyKeyword from "../../components/mypage/MyKeyword";
 import MyRecentCase from "../../components/mypage/MyRecentCase";
-import { dummydata1 } from "../../dummy";
 import { MemberInfo } from "../../types/DataTypes";
-// import { getUserInfo } from "../../api/members";
+import { getUserInfo } from "../../api/members";
 
 export default function MyInfo() {
   // const user = useSelector((state: RootState) => state.user);
@@ -15,9 +14,9 @@ export default function MyInfo() {
 
   useEffect(() => {
     const fetchData = async () => {
-      //     const response = await getUserInfo({}, user.accessToken);
-      //     setUserInfo(response);
-      setUserInfo(dummydata1);
+      // const response = await getUserInfo({}, user.accessToken);
+      const response = await getUserInfo(2);
+      setUserInfo(response);
     };
     fetchData();
     // }, [user.accessToken]
