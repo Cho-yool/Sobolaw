@@ -161,8 +161,6 @@ const RecommendSearch: React.FC = () => {
             <Tooltip title={placeTooltipContent} placement='right' overlayInnerStyle={{ backgroundColor: '#F3E7C0', color: '#000000' }}>
               <InfoCircleOutlined 
               style={{ marginLeft: 10, color: '#595959' }} 
-              onPointerEnterCapture={() => {}}
-              onPointerLeaveCapture={() => {}}
               />
             </Tooltip>
           </h4>
@@ -182,8 +180,6 @@ const RecommendSearch: React.FC = () => {
             <Tooltip title={objectTooltipContent} placement='right' overlayInnerStyle={{ backgroundColor: '#F3E7C0', color: '#000000' }}>
               <InfoCircleOutlined
                style={{ marginLeft: 10, color: '#595959' }}
-               onPointerEnterCapture={() => {}}
-               onPointerLeaveCapture={() => {}}
                />
             </Tooltip>
           </h4>
@@ -203,8 +199,6 @@ const RecommendSearch: React.FC = () => {
             <Tooltip title={personTooltipContent} placement='right' overlayInnerStyle={{ backgroundColor: '#F3E7C0', color: '#000000' }}>
               <InfoCircleOutlined 
               style={{ marginLeft: 10, color: '#595959'}}
-              onPointerEnterCapture={() => {}}
-              onPointerLeaveCapture={() => {}}
               />
               
             </Tooltip>
