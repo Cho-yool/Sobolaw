@@ -1,5 +1,5 @@
 # 빌드 스테이지
-FROM node:alpine as build
+FROM node:20.10.0-alpine as build
 WORKDIR /app
 COPY package*.json ./
 RUN yarn install
