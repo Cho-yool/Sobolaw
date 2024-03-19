@@ -10,7 +10,7 @@
   
   .progressText {
     fill: #BF8438;
-    font-size: 0.9em; /* 폰트 크기 조정 */
+    font-size: 1.2em; /* 폰트 크기 조정 */
     font-weight: bold; /* 폰트 굵기 */
     /* 텍스트의 회전 축을 SVG의 중심으로 설정 */
     transform-origin: center center;

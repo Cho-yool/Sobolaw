@@ -1,3 +1,60 @@
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 4% 12%;
+  margin-bottom: 2%;
+}
+
+.sortButtons {
+  display: flex;
+}
+
+.sortButtons button {
+  padding: 15px 20px;
+  margin-left: 2%;
+  background-color: #F3E7C0;
+  border: 1px solid #644419;
+  border-radius: 25px;
+  color: #644419;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 10px 10px;
+}
+
+.sortButtons button.active {
+  background-color: #644419;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.resultSummary {
+  display: flex;
+  align-items: center;
+  width: 50%;
+}
+
+.summaryItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 10%;
+}
+
+.summaryValue {
+  font-size: 28px;
+  font-weight: bold;
+  color: #644419;
+
+}
+
+.summaryLabel {
+  font-size: 14px;
+  color: #888;
+  margin-top: 20px;
+}
+
 .resultListContainer {
   display: flex;
   flex-direction: column;
@@ -17,31 +74,47 @@
   margin-right: 5%;
   background-color: #ffffff;
   border: 1px solid #e8e8e8;
-  border-radius: 0px;
+  border-radius: 20px;
   position: relative;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.3);
   cursor: pointer;
 }
 
 .rankBox {
   background-color: #644419; /* 색상은 원하는 색으로 조정하세요 */
   padding: 10px 16px;
-  border-radius: 0px;
+  border-radius: 10px;
   font-weight: bold;
   text-align: center;
   position: absolute;
-  left: -2%;
+  left: -3%;
   top: 50%;
   transform: translateY(-50%); /* 수직 가운데 정렬 */
   margin-right: 5%; /* 제목과의 간격 */
   flex-shrink: 0; /* 순위 박스의 크기가 유지되도록 함 */
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
+  width: 5%;
+  height: 25%;
+  line-height: 50px;
   box-shadow: 0 5px 5px 0px rgba(0, 0, 0, 0.5);
   color: #ffffff;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: bold;
+}
+
+.medal {
+  margin-right: 8px;
+}
+
+.medal.gold {
+  color: #ffd700; /* 금색 */
+}
+
+.medal.silver {
+  color: #c0c0c0; /* 은색 */
+}
+
+.medal.bronze {
+  color: #cd7f32; /* 동색 */
 }
 
 .title {
@@ -50,10 +123,6 @@
   margin: 3% 15%; /* 제목과 순위 박스와의 간격 */
   cursor: pointer;
   transition: color 0.3s ease-in-out;
-}
-
-.title:hover {
-  color: #1890ff; /* 마우스를 올렸을 때 색상 변경 */
 }
 
 .content {
@@ -81,42 +150,86 @@
 
 /* 기존 CSS 스타일 위에 추가 */
 @media (max-width: 768px) {
+  .sortButtons {
+    margin: 4% 6%;
+    margin-bottom: 10%;
+    justify-content: center;
+  }
+
+  .sortButtons button {
+    padding: 6px 12px;
+    margin-left: 2%;
+    font-size: 14px;
+  }
+
   .resultListContainer {
     margin-top: 10px;
   }
 
   .resultItem {
     flex-direction: column;
-    width: 90%;
-    margin-left: 5%;
-    margin-right: 5%;
-    padding: 15px;
+    position: relative;
+    height: auto;
+    padding: 20px;
+    margin: 20px auto;
   }
 
   .rankBox {
-    left: 50%;
-    top: -20px;
-    transform: translate(-50%, 0%); /* 좌우 가운데 정렬 및 상단으로 이동 */
-    width: 30px;
+    left: 10%;
+    top: 10px;
+    transform: translate(-50%, 0%);
+    width: 20px;
     height: 30px;
     line-height: 30px;
-    font-size: 16px;
+    font-size: 18px;
+    border-radius: 20%;
+    margin: 0 auto;
+  }
+
+  .medal {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 25px;
+    height: 25px;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  .medal.gold,
+  .medal.silver,
+  .medal.bronze {
+    font-size: 18px;
+  }
+
+  .titleContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 20px;
   }
 
   .title {
-    margin: 20px 0 10px; /* 순위 박스와의 간격 조정 */
-    font-size: 20px;
-    text-align: center; /* 모바일 화면에서 제목을 중앙 정렬 */
+    margin: 20px auto;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
   }
 
   .content {
-    margin: 0 5%; /* 좌우 마진 조정 */
+    margin: 10px 0;
     font-size: 14px;
+    -webkit-line-clamp: 3;
   }
 
-  .similarity {
-    margin: 20px 0; /* 유사도 박스와 다른 내용 사이의 간격 조정 */
-    width: 60px; /* 유사도 박스 크기 조정 */
-    align-self: center; /* 유사도 박스를 중앙에 배치 */
+  .similarityMobile {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    height: 10px;
   }
 }
+

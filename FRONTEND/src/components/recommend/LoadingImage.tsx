@@ -19,15 +19,36 @@ const getLoadingMessage = (progress: number) => {
 
 const LoadingImage: React.FC<LoadingImageProps> = ({ progress }) => {
   const loadingMessage = getLoadingMessage(progress);
-  const showFireworks = progress >= 100;
+  const showConfetti = progress >= 100;
 
   return (
     <div className={styles.loadingContainer}>
       <div className={styles.maskedImage}>
         <img src="/images/soboro_black.png" alt="Mask" />
       </div>
-      {showFireworks && <div className={styles.fireworksEffect} style={{ display: 'block'}}></div>}
-      <div className={styles.fullImage} style={{clipPath: `polygon(0 ${100 - progress}%, 100% ${100 - progress}%, 100% 100%, 0 100%)`}}>
+      {showConfetti && (
+        <div className={styles.confettiContainer}>
+          <div
+            className={styles.confetti}
+            style={{
+              left: '10%',
+              top: '50%',
+              transform: 'translate(-50%, -50%)',
+              animationDelay: '0s',
+            }}
+          />
+          <div
+            className={styles.confetti}
+            style={{
+              right: '10%',
+              top: '50%',
+              transform: 'translate(50%, -50%)',
+              animationDelay: '0.5s',
+            }}
+          />
+        </div>
+      )}
+      <div className={styles.fullImage} style={{ clipPath: `polygon(0 ${100 - progress}%, 100% ${100 - progress}%, 100% 100%, 0 100%)` }}>
         <img src="/images/soboro_color.png" alt="Loading" />
       </div>
       <div className={styles.progressBar}>

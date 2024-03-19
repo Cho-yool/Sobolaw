@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../../styles/recommend/CircularProgressBar.module.css'; // Update with your actual path
-
 interface CircularProgressBarProps {
     percentage: number;
-}
-
-const CircularProgressBar: React.FC<CircularProgressBarProps> = ({ percentage }) => {
-    const radius = 60; // 원의 반지름
-    const stroke = 8; // 원의 두께
+    size?: number;
+    isMobile?: boolean;
+  }
+  
+  const CircularProgressBar: React.FC<CircularProgressBarProps> = ({ percentage, size = 120, isMobile = false }) => {
+    const radius = size / 2;
+    const stroke = size * 0.05;
     const normalizedRadius = radius - stroke * 2;
     const circumference = normalizedRadius * 2 * Math.PI;
-    const [progress, setProgress] = useState(0); // 애니메이션 효과를 위한 상태
+    const [progress, setProgress] = useState(0);
 
     useEffect(() => {
         // 천천히 채워지는 애니메이션
@@ -31,7 +32,7 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({ percentage })
     const strokeDashoffset = circumference - (progress / 100) * circumference;
 
     return (
-        <svg height={radius * 2} width={radius * 2} className={styles.progressCircle}>
+        <svg height={size} width={size} className={styles.progressCircle}>
             <defs>
                 <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" style={{ stopColor: '#BF8438', stopOpacity: 1 }} />
