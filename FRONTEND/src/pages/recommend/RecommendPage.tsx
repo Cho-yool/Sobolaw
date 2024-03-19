@@ -67,7 +67,7 @@ const RecommendPage: React.FC = () => {
 
   return (
     <div className={style.recommendContainer}>
-      <Layout className={style.recommendBackground} style={{ backgroundImage: `url(/images/recommend-background.png)`}}>
+      <Layout className={style.recommendBackground} style={{ backgroundImage: `url("/images/recommend-background.PNG")` }}>
         <Content style={{ padding: '0 50px', marginTop: 64 }}>
           <Row justify="center">
             <div className={style.titleContainer}>
