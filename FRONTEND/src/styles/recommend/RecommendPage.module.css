@@ -6,7 +6,6 @@
 
 .recommendBackground {
     position: relative; /* 오버레이를 위한 포지셔닝 컨텍스트 설정 */
-    background-image: url('../../public/images/recommend-background.png');
     background-size: cover;
     background-color: #f5f5f5;
     background-position: center;
