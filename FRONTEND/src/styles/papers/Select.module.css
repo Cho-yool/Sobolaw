@@ -1,6 +1,6 @@
 .container {
   height: 95vh;
-  background-image: ("./images/formBackground.png");
+  background-image: url("/images/formBackground.png");
   background-size: cover;
   background-position: center;
   display: flex;
@@ -23,7 +23,6 @@
   width: 100%;
   height: 100%;
   content: "";
-  background-image: url("./images/formBackground.png");
   background-size: cover;
   background-position: center;
   position: absolute;
