@@ -8,6 +8,11 @@
   font-style: normal;
 }
 
+strong {
+  font-weight: bold;
+  /* color: brown; */
+}
+
 .container {
   background-color: aliceblue;
   width: 100%;
@@ -44,9 +49,9 @@
 }
 
 .pages {
-  width: 21cm;
-  height: 29.7cm;
-  padding: 2rem;
+  max-width: 21cm;
+  max-height: 29.7cm;
+  padding: 6rem 3rem 3rem 3rem;
   border: 0.5px solid darkgray;
   font-family: "NotoSerifKR", serif;
   letter-spacing: 1px;
@@ -56,6 +61,7 @@
 }
 
 .button-box {
+  max-width: 21cm;
   display: flex;
   width: 100%;
   justify-content: flex-end;
@@ -66,7 +72,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-  margin: 2rem 2rem 2rem 0;
+  margin: 2rem 1rem 2rem 0;
 }
 
 .title {
@@ -74,6 +80,15 @@
   font-weight: 1000;
   font-size: 1.5rem;
   margin: 2rem 0 2rem 0;
+}
+
+.numbers {
+  padding-left: 2rem;
+}
+
+.page-content {
+  padding-left: 2rem;
+  margin: 10px 0 10px 0;
 }
 
 .menu-title {

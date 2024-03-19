@@ -16,14 +16,6 @@ import LoginBtnNaver from "/images/NAVER_LOGIN.png";
 //         headers: { Authorization: `Bearer ${accessToken}` },
 //       })
 //       .then((res) => {
-//         // 불러온 유저정보에서 job이 null이라면 -> 추가 정보 입력이 필요함
-//         let tmpUser = res.data.result;
-//         // 회원가입
-//         if (tmpUser.job == null) {
-//           dispatch(login());
-//           dispatch(saveUser(tmpUser));
-//           navigate("/additionalinfo");
-//         } else {
 //           // console.log(res.data)
 //           dispatch(saveUser(tmpUser));
 //           dispatch(login());
@@ -42,25 +34,29 @@ function LoginPage() {
   const kakaoURL = `https://j10a604.p.ssafy.io/api/user-service/oauth2/authorization/kakao`;
   const naverURL = `https://j10a604.p.ssafy.io/api/user-service/oauth2/authorization/naver`;
 
-  const kakaoLogin = function () {
-    // 로그인버튼을 누르면 카카오 로그인 창으로 간다
-    window.location.href = kakaoURL;
-  };
-
   // 토큰 가져오는 useEffect
   useEffect(() => {
     // 현재 url에서 토큰을 가져와서 저장하자
     const token = new URL(window.location.href).searchParams.get("accessToken");
+    console.log(token);
     // const token = new URL(window.location.href).searchParams.get("Authorization");
     if (token) {
       // 세션에 accessToken을 저장해주자
       dispatch(saveAccessToken(token));
+      console.log(token);
+    } else {
+      (" 토큰안뜸");
     }
     if (accessToken) {
       // loadUserInfo();
       navigate("/");
     }
-  }, [accessToken]);
+  }, [dispatch, navigate]);
+
+  const kakaoLogin = function () {
+    // 로그인버튼을 누르면 카카오 로그인 창으로 간다
+    window.location.href = kakaoURL;
+  };
 
   return (
     <div
