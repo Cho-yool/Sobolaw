@@ -67,7 +67,8 @@ public class SecurityConfig {
 //                    .requestMatchers("/api/user-service/members/**").authenticated()
 //                    .requestMatchers("/api/user-service/**").hasRole("ROLE_USER")
 //                    .requestMatchers("/api/user-service/members/**").hasRole("ROLE_ADMIN")
-                    .anyRequest().authenticated()
+                    // test를 위해 허용 처리
+                    .anyRequest().permitAll()
             )
             // 인증 예외 처리
             .exceptionHandling(exceptionHandling -> exceptionHandling
