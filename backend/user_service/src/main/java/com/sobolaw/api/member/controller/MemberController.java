@@ -13,6 +13,8 @@ import com.sobolaw.api.member.service.MemberService;
 import com.sobolaw.feign.dto.response.PrecedentListResponseDTO;
 import com.sobolaw.feign.dto.response.PrecedentResponseDTO;
 import com.sobolaw.global.common.response.BaseResponse;
+import com.sobolaw.global.security.jwt.JwtProvider;
+import com.sobolaw.global.security.jwt.RedisTokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +37,34 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final MemberService memberService;
+    private final JwtProvider jwtProvider;
+    private final RedisTokenService redisTokenService;
+
+    /**
+     * 멤버 로그아웃.
+     */
+    @Operation(summary = "멤버 로그아웃", description = "로그아웃 합니다.", tags = { "멤버" })
+    @PostMapping("/logout")
+    public BaseResponse<Long> logoutMember() {
+        Long memberId = jwtProvider.getMemberId();
+        String refreshToken = redisTokenService.getRefreshTokenByUserId(memberId);
+        redisTokenService.deleteRefreshTokenByMemberId(memberId);
+
+        return BaseResponse.success(HttpStatus.OK.value(), "로그아웃 하였습니다.", memberId);
+    }
+
+    /**
+     * 멤버 회원탈퇴.
+     */
+    @Operation(summary = "멤버 회원탈퇴", description = "회원 탈퇴합니다.", tags = {"멤버"})
+    @DeleteMapping("/delete")
+    public BaseResponse<Void> deleteMember() {
+        Long memberId = jwtProvider.getMemberId();
+        redisTokenService.deleteRefreshTokenByMemberId(memberId);
+        memberService.deleteMember(memberId);
+
+        return BaseResponse.success(HttpStatus.NO_CONTENT.value(), "회원 탈퇴 하였습니다.", null);
+    }
 
     /**
      * 멤버 조회.

@@ -392,4 +392,17 @@ public class MemberService {
 
         return MemberPrecedentHighlightDTO.from(updatedHighlight);
     }
+
+    /**
+     * 멤버 삭제(탈퇴)
+     *
+     * @param memberId 멤버 Id
+     */
+    public void deleteMember(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
+
+        member.softDelete();
+        memberRepository.save(member);
+    }
 }
