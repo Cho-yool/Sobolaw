@@ -1,8 +1,10 @@
 .fraud-menu {
   width: 400px;
   background-color: rgb(221, 221, 221);
-  height: 100%;
+  height: 95vh;
   overflow-y: scroll;
+  position: fixed;
+  left: 0;
 }
 
 .fraud-menu::-webkit-scrollbar {
@@ -33,6 +35,20 @@
 .fraud-menu-input__title {
   margin-bottom: 0.8rem;
   font-size: 1rem;
+}
+
+.fraud-menu-input__money {
+  width: 95%;
+  background-color: white;
+  padding: 0 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.fraud-menu-input__money > input {
+  border: none;
+  display: flex;
+  text-align: end;
+  padding-right: 0.5rem;
 }
 
 .fraud-menu-checkbox {
