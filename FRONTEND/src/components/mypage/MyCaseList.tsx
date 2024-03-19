@@ -6,7 +6,7 @@ import { FieldTimeOutlined } from "@ant-design/icons";
 // import CaseDetail from "../../components/mypage/MyCaseDetail";
 import { MemberPrecedent } from "../../types/DataTypes";
 
-const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
+const IconText = ({ icon, text }: { icon: React.FC<any>; text: string }) => (
   <Space>
     {React.createElement(icon)}
     {text}
