@@ -17,7 +17,7 @@ const createDummyData = () => {
   })).sort((a, b) => b.similarity - a.similarity); // 유사도에 따라 내림차순 정렬
 };
 
-export interface SearchResult {
+export interface SearchResult { 
   id: number;
   title: string;
   content: string;
