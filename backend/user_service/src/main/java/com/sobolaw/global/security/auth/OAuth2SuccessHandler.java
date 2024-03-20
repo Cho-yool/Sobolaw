@@ -1,5 +1,9 @@
 package com.sobolaw.global.security.auth;
 
+import com.sobolaw.api.member.entity.Member;
+import com.sobolaw.api.member.exception.MemberErrorCode;
+import com.sobolaw.api.member.exception.MemberException;
+import com.sobolaw.api.member.repository.MemberRepository;
 import com.sobolaw.global.security.jwt.JwtAuthenticationFilter.TokenKey;
 import com.sobolaw.global.security.jwt.JwtProvider;
 import jakarta.servlet.ServletException;
@@ -21,9 +25,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
+    private final MemberRepository memberRepository;
+
     private final JwtProvider tokenProvider;
     //    private static final String URI = "https://j10a604.p.ssafy.io";
-    private static final String URI = "http://localhost:5173";
+    private static final String URI = "http://localhost:5173/login";
 
     @Override
     public void onAuthenticationSuccess(
@@ -35,15 +41,19 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         // memberId 가져오기
         Long memberId = getMemberId(authentication);
         log.info("memberId = " + memberId);
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
         // accessToken, refreshToken 발급
         String accessToken = tokenProvider.generateAccessToken(authentication, memberId);
-        tokenProvider.generateRefreshToken(authentication, memberId);
+        String refreshToken = tokenProvider.generateRefreshToken(authentication, memberId);
 
         log.info("accessToken = " + accessToken);
         // 토큰 전달을 위한 redirect
         String redirectUrl = UriComponentsBuilder.fromUriString(URI)
             .queryParam("accessToken", accessToken)
+            .queryParam("refreshToken", refreshToken)
+            .queryParam("memberId", memberId)
             .build().toUriString();
         log.info("redirectUrl = " + redirectUrl);
 
