@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
  */
 public interface LawsuitListResponseDTO {
 
+    Long getId();
+
     String getType();
 
     String getTitle();
