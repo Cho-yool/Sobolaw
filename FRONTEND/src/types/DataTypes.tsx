@@ -211,16 +211,18 @@ export interface FraudDetails {
   setDefendantPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
   incidentDate: string;
   setIncidentDate: React.Dispatch<React.SetStateAction<string>>;
-  incidentTime: TimeContent
+  incidentTime: TimeContent;
   setIncidentTime: React.Dispatch<React.SetStateAction<TimeContent>>;
-  paperIDate: string
+  paperIDate: string;
   setPaperIDate: React.Dispatch<React.SetStateAction<string>>;
-  paperITime: string
+  paperITime: string;
   setPaperITime: React.Dispatch<React.SetStateAction<string>>;
   tradedItem: string;
   setTradedItem: React.Dispatch<React.SetStateAction<string>>;
-  tradeSite: number | undefined;
-  setTradeSite: React.Dispatch<React.SetStateAction<number | undefined>>;
+  tradeSite: string;
+  setTradeSite: React.Dispatch<React.SetStateAction<string>>;
+  directSite: string;
+  setDirectSite: React.Dispatch<React.SetStateAction<string>>;
   contact: string[];
   setContact: React.Dispatch<React.SetStateAction<string[]>>;
   disposalMethod: number | undefined;
@@ -231,6 +233,10 @@ export interface FraudDetails {
   setAccountNumber: React.Dispatch<React.SetStateAction<string>>;
   damageMoney: string;
   setDamageMoney: React.Dispatch<React.SetStateAction<string>>;
+  moneyDate: string;
+  setMoneyDate: React.Dispatch<React.SetStateAction<string>>;
+  moneyTime: string;
+  setMoneyTime: React.Dispatch<React.SetStateAction<string>>;
   evidence: string;
   setEvidence: React.Dispatch<React.SetStateAction<string>>;
   evidenceEtc: boolean;

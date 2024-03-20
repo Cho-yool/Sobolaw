@@ -1,9 +1,12 @@
 import { Button } from "antd";
 import style from "../../styles/papers/A4.module.css";
 import { FraudDetails } from "../../types/DataTypes";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const FraudA4 = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
+  const [directEvidence, setDirectEvidence] = useState<string>(
+    fraudDetails.evidence
+  );
   useEffect(() => {
     console.log("A4", fraudDetails);
   }, [fraudDetails]);
@@ -72,31 +75,56 @@ const FraudA4 = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
                 </div>
               </>
             ) : null}
-            {
-              fraudDetails.tradedItem || fraudDetails.paperIDate || fraudDetails.paperITime ?
+            {fraudDetails.tradedItem ||
+            fraudDetails.paperIDate ||
+            fraudDetails.paperITime ? (
               <>
-            <div className={style["title"]}>범죄사실</div>
-            <div>
-              <p>
-                1. 고소인과 피고소인은 {fraudDetails.paperIDate} {fraudDetails.paperITime} 중고거래 사이트인
-                (중고거래 사이트명)에서, {fraudDetails.tradedItem} (이하 '본 중고거래
-                대상물')를 판매한다는 글을 보고 연락해온 고소인에게 정상적인 본
-                중고거래 대상물을 판매하겠다고 아래와 같이 거짓말을 하였습니다.
-              </p>
-              <p>
-                2. 사실 피고소인은 정상적으로 작동되는 물건이 없거나 아예 물건이
-                없어서 돈을 받더라도 정상적인 본 중고거래 대상물을 교부할 의사나
-                능력이 없었습니다.
-              </p>
-              <p>
-                3. 그럼에도 불구하고 피고소인은 위와 같이 고소인을 기망하여
-                (입금날짜) (입금 시간)에 고소인으로부터 (입금 금액(원))을
-                피고소인의 계좌로 이체받았습니다.
-              </p>
-            </div>
-            </>
-              : null
-            }
+                <div className={style["title"]}>범죄사실</div>
+                <div>
+                  <p>
+                    1. 고소인과 피고소인은 {fraudDetails.paperIDate}{" "}
+                    {fraudDetails.paperITime} 중고거래 사이트인{" "}
+                    {fraudDetails.tradeSite !== "직접입력" ? (
+                      <span>{fraudDetails.tradeSite}</span>
+                    ) : (
+                      <span>{fraudDetails.directSite}</span>
+                    )}
+                    에서, {fraudDetails.tradedItem} (이하 '본 중고거래
+                    대상물')를 판매한다는 글을 보고{" "}
+                    {fraudDetails.contact ? (
+                      <span>({fraudDetails.contact.join(" , ")})을 통해 </span>
+                    ) : null}
+                    연락해온 고소인에게 정상적인 본 중고거래 대상물을
+                    판매하겠다고 아래와 같이 거짓말을 하였습니다.
+                  </p>
+                  <p>
+                    2. 사실 피고소인은 정상적으로 작동되는 물건이 없거나 아예
+                    물건이 없어서 돈을 받더라도 정상적인 본 중고거래 대상물을
+                    교부할 의사나 능력이 없었습니다.
+                  </p>
+                  {fraudDetails.damageMoney ? (
+                    <p>
+                      3. 그럼에도 불구하고 피고소인은 위와 같이 고소인을
+                      기망하여 {fraudDetails.moneyDate} {fraudDetails.moneyTime}{" "}
+                      고소인
+                      {fraudDetails.disposalMethod === 2 ? (
+                        <span>
+                          의 계좌 ( {fraudDetails.bankName} /
+                          {fraudDetails.accountNumber} ) 로부터
+                        </span>
+                      ) : (
+                        <>으로부터</>
+                      )}{" "}
+                      {fraudDetails.damageMoney} 원을{" "}
+                      {fraudDetails.disposalMethod === 2 ? (
+                        <span>이체</span>
+                      ) : null}
+                      받았습니다.
+                    </p>
+                  ) : null}
+                </div>
+              </>
+            ) : null}
           </div>
           <div className={style["pages"]}>
             <div className={style["title"]}>고소이유</div>
@@ -120,15 +148,28 @@ const FraudA4 = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
                 피고소인을 수사하여 엄벌에 처해주시기 바랍니다.
               </p>
             </div>
-            <div className={style["title"]}>[별첨] - 증거자료</div>
-            <div>
-              <p>1. 위 사건 판매 게시글 캡쳐본 등</p>
-              <p>2. 위 사건 대화내용이 기록된 스크린샷 등</p>
-              <p>3. 위 사건 계좌로 입금된 이체확인증</p>
-              <p>4. 피고소인과 통화 녹음</p>
-              <p>5. (증거자료)</p>
-            </div>
-            <div className={style["footer"]}>@@경찰서 @@팀 귀중</div>
+            {fraudDetails.evidenceList.length > 0 ? (
+              <>
+                <div className={style["title"]}>[별첨] - 증거자료</div>
+                <ul style={{ listStyle: "decimal" }}>
+                  {fraudDetails.evidenceList.map((list) => {
+                    if (
+                      list !==
+                      "기타(피고소인을 특정할 수 있는 증거나 사항) 및 직접입력"
+                    ) {
+                      return <li>{list}</li>;
+                    } else {
+                      return <li>{directEvidence}</li>;
+                    }
+                  })}
+                </ul>
+              </>
+            ) : null}
+            {fraudDetails.policeStation ? (
+              <div className={style["footer"]}>
+                {fraudDetails.policeStation} 귀중
+              </div>
+            ) : null}
           </div>
         </>
       ) : null}

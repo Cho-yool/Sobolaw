@@ -1,13 +1,12 @@
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
 import locale from "antd/es/date-picker/locale/ko_KR";
-import { Flex, Input, DatePicker, Tooltip, Radio  } from "antd";
+import { Flex, Input, DatePicker, Tooltip, Radio } from "antd";
 import type { DatePickerProps } from "antd";
 import style from "../../styles/papers/FraudMenu.module.css";
 import CheckBox from "../common/CheckBox";
 import { useEffect } from "react";
 import { FraudDetails } from "../../types/DataTypes";
-
 
 const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
   const defaultValue = dayjs("2024-01-01");
@@ -93,7 +92,6 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
   };
   const onChangeDate: DatePickerProps["onChange"] = (_, dateStr) => {
     // dateStr이 string 타입인지 확인합니다.
-    console.log(dateStr)
     if (typeof dateStr === "string" && dateStr.trim() !== "") {
       // dateStr을 공백을 기준으로 분리하여 날짜 부분과 시간 부분을 구합니다.
       const [datePart, timePart] = dateStr.split(" ");
@@ -119,6 +117,36 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
       }
       // 변경된 날짜와 시간을 상태 변수에 할당합니다.
       fraudDetails.setPaperIDate(modifiedDatePart);
+    }
+  };
+
+  const onChangeMoneyDate: DatePickerProps["onChange"] = (_, dateStr) => {
+    // dateStr이 string 타입인지 확인합니다.
+    if (typeof dateStr === "string" && dateStr.trim() !== "") {
+      // dateStr을 공백을 기준으로 분리하여 날짜 부분과 시간 부분을 구합니다.
+      const [datePart, timePart] = dateStr.split(" ");
+      // incidentDate 상태 변수에 날짜 부분을 할당합니다.
+      fraudDetails.setIncidentDate(datePart);
+      // 시간 부분을 콜론을 기준으로 분리하여 각 시간 요소를 구합니다.
+      const [hourStr, minuteStr, secondStr] = timePart.split(":");
+      const hour = parseInt(hourStr, 10);
+      const minute = parseInt(minuteStr, 10);
+      const second = parseInt(secondStr, 10);
+      // incidentTime 상태 변수에 시간 요소를 할당합니다.
+      fraudDetails.setIncidentTime({ hour, minute, second, nano: 0 });
+      // 고소장에 파싱될 용도의 날짜/시간도 할당합니다
+      // 용도에 맞게 날짜 형식을 변경합니다.
+      const modifiedDatePart = datePart.replace(/-/g, ".");
+      // 용도에 맞게 시간 형식을 변경합니다.
+      if (minuteStr == "00") {
+        const modifiedTimePart = `${hourStr}시 경`;
+        fraudDetails.setMoneyTime(modifiedTimePart);
+      } else {
+        const modifiedTimePart = `${hourStr}시 ${minuteStr}분 경`;
+        fraudDetails.setMoneyTime(modifiedTimePart);
+      }
+      // 변경된 날짜와 시간을 상태 변수에 할당합니다.
+      fraudDetails.setMoneyDate(modifiedDatePart);
     }
   };
   useEffect(() => {
@@ -289,7 +317,7 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
                 size="large"
                 showTime
                 onChange={onChangeDate}
-                style={{ width : "100%"}}
+                style={{ width: "100%" }}
               />
             </Tooltip>
           </Flex>
@@ -305,12 +333,17 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
             onChange={(e) => fraudDetails.setTradeSite(e.target.value)}
           >
             <p className={style["fraud-menu-input__title"]}>사이트명</p>
-            <Radio value={1}>당근마켓</Radio>
-            <Radio value={2}>중고나라</Radio>
-            <Radio value={3}>번개장터</Radio>
-            <Radio value={4}>직접입력</Radio>
-            {fraudDetails.tradeSite === 4 ? (
-              <Input size="large" placeholder="OO마켓" />
+            <Radio value="당근마켓">당근마켓</Radio>
+            <Radio value="중고나라">중고나라</Radio>
+            <Radio value="번개장터">번개장터</Radio>
+            <Radio value="직접입력">직접입력</Radio>
+            {fraudDetails.tradeSite === "직접입력" ? (
+              <Input
+                size="large"
+                placeholder="OO마켓"
+                value={fraudDetails.directSite}
+                onChange={(e) => fraudDetails.setDirectSite(e.target.value)}
+              />
             ) : null}
           </Radio.Group>
         </Flex>
@@ -341,25 +374,27 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
             <Radio value={2}>계좌이체</Radio>
           </Radio.Group>
         </Flex>
-        <Flex className={style["fraud-menu-box"]} vertical>
-          <p className={style["fraud-menu-input__title"]}>계좌번호</p>
-          <Flex vertical gap={10}>
-            <Input
-              placeholder="은행명"
-              size="large"
-              type="text"
-              value={fraudDetails.bankName}
-              onChange={(e) => fraudDetails.setBankName(e.target.value)}
-            />
-            <Input
-              placeholder="계좌번호"
-              size="large"
-              type="text"
-              value={fraudDetails.accountNumber}
-              onChange={(e) => fraudDetails.setAccountNumber(e.target.value)}
-            />
+        {fraudDetails.disposalMethod === 2 ? (
+          <Flex className={style["fraud-menu-box"]} vertical>
+            <p className={style["fraud-menu-input__title"]}>계좌번호</p>
+            <Flex vertical gap={10}>
+              <Input
+                placeholder="은행명"
+                size="large"
+                type="text"
+                value={fraudDetails.bankName}
+                onChange={(e) => fraudDetails.setBankName(e.target.value)}
+              />
+              <Input
+                placeholder="계좌번호"
+                size="large"
+                type="text"
+                value={fraudDetails.accountNumber}
+                onChange={(e) => fraudDetails.setAccountNumber(e.target.value)}
+              />
+            </Flex>
           </Flex>
-        </Flex>
+        ) : null}
         <Flex className={style["fraud-menu-box"]} vertical>
           <Flex className={style["fraud-menu-input"]} vertical>
             <p className={style["fraud-menu-input__title"]}>
@@ -392,12 +427,11 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
                 defaultValue={defaultValue}
                 locale={locale}
                 size="large"
+                showTime
+                onChange={onChangeMoneyDate}
+                style={{ width: "100%" }}
               />
             </Tooltip>
-          </Flex>
-          <Flex vertical style={{ width: "100%" }}>
-            <p className={style["fraud-menu-input__title"]}>일시</p>
-            <Input placeholder="오전 10시 경" size="large" type="text" />
           </Flex>
         </Flex>
       </Flex>

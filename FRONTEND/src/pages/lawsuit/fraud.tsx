@@ -35,12 +35,15 @@ export default function FraudPage() {
   const [paperIDate, setPaperIDate] = useState<string>("");
   const [paperITime, setPaperITime] = useState<string>("");
   const [tradedItem, setTradedItem] = useState<string>(""); // 물건
-  const [tradeSite, setTradeSite] = useState<number>(); // 사이트명
+  const [tradeSite, setTradeSite] = useState<string>(""); // 사이트명
+  const [directSite, setDirectSite] = useState<string>(""); // 사이트명
   const [contact, setContact] = useState<string[]>([]); // 연락방법
   const [disposalMethod, setDisposalMethod] = useState<number>(); // 처분방법
   const [bankName, setBankName] = useState<string>(""); // 은행 이름
   const [accountNumber, setAccountNumber] = useState<string>(""); // 계좌 번호
   const [damageMoney, setDamageMoney] = useState<string>(""); // 피해액수
+  const [moneyDate, setMoneyDate] = useState<string>("");
+  const [moneyTime, setMoneyTime] = useState<string>("");
   const [evidence, setEvidence] = useState<string>(""); // 기타 증거
   const [evidenceEtc, setEvidenceEtc] = useState<boolean>(false); // 기타 체크시
   const [evidenceList, setEvidenceList] = useState<string[]>([]); // 출력할 증거리스트
@@ -86,6 +89,8 @@ export default function FraudPage() {
     setPaperITime: setPaperITime,
     tradedItem: tradedItem,
     setTradedItem: setTradedItem,
+    directSite: directSite,
+    setDirectSite: setDirectSite,
     tradeSite: tradeSite,
     setTradeSite: setTradeSite,
     contact: contact,
@@ -98,6 +103,10 @@ export default function FraudPage() {
     setAccountNumber: setAccountNumber,
     damageMoney: damageMoney,
     setDamageMoney: setDamageMoney,
+    moneyDate,
+    setMoneyDate,
+    moneyTime,
+    setMoneyTime,
     evidence: evidence,
     setEvidence: setEvidence,
     evidenceEtc: evidenceEtc,
