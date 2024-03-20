@@ -1,5 +1,9 @@
 package com.sobolaw.global.security.jwt;
 
+import com.sobolaw.api.member.entity.Member;
+import com.sobolaw.api.member.exception.MemberErrorCode;
+import com.sobolaw.api.member.exception.MemberException;
+import com.sobolaw.api.member.repository.MemberRepository;
 import com.sobolaw.global.security.auth.CustomUserDetails;
 import com.sobolaw.global.security.jwt.exception.TokenErrorCode;
 import com.sobolaw.global.security.jwt.exception.TokenException;
@@ -9,13 +13,13 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +27,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -31,9 +34,12 @@ import org.springframework.util.StringUtils;
 /**
  * 토큰 생성, 유효성 검사, 재발급 등의 관리.
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtProvider {
+
+    private final MemberRepository memberRepository;
 
     @Value("${jwt.expiration.access}")
     private Long accessExpiration;
@@ -59,7 +65,6 @@ public class JwtProvider {
     private void setAccessSecretKey() {
         this.secretKey = Keys.hmacShaKeyFor(key.getBytes()); // Decoders.BASE64URL.decode(key)
     }
-
 
 
     /**
@@ -102,10 +107,20 @@ public class JwtProvider {
     public Authentication getAuthentication(String token) {
         Claims claims = parseClaims(token);
         List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
+        Long memberId = getMemberIdByToken(token);
 
-        // security의 User 객체 생성
-        User principal = new User(claims.getSubject(), "", authorities);
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+//        // memberId 추출
+//        Long memberId = claims.get("memberId", Long.class);
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
+        log.info("claims = " + claims);
+        log.info("subject = " + claims.getSubject());
+//         //security의 User 객체 생성
+//        User principal = new User(claims.getSubject(), "", authorities);
+        // CustomUserDetails 객체 생성
+        CustomUserDetails userDetails = new CustomUserDetails(member, null, null);
+
+        return new UsernamePasswordAuthenticationToken(userDetails, token, authorities);
     }
 
     /**
@@ -171,13 +186,18 @@ public class JwtProvider {
      */
     public Long getMemberId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
+        log.info("security" + SecurityContextHolder.getContext());
+        log.info("auth = " + authentication);
+        log.info("isAuth = " + authentication.isAuthenticated());
+        log.info("principle = " + authentication.getPrincipal());
         if (authentication != null && authentication.isAuthenticated()) {
             Object principal = authentication.getPrincipal();
             if (principal instanceof CustomUserDetails) {
                 return ((CustomUserDetails) principal).getMemberId();
             } else if (principal instanceof UserDetails) {
-                return Long.valueOf(((UserDetails) principal).getUsername());
+                String name = ((UserDetails) principal).getUsername();
+                Member member = memberRepository.findByName(name);
+                return member.getMemberId();
             } else {
                 // 만약 principal이 UserDetails가 아닌 다른 타입이면, 해당 타입에 맞게 처리
                 return Long.valueOf(principal.toString());
@@ -192,7 +212,7 @@ public class JwtProvider {
      * @param token AccessToken
      */
     public Long getMemberIdByToken(String token) {
-        return parseClaims(token).get("memberId", Long.class);
+        return ((Number) parseClaims(token).get("memberId")).longValue();
     }
 
 

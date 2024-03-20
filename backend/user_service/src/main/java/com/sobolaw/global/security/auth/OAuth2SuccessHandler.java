@@ -2,7 +2,6 @@ package com.sobolaw.global.security.auth;
 
 import com.sobolaw.global.security.jwt.JwtAuthenticationFilter.TokenKey;
 import com.sobolaw.global.security.jwt.JwtProvider;
-import jakarta.persistence.Column;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * 소셜 로그인이 성공적으로 이루어졌다면 Token 을 발급하고 redirect. (2)
@@ -23,7 +21,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     private final JwtProvider tokenProvider;
-    private static final String URI = "https://j10a604.p.ssafy.io/";
+    //    private static final String URI = "https://j10a604.p.ssafy.io";
+    private static final String URI = "http://localhost:5173";
 
     @Override
     public void onAuthenticationSuccess(
@@ -32,8 +31,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         Authentication authentication
     ) throws IOException, ServletException {
 
-        // memberId 가져오기 (예시)
-        Long memberId = extractMemberId(authentication);
+        // memberId 가져오기
+        Long memberId = getMemberId(authentication);
+        log.info("memberId = " + memberId);
 
         // accessToken, refreshToken 발급
         String accessToken = tokenProvider.generateAccessToken(authentication, memberId);
@@ -49,11 +49,13 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         response.sendRedirect(URI);
     }
 
-    //todo:
-    // 사용자 인증 정보에서 memberId 추출하는 메서드 (예시)
-    private Long extractMemberId(Authentication authentication) {
 
+    // 사용자 인증 정보에서 memberId 추출하는 메서드
+    private Long getMemberId(Authentication authentication) {
+        log.info("authentication = " + authentication);
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        log.info("authentication.Principle = " + authentication.getPrincipal());
+        log.info("userDetails = " + userDetails);
         return userDetails.getMemberId();
     }
 }

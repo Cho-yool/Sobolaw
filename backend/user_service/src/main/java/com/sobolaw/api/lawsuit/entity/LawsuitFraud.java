@@ -95,7 +95,7 @@ public class LawsuitFraud extends BaseEntity {
 
     @Setter
     @Column
-    private long depositAmount;  // 입금 금액(원)
+    private Long depositAmount;  // 입금 금액(원)
 
     @Setter
     @Column

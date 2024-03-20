@@ -45,8 +45,11 @@ public class SwaggerConfig {
     }
 
     @Operation(summary = "Naver OAuth2 Authorization Endpoint", description = "Endpoint for initiating OAuth2 authorization with Naver.")
-    public void naverOAuth2Authorization() {}
+    public void naverOAuth2Authorization() {
+    }
 
     @Operation(summary = "Kakao OAuth2 Authorization Endpoint", description = "Endpoint for initiating OAuth2 authorization with Kakao.")
-    public void kakaoOAuth2Authorization() {}
+    public void kakaoOAuth2Authorization() {
+    }
+
 }

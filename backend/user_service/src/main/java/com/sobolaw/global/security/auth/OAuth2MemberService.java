@@ -50,6 +50,7 @@ public class OAuth2MemberService extends DefaultOAuth2UserService {
         Member member = getOrSave(oAuth2UserInfoDTO);
         log.info("member = " + member);
 
+        log.info("principle " + new CustomUserDetails(member, oAuth2UserAttributes, userNameAttributeName));
         return new CustomUserDetails(member, oAuth2UserAttributes, userNameAttributeName);
     }
 

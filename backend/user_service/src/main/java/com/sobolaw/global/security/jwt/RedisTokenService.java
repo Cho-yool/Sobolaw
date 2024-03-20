@@ -7,8 +7,6 @@ import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.core.token.Token;
-import org.springframework.security.core.token.TokenService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @RequiredArgsConstructor
-public class RedisTokenService  {
+public class RedisTokenService {
 
     private final RedisTemplate<String, String> redisTemplate;
 
@@ -36,8 +34,6 @@ public class RedisTokenService  {
         }
         return keys.iterator().next();
     }
-
-
 
 
     /**
@@ -77,13 +73,12 @@ public class RedisTokenService  {
      * 사용자의 RefreshToken을 저장하거나 업데이트합니다.
      *
      * @param refreshToken 저장할 RefreshToken
-     * @param memberId    memberId
+     * @param memberId     memberId
      */
     @Transactional
     public void saveOrUpdate(String refreshToken, Long memberId) {
         redisTemplate.opsForValue().set(refreshToken, String.valueOf(memberId));
     }
-
 
 
     /**
@@ -119,7 +114,6 @@ public class RedisTokenService  {
     public void deleteRefreshToken(String refreshToken) {
         redisTemplate.delete(refreshToken);
     }
-
 
 
 }

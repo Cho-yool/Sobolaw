@@ -29,7 +29,7 @@ public class RedisConfig {
         return new LettuceConnectionFactory(host, port);
     }
 
-    /**z
+    /**
      * RedisTemplate 을 구성하는 빈을 생성.
      */
     @Bean

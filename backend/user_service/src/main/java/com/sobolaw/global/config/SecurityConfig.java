@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -65,8 +64,8 @@ public class SecurityConfig {
                     .requestMatchers("/", "/api", "/api/user-service/oauth2/**").permitAll()
                     .requestMatchers("/api/user-service/swagger-ui/**").permitAll()
                     .requestMatchers("/api/user-service/swagger-ui/index.html").permitAll()
-                    .requestMatchers("/api/user-service/lawsuit/**").authenticated()
-                    .requestMatchers("/api/user-service/members/**").authenticated()
+                    .requestMatchers("/api/user-service/lawsuit/**").permitAll()
+                    .requestMatchers("/api/user-service/members/**").permitAll()
 //                    .requestMatchers("/api/user-service/**").hasRole("ROLE_USER")
 //                    .requestMatchers("/api/user-service/members/**").hasRole("ROLE_ADMIN")
                     .anyRequest().permitAll()
