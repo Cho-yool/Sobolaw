@@ -1,0 +1,107 @@
+.modal-page {
+  width: 350px;
+  height: 600px;
+  background-color: #eaa854;
+  right: 7.6em;
+  bottom: 1rem;
+  position: fixed;
+  border-radius: 1rem;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.304);
+  z-index: 10;
+}
+
+.modal-page:after {
+  border-top: 15px solid #eaa854;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 0px solid transparent;
+  transform: rotate(-90deg);
+  content: "";
+  position: absolute;
+  bottom: 9rem;
+  right: -22px;
+}
+
+/* 헤더부분 */
+
+.modal-header {
+  width: 100%;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  background-color: #feda89;
+  border-radius: 1rem 1rem 0 0;
+  padding: 1rem 0;
+}
+
+.modal-header__icon {
+  width: 75px;
+  height: 75px;
+  margin: 0 1rem;
+}
+
+.modal-header__title {
+  font-size: 1.7rem;
+}
+
+.modal-header__close {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  right: 1rem;
+  cursor: pointer;
+}
+
+.modal-header__close:hover {
+  opacity: 0.5;
+}
+
+/* 바디부분 */
+
+.modal-body {
+  width: 100%;
+  height: 380px;
+  padding: 1rem 0;
+}
+
+.modal-body__content {
+  background-color: rgba(255, 255, 255, 0.555);
+  height: 80%;
+  width: 90%;
+  overflow-y: scroll;
+  border-radius: 1rem;
+}
+
+.modal-body__content::-webkit-scrollbar {
+  display: none;
+}
+
+/* 푸터부분 */
+
+.footer-btn {
+  width: 100%;
+  height: 70px;
+  padding: 1rem 0;
+}
+
+.footer-btn__1 {
+  width: 50%;
+  height: 100%;
+  border-radius: 0 0 0 1rem;
+}
+
+.footer-btn__2 {
+  width: 50%;
+  height: 100%;
+  border-radius: 0 0 1rem 0;
+}
+
+.footer-btn__image {
+  width: 50px;
+  height: 50px;
+}
+
+.active {
+  background-color: #feda89;
+}

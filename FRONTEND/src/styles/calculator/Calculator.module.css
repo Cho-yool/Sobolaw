@@ -1,0 +1,153 @@
+.pages {
+  background-color: #f5f5f5;
+}
+.calculator {
+  text-align: center;
+  margin: 1rem auto;
+  background-color: #f3e7c0;
+  display: flex;
+  justify-content: start;
+  width: fit-content;
+  border-radius: 1rem;
+  padding: 1rem;
+  max-width: 800px;
+}
+
+.calculator-box {
+  min-width: 800px;
+}
+
+.calculator-box__money {
+  display: flex;
+  background-color: white;
+  padding: 0 11px;
+  line-height: 1.5;
+  border-radius: 8px;
+  align-items: center;
+  font-size: 20px;
+}
+
+.calculator-box__money > input {
+  font-size: 18px;
+  margin: 7px 0;
+  width: 100%;
+  border: none;
+  outline: none;
+  text-align: end;
+  transform: translateY(10%);
+}
+.calculator-box__money > input::-webkit-inner-spin-button {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+}
+
+.detail-info {
+  width: 90%;
+  margin: 2rem auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.result-box {
+  width: 800px;
+  margin: 1rem auto;
+  padding: 1rem;
+  border: #f3e7c0 solid 1px;
+  border-radius: 1rem;
+  line-height: 2rem;
+  background-color: #f3e7c0;
+}
+
+.result-box p {
+  font-size: 1.2rem;
+}
+
+.notice {
+  width: 100%;
+  margin-top: 1rem;
+  line-height: 2rem;
+}
+
+.notice-header {
+  background-color: white;
+  box-shadow: 5px 5px 5px rgba(128, 128, 128, 0.516);
+  border: 1px solid rgba(128, 128, 128, 0.516);
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.notice-header-box {
+  margin-bottom: 0.5rem;
+}
+
+.notice-header-title,
+.notice-content-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin: 1rem 0;
+}
+
+.notice-header-content {
+  font-size: 1rem;
+}
+
+.notice-content {
+  margin-bottom: 1rem;
+}
+
+.notice-content-table {
+  display: table;
+  width: 90%;
+  margin: 1rem;
+  height: fit-content;
+}
+
+.notice-content-row {
+  display: table-row;
+  height: fit-content;
+}
+
+.notice-content-header,
+.notice-content-column {
+  display: table-cell;
+  height: fit-content;
+}
+
+.notice-content-column > li {
+  border: 1px solid black;
+  padding: 1rem;
+  height: fit-content;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.notice-content-header {
+  font-weight: bold;
+  background-color: #f2f2f2;
+  border: 1px solid black;
+  padding: 1rem;
+}
+
+.notice-content-header:first-child {
+  border-radius: 1rem 0 0 0;
+}
+
+.notice-content-header:last-child {
+  border-radius: 0 1rem 0 0;
+}
+
+.notice-content-column_left {
+  border-radius: 0 0 0 1rem;
+}
+
+.notice-content-column_right {
+  border-radius: 0 0 1rem 0;
+}
+
+.notice-content-list {
+  list-style: decimal;
+  margin: 0.5rem 0.5rem;
+  font-weight: 600;
+}

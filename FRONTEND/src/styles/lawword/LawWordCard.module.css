@@ -1,0 +1,11 @@
+.card-body {
+  width: 90%;
+  height: 70px;
+  margin: 1rem 0;
+}
+
+.card-body__content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -1,0 +1,39 @@
+.myinfo-box {
+  padding-left: 7rem;
+  padding-right: 7rem;
+}
+
+.box-title {
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
+  background-color: #f3e9d2;
+  padding: 1rem;
+  font-weight: bold;
+  font-size: large;
+  color: rgba(41, 9, 9, 0.829);
+}
+
+.box-content {
+  display: flex;
+  /* justify-content: space-between; */
+}
+
+.box4 {
+  display: flex;
+  height: 5rem;
+  justify-content: flex-end;
+  align-items: flex-end;
+  margin-top: 5rem;
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 768px) {
+  .myinfo-box {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .box-content {
+    justify-content: space-between;
+  }
+}

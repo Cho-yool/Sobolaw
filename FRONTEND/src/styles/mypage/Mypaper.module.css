@@ -1,0 +1,27 @@
+.mypaper-box {
+  padding-left: 7rem;
+  padding-right: 7rem;
+}
+
+.button-box {
+  display: flex;
+
+  justify-content: flex-end;
+  align-items: flex-end;
+  margin-top: 2.5rem;
+}
+
+.mypaper-button {
+  margin-bottom: 1rem;
+}
+
+.table {
+  margin-bottom: 3rem;
+}
+
+@media (max-width: 700px) {
+  .mypaper-box {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
