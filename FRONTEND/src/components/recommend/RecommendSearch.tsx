@@ -4,6 +4,7 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import style from '../../styles/recommend/RecommendSearch.module.css';
 import LoadingImage from './LoadingImage';
+import { searchPrecedents } from '../../api/recommendsearch';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -110,20 +111,20 @@ const RecommendSearch: React.FC = () => {
     }, updateInterval);
   };
 
+  const handleSubmit = async () => {
+    const situation = `${selectedCaseType} ${stepTwoValue} ${stepThreeValue} ${stepFourValue}`;
+    console.log('Submitting', situation);
 
-  
-
-  const handleSubmit = () => {
-    const submissionData = [{
-      selectedCaseType,
-      stepTwoValue,
-      stepThreeValue,
-      stepFourValue,
-    }];
-    console.log('Submitting', submissionData);
-    simulateLoadingProcess();
-    // 여기에 제출 로직을 추가하세요, 예를 들어:
-    // fetch('/api/submit', { method: 'POST', body: JSON.stringify(submissionData), headers: { 'Content-Type': 'application/json' } })
+    try {
+      simulateLoadingProcess(); // 로딩 프로세스를 시뮬레이션하는 함수 호출
+      const searchResults = await searchPrecedents(situation);
+      console.log('Search results:', searchResults);
+      // TODO: 검색 결과 페이지로 이동
+      // 예: 결과 페이지로 이동하면서 검색 결과 데이터 전달
+      navigate('/recommend-results', { state: { searchResults } });
+    } catch (error) {
+      console.error('검색 중 오류가 발생하였습니다', error);
+    }
   }
 
   if(isLoading) {
