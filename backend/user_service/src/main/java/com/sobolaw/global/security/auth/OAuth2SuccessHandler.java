@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * 소셜 로그인이 성공적으로 이루어졌다면 Token 을 발급하고 redirect. (2)
@@ -40,13 +41,13 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         tokenProvider.generateRefreshToken(authentication, memberId);
 
         log.info("accessToken = " + accessToken);
-
         // 토큰 전달을 위한 redirect
-        // 토큰을 헤더에 추가하여 전달
-        response.addHeader("Authorization", TokenKey.TOKEN_PREFIX + accessToken);
+        String redirectUrl = UriComponentsBuilder.fromUriString(URI)
+            .queryParam("accessToken", accessToken)
+            .build().toUriString();
+        log.info("redirectUrl = " + redirectUrl);
 
-        // 리다이렉트 URL로 이동
-        response.sendRedirect(URI);
+        response.sendRedirect(redirectUrl);
     }
 
 
