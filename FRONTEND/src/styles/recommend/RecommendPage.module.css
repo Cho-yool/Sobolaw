@@ -86,7 +86,7 @@
   .recommendCardSection h2 {
     font-size: 35px; /* 글꼴 크기 */
     font-weight: 600; /* 글꼴 두껍게 */
-    margin-top: 10%;
+    margin-top: 7%;
     margin-bottom: 5%;
     margin-left: 10%;
   }
@@ -100,16 +100,17 @@
 
   .recommendSearchSection {
     background-color: #f5f5f5; /* 배경색 */
-    margin: 0px auto 50% auto; /* 상하 마진과 자동 가로 정렬 */
+    margin: 0px auto 40% auto; /* 상하 마진과 자동 가로 정렬 */
     width: 100%; /* 전체 너비의 80% */
-    height: 700px;
+    height: 500px;
+    
   }
   
   .recommendSearchSection h2 {
-    font-size: 35px; /* 글꼴 크기 */
+    font-size: 32px; /* 글꼴 크기 */
     font-weight: 600; /* 글꼴 두껍게 */
-    margin-top: 10%;
-    margin-bottom: 7%;
+    margin-top: 7%;
+    margin-bottom: 5%;
     margin-left: 10%;
   }
 

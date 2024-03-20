@@ -5,6 +5,7 @@ import Sidebar from "../../components/lawcasedetail/Sidebar";
 import { getLawDetail } from "../../api/lawdetail";
 import { useQuery } from "react-query";
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 interface getDataProps {
   caseContent: string;
@@ -24,8 +25,10 @@ interface getDataProps {
 const LawCaseDetail = () => {
   const { Title } = Typography;
   const [getData, setGetData] = useState<getDataProps>(Object());
+  const location = useLocation()
+  const [currentLocation, setCurrentLocation] = useState<number>(Number(location.pathname.split("/")[2]))
 
-  const onChange = useQuery("lawDetail", () => getLawDetail(), {
+  const onChange = useQuery("lawDetail", () => getLawDetail(currentLocation), {
     onSuccess: (response) => {
       setGetData(response.data.data);
     },
