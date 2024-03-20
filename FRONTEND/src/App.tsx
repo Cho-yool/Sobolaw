@@ -2,9 +2,10 @@ import { Route, Routes } from "react-router-dom";
 import LayoutPage from "./components/common/Layout";
 import LawCaseDetail from "./pages/lawcasedetail/LawCaseDetail";
 import LoginPage from "./pages/LoginPage";
-import SearchPage from "./pages/SearchPage";
-import SearchResultPage from "./pages/SearchResultPage";
-import RecommendPage from "./pages/RecommendPage";
+import SearchPage from "./pages/keywordsearch/SearchPage";
+import SearchResultPage from "./pages/keywordsearch/SearchResultPage";
+import RecommendPage from "./pages/recommend/RecommendPage";
+import RecommendResultPage from "./pages/recommend/RecommendResultPage";
 import FormPage from "./pages/FormPage";
 import CalculatorPage from "./pages/CalculatorPage";
 import MainPage from "./pages/MainPage";
@@ -27,6 +28,7 @@ function App() {
         <Route path="/search" element={<SearchPage />} />
         <Route path="/search-results" element={<SearchResultPage />} />
         <Route path="/recommend" element={<RecommendPage />} />
+        <Route path="/recommend-results" element={<RecommendResultPage />} />
         <Route path="/plaint" element={<FormPage />} />
         <Route path="/cal" element={<CalculatorPage />} />
         <Route path="/mypage/*" element={<MyPage />}>

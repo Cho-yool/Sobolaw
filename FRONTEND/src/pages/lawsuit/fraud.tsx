@@ -118,7 +118,7 @@ export default function FraudPage() {
   };
 
   return (
-    <div className="pages">
+    <div>
       <LawsuitTab cates="사기죄" />
       <div className={style["container"]}>
         <div className={style["left-menu"]}>

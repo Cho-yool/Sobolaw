@@ -14,6 +14,7 @@ const MypageMenu: React.FC<RightMenuProps> = ({ mode, setSelectedKeys, selectedS
     setSelectedKeys([""])
     setSelectedSubKeys([key])
   }
+
   return (
     <Menu mode={mode} selectedKeys={selectedSubKeys} onSelect={subClickHandler}>
       <Menu.SubMenu

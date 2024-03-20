@@ -15,7 +15,7 @@ const theme = {
   token: {
     fontFamily: "Orbit-Regular",
     Tabs: {
-      itemColor: "#bbbbbb",
+      itemColor: "#aaaaaa",
       itemHoverColor: "#EAA854",
       itemSelectedColor: "#EAA854",
       inkBarColor: "#EAA854",
@@ -38,6 +38,10 @@ const theme = {
     },
     Input: {
       colorPrimary: "#FEDA89",
+      algorithm: true, // Enable algorithm
+    },
+    Checkbox: {
+      colorPrimary: "#BF8438",
       algorithm: true, // Enable algorithm
     },
   },

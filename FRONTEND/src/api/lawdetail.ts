@@ -5,8 +5,8 @@ const http = mainAxios();
 const headers = new AxiosHeaders();
 headers.set("Content-Type", "application/json;charset=utf-8");
 
-export async function getLawDetail(params?: { precedentId: number }) {
-  const url = "/law-service/precedent/detail/64453";
+export async function getLawDetail(params: number ) {
+  const url = `/law-service/precedent/detail/${params}`;
   return await http.get(url);
 }
 
