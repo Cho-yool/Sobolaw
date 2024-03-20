@@ -10,7 +10,7 @@ const { Content } = Layout;
 const words = ['손해배상', '사기', '횡령', '계약위반', '고용법', '청구이의', '소유권분쟁']; // 변화할 단어 목록
 const tooltipMessage = (
   <>
-    <span>판례를 분석하기 위해 한국어 형태소 분석기인 konlpy를 사용하여 텍스트를 단어로 나누고,</span>
+    <span>판례를 분석하기 위해 한국어 형태소 분석기인 koNLPy를 사용하여 텍스트를 단어로 나누고,</span>
     <br />
     <span>가장 중요한 단어를 찾아내기 위해 TF-IDF 방식을 활용했습니다.</span>
     <br />
@@ -46,13 +46,14 @@ const RecommendPage: React.FC = () => {
     return () => window.removeEventListener('scroll', checkScroll);
   }, []);
 
+  // 위에서 정의한 단어 목록을 이용하여, 0.1초마다 한 글자씩 추가하고, 1초 후 다음 단어로 변경
   useEffect(() => {
     if (letterIndex > words[wordIndex].length) {
       setTimeout(() => {
         setWordIndex((prevIndex) => (prevIndex + 1) % words.length);
         setLetterIndex(0);
-      }, 1000);
-    } else {
+      }, 1000); // 1초 후 다음 단어로 변경
+    } else { // 0.1초마다 한 글자씩 추가
       const timer = setTimeout(() => {
         setLetterIndex(letterIndex + 1);
         setCurrentWord(words[wordIndex].substring(0, letterIndex));
@@ -61,8 +62,12 @@ const RecommendPage: React.FC = () => {
     }
   }, [letterIndex, wordIndex]);
 
+  // 버튼 클릭 시 검색 섹션으로 스크롤 이동
   const scrollToSearchSection = () => {
-    window.scrollTo({ top: 1500, behavior: 'smooth' });
+    const searchSection = document.querySelector(`.${style.recommendSearchSection}`);
+    if (searchSection) {
+      searchSection.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   return (
