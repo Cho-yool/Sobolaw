@@ -1,4 +1,4 @@
-import { InsultForm } from "./DataTypes";
+import { FraudForm, InsultForm } from "./DataTypes";
 
 interface OnlineOption {
   value: string | number;
@@ -85,5 +85,39 @@ export const initialInsultContent: InsultForm = {
   circumstancesForIdentification: "",
   evidence: "",
   submissionDate: "",
+  policeStationTeam: "",
+};
+
+export const initialFraudContent: FraudForm = {
+  title: "",
+  plaintiffName: "",
+  plaintiffResidentRegistrationNumber: "",
+  plaintiffAddress: "",
+  plaintiffPhoneNumber: "",
+  defendantName: "",
+  defendantAddress: "",
+  defendantPhoneNumber: "",
+  contactDate: "",
+  contactTime: {
+    hour: 0,
+    minute: 0,
+    second: 0,
+    nano: 0,
+  },
+  tradeSite: "",
+  tradedItem: "",
+  depositDate: "",
+  depositTime: {
+    hour: 0,
+    minute: 0,
+    second: 0,
+    nano: 0,
+  },
+  depositAmount: 0,
+  contactMethod: "",
+  isCashDeposit: false,
+  bankName: "",
+  accountNumber: "",
+  evidence: "",
   policeStationTeam: "",
 };
