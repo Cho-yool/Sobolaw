@@ -6,19 +6,25 @@ import java.time.LocalDateTime;
 /**
  * 소장 리스트 출력 DTO.
  */
-public record LawsuitDefamationListResponseDTO(String type, String title, LocalDateTime createdTime, String defendantName) implements LawsuitListResponseDTO {
+public record LawsuitDefamationListResponseDTO(Long lawsuitDefamationId, String type, String title, LocalDateTime createdTime, String defendantName) implements LawsuitListResponseDTO {
 
     /**
      * LawsuitDefamation 엔티티를 LawsuitDefamationListResponseDTO 변환하는 메소드.
      */
     public static LawsuitDefamationListResponseDTO from(LawsuitDefamation lawsuitDefamation) {
         return new LawsuitDefamationListResponseDTO(
+            lawsuitDefamation.getLawsuitDefamationId(),
             "Defamation",
             lawsuitDefamation.getTitle(),
             lawsuitDefamation.getCreatedTime(),
             lawsuitDefamation.getDefendantName()
         );
 
+    }
+
+    @Override
+    public Long getId() {
+        return lawsuitDefamationId;
     }
 
     @Override

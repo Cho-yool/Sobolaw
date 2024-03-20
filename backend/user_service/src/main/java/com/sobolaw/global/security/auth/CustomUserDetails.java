@@ -1,13 +1,9 @@
 package com.sobolaw.global.security.auth;
 
 import com.sobolaw.api.member.entity.Member;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,6 +33,10 @@ public record CustomUserDetails(Member member,
             new SimpleGrantedAuthority(member.getRole().name()));
     }
 
+    public Long getMemberId() {
+        return member.getMemberId();
+    }
+
     @Override
     public String getPassword() {
         return null;
@@ -47,21 +47,33 @@ public record CustomUserDetails(Member member,
         return member.getName();
     }
 
+    /**
+     * 계정이 만료되지 않았는지 검증.
+     */
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    /**
+     * 계정이 잠기지 않았는지 검증.
+     */
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    /**
+     * 비밀번호가 만료되지 않았는지 검증.
+     */
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    /**
+     * 계정이 활상화 상태인지 검증.
+     */
     @Override
     public boolean isEnabled() {
         return true;

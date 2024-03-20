@@ -98,8 +98,9 @@ eureka:
 
 # jwt
 jwt:
-  secret-key: "123testKeyValue123456testKeyValue456789testKeyValue789123testKeyValue123456testKeyValue456789testKeyValue789123testKeyValue123456testKeyValue456789testKeyValue789"
-  access:
-    expiration: "604800000" # 7일
-  refresh:
-    expiration: "360000" # 1시간
+  secret-key:
+    access: "123testKeyValue123456testKeyValue456789testKeyValue789123testKeyValue123456testKeyValue456789testKeyValue789123testKeyValue123456testKeyValue456789testKeyValue789"
+    refresh: "1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r"
+  expiration:
+    access: "360000" # 1시간
+    refresh: "259200000" # 30일
