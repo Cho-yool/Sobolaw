@@ -66,6 +66,10 @@ public class JwtProvider {
         this.secretKey = Keys.hmacShaKeyFor(key.getBytes()); // Decoders.BASE64URL.decode(key)
     }
 
+    @PostConstruct
+    private void setRefreshSecretKey() {
+        this.secretRefreshKey = Keys.hmacShaKeyFor(refreshKey.getBytes()); // Decoders.BASE64URL.decode(key)
+    }
 
     /**
      * AccessToken 발급.
@@ -77,9 +81,10 @@ public class JwtProvider {
     /**
      * refreshToken 발급.
      */
-    public void generateRefreshToken(Authentication authentication, Long memberId) {
-        String refreshToken = generateToken(authentication, refreshExpiration, memberId, secretKey);
+    public String generateRefreshToken(Authentication authentication, Long memberId) {
+        String refreshToken = generateToken(authentication, refreshExpiration, memberId, secretRefreshKey);
         redisTokenService.saveOrUpdate(refreshToken, memberId); // redis에 저장
+        return refreshToken;
     }
 
     /**
@@ -102,7 +107,7 @@ public class JwtProvider {
     }
 
     /**
-     * 토큰으로부터 사용자의 인증 정보를 가져오고 Spring Security의 Authentication 객체를 생성.
+     * access 토큰으로부터 사용자의 인증 정보를 가져오고 Spring Security의 Authentication 객체를 생성.
      */
     public Authentication getAuthentication(String token) {
         Claims claims = parseClaims(token);
@@ -140,10 +145,10 @@ public class JwtProvider {
             String refreshToken = redisTokenService.findRefreshTokenByAccessToken(accessToken);
 
             // refreshToken이 유효한지 확인
-            if (validateToken(refreshToken)) {
+            if (validateRefreshToken(refreshToken)) {
                 // memberId 가져오기
                 Long memberId = getMemberIdByToken(refreshToken);
-                Authentication authentication = getAuthentication(refreshToken);
+                Authentication authentication = getAuthenticationByRefreshToken(refreshToken);
                 // 새로운 accessToken 생성
                 String reissueAccessToken = generateAccessToken(authentication, memberId);
                 // 재발급된 accessToken 반환
@@ -154,7 +159,7 @@ public class JwtProvider {
     }
 
     /**
-     * 토큰 유효성(권한 만료) 검사.
+     * access 토큰 유효성(권한 만료) 검사.
      */
     public boolean validateToken(String token) {
         if (!StringUtils.hasText(token)) {
@@ -166,7 +171,7 @@ public class JwtProvider {
     }
 
     /**
-     * 토큰 해독하여 payload 추출.
+     * access 토큰 해독하여 payload 추출.
      */
     private Claims parseClaims(String token) {
         try {
@@ -207,12 +212,71 @@ public class JwtProvider {
     }
 
     /**
-     * Token 으로부터 회원 아이디를 가져온다.
+     * accessToken 으로부터 회원 아이디를 가져온다.
      *
      * @param token AccessToken
      */
     public Long getMemberIdByToken(String token) {
         return ((Number) parseClaims(token).get("memberId")).longValue();
+    }
+
+    /**
+     * refresh 토큰으로부터 사용자의 인증 정보를 가져오고 Spring Security의 Authentication 객체를 생성.
+     */
+    public Authentication getAuthenticationByRefreshToken(String token) {
+        Claims claims = parseRefreshClaims(token);
+        List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
+        Long memberId = getMemberIdByRefreshToken(token);
+
+//        // memberId 추출
+//        Long memberId = claims.get("memberId", Long.class);
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
+        log.info("claims = " + claims);
+        log.info("subject = " + claims.getSubject());
+//         //security의 User 객체 생성
+//        User principal = new User(claims.getSubject(), "", authorities);
+        // CustomUserDetails 객체 생성
+        CustomUserDetails userDetails = new CustomUserDetails(member, null, null);
+
+        return new UsernamePasswordAuthenticationToken(userDetails, token, authorities);
+    }
+
+    /**
+     * refresh 토큰 유효성(권한 만료) 검사.
+     */
+    public boolean validateRefreshToken(String token) {
+        if (!StringUtils.hasText(token)) {
+            return false;
+        }
+
+        Claims claims = parseRefreshClaims(token);
+        return claims.getExpiration().after(new Date());
+    }
+
+    /**
+     * refresh 토큰 해독하여 payload 추출.
+     */
+    private Claims parseRefreshClaims(String token) {
+        try {
+            return Jwts.parser().verifyWith(secretRefreshKey).build()
+                .parseSignedClaims(token).getPayload();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims();
+        } catch (MalformedJwtException e) {
+            throw new TokenException(TokenErrorCode.INVALID_TOKEN);
+        } catch (SecurityException e) {
+            throw new TokenException(TokenErrorCode.INVALID_JWT_SIGNATURE);
+        }
+    }
+
+    /**
+     * accessToken 으로부터 회원 아이디를 가져온다.
+     *
+     * @param token RefreshToken
+     */
+    public Long getMemberIdByRefreshToken(String token) {
+        return ((Number) parseRefreshClaims(token).get("memberId")).longValue();
     }
 
 
