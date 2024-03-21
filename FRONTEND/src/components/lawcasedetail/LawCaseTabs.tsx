@@ -43,6 +43,7 @@ const TABMENUS: TabMenusProps[] = [
 
 const LawCaseTabs = ({ getData }: getDataProps) => {
   const [activeTab, setActiveTab] = useState(0);
+  const [onEditing, setOnEditing] = useState<boolean>(false);
   const [isSummary, setIsSummary] = useState<boolean>(false);
   const judgmentRef = useRef<HTMLDivElement>(null);
   const rulingRef = useRef<HTMLDivElement>(null);
@@ -81,6 +82,24 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
     if (ref && ref.current) {
       ref.current.scrollIntoView({ behavior: "smooth" });
     }
+  };
+
+  const onMouseClickHandler = () => {
+    setOnEditing(true);
+  };
+  const onMouseMoveHandler = () => {
+    if (onEditing) {
+      console.log(window.getSelection()?.toString());
+      console.log(window.getSelection()?.focusOffset);
+      const range = window.getSelection()?.getRangeAt(0);
+
+      const test = range?.startContainer;
+      console.log(test);
+      window.getSelection()?.deleteFromDocument();
+    }
+  };
+  const onMouseOutHandler = () => {
+    setOnEditing(false);
   };
 
   return (
@@ -160,6 +179,9 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
             dangerouslySetInnerHTML={{
               __html: getData.caseContent,
             }}
+            onMouseDown={onMouseClickHandler}
+            onMouseMove={onMouseMoveHandler}
+            onMouseUp={onMouseOutHandler}
           ></p>
         )}
       </div>

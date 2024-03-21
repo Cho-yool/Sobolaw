@@ -25,10 +25,12 @@ interface getDataProps {
 const LawCaseDetail = () => {
   const { Title } = Typography;
   const [getData, setGetData] = useState<getDataProps>(Object());
-  const location = useLocation()
-  const [currentLocation, setCurrentLocation] = useState<number>(Number(location.pathname.split("/")[2]))
+  const location = useLocation();
+  const [currentLocation, setCurrentLocation] = useState<number>(
+    Number(location.pathname.split("/")[2])
+  );
 
-  const onChange = useQuery("lawDetail", () => getLawDetail(currentLocation), {
+  useQuery("lawDetail", () => getLawDetail(currentLocation), {
     onSuccess: (response) => {
       setGetData(response.data.data);
     },
