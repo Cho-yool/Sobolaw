@@ -1,7 +1,7 @@
 // src/pages/SearchResultPage.tsx
-import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { Pagination, Input, Tabs, Select } from "antd";
+import { useState, useEffect, useMemo } from "react";
+import { useLocation } from "react-router-dom";
+import { Pagination, Input, Tabs, Select, Skeleton } from "antd";
 import { SearchOutlined } from '@ant-design/icons';
 import SearchResultList, { SearchResult } from "../../components/search/SearchResultList";
 import style from "../../styles/search/SearchResultList.module.css";
@@ -17,20 +17,20 @@ interface FilterOptions {
 
 const SearchResultPage = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const initialPage = 1;
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedCourt, setSelectedCourt] = useState<string>('');
   const [selectedInstance, setSelectedInstance] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<string>('');
+  const [loading, setLoading] = useState(false);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const pageSize = 10;
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const searchQuery = queryParams.get('query');
-    const activeTab = queryParams.get('tab') || 'precedent';
+    const activeTab = location.state?.activeTab || 'precedent';
 
     if (searchQuery) {
       setSearchTerm(searchQuery);
@@ -39,6 +39,7 @@ const SearchResultPage = () => {
   }, [location]);
 
   const fetchSearchResults = async (searchQuery: string, activeTab: string) => {
+    setLoading(true);
     try {
       let results: SearchResult[] = [];
       if (activeTab === 'precedent') {
@@ -53,33 +54,34 @@ const SearchResultPage = () => {
         }
       }
       setSearchResults(results);
-      console.log('Search results:', results);
+      // navigate(`/search-results?query=${encodeURIComponent(searchQuery)}&tab=${activeTab}`, {
+      //   state: { searchResults: results, activeTab },
+      // });
+      console.log('Search results(SearchResultPage):', results);
     } catch (error) {
       console.error('Error fetching search results:', error);
-      setSearchResults([]); // 에러 발생 시 searchResults를 빈 배열로 설정합니다.
-      // TODO: 에러 처리
+    } finally {
+      setLoading(false);
     }
   };
 
   const filterResults = () => {
     if (!Array.isArray(searchResults)) return [];
 
-    const filtered = searchResults.filter(result =>
-      (selectedCourt ? result.courtName === selectedCourt : true) &&
-      (selectedInstance ? result.instance === selectedInstance : true) &&
-      (selectedDate ? result.judgmentDate === selectedDate : true)
+    const filtered = searchResults.filter(
+      (result) =>
+        (selectedCourt ? result.courtName === selectedCourt : true) &&
+        (selectedInstance ? result.instance === selectedInstance : true) &&
+        (selectedDate ? result.judgmentDate === selectedDate : true)
     );
-
-    console.log(selectedCourt, selectedInstance, selectedDate, filtered)
     return filtered;
   };
 
-  const filteredResults = filterResults();
+  const filteredResults = useMemo(() => filterResults(), [searchResults, selectedCourt, selectedInstance, selectedDate]);
   const paginatedResults = filteredResults.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const handleSearch = () => {
     console.log(`검색어: ${searchTerm}`);
-    navigate(`/search-results?query=${encodeURIComponent(searchTerm)}`);
     fetchSearchResults(searchTerm, 'precedent');
   };
 
@@ -95,11 +97,13 @@ const SearchResultPage = () => {
         <>
           <div className={style.selectContainer}>
             <Select defaultValue="법원" style={{ width: 95 }} onChange={onCourtChange} className={style.singleSelect}>
+              <Option value="전체">전체</Option>
               <Option value="대법원">대법원</Option>
               <Option value="고등법원">고등법원</Option>
               <Option value="지방법원">지방법원</Option>
             </Select>
             <Select defaultValue="심급" style={{ width: 70 }} onChange={onInstanceChange} className={style.singleSelect}>
+              <Option value="전체">전체</Option>
               <Option value="1심">1심</Option>
               <Option value="2심">2심</Option>
               <Option value="3심">3심</Option>
@@ -111,9 +115,24 @@ const SearchResultPage = () => {
               <Option value="5년">5년</Option>
             </Select>
           </div>
-          <div className={style.searchResultList}>
-            <SearchResultList searchResults={paginatedResults} />
-          </div>
+          {loading ? (
+            <div>
+              {Array.from({ length: 5 }).map((_, index) => (
+                <Skeleton
+                  key={index}
+                  active
+                  avatar
+                  title={{ width: '100%' }}
+                  paragraph={{ rows: 3, width: '400px' }}
+                  style={{ marginBottom: 20 }}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className={style.searchResultList}>
+              <SearchResultList searchResults={paginatedResults} loading={loading} />
+            </div>
+          )}
         </>
       ),
     },
