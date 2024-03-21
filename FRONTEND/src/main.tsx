@@ -44,6 +44,10 @@ const theme = {
       colorPrimary: "#BF8438",
       algorithm: true, // Enable algorithm
     },
+    Pagination: {
+      colorPrimary: "#644419",
+      algorithm: true, // Enable algorithm
+    },
   },
 };
 const queryClient = new QueryClient();

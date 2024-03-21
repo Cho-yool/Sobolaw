@@ -12,6 +12,7 @@ export interface SearchResult {
   caseName: string;
   caseContent: string;
   similarity: number;
+  judgmentDate: string;
 }
 
 const RecommendResultList = () => {
@@ -44,6 +45,7 @@ const RecommendResultList = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  
   const calculateAverageSimilarity = (results: SearchResult[]) => {
     const totalSimilarity = results.reduce((sum, result) => sum + result.similarity, 0);
     const averageSimilarity = Math.round(totalSimilarity / results.length);
@@ -57,24 +59,31 @@ const RecommendResultList = () => {
     setTop20Similarity(top20AverageSimilarity);
   };
 
-  const handleChangePage = (page: number) => {
+
+  const handleChangePage =(page: number) => {
     setCurrentPage(page);
   };
 
   const handleSortChange = (option: 'similarity' | 'latest') => {
     setSortOption(option);
     const sortedResults = [...searchResults];
+
     if (option === 'similarity') {
       sortedResults.sort((a, b) => b.similarity - a.similarity);
     } else if (option === 'latest') {
-      sortedResults.sort((a, b) => b.precedentId - a.precedentId);
+      sortedResults.sort((a, b) => b.judgmentDate.localeCompare(a.judgmentDate));
     }
     setSearchResults(sortedResults);
   };
 
   const handleListClick = (precedentId: number) => {
     window.scrollTo(0, 0);
-    navigate(`/laws/${precedentId}`);
+    navigate(`/laws/${precedentId}`, {state: {currentPage, sortOption}}); // 페이지 이동 시 상태 전달
+  };
+
+  // HTML 태그 지우고 텍스트만 표시
+  const cleanHtmlTags = (htmlString: string) => {
+    return htmlString.replace(/<[^>]*>?/gm, '');
   };
 
   const currentData = searchResults.slice(
@@ -90,13 +99,13 @@ const RecommendResultList = () => {
             className={sortOption === 'similarity' ? style.active : ''}
             onClick={() => handleSortChange('similarity')}
           >
-            유사도 높은 순
+            유사도 높은순
           </button>
           <button
             className={sortOption === 'latest' ? style.active : ''}
             onClick={() => handleSortChange('latest')}
           >
-            최신 순
+            최신순
           </button>
         </div>
         <div className={style.resultSummary}>
@@ -104,7 +113,7 @@ const RecommendResultList = () => {
             <div className={style.summaryValue}>
               <CountUp end={totalCount} duration={2} />건
             </div>
-            <div className={style.summaryLabel}>검색된 판례 수</div>
+            <div className={style.summaryLabel}>검색된 판례수</div>
           </div>
           <div className={style.summaryItem}>
             <div className={style.summaryValue}>
@@ -135,7 +144,7 @@ const RecommendResultList = () => {
             </div>
             <div className={style.titleContent}>
               <div className={style.title}>{item.caseName}</div>
-              <div className={style.content}>{item.caseContent}</div>
+              <div className={style.content}>{cleanHtmlTags(item.caseContent)}</div>
             </div>
             <div className={`${style.similarity} ${style.similarityMobile}`}>
               <CircularProgressBar percentage={Math.round(item.similarity)} size={isMobile ? 60 : 100} isMobile={isMobile} />
