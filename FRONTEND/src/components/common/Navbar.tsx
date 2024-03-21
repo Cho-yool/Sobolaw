@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import {
   Tag,
   Layout,
@@ -17,6 +18,8 @@ import {
   EditTwoTone,
   CopyTwoTone,
 } from "@ant-design/icons";
+import { postLogout, temppostLogout } from "../../api/members";
+import { RootState } from "../../redux/store/store";
 import logo from "/NavLogo.png";
 import MypageMenu from "./MypageMenu";
 import style from "../../styles/common/Navbar.module.css";
@@ -42,14 +45,22 @@ const ResponsiveNav = ({
   setSelectedKeys,
   setSelectedSubKeys,
 }: ResponsiveNavProps) => {
-  const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.user);
+  const [visible, setVisible] = useState(false);
   const showDrawer = () => {
     setVisible(true);
   };
 
   const onClose = () => {
     setVisible(false);
+  };
+  const handlelogout = () => {
+    console.log(user.accessToken);
+    // postLogout(user.accessToken, user.refreshToken);
+    temppostLogout(user.accessToken, user.refreshToken);
+    // dispatch(resetAuth());
+    navigate("/");
   };
 
   return (
@@ -100,24 +111,38 @@ const ResponsiveNav = ({
               />
             </Col>
             <Col xs={0} sm={0} md={4}>
-              <MypageMenu
-                mode={"horizontal"}
-                setSelectedKeys={setSelectedKeys}
-                selectedSubKeys={selectedSubKeys}
-                setSelectedSubKeys={setSelectedSubKeys}
-              />
+              {user.accessToken != "" && (
+                <MypageMenu
+                  username={user.nickname}
+                  mode={"horizontal"}
+                  setSelectedKeys={setSelectedKeys}
+                  selectedSubKeys={selectedSubKeys}
+                  setSelectedSubKeys={setSelectedSubKeys}
+                />
+              )}
             </Col>
             <Col xs={0} sm={0} md={2}>
-              <Button
-                type="primary"
-                shape="round"
-                style={{ marginRight: "10px" }}
-                onClick={() => {
-                  navigate("/login");
-                }}
-              >
-                로그인
-              </Button>
+              {user.accessToken === "" ? (
+                <Button
+                  type="primary"
+                  shape="round"
+                  style={{ marginRight: "10px" }}
+                  onClick={() => {
+                    navigate("/login");
+                  }}
+                >
+                  로그인
+                </Button>
+              ) : (
+                <Button
+                  type="primary"
+                  shape="round"
+                  style={{ marginRight: "10px" }}
+                  onClick={handlelogout}
+                >
+                  로그아웃
+                </Button>
+              )}
             </Col>
           </Row>
           {/* 로그인시 활성화 */}
@@ -156,17 +181,33 @@ const ResponsiveNav = ({
               color: "644419",
             }}
           >
-            로그인이 필요합니다
-            <Button
-              type="primary"
-              shape="round"
-              style={{ marginRight: "10px", marginTop: "1rem" }}
-              onClick={() => {
-                navigate("/login");
-              }}
-            >
-              로그인
-            </Button>
+            {user.accessToken === "" ? (
+              <div>
+                로그인이 필요합니다
+                <Button
+                  type="primary"
+                  shape="round"
+                  style={{ marginRight: "10px", marginTop: "1rem" }}
+                  onClick={() => {
+                    navigate("/login");
+                  }}
+                >
+                  로그인
+                </Button>
+              </div>
+            ) : (
+              <div>
+                {user.nickname}님! 안녕하세요
+                <Button
+                  type="primary"
+                  shape="round"
+                  style={{ marginRight: "10px" }}
+                  onClick={handlelogout}
+                >
+                  로그아웃
+                </Button>
+              </div>
+            )}
           </div>
 
           <div

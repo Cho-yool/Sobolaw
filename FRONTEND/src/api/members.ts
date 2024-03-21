@@ -1,16 +1,66 @@
-import { userAxios } from "./http";
+import { userAxios, localuserAxios } from "./http";
 import { AxiosHeaders } from "axios";
 
 const http = userAxios();
+const testHttp = localuserAxios();
 const headers = new AxiosHeaders();
 headers.set("Content-Type", "application/json;charset=utf-8");
 
 const url = "members";
 
 // 멤버 정보 조회
-async function getUserInfo(memberId: number) {
-  const response = await http.get(`${url}/${memberId}`);
+async function getUserInfo(accessToken: string) {
+  const response = await http.get(`${url}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + accessToken,
+    },
+  });
   return response.data.data;
+}
+
+// 멤버 정보 조회(로컬)
+async function tempgetUserInfo(accessToken: string) {
+  const response = await testHttp.get(`/${url}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + accessToken,
+    },
+  });
+  return response.data.data;
+}
+
+// 로그아웃
+async function postLogout(accessToken: string, refreshToken: string) {
+  console.log(accessToken);
+  const response = await http.post(`${url}/logout`, refreshToken, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.data.data;
+}
+
+// 로컬로그아웃
+async function temppostLogout(accessToken: string, refreshToken: string) {
+  const response = await testHttp.post(`${url}/logout`, refreshToken, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.data.data;
+}
+
+// 회원탈퇴
+async function deleteUser(accessToken: string) {
+  await http.delete(`${url}/delete`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 }
 
 // 멤버가 저장한 판례 조회
@@ -52,6 +102,10 @@ export {
   getRecentPrecedents,
   getMemberList,
   postMyKeyword,
+  postLogout,
+  deleteUser,
+  tempgetUserInfo,
+  temppostLogout,
 };
 
 // async function getUserInfo(

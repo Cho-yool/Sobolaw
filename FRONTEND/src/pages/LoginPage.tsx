@@ -2,7 +2,9 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store/store";
-import { saveToken } from "../redux/reducers/user/userSlice";
+import { saveToken, loadInfo } from "../redux/reducers/user/userSlice";
+import { getUserInfo } from "../api/members";
+import { tempgetUserInfo } from "../api/members";
 import backImg from "/images/loginBg.jpg";
 import LoginBtnKaKao from "/images/KAKAO_LOGIN.png";
 import LoginBtnNaver from "/images/NAVER_LOGIN.png";
@@ -11,13 +13,14 @@ function LoginPage() {
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
+  const userId = useSelector((state: RootState) => state.user.userId);
   const kakaoURL = `https://j10a604.p.ssafy.io/api/user-service/oauth2/authorization/kakao`;
   const naverURL = `https://j10a604.p.ssafy.io/api/user-service/oauth2/authorization/naver`;
 
   useEffect(() => {
     const aT = new URL(window.location.href).searchParams.get("accessToken");
     const rT = new URL(window.location.href).searchParams.get("refreshToken");
-
+    console.log(accessToken);
     console.log(aT);
     console.log(rT);
     if (aT) {
@@ -26,15 +29,24 @@ function LoginPage() {
       console.log(aT);
     }
     if (accessToken) {
-      console.log(accessToken);
-      // loadUserInfo();
-      navigate("/");
+      tempgetUserInfo(accessToken)
+        .then((res) => {
+          console.log(res);
+          dispatch(loadInfo({ userId: res.memberId, nickname: res.name }));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      // navigate("/");
     }
   }, [accessToken]);
 
+  console.log(userId);
+
   const kakaoLogin = function () {
     // 로그인버튼을 누르면 카카오 로그인 창으로 간다
-    window.location.href = kakaoURL;
+    window.location.href =
+      "http://70.12.247.27:8001/api/user-service/oauth2/authorization/kakao";
   };
 
   return (

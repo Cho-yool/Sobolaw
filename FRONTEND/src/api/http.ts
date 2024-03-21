@@ -1,5 +1,4 @@
 import axios from "axios";
-import { head } from "lodash";
 
 const BASEURL = "j10a604.p.ssafy.io/api/";
 // withCredentials의 디폴트는 false
@@ -30,6 +29,15 @@ function userAxios() {
     // withCredentials: credential,
   });
 }
+// 재성이 로컬
+function localuserAxios() {
+  return axios.create({
+    baseURL: "http://70.12.247.27:8001/api/user-service/",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+  });
+}
 
 // https://j10a604.p.ssafy.io/api/law-service/swagger-ui/index.html
 // 소영 파트
@@ -42,7 +50,6 @@ function lawAxios() {
     },
     // withCredentials: credential,
   });
-
 }
 // https://j10a604.p.ssafy.io/api/recommend-service/swagger-ui.html
 // 종범 파트
@@ -57,4 +64,4 @@ function recommendAxios() {
   });
 }
 
-export { mainAxios, userAxios, lawAxios, recommendAxios};
+export { mainAxios, userAxios, lawAxios, recommendAxios, localuserAxios };
