@@ -17,7 +17,10 @@ const userSlice = createSlice({
   reducers: {
     // 초기화 함수
     resetAuth: (state) => {
+      state.userId = 0;
+      state.nickname = "";
       state.accessToken = "";
+      state.refreshToken = "";
     },
     // 처음 user의 정보를 저장하는 함수
     loadInfo(state, action) {

@@ -18,7 +18,8 @@ import {
   EditTwoTone,
   CopyTwoTone,
 } from "@ant-design/icons";
-import { postLogout, temppostLogout } from "../../api/members";
+// import { postLogout } from "../../api/members";
+import { temppostLogout } from "../../api/members";
 import { RootState } from "../../redux/store/store";
 import logo from "/NavLogo.png";
 import MypageMenu from "./MypageMenu";
@@ -210,68 +211,70 @@ const ResponsiveNav = ({
             )}
           </div>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-around",
-              margin: "1.5rem",
-            }}
-          >
+          {user.accessToken != "" && (
             <div
               style={{
                 display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                cursor: "pointer",
-              }}
-              onClick={() => {
-                navigate("/mypage/user");
+                justifyContent: "space-around",
+                margin: "1.5rem",
               }}
             >
-              <SmileTwoTone
-                style={{ fontSize: "3rem" }}
-                twoToneColor="#BF8438"
-              />
-              <Tag bordered={false}>회원정보</Tag>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  navigate("/mypage/user");
+                }}
+              >
+                <SmileTwoTone
+                  style={{ fontSize: "3rem" }}
+                  twoToneColor="#BF8438"
+                />
+                <Tag bordered={false}>회원정보</Tag>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  navigate("/mypage/papers");
+                }}
+              >
+                <EditTwoTone
+                  style={{ fontSize: "3rem" }}
+                  twoToneColor="#BF8438"
+                />
+                <Tag bordered={false}>내가쓴소장</Tag>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  navigate("/mypage/case");
+                }}
+              >
+                <CopyTwoTone
+                  style={{ fontSize: "3rem" }}
+                  twoToneColor="#BF8438"
+                />
+                <Tag bordered={false}>저장한판례</Tag>
+              </div>
             </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                cursor: "pointer",
-              }}
-              onClick={() => {
-                navigate("/mypage/papers");
-              }}
-            >
-              <EditTwoTone
-                style={{ fontSize: "3rem" }}
-                twoToneColor="#BF8438"
-              />
-              <Tag bordered={false}>내가쓴소장</Tag>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                cursor: "pointer",
-              }}
-              onClick={() => {
-                navigate("/mypage/case");
-              }}
-            >
-              <CopyTwoTone
-                style={{ fontSize: "3rem" }}
-                twoToneColor="#BF8438"
-              />
-              <Tag bordered={false}>저장한판례</Tag>
-            </div>
-          </div>
+          )}
 
           <Menu
             mode="vertical"

@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store/store";
 import { saveToken, loadInfo } from "../redux/reducers/user/userSlice";
-import { getUserInfo } from "../api/members";
+// import { getUserInfo } from "../api/members";
 import { tempgetUserInfo } from "../api/members";
+import style from "../styles/common/Login.module.css";
 import backImg from "/images/loginBg.jpg";
 import LoginBtnKaKao from "/images/KAKAO_LOGIN.png";
 import LoginBtnNaver from "/images/NAVER_LOGIN.png";
@@ -14,30 +15,25 @@ function LoginPage() {
   const dispatch: AppDispatch = useDispatch();
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
   const userId = useSelector((state: RootState) => state.user.userId);
-  const kakaoURL = `https://j10a604.p.ssafy.io/api/user-service/oauth2/authorization/kakao`;
-  const naverURL = `https://j10a604.p.ssafy.io/api/user-service/oauth2/authorization/naver`;
+  const tokenURL = `https://j10a604.p.ssafy.io/api/user-service/oauth2/authorization`;
 
   useEffect(() => {
     const aT = new URL(window.location.href).searchParams.get("accessToken");
     const rT = new URL(window.location.href).searchParams.get("refreshToken");
-    console.log(accessToken);
-    console.log(aT);
-    console.log(rT);
+
     if (aT) {
       // 세션에 accessToken을 저장해주자
       dispatch(saveToken({ accessToken: aT, refreshToken: rT }));
-      console.log(aT);
     }
     if (accessToken) {
       tempgetUserInfo(accessToken)
         .then((res) => {
-          console.log(res);
           dispatch(loadInfo({ userId: res.memberId, nickname: res.name }));
         })
         .catch((err) => {
           console.log(err);
         });
-      // navigate("/");
+      navigate("/");
     }
   }, [accessToken]);
 
@@ -47,6 +43,13 @@ function LoginPage() {
     // 로그인버튼을 누르면 카카오 로그인 창으로 간다
     window.location.href =
       "http://70.12.247.27:8001/api/user-service/oauth2/authorization/kakao";
+  };
+  // 로그인버튼을 누르면 각 로그인 창으로 간다
+  // const kakaoLogin = function () {
+  //   window.location.href = `${tokenURL}/kakao`;
+  // };
+  const naverLogin = function () {
+    window.location.href = `${tokenURL}/naver`;
   };
 
   return (
@@ -71,12 +74,14 @@ function LoginPage() {
       </div>
       <img
         src={LoginBtnKaKao}
+        className={style["login-btn-kakao"]}
         onClick={kakaoLogin}
         style={{ cursor: "pointer" }}
       />
       <img
         src={LoginBtnNaver}
-        onClick={() => (window.location.href = naverURL)}
+        className={style["login-btn-naver"]}
+        onClick={naverLogin}
         style={{ cursor: "pointer" }}
       />
     </div>

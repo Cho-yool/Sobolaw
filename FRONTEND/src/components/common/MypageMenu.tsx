@@ -29,8 +29,9 @@ const MypageMenu: React.FC<RightMenuProps> = ({
         title={
           <>
             <span className="username" style={{ width: "2rem" }}>
-              <p style={{ color: "#BF8438", fontWeight: "bold" }}>{username}</p>
-              님
+              <p style={{ color: "#BF8438", fontWeight: "bold" }}>
+                {username}님
+              </p>
             </span>
           </>
         }
