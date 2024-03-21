@@ -1,6 +1,6 @@
 // src/pages/SearchResultPage.tsx
 import { useState, useEffect, useMemo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Pagination, Input, Tabs, Select, Skeleton } from "antd";
 import { SearchOutlined } from '@ant-design/icons';
 import SearchResultList, { SearchResult } from "../../components/search/SearchResultList";
@@ -17,7 +17,6 @@ interface FilterOptions {
 
 const SearchResultPage = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const initialPage = 1;
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -71,9 +70,9 @@ const SearchResultPage = () => {
 
     const filtered = searchResults.filter(
       (result) =>
-      (selectedCourt ? result.courtName === selectedCourt : true) &&
-      (selectedInstance ? result.instance === selectedInstance : true) &&
-      (selectedDate ? result.judgmentDate === selectedDate : true)
+        (selectedCourt ? result.courtName === selectedCourt : true) &&
+        (selectedInstance ? result.instance === selectedInstance : true) &&
+        (selectedDate ? result.judgmentDate === selectedDate : true)
     );
     return filtered;
   };
@@ -117,19 +116,22 @@ const SearchResultPage = () => {
             </Select>
           </div>
           {loading ? (
-            Array.from({ length: 5 }).map((_, index) => (
-              <Skeleton
-                active
-                avatar
-                title={{ width: '100%' }}
-                paragraph={{ rows: 3, width: '400px'}}
-                style={{ marginBottom: 20 }}
-              />
-            ))
+            <div>
+              {Array.from({ length: 5 }).map((_, index) => (
+                <Skeleton
+                  key={index}
+                  active
+                  avatar
+                  title={{ width: '100%' }}
+                  paragraph={{ rows: 3, width: '400px' }}
+                  style={{ marginBottom: 20 }}
+                />
+              ))}
+            </div>
           ) : (
-          <div className={style.searchResultList}>
-            <SearchResultList searchResults={paginatedResults} loading={loading}/>
-          </div>
+            <div className={style.searchResultList}>
+              <SearchResultList searchResults={paginatedResults} loading={loading} />
+            </div>
           )}
         </>
       ),
