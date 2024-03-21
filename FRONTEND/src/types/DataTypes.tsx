@@ -104,7 +104,6 @@ export type DefamationForm = {
 };
 
 export type FraudForm = {
-  lawsuitId: number;
   title: string;
   plaintiffName: string;
   plaintiffResidentRegistrationNumber: string;
@@ -171,3 +170,79 @@ export type InsultForm = {
   submissionDate: string;
   policeStationTeam: string;
 };
+
+export interface TimeContent {
+  hour: number;
+  minute: number;
+  second: number;
+  nano: number;
+}
+
+export interface FraudDetails {
+  title: string;
+  setTitle: React.Dispatch<React.SetStateAction<string>>;
+  plaintiffName: string;
+  setPlaintiffName: React.Dispatch<React.SetStateAction<string>>;
+  isPlaintiff: boolean;
+  setIsplaintiff: React.Dispatch<React.SetStateAction<boolean>>;
+  plaintiffResidentRegistrationNumber: string;
+  setPlaintiffResidentRegistrationNumber: React.Dispatch<
+    React.SetStateAction<string>
+  >;
+  plaintiffMainAddress: string;
+  setPlaintiffMainAddress: React.Dispatch<React.SetStateAction<string>>;
+  plaintiffSubAddress: string;
+  setPlaintiffSubAddress: React.Dispatch<React.SetStateAction<string>>;
+  plaintiffPhoneNumber: string;
+  setPlaintiffPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
+  defendantName: string;
+  setDefendantName: React.Dispatch<React.SetStateAction<string>>;
+  isDefendantName: boolean;
+  setIsDefendantName: React.Dispatch<React.SetStateAction<boolean>>;
+  isDefendantAddress: boolean;
+  setIsDefendantAddress: React.Dispatch<React.SetStateAction<boolean>>;
+  isDefendantPhoneNumber: boolean;
+  setIsDefendantPhoneNumber: React.Dispatch<React.SetStateAction<boolean>>;
+  defendantMainAddress: string;
+  setDefendantMainAddress: React.Dispatch<React.SetStateAction<string>>;
+  defendantSubAddress: string;
+  setDefendantSubAddress: React.Dispatch<React.SetStateAction<string>>;
+  defendantPhoneNumber: string;
+  setDefendantPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
+  incidentDate: string;
+  setIncidentDate: React.Dispatch<React.SetStateAction<string>>;
+  incidentTime: TimeContent;
+  setIncidentTime: React.Dispatch<React.SetStateAction<TimeContent>>;
+  paperIDate: string;
+  setPaperIDate: React.Dispatch<React.SetStateAction<string>>;
+  paperITime: string;
+  setPaperITime: React.Dispatch<React.SetStateAction<string>>;
+  tradedItem: string;
+  setTradedItem: React.Dispatch<React.SetStateAction<string>>;
+  tradeSite: string;
+  setTradeSite: React.Dispatch<React.SetStateAction<string>>;
+  directSite: string;
+  setDirectSite: React.Dispatch<React.SetStateAction<string>>;
+  contact: string[];
+  setContact: React.Dispatch<React.SetStateAction<string[]>>;
+  disposalMethod: number | undefined;
+  setDisposalMethod: React.Dispatch<React.SetStateAction<number | undefined>>;
+  bankName: string;
+  setBankName: React.Dispatch<React.SetStateAction<string>>;
+  accountNumber: string;
+  setAccountNumber: React.Dispatch<React.SetStateAction<string>>;
+  damageMoney: string;
+  setDamageMoney: React.Dispatch<React.SetStateAction<string>>;
+  moneyDate: string;
+  setMoneyDate: React.Dispatch<React.SetStateAction<string>>;
+  moneyTime: string;
+  setMoneyTime: React.Dispatch<React.SetStateAction<string>>;
+  evidence: string;
+  setEvidence: React.Dispatch<React.SetStateAction<string>>;
+  evidenceEtc: boolean;
+  setEvidenceEtc: React.Dispatch<React.SetStateAction<boolean>>;
+  evidenceList: string[];
+  setEvidenceList: React.Dispatch<React.SetStateAction<string[]>>;
+  policeStation: string;
+  setPoliceStation: React.Dispatch<React.SetStateAction<string>>;
+}
