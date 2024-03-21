@@ -9,7 +9,7 @@ import pageStyle from '../../styles/search/SearchPage.module.css';
 
 const { Content } = Layout;
 
-const SearchPage: React.FC = () => {
+const SearchPage = () => {
   const navigate = useNavigate();
   // Dummy data for recently viewed law cases, replace with real data as needed
   const [recentLawCases] = useState([
@@ -25,20 +25,11 @@ const SearchPage: React.FC = () => {
     { id: 10, title: '대전고등법원 2019. 1. 18. 선고 2018노485,2018전노32(병합) 판결 살인,살인예비,절도,도로교통법위반(음주측정거부),부착명령', type: '법령' as '법령' },
   ]);
 
-  const [ searchResults, setSearchResults ] = useState<any[]>([]); // 검색 결과 상태
-
   // 검색 함수
   const handleSearch = (searchTerm: string, activeTab: string, results: any) => {
     console.log(`검색어: ${searchTerm}, 활성 탭: ${activeTab}`);
-
-    // TODO: 실제 검색 로직으로 검색 결과 업데이트
-    setSearchResults(results);
-
-    // 검색 결과 페이지로 이동
-    navigate(`/search-results?query=${encodeURIComponent(searchTerm)}&tab=${activeTab}`, {
-      state: { searchResults: results },
-    });
-  };
+    console.log('검색 결과(SearchPage):', results);
+  }
 
   return (
     <Layout style={{ backgroundColor: '#F3E7C0' }}>
@@ -46,7 +37,7 @@ const SearchPage: React.FC = () => {
         <Row justify="center" gutter={[16, 16]}>
           <Col span={24}>
             <div className={pageStyle.searchContainer}>
-              <SearchInput onSearch={handleSearch}/* onSearch handler */ />
+              <SearchInput />
             </div>
           </Col>
         </Row>

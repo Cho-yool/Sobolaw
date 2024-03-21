@@ -20,7 +20,7 @@ const RecentLawCase: React.FC<RecentLawCaseProps> = ({ lawCases }) => {
   // 상세 페이지로 이동하는 함수
   const handleNavigate = (id: number, type: '판례' | '법령') => {
     // type에 따라 경로를 설정합니다.
-    const path = type === '판례' ? `/cases/${id}` : `/laws/${id}`;
+    const path = type === '판례' ? `/lawss/${id}` : `/statutes/${id}`;
     navigate(path); // 설정된 경로로 이동합니다.
   };
 
