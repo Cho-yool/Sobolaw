@@ -95,7 +95,7 @@
   left: -3%;
   top: 50%;
   transform: translateY(-50%); /* 수직 가운데 정렬 */
-  margin-right: 5%; /* 제목과의 간격 */
+  margin-right: 2%; /* 제목과의 간격 */
   flex-shrink: 0; /* 순위 박스의 크기가 유지되도록 함 */
   width: 5%;
   height: 25%;
@@ -107,7 +107,7 @@
 }
 
 .medal {
-  margin-right: 8px;
+  margin-right: 5px;
 }
 
 .medal.gold {
