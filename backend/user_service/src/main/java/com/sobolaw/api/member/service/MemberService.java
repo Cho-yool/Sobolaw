@@ -428,8 +428,6 @@ public class MemberService {
         Member member = memberRepository.findById(currentMemberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
-        redisTokenService.deleteRefreshTokenByMemberId(currentMemberId);
-
         member.softDelete();
         memberRepository.save(member);
     }

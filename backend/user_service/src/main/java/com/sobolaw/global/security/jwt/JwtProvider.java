@@ -16,12 +16,15 @@ import jakarta.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,6 +33,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * 토큰 생성, 유효성 검사, 재발급 등의 관리.
@@ -107,6 +111,14 @@ public class JwtProvider {
     }
 
     /**
+     * accessToken 서버에 저장.
+     */
+    protected void setAuthentication(String accessToken) {
+        Authentication authentication = getAuthentication(accessToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    /**
      * access 토큰으로부터 사용자의 인증 정보를 가져오고 Spring Security의 Authentication 객체를 생성.
      */
     public Authentication getAuthentication(String token) {
@@ -114,14 +126,11 @@ public class JwtProvider {
         List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
         Long memberId = getMemberIdByToken(token);
 
-//        // memberId 추출
-//        Long memberId = claims.get("memberId", Long.class);
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
         log.info("claims = " + claims);
         log.info("subject = " + claims.getSubject());
-//         //security의 User 객체 생성
-//        User principal = new User(claims.getSubject(), "", authorities);
+
         // CustomUserDetails 객체 생성
         CustomUserDetails userDetails = new CustomUserDetails(member, null, null);
 
@@ -138,24 +147,28 @@ public class JwtProvider {
     /**
      * accessToken 재발급.
      */
-    public String reissueAccessToken(String accessToken) {
-        // 현재 accessToken이 유효한지 확인
-        if (StringUtils.hasText(accessToken)) {
-            // refreshToken 가져오기
-            String refreshToken = redisTokenService.findRefreshTokenByAccessToken(accessToken);
-
-            // refreshToken이 유효한지 확인
-            if (validateRefreshToken(refreshToken)) {
-                // memberId 가져오기
-                Long memberId = getMemberIdByToken(refreshToken);
-                Authentication authentication = getAuthenticationByRefreshToken(refreshToken);
-                // 새로운 accessToken 생성
-                String reissueAccessToken = generateAccessToken(authentication, memberId);
-                // 재발급된 accessToken 반환
-                return reissueAccessToken;
+    public ReIssueTokenResponseDTO reissueAccessToken(String refreshToken) {
+        if (validateRefreshToken(refreshToken)) {
+            // memberId 가져오기
+            Long memberId = getMemberIdByToken(refreshToken);
+            Authentication authentication = getAuthenticationByRefreshToken(refreshToken);
+            if (Objects.equals(memberId, redisTokenService.findMemberIdByRefreshToken(refreshToken))) {
+                throw new TokenException(TokenErrorCode.INVALID_REFRESH_TOKEN);
             }
+            // 새로운 accessToken 생성
+            String reissueAccessToken = generateAccessToken(authentication, memberId);
+            setAuthentication(reissueAccessToken);
+            //
+            String reissueRefreshToken = generateRefreshToken(authentication, memberId);
+            log.info("accessToken = " + reissueAccessToken);
+            log.info("refreshToken = " + reissueRefreshToken);
+
+
+            return ReIssueTokenResponseDTO.of(reissueRefreshToken, reissueAccessToken);
+        } else {
+            throw new TokenException(TokenErrorCode.INVALID_REFRESH_TOKEN);
         }
-        return null;
+
     }
 
     /**
@@ -167,6 +180,7 @@ public class JwtProvider {
         }
 
         Claims claims = parseClaims(token);
+        log.info("AccessToken Expiration : " + claims.getExpiration().after(new Date()));
         return claims.getExpiration().after(new Date());
     }
 
@@ -207,8 +221,9 @@ public class JwtProvider {
                 // 만약 principal이 UserDetails가 아닌 다른 타입이면, 해당 타입에 맞게 처리
                 return Long.valueOf(principal.toString());
             }
+        } else {
+            throw new MemberException(MemberErrorCode.NOT_LOGGED_USER); // 인증된 사용자가 없는 경우 예외 발생
         }
-        return null; // 인증된 사용자가 없는 경우
     }
 
     /**
@@ -228,14 +243,10 @@ public class JwtProvider {
         List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
         Long memberId = getMemberIdByRefreshToken(token);
 
-//        // memberId 추출
-//        Long memberId = claims.get("memberId", Long.class);
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
         log.info("claims = " + claims);
         log.info("subject = " + claims.getSubject());
-//         //security의 User 객체 생성
-//        User principal = new User(claims.getSubject(), "", authorities);
         // CustomUserDetails 객체 생성
         CustomUserDetails userDetails = new CustomUserDetails(member, null, null);
 
@@ -264,7 +275,7 @@ public class JwtProvider {
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         } catch (MalformedJwtException e) {
-            throw new TokenException(TokenErrorCode.INVALID_TOKEN);
+            throw new TokenException(TokenErrorCode.INVALID_REFRESH_TOKEN);
         } catch (SecurityException e) {
             throw new TokenException(TokenErrorCode.INVALID_JWT_SIGNATURE);
         }

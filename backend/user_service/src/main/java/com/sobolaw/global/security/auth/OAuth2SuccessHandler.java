@@ -4,7 +4,6 @@ import com.sobolaw.api.member.entity.Member;
 import com.sobolaw.api.member.exception.MemberErrorCode;
 import com.sobolaw.api.member.exception.MemberException;
 import com.sobolaw.api.member.repository.MemberRepository;
-import com.sobolaw.global.security.jwt.JwtAuthenticationFilter.TokenKey;
 import com.sobolaw.global.security.jwt.JwtProvider;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

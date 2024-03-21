@@ -1,7 +1,7 @@
 package com.sobolaw.global.config;
 
 import com.sobolaw.global.security.auth.OAuth2SuccessHandler;
-import com.sobolaw.global.security.jwt.JwtAuthenticationFilter;
+import com.sobolaw.global.security.jwt.JwtRequestFilter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -35,7 +36,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
     private final DefaultOAuth2UserService oAuth2UserService;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtRequestFilter jwtRequestFilter;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
     @Bean
@@ -53,13 +54,15 @@ public class SecurityConfig {
             .sessionManagement(sessionManagement -> sessionManagement
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
+            .formLogin(AbstractHttpConfigurer::disable)
+
             // 카카오 로그인 추가
             .oauth2Login(oauth2 -> oauth2
                 .redirectionEndpoint(endpoint -> endpoint.baseUri("/oauth2/callback/*"))
                 .userInfoEndpoint(endpoint -> endpoint.userService(oAuth2UserService))
                 .successHandler(oAuth2SuccessHandler)
             )
-
+            .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(request -> request
                     .requestMatchers("/", "/api", "/api/user-service/oauth2/**").permitAll()
                     .requestMatchers("/api/user-service/swagger-ui/**").permitAll()
@@ -71,13 +74,13 @@ public class SecurityConfig {
                     // test를 위해 허용 처리
                     .anyRequest().permitAll()
             )
+
             // 인증 예외 처리
             .exceptionHandling(exceptionHandling -> exceptionHandling
 //                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                     .authenticationEntryPoint(new FailedAuthenticationEntryPoint())
                     .accessDeniedHandler(new CustomAccessDeniedHandler())
-            )
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            );
 
         return httpSecurity.build();
     }
@@ -89,9 +92,11 @@ public class SecurityConfig {
     protected CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-//        corsConfiguration.addAllowedOrigin("*");
-//        corsConfiguration.addAllowedMethod("*");
-//        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedOrigin("*");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.addExposedHeader("*");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
