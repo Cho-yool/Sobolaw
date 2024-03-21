@@ -1,22 +1,26 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Button, Divider } from "antd";
 import { SmileTwoTone, MailTwoTone, HeartTwoTone } from "@ant-design/icons";
 import "../../App.css";
 import style from "../../styles/mypage/MyInfo.module.css";
+import { RootState } from "../../redux/store/store";
 import MyKeyword from "../../components/mypage/MyKeyword";
 import MyRecentCase from "../../components/mypage/MyRecentCase";
 import { MemberInfo } from "../../types/DataTypes";
-import { getUserInfo } from "../../api/members";
+// import { getUserInfo } from "../../api/members";
+import { tempgetUserInfo } from "../../api/members";
 
 export default function MyInfo() {
-  // const user = useSelector((state: RootState) => state.user);
+  const accessToken = useSelector((state: RootState) => state.user.accessToken);
   const [userInfo, setUserInfo] = useState<MemberInfo>();
 
   useEffect(() => {
     const fetchData = async () => {
-      // const response = await getUserInfo({}, user.accessToken);
-      const response = await getUserInfo(2);
-      setUserInfo(response);
+      // const response = await getUserInfo(accessToken);
+      const response = await tempgetUserInfo(accessToken);
+      console.log(response);
+      // setUserInfo(response);
     };
     fetchData();
     // }, [user.accessToken]
