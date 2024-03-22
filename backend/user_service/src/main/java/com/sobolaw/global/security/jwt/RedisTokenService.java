@@ -2,7 +2,6 @@ package com.sobolaw.global.security.jwt;
 
 import com.sobolaw.global.security.jwt.exception.TokenErrorCode;
 import com.sobolaw.global.security.jwt.exception.TokenException;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;

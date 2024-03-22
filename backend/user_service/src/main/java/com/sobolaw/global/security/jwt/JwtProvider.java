@@ -167,7 +167,6 @@ public class JwtProvider {
             log.info("accessToken = " + reissueAccessToken);
             log.info("refreshToken = " + reissueRefreshToken);
 
-
             return ReIssueTokenResponseDTO.of(reissueRefreshToken, reissueAccessToken);
         } else {
             throw new TokenException(TokenErrorCode.INVALID_REFRESH_TOKEN);
