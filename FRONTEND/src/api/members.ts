@@ -11,7 +11,7 @@ const url = "members";
 
 // reissue token
 async function reissueToken(accessToken: string, refreshToken: string) {
-  const response = await testHttp.post("token", refreshToken, {
+  const response = await testHttp.post("token/refresh", refreshToken, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
@@ -96,7 +96,7 @@ async function temppostLogout(accessToken: string, refreshToken: string) {
 
 // 회원탈퇴
 async function deleteUser(accessToken: string) {
-  await http.delete(`${url}/delete`, {
+  await testHttp.delete(`${url}/delete`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
@@ -117,8 +117,17 @@ async function getRecentPrecedents(memberId: number) {
 }
 
 // 키워드 저장
-async function postMyKeyword(memberId: number, keywords: string[]) {
-  await http.post(`${url}/${memberId}/keywords`, { keywords });
+async function postMyKeyword(accessToken: string, words: string[]) {
+  await testHttp.post(
+    `${url}/keywords`,
+    { words },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
 }
 
 // async function postMyKeyword(memberId: number, accessToken: string) {
