@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store/store";
 import { saveToken, loadInfo } from "../redux/reducers/user/userSlice";
-// import { getUserInfo } from "../api/members";
-import { tempgetUserInfo } from "../api/members";
+import { getUserInfo } from "../api/members";
+// import { tempgetUserInfo } from "../api/members";
 import style from "../styles/common/Login.module.css";
 import backImg from "/images/loginBg.jpg";
 import LoginBtnKaKao from "/images/KAKAO_LOGIN.png";
@@ -14,7 +14,6 @@ function LoginPage() {
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
-  const userId = useSelector((state: RootState) => state.user.userId);
   const tokenURL = `https://j10a604.p.ssafy.io/api/user-service/oauth2/authorization`;
 
   useEffect(() => {
@@ -26,7 +25,7 @@ function LoginPage() {
       dispatch(saveToken({ accessToken: aT, refreshToken: rT }));
     }
     if (accessToken) {
-      tempgetUserInfo(accessToken)
+      getUserInfo(accessToken)
         .then((res) => {
           dispatch(loadInfo({ userId: res.memberId, nickname: res.name }));
         })
@@ -37,17 +36,10 @@ function LoginPage() {
     }
   }, [accessToken]);
 
-  console.log(userId);
-
-  const kakaoLogin = function () {
-    // 로그인버튼을 누르면 카카오 로그인 창으로 간다
-    window.location.href =
-      "http://70.12.247.27:8001/api/user-service/oauth2/authorization/kakao";
-  };
   // 로그인버튼을 누르면 각 로그인 창으로 간다
-  // const kakaoLogin = function () {
-  //   window.location.href = `${tokenURL}/kakao`;
-  // };
+  const kakaoLogin = function () {
+    window.location.href = `${tokenURL}/kakao`;
+  };
   const naverLogin = function () {
     window.location.href = `${tokenURL}/naver`;
   };

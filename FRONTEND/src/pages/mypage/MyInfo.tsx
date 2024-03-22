@@ -9,8 +9,7 @@ import { RootState } from "../../redux/store/store";
 import MyKeyword from "../../components/mypage/MyKeyword";
 import MyRecentCase from "../../components/mypage/MyRecentCase";
 import { MemberInfo } from "../../types/DataTypes";
-// import { getUserInfo, deleteUser } from "../../api/members";
-import { tempgetUserInfo, deleteUser } from "../../api/members";
+import { getUserInfo, deleteUser } from "../../api/members";
 
 export default function MyInfo() {
   const navigate = useNavigate();
@@ -21,7 +20,7 @@ export default function MyInfo() {
   useEffect(() => {
     const fetchData = async () => {
       // const response = await getUserInfo(accessToken);
-      const response = await tempgetUserInfo(accessToken);
+      const response = await getUserInfo(accessToken);
       setUserInfo(response);
     };
     fetchData();
