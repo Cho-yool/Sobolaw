@@ -16,6 +16,7 @@ import MyCase from "./pages/mypage/MyCase";
 import DefamatinoPage from "./pages/lawsuit/defamation";
 import FraudPage from "./pages/lawsuit/fraud";
 import InsultPage from "./pages/lawsuit/insult";
+import Print from "./pages/test";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
       <Route path="/plaint/1" element={<DefamatinoPage />} />
       <Route path="/plaint/2" element={<FraudPage />} />
       <Route path="/plaint/3" element={<InsultPage />} />
+      <Route path="/test" element={<Print />} />
       {/* 다른 Route도 추가가능~ */}
     </Routes>
   );

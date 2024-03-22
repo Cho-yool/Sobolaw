@@ -1,5 +1,4 @@
 import axios from "axios";
-import { head } from "lodash";
 
 const BASEURL = "j10a604.p.ssafy.io/api/";
 // withCredentials의 디폴트는 false
@@ -42,7 +41,6 @@ function lawAxios() {
     },
     // withCredentials: credential,
   });
-
 }
 // https://j10a604.p.ssafy.io/api/recommend-service/swagger-ui.html
 // 종범 파트
@@ -57,4 +55,4 @@ function recommendAxios() {
   });
 }
 
-export { mainAxios, userAxios, lawAxios, recommendAxios};
+export { mainAxios, userAxios, lawAxios, recommendAxios };
