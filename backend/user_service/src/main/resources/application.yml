@@ -102,5 +102,5 @@ jwt:
     access: "123testKeyValue123456testKeyValue456789testKeyValue789123testKeyValue123456testKeyValue456789testKeyValue789123testKeyValue123456testKeyValue456789testKeyValue789"
     refresh: "1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r1q2w3e4r"
   expiration:
-    access: "360000" # 1시간
-    refresh: "259200000" # 30일
+    access: "600000" # 1시간
+    refresh: "100800000" # 7일
