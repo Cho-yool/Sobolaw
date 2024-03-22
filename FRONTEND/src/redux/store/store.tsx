@@ -19,7 +19,7 @@ const persistConfig = {
   blacklist: [],
 };
 
-// redux store 생성
+// redux store 생성, persistConfig를 적용하여 userReducer와 searchReducer를 저장한다.
 const store = configureStore({
   reducer: {
     user: persistReducer(persistConfig, userReducer),
