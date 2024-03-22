@@ -5,6 +5,7 @@ import com.sobolaw.api.precedent.dto.PrecedentDTO;
 import com.sobolaw.api.precedent.service.PrecedentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +41,7 @@ public class PrecedentController {
 
     @GetMapping("/search/{searchKeyword}")
     @Operation(summary = "판례 검색", description = "키워드를 사용하여 판례 내용을 검색합니다.")
-    public BaseResponse<List<PrecedentDTO>> searchStatutes(@PathVariable String searchKeyword) {
+    public BaseResponse<List<PrecedentDTO>> searchStatutes(@PathVariable String searchKeyword) throws IOException {
         List<PrecedentDTO> searchResults = precedentService.searchByKeyword(searchKeyword);
         return BaseResponse.success(HttpStatus.OK.value(), "판례 검색 성공!",searchResults);
     }

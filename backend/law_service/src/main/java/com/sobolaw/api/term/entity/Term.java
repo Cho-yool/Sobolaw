@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity(name = "legal_term")
-public class LegalTerm {
+public class Term {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

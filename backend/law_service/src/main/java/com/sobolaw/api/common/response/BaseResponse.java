@@ -18,7 +18,7 @@ public class BaseResponse<T> {
         return new BaseResponse<>(status, message, data);
     }
 
-    public static BaseResponse<Void> error(int status, String message) {
+    public static BaseResponse<Void> error(int status, String message, Object o) {
         return new BaseResponse<>(status, message, null);
     }
 

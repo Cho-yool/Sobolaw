@@ -1,0 +1,34 @@
+{
+  "properties": {
+    "statuteNumber": {
+      "type": "long"
+    },
+    "statuteId": {
+      "type": "long"
+    },
+    "articleContent": {
+      "type": "text",
+      "analyzer": "ksb_custom_korean_analyzer"
+    },
+    "articleContentSub": {
+      "type": "text",
+      "analyzer": "ksb_custom_korean_analyzer"
+    },
+    "articleEffectiveDate": {
+      "type": "keyword"
+    },
+    "articleNumber": {
+      "type": "keyword"
+    },
+    "articleNumberSub": {
+      "type": "keyword"
+    },
+    "articleTitle": {
+      "type": "text",
+      "analyzer": "ksb_custom_korean_analyzer"
+    },
+    "articleType": {
+      "type": "keyword"
+    }
+  }
+}

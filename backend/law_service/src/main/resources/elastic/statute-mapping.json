@@ -1,0 +1,29 @@
+{
+  "properties": {
+    "statuteNumber": {
+      "type": "long"
+    },
+    "statuteName": {
+      "type": "text",
+      "analyzer": "ksb_custom_korean_analyzer"
+    },
+    "statuteType": {
+      "type": "keyword"
+    },
+    "department": {
+      "type": "keyword"
+    },
+    "amendmentType": {
+      "type": "keyword"
+    },
+    "publicationNumber": {
+      "type": "keyword"
+    },
+    "publicationDate": {
+      "type": "keyword"
+    },
+    "enforcementDate": {
+      "type": "keyword"
+    }
+  }
+}
