@@ -12,4 +12,5 @@ services:
       - /jenkins:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
       - /etc/letsencrypt:/etc/letsencrypt
+      - /home/ubuntu/esdata1:/home/ubuntu/esdata1
     user: root
