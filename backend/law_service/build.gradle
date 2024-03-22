@@ -54,6 +54,11 @@ dependencies {
 	// msa
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+	// spring-data-elasticsearch
+	implementation 'org.springframework.data:spring-data-elasticsearch:5.2.3'
+	// elasticsearch Java API Client
+	implementation 'co.elastic.clients:elasticsearch-java:8.11.4'
 }
 
 dependencyManagement {

@@ -1,4 +1,4 @@
-package com.sobolaw.api.statute.repository;
+package com.sobolaw.api.statute.repository.jpa;
 
 import com.sobolaw.api.statute.entity.Statute;
 import java.util.List;

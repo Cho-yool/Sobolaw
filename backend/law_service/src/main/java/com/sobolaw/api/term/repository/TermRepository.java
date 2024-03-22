@@ -1,13 +1,13 @@
 package com.sobolaw.api.term.repository;
 
-import com.sobolaw.api.term.entity.LegalTerm;
+import com.sobolaw.api.term.entity.Term;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface LegalTermRepository extends JpaRepository<LegalTerm, Long> {
+public interface TermRepository extends JpaRepository<Term, Long> {
 
-    List<LegalTerm> findByTermNameContaining(String searchKeyword);
+    List<Term> findByTermNameContaining(String searchKeyword);
 
 }
