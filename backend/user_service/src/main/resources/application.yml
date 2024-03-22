@@ -76,7 +76,7 @@ logging:
   level:
     org.hibernate.SQL: INFO
     org.hibernate.orm.jdbc.bind: trace
-    root: INFO
+    root: DEBUG
     org:
       springframework:
         web: INFO
