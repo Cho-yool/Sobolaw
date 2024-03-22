@@ -84,6 +84,7 @@ logging:
           tiles: DEBUG
         springframework:
           boot: DEBUG
+          security: DEBUG
 
 eureka:
   client:
