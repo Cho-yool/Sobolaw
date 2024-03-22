@@ -11,6 +11,8 @@ export interface SearchResult {
   courtName?: string;
   instance?: string;
   judgmentDate?: string;
+  court?: string;
+  period?: string;
 }
 
 interface SearchResultListProps {
