@@ -81,6 +81,7 @@ const TableTransfer = ({
 
 interface MemberKeywordProps {
   keywords: MemberKeyword[] | undefined;
+  accessToken: string;
 }
 
 const leftTableColumns: TableColumnsType<KeywordType> = [
@@ -99,7 +100,7 @@ const rightTableColumns: TableColumnsType<KeywordType> = [
   },
 ];
 
-const MyKeyword: React.FC<MemberKeywordProps> = ({ keywords }) => {
+const MyKeyword: React.FC<MemberKeywordProps> = ({ keywords, accessToken }) => {
   const [targetKeys, setTargetKeys] = useState<string[]>([]);
   const [isDisabled, setIsDisabled] = useState(true);
 
@@ -118,7 +119,7 @@ const MyKeyword: React.FC<MemberKeywordProps> = ({ keywords }) => {
   };
 
   const handleCheck = () => {
-    postMyKeyword(1, targetKeys)
+    postMyKeyword(accessToken, targetKeys)
       .then((res) => {
         console.log(res);
       })
