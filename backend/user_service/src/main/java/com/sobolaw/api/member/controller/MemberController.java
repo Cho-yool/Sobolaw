@@ -46,7 +46,7 @@ public class MemberController {
      * 멤버 로그아웃.
      */
     @PostMapping("/logout")
-    @Operation(summary = "멤버 로그아웃", description = "로그아웃 합니다.", tags = { "멤버" })
+    @Operation(summary = "멤버 로그아웃", description = "로그아웃 합니다.", tags = {"멤버"})
     public BaseResponse<Long> logoutMember(
         @RequestBody String refreshToken
     ) {
