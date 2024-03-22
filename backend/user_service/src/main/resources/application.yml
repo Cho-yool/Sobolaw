@@ -76,7 +76,7 @@ logging:
   level:
     org.hibernate.SQL: INFO
     org.hibernate.orm.jdbc.bind: trace
-    root: DEBUG
+    root: INFO
     org:
       springframework:
         web: INFO
@@ -84,7 +84,6 @@ logging:
           tiles: DEBUG
         springframework:
           boot: DEBUG
-          security: DEBUG
 
 eureka:
   client:
