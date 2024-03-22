@@ -18,6 +18,7 @@ import com.sobolaw.global.security.jwt.RedisTokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 멤버 controller.
  */
+@Slf4j
 @RequestMapping("/members")
 @RestController
 @RequiredArgsConstructor
@@ -45,9 +47,12 @@ public class MemberController {
      */
     @PostMapping("/logout")
     @Operation(summary = "멤버 로그아웃", description = "로그아웃 합니다.", tags = { "멤버" })
-    public BaseResponse<Long> logoutMember() {
+    public BaseResponse<Long> logoutMember(
+        @RequestBody String refreshToken
+    ) {
         Long memberId = jwtProvider.getMemberId();
-        String refreshToken = redisTokenService.getRefreshTokenByUserId(memberId);
+        log.info("memberId = " + memberId);
+        log.info("refreshToken = " + refreshToken);
         redisTokenService.deleteRefreshToken(refreshToken);
 
         return BaseResponse.success(HttpStatus.OK.value(), "로그아웃 하였습니다.", memberId);
@@ -58,7 +63,10 @@ public class MemberController {
      */
     @DeleteMapping("/delete")
     @Operation(summary = "멤버 회원탈퇴", description = "회원 탈퇴합니다.", tags = {"멤버"})
-    public BaseResponse<Void> deleteMember() {
+    public BaseResponse<Void> deleteMember(
+        @RequestBody String refreshToken
+    ) {
+        redisTokenService.deleteRefreshToken(refreshToken);
         memberService.deleteMember();
 
         return BaseResponse.success(HttpStatus.NO_CONTENT.value(), "회원 탈퇴 하였습니다.", null);

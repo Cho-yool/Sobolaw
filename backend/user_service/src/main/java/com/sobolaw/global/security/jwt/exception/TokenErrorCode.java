@@ -10,8 +10,9 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum TokenErrorCode {
-    NOT_EXIST_TOKEN(HttpStatus.BAD_REQUEST, "리프레시 토큰을 찾을 수 없습니다."),
+    NOT_EXIST_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "리프레시 토큰을 찾을 수 없습니다."),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
+    INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 리프레쉬 토큰입니다."),
     INVALID_JWT_SIGNATURE(HttpStatus.UNAUTHORIZED, "JWT 서명이 유효하지 않습니다.");
 
     private final HttpStatus httpStatus;

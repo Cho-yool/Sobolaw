@@ -4,7 +4,6 @@ import com.sobolaw.api.member.entity.Member;
 import com.sobolaw.api.member.exception.MemberErrorCode;
 import com.sobolaw.api.member.exception.MemberException;
 import com.sobolaw.api.member.repository.MemberRepository;
-import com.sobolaw.global.security.jwt.JwtAuthenticationFilter.TokenKey;
 import com.sobolaw.global.security.jwt.JwtProvider;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,6 +48,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         String refreshToken = tokenProvider.generateRefreshToken(authentication, memberId);
 
         log.info("accessToken = " + accessToken);
+        log.info("handler 내 refreshToken = " + refreshToken);
         // 토큰 전달을 위한 redirect
         String redirectUrl = UriComponentsBuilder.fromUriString(URI)
             .queryParam("accessToken", accessToken)
