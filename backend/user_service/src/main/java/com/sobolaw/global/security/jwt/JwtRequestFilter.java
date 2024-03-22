@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sobolaw.api.member.entity.Member;
 import com.sobolaw.api.member.repository.MemberRepository;
 import com.sobolaw.global.common.response.BaseResponse;
+import com.sobolaw.global.security.jwt.exception.TokenErrorCode;
 import com.sobolaw.global.security.jwt.exception.TokenException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -44,14 +45,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         BaseResponse<Void> responseDto = null;
 
         log.info("header = " + header);
+        log.info("servletPath : " + servletPath);
+//        log.info("예외처리 주소 : " + servletPath.contains("/api/user-service/swagger-ui/index.html"));
         if (
-            servletPath.startsWith("/api/user-service/swagger-ui.html") || servletPath.startsWith("/api/user-service/oauth2/") || servletPath.equals("/api/user-service/oauth2/login") || servletPath.equals("/api/user-service/token")
+            servletPath.contains("swaggers") || servletPath.startsWith("/oauth2/") || servletPath.startsWith("/oauth2/login") || servletPath.startsWith("/token/refresh")
         ) {
-
             log.info("토큰 검사 pass");
             filterChain.doFilter(request, response);
         } else if (header == null || !header.startsWith("Bearer ")) {
-            log.info("토큰이 없거나 잘못되었습니다.");
+            log.info("토큰이 없습니다.");
 
 //            responseDto = new BaseResponse<>(HttpStatus.NOT_ACCEPTABLE.value(), "access token 이 존재하지 않음.", null);
 //            response.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
@@ -59,24 +61,36 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 //            response.setCharacterEncoding("UTF-8");
 //            response.getWriter().write(new ObjectMapper().writeValueAsString(responseDto));
             filterChain.doFilter(request, response);
+        } else if (!header.startsWith("Bearer ")) {
+            log.info("토큰형식이 잘못되었습니다.");
+            filterChain.doFilter(request, response);
         } else {
             try {
                 String accessToken = resolveToken(request);
+                log.info("accessToken 헤더 분리 = " + accessToken);
                 log.info("토큰 검사 중 ");
                 /*
                  * Expired 되었을 경우
                  * RefreshToken 과 대조해야한다.
                  */
-                Long memberId = jwtProvider.getMemberIdByToken(accessToken);
-                if (memberId != null) {
-                    Member member = memberRepository.findById(memberId).orElse(null);
-                    if (member == null) {
-                        SecurityContextHolder.clearContext();
+                if (jwtProvider.validateToken(accessToken)) {
+                    Long memberId = jwtProvider.getMemberIdByToken(accessToken);
+                    log.info("멤버 id 값 : " + memberId);
+                    if (memberId != null) {
+                        Member member = memberRepository.findById(memberId).orElse(null);
+                        log.info("멤버 값:" + member);
+                        if (member == null) {
+                            SecurityContextHolder.clearContext();
+                        }
+                        // 인증 처리 후 정상적으로 다음 Filter 수행
+                        jwtProvider.setAuthentication(accessToken);
+                        filterChain.doFilter(request, response);
                     }
-                    // 인증 처리 후 정상적으로 다음 Filter 수행
-                    filterChain.doFilter(request, response);
+                } else {
+                    throw new TokenException(TokenErrorCode.INVALID_TOKEN);
                 }
             } catch (TokenException exception) {
+                log.info("SecurityException : " + exception);
                 responseDto = new BaseResponse<>(HttpStatus.UNAUTHORIZED.value(), "Access Token이 만료되었습니다.", null);
 
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());
@@ -85,6 +99,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 response.getWriter().write(new ObjectMapper().writeValueAsString(responseDto));
 
             } catch (NullPointerException e) {
+                log.info("NullPointerException : " + e);
                 responseDto = new BaseResponse<>(HttpStatus.NOT_FOUND.value(), "해당 객체를 찾을 수 없습니다.", null);
 
                 response.setStatus(HttpStatus.NOT_FOUND.value());

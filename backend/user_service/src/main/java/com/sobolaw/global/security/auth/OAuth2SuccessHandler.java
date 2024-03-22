@@ -48,6 +48,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         String refreshToken = tokenProvider.generateRefreshToken(authentication, memberId);
 
         log.info("accessToken = " + accessToken);
+        log.info("handler 내 refreshToken = " + refreshToken);
         // 토큰 전달을 위한 redirect
         String redirectUrl = UriComponentsBuilder.fromUriString(URI)
             .queryParam("accessToken", accessToken)

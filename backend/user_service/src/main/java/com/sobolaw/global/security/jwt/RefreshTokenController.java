@@ -27,11 +27,14 @@ public class RefreshTokenController {
     /**
      * Token 재발급.
      */
-    @PostMapping("refresh")
+    @PostMapping("/refresh")
     @PermitAll
     @Operation(summary = "accessToken 재발급", description = "accessToken 을 재발급합니다.", tags = {"토큰"})
     public ResponseEntity<BaseResponse<?>> reissueAccessToken(@RequestBody String refreshToken) {
         log.info("토큰 재발급");
+        log.info("refreshToken : " + refreshToken);
+        refreshToken = refreshToken.replace("\"", "");
+        log.info("refreshToken 분해 : " + refreshToken);
         ReIssueTokenResponseDTO responseDTO = jwtProvider.reissueAccessToken(refreshToken);
         // 새로 발급한 Access Token 을 헤더에 넣어 클라이언트에게 전달
         HttpHeaders headers = new HttpHeaders();
