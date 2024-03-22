@@ -39,7 +39,7 @@ export type MemberInfo = {
   memberId: number;
   name: string;
   email: string;
-  birthday: string;
+  birthday: string | null;
   memberKeyword: MemberKeyword[];
   memberRecents: MemberRecent[];
 };
