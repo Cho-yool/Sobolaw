@@ -37,6 +37,9 @@
 
 .content-box__contents {
   line-height: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .tab-menu__title {

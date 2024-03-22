@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import style from "../../styles/lawcasedetail/LawCaseTabs.module.css";
 import { Switch } from "antd";
 import { getLawDetailSummary } from "../../api/lawdetail";
@@ -44,11 +44,16 @@ const TABMENUS: TabMenusProps[] = [
 const LawCaseTabs = ({ getData }: getDataProps) => {
   const [activeTab, setActiveTab] = useState(0);
   const [onEditing, setOnEditing] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [selectionNode, setSelectionNode] = useState<any>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [selectionPos, setSelectionPos] = useState<any>();
   const [isSummary, setIsSummary] = useState<boolean>(false);
   const judgmentRef = useRef<HTMLDivElement>(null);
   const rulingRef = useRef<HTMLDivElement>(null);
   const precedentRef = useRef<HTMLDivElement>(null);
   const [summaryData, setSummaryData] = useState<string>("");
+  const [newRenderText, setNewRenderText] = useState<React.ReactNode[]>([]);
   const onChange = () => {
     setIsSummary(!isSummary);
   };
@@ -57,7 +62,6 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
     onSuccess: (response) => {
       setSummaryData(response.data.summary);
     },
-
     onError: (error) => {
       console.error(error);
     },
@@ -87,20 +91,47 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
   const onMouseClickHandler = () => {
     setOnEditing(true);
   };
+
   const onMouseMoveHandler = () => {
     if (onEditing) {
-      console.log(window.getSelection()?.toString());
-      console.log(window.getSelection()?.focusOffset);
-      const range = window.getSelection()?.getRangeAt(0);
-
-      const test = range?.startContainer;
-      console.log(test);
-      window.getSelection()?.deleteFromDocument();
+      const selection = window.getSelection();
+      if (selection) {
+        setSelectionPos(selection.getRangeAt(0));
+        setSelectionNode(selection);
+      }
     }
   };
+
   const onMouseOutHandler = () => {
     setOnEditing(false);
+    if (selectionPos) {
+      if (
+        selectionNode.baseNode.textContent ===
+        selectionNode.focusNode.textContent
+      ) {
+        const span = document.createElement("span");
+        span.style.backgroundColor = "yellow";
+        selectionPos.surroundContents(span);
+      } else {
+        console.log(selectionPos);
+        const span = document.createElement("span");
+        span.style.backgroundColor = "yellow";
+        const fragment = selectionPos.extractContents(); // 선택한 텍스트를 fragment로 추출
+        span.appendChild(fragment); // fragment를 span 요소에 삽입
+        selectionPos.insertNode(span); // span 요소를 원래 위치에 삽입
+      }
+    }
   };
+
+  useEffect(() => {
+    if (getData && Object.keys(getData).length !== 0) {
+      const renderText = getData.caseContent.split("<br/>");
+      const newText = renderText.map((text) => {
+        return <>{text} + "\n"</>;
+      });
+      setNewRenderText(newText);
+    }
+  }, [getData]);
 
   return (
     <div className={style["tab-container"]}>
@@ -174,15 +205,14 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
             }}
           ></p>
         ) : (
-          <p
+          <div
             className={style["content-box__contents"]}
-            dangerouslySetInnerHTML={{
-              __html: getData.caseContent,
-            }}
             onMouseDown={onMouseClickHandler}
             onMouseMove={onMouseMoveHandler}
             onMouseUp={onMouseOutHandler}
-          ></p>
+          >
+            {newRenderText ? <>{newRenderText}</> : null}
+          </div>
         )}
       </div>
     </div>
