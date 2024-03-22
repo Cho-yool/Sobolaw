@@ -11,7 +11,12 @@ const url = "members";
 
 // reissue token
 async function reissueToken(accessToken: string, refreshToken: string) {
-  const response = await testHttp.post("token", refreshToken);
+  const response = await testHttp.post("token", refreshToken, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   console.log(response);
   const responseData = response.data;
   if (responseData.status == 401) {
