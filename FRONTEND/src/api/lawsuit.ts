@@ -7,11 +7,18 @@ const headers = new AxiosHeaders();
 headers.set("Content-Type", "application/json;charset=utf-8");
 
 const url = "lawsuit";
+const testToken =
+  "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLquYDtmITsp4AiLCJyb2xlIjoiUk9MRV9VU0VSIiwibWVtYmVySWQiOjEwLCJpYXQiOjE3MTEwOTYyNjEsImV4cCI6MTcxMTk2MDI2MX0.w41clWwjq1DW3jDXoZxtpHPuQyZCaG-9Bi7_mN-z8qb_p-NLKhJ2rJN6MAAWVGNW8E7edn1rCaiupjzk9POntw";
 
 // 마이페이지
 // 멤버의 소장 리스트 조회
-async function getLawsuitList(memberId: number) {
-  const response = await http.get(`${url}/${memberId}`);
+async function getLawsuitList(accessToken: string) {
+  const response = await http.get(`${url}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${testToken}`,
+    },
+  });
   return response.data.data;
 }
 
