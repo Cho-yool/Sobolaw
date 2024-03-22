@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Tag,
   Layout,
@@ -19,8 +19,9 @@ import {
   CopyTwoTone,
 } from "@ant-design/icons";
 // import { postLogout } from "../../api/members";
-import { temppostLogout } from "../../api/members";
-import { RootState } from "../../redux/store/store";
+import { temppostLogout, reissueToken } from "../../api/members";
+import { RootState, AppDispatch } from "../../redux/store/store";
+import { resetAuth } from "../../redux/reducers/user/userSlice";
 import logo from "/NavLogo.png";
 import MypageMenu from "./MypageMenu";
 import style from "../../styles/common/Navbar.module.css";
@@ -47,6 +48,7 @@ const ResponsiveNav = ({
   setSelectedSubKeys,
 }: ResponsiveNavProps) => {
   const navigate = useNavigate();
+  const dispatch: AppDispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
   const [visible, setVisible] = useState(false);
   const showDrawer = () => {
@@ -56,12 +58,16 @@ const ResponsiveNav = ({
   const onClose = () => {
     setVisible(false);
   };
+
   const handlelogout = () => {
-    console.log(user.accessToken);
     // postLogout(user.accessToken, user.refreshToken);
     temppostLogout(user.accessToken, user.refreshToken);
-    // dispatch(resetAuth());
+    dispatch(resetAuth());
     navigate("/");
+  };
+
+  const handletoken = () => {
+    reissueToken(user.accessToken, user.refreshToken);
   };
 
   return (
@@ -207,6 +213,7 @@ const ResponsiveNav = ({
                 >
                   로그아웃
                 </Button>
+                <Button onClick={handletoken}>리이슈토큰</Button>
               </div>
             )}
           </div>

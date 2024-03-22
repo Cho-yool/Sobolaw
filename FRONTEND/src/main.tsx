@@ -44,6 +44,12 @@ const theme = {
       colorPrimary: "#BF8438",
       algorithm: true, // Enable algorithm
     },
+    Radio: {
+      buttonColor: "#BF8438",
+      colorPrimary: "#BF8438",
+      buttonSolidCheckedHoverBg: "#EAA854",
+      algorithm: true,
+    },
   },
 };
 const queryClient = new QueryClient();
