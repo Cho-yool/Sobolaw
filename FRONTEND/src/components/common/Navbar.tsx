@@ -18,8 +18,7 @@ import {
   EditTwoTone,
   CopyTwoTone,
 } from "@ant-design/icons";
-// import { postLogout } from "../../api/members";
-import { temppostLogout, reissueToken } from "../../api/members";
+import { postLogout, reissueToken } from "../../api/members";
 import { RootState, AppDispatch } from "../../redux/store/store";
 import { resetAuth } from "../../redux/reducers/user/userSlice";
 import logo from "/NavLogo.png";
@@ -61,7 +60,7 @@ const ResponsiveNav = ({
 
   const handlelogout = () => {
     // postLogout(user.accessToken, user.refreshToken);
-    temppostLogout(user.accessToken, user.refreshToken);
+    postLogout(user.accessToken, user.refreshToken);
     dispatch(resetAuth());
     navigate("/");
   };

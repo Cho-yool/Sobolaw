@@ -11,7 +11,7 @@ const url = "members";
 
 // reissue token
 async function reissueToken(accessToken: string, refreshToken: string) {
-  const response = await testHttp.post("token/refresh", refreshToken, {
+  const response = await http.post("token/refresh", refreshToken, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
@@ -53,17 +53,6 @@ async function getUserInfo(accessToken: string) {
   return response.data.data;
 }
 
-// 멤버 정보 조회(로컬)
-async function tempgetUserInfo(accessToken: string) {
-  const response = await testHttp.get(`/${url}`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + accessToken,
-    },
-  });
-  return response.data.data;
-}
-
 // 로그아웃
 async function postLogout(accessToken: string, refreshToken: string) {
   console.log(accessToken);
@@ -76,27 +65,9 @@ async function postLogout(accessToken: string, refreshToken: string) {
   return response.data.data;
 }
 
-// 로컬로그아웃
-async function temppostLogout(accessToken: string, refreshToken: string) {
-  const response = await testHttp.post(`${url}/logout`, refreshToken, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-  console.log(response.data.status);
-  const responseData = response.data;
-  if (responseData.status == 401) {
-    reissueToken(accessToken, refreshToken);
-  } else {
-    return responseData.data;
-  }
-  // return response.data.data;
-}
-
 // 회원탈퇴
 async function deleteUser(accessToken: string) {
-  await testHttp.delete(`${url}/delete`, {
+  await http.delete(`${url}/delete`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
@@ -118,7 +89,7 @@ async function getRecentPrecedents(memberId: number) {
 
 // 키워드 저장
 async function postMyKeyword(accessToken: string, words: string[]) {
-  await testHttp.post(
+  await http.post(
     `${url}/keywords`,
     { words },
     {
@@ -155,8 +126,6 @@ export {
   postMyKeyword,
   postLogout,
   deleteUser,
-  tempgetUserInfo,
-  temppostLogout,
 };
 
 // async function getUserInfo(
