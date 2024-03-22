@@ -29,9 +29,9 @@ public class DataIndexerApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         // Elasticsearch에 데이터 색인하기
-//        statuteDatabaseIndexer.indexDataFromDatabase();
-//        statuteTextDatabaseIndexer.indexDataFromDatabase();
-//        precedentDatabaseIndexer.indexDataFromDatabase();
-//        termDatabaseIndexer.indexDataFromDatabase();
+        statuteDatabaseIndexer.indexDataFromDatabase();
+        statuteTextDatabaseIndexer.indexDataFromDatabase();
+        precedentDatabaseIndexer.indexDataFromDatabase();
+        termDatabaseIndexer.indexDataFromDatabase();
     }
 }
