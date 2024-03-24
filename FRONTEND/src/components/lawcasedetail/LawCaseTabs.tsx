@@ -113,12 +113,14 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
         span.style.backgroundColor = "yellow";
         selectionPos.surroundContents(span);
       } else {
-        console.log(selectionPos);
         const span = document.createElement("span");
         span.style.backgroundColor = "yellow";
         const fragment = selectionPos.extractContents(); // 선택한 텍스트를 fragment로 추출
-        span.appendChild(fragment); // fragment를 span 요소에 삽입
-        selectionPos.insertNode(span); // span 요소를 원래 위치에 삽입
+        // fragment.childNodes를 반복하면서 각 노드를 처리합니다.
+        fragment.childNodes.forEach((node) => {
+          node.style.backgroundColor = "yellow";
+        });
+        selectionPos.startContainer.insertNode(span); // span 요소를 원래 위치에 삽입
       }
     }
   };
@@ -127,7 +129,7 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
     if (getData && Object.keys(getData).length !== 0) {
       const renderText = getData.caseContent.split("<br/>");
       const newText = renderText.map((text) => {
-        return <>{text} + "\n"</>;
+        return <span>{text}</span>;
       });
       setNewRenderText(newText);
     }
@@ -144,8 +146,7 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
                 ? `${style["tab"]} ${style["active"]}`
                 : style["tab"]
             }
-            onClick={() => handleTabClick(tab.id)}
-          >
+            onClick={() => handleTabClick(tab.id)}>
             <p className={style["tab-title"]}>{tab.title}</p>
           </div>
         ))}
@@ -169,8 +170,7 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
         className={style["content-box__contents"]}
         dangerouslySetInnerHTML={{
           __html: getData.judicialNotice,
-        }}
-      ></p>
+        }}></p>
       <br />
       <br />
       <p className={style["tab-menu__title"]} ref={rulingRef}>
@@ -182,8 +182,7 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
         className={style["content-box__contents"]}
         dangerouslySetInnerHTML={{
           __html: getData.verdictSummary,
-        }}
-      ></p>
+        }}></p>
       <br />
       <br />
       <p className={style["tab-menu__title"]} ref={precedentRef}>
@@ -202,15 +201,13 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
             className={style["content-box__contents"]}
             dangerouslySetInnerHTML={{
               __html: summaryData,
-            }}
-          ></p>
+            }}></p>
         ) : (
           <div
             className={style["content-box__contents"]}
             onMouseDown={onMouseClickHandler}
             onMouseMove={onMouseMoveHandler}
-            onMouseUp={onMouseOutHandler}
-          >
+            onMouseUp={onMouseOutHandler}>
             {newRenderText ? <>{newRenderText}</> : null}
           </div>
         )}
