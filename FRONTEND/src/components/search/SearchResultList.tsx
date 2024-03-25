@@ -1,8 +1,12 @@
 // src/components/search/SearchResultList.tsx
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store/store';
 import { List } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import style from '../../styles/search/SearchResultList.module.css';
+import { postRecentPrecedents } from '../../api/members';
+
 
 export interface SearchResult {
   precedentId: number;
@@ -22,10 +26,21 @@ interface SearchResultListProps {
 
 const SearchResultList: React.FC<SearchResultListProps> = ({ searchResults, loading }) => {
   const navigate = useNavigate();
+  const accessToken = useSelector((state: RootState) => state.user.accessToken);
 
   // list 아이템 클릭 시 호출되는 함수
-  const handleItemClick = (precedentId: number) => {
-    navigate(`/laws/${precedentId}`);
+  const handleItemClick = async (precedentId: number) => {
+    console.log('handleItemClick', precedentId, accessToken)
+    try {
+      if (accessToken) {
+        await postRecentPrecedents(accessToken, precedentId);
+        // console.log('최근 본 판례 등록 완료', precedentId, accessToken);
+      }
+      navigate(`/laws/${precedentId}`);
+    } catch (error) {
+      // console.error('최근 본 판례 등록 오류:', error);
+      navigate(`/laws/${precedentId}`);
+    }
   };
 
 

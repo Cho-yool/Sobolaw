@@ -5,23 +5,22 @@ import { List } from 'antd';
 import style from '../../styles/search/RecentLawCase.module.css'; // Assuming you have CSS module for styling
 
 interface LawCase {
-  id: number;
-  title: string;
-  type: '판례' | '법령'; 
+  precedentId: number;
+  caseName: string;
+  caseType: string; 
 }
 
 interface RecentLawCaseProps {
-  lawCases: LawCase[];
+  recentCases: LawCase[];
 }
 
-const RecentLawCase: React.FC<RecentLawCaseProps> = ({ lawCases }) => {
+const RecentLawCase: React.FC<RecentLawCaseProps> = ({ recentCases }) => {
   const navigate = useNavigate();
 
   // 상세 페이지로 이동하는 함수
-  const handleNavigate = (id: number, type: '판례' | '법령') => {
-    // type에 따라 경로를 설정합니다.
-    const path = type === '판례' ? `/lawss/${id}` : `/statutes/${id}`;
-    navigate(path); // 설정된 경로로 이동합니다.
+  const handleNavigate = (precedentId: number, caseType: string) => {
+    const path = caseType === '판례' ? `/laws/${precedentId}` : `/statutes/${precedentId}`;
+    navigate(path);
   };
 
   return (
@@ -31,13 +30,13 @@ const RecentLawCase: React.FC<RecentLawCaseProps> = ({ lawCases }) => {
       </div>
       <List
         itemLayout="horizontal"
-        dataSource={lawCases.slice(0, 10)} // 처음 10개 항목만 표시
+        dataSource={recentCases.slice(0, 10)} // 처음 10개 항목만 표시
         renderItem={(lawCase, index) => (
           <List.Item 
           className={`{style.listItem} ${index >= 5 ? style.hiddenItem : ''}`}
-          onClick={() => handleNavigate(lawCase.id, lawCase.type)}> 
-            <div className={style.caseTypeBox}>{lawCase.type}</div>
-            <div className={style.caseTitle}>{lawCase.title}</div>
+          onClick={() => handleNavigate(lawCase.precedentId, lawCase.caseType)}> 
+            <div className={style.caseTypeBox}>{lawCase.caseType}</div>
+            <div className={style.caseTitle}>{lawCase.caseName}</div>
           </List.Item>
         )}
         className={style.recentLawCaseList}
