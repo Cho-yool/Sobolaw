@@ -76,14 +76,39 @@ async function deleteUser(accessToken: string) {
 }
 
 // 멤버가 저장한 판례 조회
-async function getPrecedents(memberId: number) {
-  const response = await http.get(`${url}/${memberId}/precedents`);
+async function getPrecedents(accessToken: string) {
+  const response = await http.get(`${url}/precedents`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   return response.data.data;
 }
 
-// 멤버가 최근 본 판례
-async function getRecentPrecedents(memberId: number) {
-  const response = await http.get(`${url}/${memberId}/recent`);
+// 멤버가 조회한 판례를 '최근 본 판례'로 저장
+async function postRecentPrecedents(accessToken: string, precedentId: number) {
+  await http.post(
+    `${url}/recents`,
+    { precedentId },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+}
+
+// 멤버가 최근 본 판례 리스트 조회
+async function getRecentPrecedents(accessToken: string) {
+  // console.log('getRecentPrecedents 함수 호출:', accessToken);
+  const response = await http.get(`${url}/recents`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   return response.data.data;
 }
 
@@ -121,6 +146,7 @@ export {
   reissueToken,
   getUserInfo,
   getPrecedents,
+  postRecentPrecedents,
   getRecentPrecedents,
   getMemberList,
   postMyKeyword,

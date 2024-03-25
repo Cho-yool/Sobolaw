@@ -14,8 +14,7 @@ export default function MyRecentCase({ cases }: MyRecentCaseProps) {
     <div
       key={item.recentPrecedentId}
       onClick={() => {
-        navigate("/detail");
-        // navigate(`/detail/${item.precedentId}`);
+        navigate(`/laws/${item.precedentId}`);
       }}
       style={{
         cursor: "pointer",
