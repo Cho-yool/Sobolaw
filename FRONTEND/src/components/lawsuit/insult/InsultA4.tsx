@@ -8,7 +8,6 @@ import type { DatePickerProps, CheckboxProps, GetProp } from "antd";
 import {
   Button,
   Input,
-  InputNumber,
   DatePicker,
   Cascader,
   Tooltip,
@@ -19,8 +18,7 @@ import {
 import locale from "antd/es/date-picker/locale/ko_KR";
 import { RootState } from "../../../redux/store/store";
 import { postInsult } from "../../../api/lawsuit";
-import { InsultForm } from "../../../types/DataTypes";
-import { options, initialInsultContent } from "../../../types/LawsuitTypes";
+import { options } from "../../../types/LawsuitTypes";
 import style from "../../../styles/papers/Insult.module.css";
 
 const { Option } = Select;
@@ -28,8 +26,6 @@ const { Option } = Select;
 export default function LawsuitInsult() {
   const navigate = useNavigate();
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
-  const [insultContent, setInsultContent] =
-    useState<InsultForm>(initialInsultContent);
 
   // 데이터 입력용 인풋모음들
 
@@ -77,6 +73,7 @@ export default function LawsuitInsult() {
   const [paperRPCount, setPaperRPCount] = useState("다수");
   const [paperWitness, setPaperWitness] = useState("의 ");
   const [paperEvidence, setPaperEvidence] = useState<string[]>([]);
+  const [paperSubmissionDate, setPaperSubmissionDate] = useState("");
   const [agreements, setAgreements] = useState(false);
 
   // input 효과들
@@ -170,8 +167,9 @@ export default function LawsuitInsult() {
   };
 
   // 이용자 수
-  const onChangeUser = (value: null | string) => {
-    if (value === null) {
+  const onChangeUser: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    const value = event.target.value;
+    if (value === "") {
       setPaperRPCount("다수");
       setRelatedPeopleCount("다수");
     } else {
@@ -286,9 +284,10 @@ export default function LawsuitInsult() {
   // 제출일자
   const onChangeSubmitDate: DatePickerProps["onChange"] = (_, dateStr) => {
     if (typeof dateStr === "string") {
+      setSubmissionDate(dateStr);
       const date = new Date(dateStr);
       const modifieddateStr = `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
-      setSubmissionDate(modifieddateStr);
+      setPaperSubmissionDate(modifieddateStr);
     }
   };
 
@@ -299,8 +298,58 @@ export default function LawsuitInsult() {
     // 모든 조건이 True일 때 제출 가능 (필수입력 공백확인)
     if (title === "") {
       alert("소장 저장명을 확인해주세요!");
+    } else if (plaintiffName === "") {
+      alert("원고 성명을 확인해주세요!");
+    } else if (plaintiffRRNumber === "") {
+      alert("원고 주민등록번호를 확인해주세요!");
+    } else if (plaintiffAddress === "") {
+      alert("원고 주소를 확인해주세요!");
+    } else if (plaintiffPhoneNumber === "") {
+      alert("원고 연락처를 확인해주세요!");
+    } else if (plaintiffNickname === "") {
+      alert("원고 닉네임을 확인해주세요!");
+    } else if (defendantName === "") {
+      alert("피고 성명을 확인해주세요!");
+    } else if (defendantNickname === "") {
+      alert("피고 닉네임을 확인해주세요!");
+    } else if (defendantAddress === "") {
+      alert("피고 주소를 확인해주세요!");
+    } else if (defendantPhoneNumber === "") {
+      alert("피고 연락처를 확인해주세요!");
+    } else if (incidentDate === "") {
+      alert("사건 발생일을 확인해주세요!");
+    } else if (incidentTime === "") {
+      alert("사건 발생시간을 확인해주세요!");
+    } else if (onlineServiceType === "") {
+      alert("온라인 서비스 종류를 확인해주세요!");
+    } else if (webServiceDetails === "") {
+      alert("웹 서비스 상세정보를 확인해주세요!");
+    } else if (problemSpeech === "") {
+      alert("문제 발언 내용을 확인해주세요!");
+    } else if (reasonsForInsult === "") {
+      alert("모욕사유를 확인해주세요!");
+    } else if (relatedPeopleCount === "") {
+      alert("관련인원 수를 확인해주세요!");
+    } else if (witness1 === "") {
+      alert("증인1을 확인해주세요!");
+    } else if (witness2 === "") {
+      alert("증인2를 확인해주세요!");
+    } else if (witness3 === "") {
+      alert("증인3을 확인해주세요!");
+    } else if (insultDuration === "") {
+      alert("모욕기간을 확인해주세요!");
+    } else if (insultFrequency === "") {
+      alert("모욕빈도를 확인해주세요!");
+    } else if (circumstance === "") {
+      alert("식별 사정을 확인해주세요!");
+    } else if (evidence === "") {
+      alert("증거를 확인해주세요!");
+    } else if (submissionDate === "") {
+      alert("제출일을 확인해주세요!");
+    } else if (policeStationTeam === "") {
+      alert("관할 경찰서/단체를 확인해주세요!");
     } else {
-      setInsultContent({
+      const insultContent = {
         title: title,
         plaintiffName: plaintiffName,
         plaintiffResidentRegistrationNumber: plaintiffRRNumber,
@@ -327,8 +376,7 @@ export default function LawsuitInsult() {
         evidence: evidence,
         submissionDate: submissionDate,
         policeStationTeam: policeStationTeam,
-      });
-      // const response = await postInsult(1, insultContent);
+      };
       await postInsult(accessToken, insultContent)
         .then(() => {
           alert("소장 저장이 완료되었습니다");
@@ -502,7 +550,7 @@ export default function LawsuitInsult() {
             공연성: 불특정 또는 다수인이 인식할 수 있는 상태
           </p>
           <p>웹사이트의 이용자 수</p>
-          <InputNumber
+          <Input
             addonBefore={
               <Select
                 defaultValue="모름"
@@ -945,7 +993,7 @@ export default function LawsuitInsult() {
               <p>위 첨부서류 - 각 1부</p>
             </div>
             <div className={style["date"]}>
-              <strong>{submissionDate}</strong>
+              <strong>{paperSubmissionDate}</strong>
             </div>
             {agreements && (
               <>

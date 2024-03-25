@@ -145,10 +145,10 @@ export default function MyLawcaseTable({ lawsuitList }: MyLawcaseTableProps) {
     {
       title: "설정",
       key: "action",
-      render: () => (
+      render: (record: MypaperNarrow) => (
         <Space size="middle">
-          <a>수정</a>
-          <a>삭제</a>
+          <Link to={`/plaint/edit/${record.id}`}>수정</Link>
+          <a onClick={() => showModal(record.id)}>삭제</a>
         </Space>
       ),
     },

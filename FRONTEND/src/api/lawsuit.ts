@@ -46,8 +46,12 @@ async function getInsult(insultId: number, accessToken: string) {
 }
 
 // 멤버의 특정 모욕죄 소장 수정
-async function patchInsult(insultId: number, accessToken: string) {
-  await http.patch(`${url}/insults/${insultId}`, {
+async function patchInsult(
+  insultId: number,
+  data: InsultForm,
+  accessToken: string
+) {
+  await http.patch(`${url}/insults/${insultId}`, data, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
@@ -70,7 +74,7 @@ async function deleteInsult(insultId: number, accessToken: string) {
 
 // 멤버의 사기죄 소장 추가
 async function postFraud(memberId: number, data: FraudForm) {
-  await http.post(`${url}/frauds/${memberId}`, data);
+  await http.post(`${url}/frauds`, data);
 }
 
 // // 명예훼손죄
@@ -78,7 +82,7 @@ async function postFraud(memberId: number, data: FraudForm) {
 
 // 멤버의 명예훼손 소장 추가
 async function postDefamation(memberId: number, data: DefamationForm) {
-  await http.post(`${url}/defamations/${memberId}`, data);
+  await http.post(`${url}/defamations`, data);
 }
 
 export {
