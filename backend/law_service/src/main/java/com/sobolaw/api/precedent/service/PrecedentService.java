@@ -48,9 +48,6 @@ public class PrecedentService {
 
         SearchResponse<PrecedentDocument> precedentResponse = elasticsearchClient.search(s -> s
                 .index("precedent_index")
-                .size(10)
-                .from()
-                .
                 .query(q -> q
                     .multiMatch(m -> m
                         .query(searchKeyword)
