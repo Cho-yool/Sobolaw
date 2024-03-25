@@ -44,6 +44,30 @@ public class LawsuitService {
     private JwtProvider jwtProvider;
 
     /**
+     * 저장된 전체 소장 조회.
+     */
+    public List<LawsuitListResponseDTO> getLawsuits() {
+        List<LawsuitListResponseDTO> lawsuits = new ArrayList<>();
+
+        List<LawsuitDefamation> defamations = lawsuitDefamationRepository.findAll();
+        lawsuits.addAll(defamations.stream()
+            .map(LawsuitDefamationListResponseDTO::from)
+            .toList());
+
+        List<LawsuitInsult> insults = lawsuitInsultRepository.findAll();
+        lawsuits.addAll(insults.stream()
+            .map(LawsuitInsultListResponseDTO::from)
+            .toList());
+
+        List<LawsuitFraud> frauds = lawsuitFraudRepository.findAll();
+        lawsuits.addAll(frauds.stream()
+            .map(LawsuitFraudListResponseDTO::from)
+            .toList());
+
+        return lawsuits;
+    }
+
+    /**
      * 멤버 전체 소장 리스트 조회.
      */
     public List<LawsuitListResponseDTO> getAllLawsuits() {
@@ -672,6 +696,7 @@ public class LawsuitService {
 
         return LawsuitFraudDTO.from(updatedFraud);
     }
+
 
 
 }

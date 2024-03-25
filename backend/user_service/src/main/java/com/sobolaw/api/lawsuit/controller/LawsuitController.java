@@ -39,6 +39,16 @@ public class LawsuitController {
     /**
      * 전체 소장 리스트 조회.
      */
+    @GetMapping("list")
+    @Operation(summary = "전체 소장 리스트 조회", description = "저장된 전체 소장 리스트를 조회합니다.", tags = {"소장"})
+    public BaseResponse<List<LawsuitListResponseDTO>> getLawsuits() {
+        return BaseResponse.success((HttpStatus.OK.value()), "저장된 소장을 모두 조회했습니다.", lawsuitService.getLawsuits());
+    }
+
+    
+    /**
+     * 멤버의 전체 소장 리스트 조회.
+     */
     @GetMapping("")
     @Operation(summary = "멤버의 전체 소장 리스트 조회", description = "멤버가 저장한 전체 소장 리스트를 조회합니다.", tags = {"소장"})
     public BaseResponse<List<LawsuitListResponseDTO>> getAllLawsuits() {

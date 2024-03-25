@@ -39,7 +39,7 @@ public class MemberKeyword extends BaseEntity {
     @JoinColumn(name = "member_precedent_id", nullable = true)
     private MemberPrecedent memberPrecedent;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String word;
 
     @Setter

@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 /**
  * 소장 리스트 출력 DTO.
  */
-public record LawsuitInsultListResponseDTO(Long lawsuitInsultId, String type, String title, LocalDateTime createdTime, String defendantName) implements LawsuitListResponseDTO {
+public record LawsuitInsultListResponseDTO(Long id, String type, String title, LocalDateTime createdTime, String defendantName) implements LawsuitListResponseDTO {
 
     /**
      * LawsuitInsult 엔티티를 LawsuitInsultListResponseDTO 변환하는 메소드.
@@ -23,7 +23,7 @@ public record LawsuitInsultListResponseDTO(Long lawsuitInsultId, String type, St
 
     @Override
     public Long getId() {
-        return lawsuitInsultId;
+        return id;
     }
 
     @Override
