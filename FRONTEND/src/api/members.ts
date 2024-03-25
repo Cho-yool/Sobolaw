@@ -73,9 +73,23 @@ async function getPrecedents(accessToken: string) {
   return response.data.data;
 }
 
-// 멤버가 최근 본 판례
+// 멤버가 조회한 판례를 '최근 본 판례'로 저장
+async function postRecentPrecedents(accessToken: string, precedentId: number) {
+  await http.post(
+    `${url}/recents`,
+    { precedentId },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+}
+
+// 멤버가 최근 본 판례 리스트 조회
 async function getRecentPrecedents(accessToken: string) {
-  const response = await http.get(`${url}/recent`, {
+  const response = await http.get(`${url}/recents`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
@@ -109,6 +123,7 @@ export {
   reissueToken,
   getUserInfo,
   getPrecedents,
+  postRecentPrecedents,
   getRecentPrecedents,
   getMemberList,
   postMyKeyword,
