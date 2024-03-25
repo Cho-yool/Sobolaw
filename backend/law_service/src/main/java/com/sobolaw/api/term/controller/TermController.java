@@ -23,11 +23,12 @@ public class TermController {
     private final TermService termService;
 
     @GetMapping("/search/{searchKeyword}")
-    @Operation(summary = "법령용어 검색", description = "키워드를 사용하여 법령용어를 검색합니다.")
+    @Operation(summary = "법령용어 검색", description = "키워드를 사용하여 법령용어명, 법령용어정의 컬럼을 검색합니다.")
     public BaseResponse<List<TermDTO>> searchLegalTerm(@PathVariable String searchKeyword) throws IOException {
         List<TermDTO> searchResults = termService.searchByKeyword(searchKeyword);
-        System.out.println("법령용어 데이터확인");
-        System.out.println(searchResults);
-        return BaseResponse.success(HttpStatus.OK.value(), "법령 검색 성공!",searchResults);
+        if (searchResults.isEmpty()) {
+            return BaseResponse.success(HttpStatus.OK.value(), "해당 용어 정보가 없습니다.",searchResults);
+        }
+        return BaseResponse.success(HttpStatus.OK.value(), "법령용어 검색 성공!",searchResults);
     }
 }

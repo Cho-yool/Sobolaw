@@ -22,9 +22,15 @@ public class StatuteController {
     private final StatuteSearchService statuteSearchService;
 
     @GetMapping("/search/{searchKeyword}")
-    @Operation(summary = "법령 검색", description = "키워드를 사용하여 법령 타이틀을 검색합니다.")
+    @Operation(
+        summary = "법령 검색",
+        description = "키워드를 사용하여 법령명, 조문내용, 조문서브내용 컬럼을 검색합니다."
+    )
     public BaseResponse<List<StatuteDTO>> searchStatutes(@PathVariable String searchKeyword) throws Exception {
         List<StatuteDTO> searchResults = statuteSearchService.searchByKeyword(searchKeyword);
+        if (searchResults.isEmpty()) {
+            return BaseResponse.success(HttpStatus.OK.value(), "법령 검색 결과가 없습니다.", searchResults);
+        }
         return BaseResponse.success(HttpStatus.OK.value(), "법령 검색 성공!", searchResults);
     }
 }
