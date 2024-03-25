@@ -359,6 +359,43 @@ public class MemberService {
     }
 
     /**
+     * 키워드 수정.
+     */
+    @Transactional
+    public List<MemberKeywordDTO> patchMemberKeywords(KeywordSaveRequestDTO request) {
+        Long currentMemberId = jwtProvider.getMemberId();
+        Member member = memberRepository.findById(currentMemberId)
+            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
+
+        // 기존에 이미 존재하는 키워드들을 조회합니다.
+        List<MemberKeyword> existingKeywords = memberKeywordRepository.findByMember(member);
+
+        List<MemberKeywordDTO> result = new ArrayList<>();
+
+        // 요청에서 받은 전체 키워드를 확인하면서 기존 키워드와 비교합니다.
+        for (String word : request.words()) {
+            // 기존에 이미 존재하는 키워드인지 확인합니다.
+            if (existingKeywords.stream().noneMatch(keyword -> keyword.getWord().equals(word))) {
+                // 기존에 존재하지 않는 키워드인 경우, 새로운 키워드를 추가합니다.
+                MemberKeyword newMemberKeyword = MemberKeyword.of(word, KeywordType.DIRECT);
+                newMemberKeyword.setMember(member);
+                MemberKeyword savedKeyword = memberKeywordRepository.save(newMemberKeyword);
+                result.add(MemberKeywordDTO.from(savedKeyword));
+            }
+        }
+
+        // 기존 키워드 중에 요청에서 받은 키워드에 포함되지 않는 키워드는 삭제합니다.
+        existingKeywords.stream()
+            .filter(keyword -> !request.words().contains(keyword.getWord()))
+            .forEach(keyword -> {
+                keyword.softDelete(); // 소프트 딜리트 플래그 설정
+                memberKeywordRepository.save(keyword); // 저장하여 업데이트
+            });
+
+        return result;
+    }
+
+    /**
      * 멤버의 판례 삭제.
      *
      * @param precedentId 삭제할 판례 ID.
