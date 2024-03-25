@@ -7,6 +7,7 @@ import com.sobolaw.api.term.document.TermDocument;
 import com.sobolaw.api.term.dto.TermDTO;
 import com.sobolaw.api.term.entity.Term;
 import com.sobolaw.api.term.repository.TermRepository;
+import jakarta.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +65,12 @@ public class TermService {
         Page<Term> termPage = termRepository.findAll(pageable);
 
         return termPage.map(this::convertToTermDTO);
+    }
+
+    public TermDTO findTermByTermId(Long termId) {
+        Term term = termRepository.findById(termId)
+            .orElseThrow(() -> new EntityNotFoundException("해당 법령용어가 없습니다. termId = " + termId));
+        return convertToTermDTO(term);
     }
 
     // entity -> DTO 변환

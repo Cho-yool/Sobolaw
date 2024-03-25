@@ -40,7 +40,13 @@ public class TermController {
         // 페이지는 1페이지 부터 있고
         // 페이지네이션에선 0일 때 1-20번 데이터 가져오기 때문에 page-1
         Page<TermDTO> terms = termService.getTermsByPage(page-1);
-        return BaseResponse.success(HttpStatus.OK.value(), "법령용어 목록!", terms);
+        return BaseResponse.success(HttpStatus.OK.value(), "법령용어 목록 조회 성공!", terms);
     }
 
+    @GetMapping("/detail/{termId}")
+    @Operation(summary = "법령용어 상세보기", description = "법령용어 설명 보기")
+    public BaseResponse<TermDTO> getTermDetail (@PathVariable Long termId) {
+        TermDTO term = termService.findTermByTermId(termId);
+        return BaseResponse.success(HttpStatus.OK.value(), "법령용어 조회 성공!", term);
+    }
 }
