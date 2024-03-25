@@ -1,0 +1,27 @@
+/* SearchHitPage.module.css */
+.hitResultSection {
+    padding: 5%;
+    background: #F3E7C0;
+    /* 배경색은 원하는 대로 설정 */
+}
+
+.hitResultSection h2 {
+    font-size: 36px;
+    font-weight: bold;
+    margin: 2% 13%;
+    margin-bottom: 5%;
+    color: #644419;
+}
+
+/* 만약 반응형 디자인이 필요하다면 */
+@media (max-width: 768px) {
+    .hitResultSection {
+        padding: 10px;
+    }
+
+    .hitResultSection h2 {
+        font-size: 24px;
+        margin: 30px auto;
+        text-align: center;
+    }
+}

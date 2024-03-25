@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { searchStatute, searchPrecedent } from '../../api/lawsearch';
 import { Input, Tabs } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import style from '../../styles/search/SearchInput.module.css';
+import CountUp from 'react-countup';
 
 const SearchInput: React.FC = () => {
   const navigate = useNavigate();
@@ -11,6 +11,7 @@ const SearchInput: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('precedent');
 
   const handleSearch = (): void => {
+    window.scrollTo(0, 0);
     navigate(`/search-results?query=${encodeURIComponent(searchTerm)}&tab=${activeTab}`);
   };
 
@@ -31,16 +32,16 @@ const SearchInput: React.FC = () => {
 
 
   return (
-    <div className={style.container}>
+    <div className={style.container} style={{background: `url("/images/SearchInputImage.png")`}}>
       <h3 className={style.title}>
-        고도화된 검색 환경으로<br />
-        48,684 건의 판례를 찾아보세요.
+        소보로의 고도화된 검색 환경으로<br />
+        <CountUp end={270222} duration={3} separator="," />건의 법률 데이터를 찾아보세요.
       </h3>
       <Tabs
         defaultActiveKey={activeTab}
         onChange={onTabChange}
         items={tabItems}
-        tabBarGutter={40}
+        tabBarGutter={60}
         className={style.tabContainer}
       />
       <Input

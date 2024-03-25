@@ -42,27 +42,27 @@ const SearchPage = () => {
           </Col>
         </Row>
         <div className={pageStyle.middleContainer}>
-          <Row gutter={[16, 16]} justify="space-between">
+          <Row gutter={[16, 16]} justify="center">
             {/* Category cards on the left side */}
-            <Col xs={24} sm={24} md={10} lg={10} xl={10}>
+            <Col span={24}>
               <div className={pageStyle.categoryCardsContainer}>
-                <Card hoverable onClick={() => navigate('/cases')} className={pageStyle.singleCategoryCard}>
+                <Card hoverable onClick={() => navigate('/hit')} className={pageStyle.singleCategoryCard}>
                   <BookOutlined style={{ marginRight: 20, color: '#644419' }} />
-                  사람들이 가장 많이 본 판례
+                  인기 판례 둘러보기
                 </Card>
-                <Card hoverable onClick={() => navigate('/laws')} className={pageStyle.singleCategoryCard}>
+                <Card hoverable onClick={() => navigate('/hit')} className={pageStyle.singleCategoryCard}>
                   <CommentOutlined style={{ marginRight: 20, color: '#644419' }} />
-                  사람들이 가장 많이 본 법령
+                  인기 법령 둘러보기
                 </Card>
                 <Card hoverable onClick={() => navigate('/favorites')} className={pageStyle.singleCategoryCard}>
                   <StarOutlined style={{ marginRight: 20, color: '#644419' }} />
-                  내 스크랩
+                  내가 스크랩한 판례
                 </Card>
               </div>
             </Col>
             {/* Recent Law Cases List on the right side */}
             <div className={pageStyle.recentLawCaseContainer}>
-              <Col xs={24} sm={24} md={20} lg={20} xl={20}>
+              <Col span={24}>
                 <RecentLawCase lawCases={recentLawCases} />
               </Col>
             </div>

@@ -1,6 +1,6 @@
 // src/components/search/SearchResultList.tsx
 import React from 'react';
-import { List, Skeleton } from 'antd';
+import { List } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import style from '../../styles/search/SearchResultList.module.css';
 
@@ -11,6 +11,8 @@ export interface SearchResult {
   courtName?: string;
   instance?: string;
   judgmentDate?: string;
+  court?: string;
+  period?: string;
 }
 
 interface SearchResultListProps {

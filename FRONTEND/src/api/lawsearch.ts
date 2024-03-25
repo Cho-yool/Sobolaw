@@ -17,10 +17,16 @@ async function getPrecedentList() {
     return response.data.data;
 }
 
+// 조회수별 판례 목록 조회
+async function getHitPrecedentList() {
+    const response = await http.get("/precedent/list"); 
+    return response.data.data;
+}
+
 // 판례 검색
 async function searchPrecedent(searchKeyword: string) {
     const response = await http.get(`/precedent/search/${searchKeyword}`);
     return response.data;
 }
 
-export { searchStatute, getPrecedentList, searchPrecedent };
+export { searchStatute, getPrecedentList, getHitPrecedentList, searchPrecedent };
