@@ -1,8 +1,13 @@
 package com.sobolaw.api.precedent.service;
 
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch.core.SearchResponse;
+import co.elastic.clients.elasticsearch.core.search.Hit;
+import com.sobolaw.api.precedent.document.PrecedentDocument;
 import com.sobolaw.api.precedent.dto.PrecedentDTO;
 import com.sobolaw.api.precedent.entity.Precedent;
 import com.sobolaw.api.precedent.repository.PrecedentRepository;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PrecedentService {
 
     private final PrecedentRepository precedentRepository;
+    private final ElasticsearchClient elasticsearchClient;
 
     // precedentId로 판례 내용 조회
     public PrecedentDTO findPrecedentById(Long precedentId) {
@@ -37,18 +43,46 @@ public class PrecedentService {
             .collect(Collectors.toList());
     }
 
-    // searchKeyword로 키워드 일치하는 판례 검색 (일단 판례 내용에서만 검색)
-    public List<PrecedentDTO> searchByKeyword(String searchKeyword) {
+    // elasticsearch 판례검색
+    public List<PrecedentDTO> searchByKeyword(String searchKeyword) throws IOException {
 
-        List<Precedent> precedents = precedentRepository.findByCaseContentContaining(searchKeyword);
+        SearchResponse<PrecedentDocument> precedentResponse = elasticsearchClient.search(s -> s
+                .index("precedent_index")
+                .query(q -> q
+                    .multiMatch(m -> m
+                        .query(searchKeyword)
+                        .fields(
+                            "case_content", "case_name", "case_number",
+                            "judicial_notice", "referenced_case", "referenced_statute", "verdict_summary"
+                        )
+                    )
+                ),
+            PrecedentDocument.class
+        );
 
-        if (precedents.isEmpty()) {
-            throw new IllegalArgumentException("해당 키워드 관련 판례가 없습니다. searchKeyword=" + searchKeyword);
-        }
-
-        return precedents.stream()
-            .map(this::convertToPrecedentDTO)
+        List<PrecedentDTO> precedents = precedentResponse.hits().hits().stream()
+            .map(Hit::source)
+            .map(precedentDocument -> {
+                return new PrecedentDTO (
+                    precedentDocument.getPrecedentId(),
+                    precedentDocument.getCaseContent(),
+                    precedentDocument.getCaseName(),
+                    precedentDocument.getCaseNumber(),
+                    precedentDocument.getCaseType(),
+                    precedentDocument.getCourtName(),
+                    precedentDocument.getJudgment(),
+                    precedentDocument.getJudgmentDate(),
+                    precedentDocument.getJudicialNotice(),
+                    precedentDocument.getReferencedCase(),
+                    precedentDocument.getReferencedStatute(),
+                    precedentDocument.getVerdictSummary(),
+                    precedentDocument.getVerdictType(),
+                    precedentDocument.getHit()
+                );
+            })
             .collect(Collectors.toList());
+
+        return precedents;
     }
 
     private PrecedentDTO convertToPrecedentDTO(Precedent entity) {

@@ -20,6 +20,16 @@ spring:
       password: qlpoh4yX1A
     url: jdbc:mariadb://stg-yswa-kr-practice-db-master.mariadb.database.azure.com:3306/S10P22A604?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
 
+  # elasticsearch
+  elasticsearch:
+    host: j10a604.p.ssafy.io
+    port: 9200
+    indices:
+      statutesIndexName: statute_index
+      statutetexsIndexName: statutetext_index
+      precidentsIndexName: precident_index
+      termsIndexName: term_index
+
   # jpa
   jpa:
     hibernate:

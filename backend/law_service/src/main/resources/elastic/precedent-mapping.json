@@ -1,0 +1,52 @@
+{
+  "properties": {
+    "precedentId": {
+      "type": "long"
+    },
+    "caseContent": {
+      "type": "text",
+      "analyzer": "ksb_custom_korean_analyzer"
+    },
+    "caseName": {
+      "type": "text",
+      "analyzer": "ksb_custom_korean_analyzer"
+    },
+    "caseNumber": {
+      "type": "keyword"
+    },
+    "caseType": {
+      "type": "keyword"
+    },
+    "courtName": {
+      "type": "keyword"
+    },
+    "judgment": {
+      "type": "keyword"
+    },
+    "judgmentDate": {
+      "type": "keyword"
+    },
+    "judicialNotice": {
+      "type": "text",
+      "analyzer": "ksb_custom_korean_analyzer"
+    },
+    "referencedCase": {
+      "type": "text",
+      "analyzer": "ksb_custom_korean_analyzer"
+    },
+    "referencedStatute": {
+      "type": "text",
+      "analyzer": "ksb_custom_korean_analyzer"
+    },
+    "verdictSummary": {
+      "type": "text",
+      "analyzer": "ksb_custom_korean_analyzer"
+    },
+    "verdictType": {
+      "type": "keyword"
+    },
+    "hit": {
+      "type": "long"
+    }
+  }
+}
