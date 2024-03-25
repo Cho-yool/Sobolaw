@@ -27,7 +27,7 @@ const HitLawCaseList: React.FC = () => {
     const fetchHitPrecedentList = async () => {
         try {
             const response = await getHitPrecedentList();
-            console.log('판례 목록 조회 결과:', response); // 판례 목록 조회 결과 확인
+            // console.log('판례 목록 조회 결과:', response); // 판례 목록 조회 결과 확인
             if (Array.isArray(response)) {
                 const sortedLawCases = response.sort((a, b) => b.hit - a.hit); // 조회수 내림차순 정렬
                 setLawCases(sortedLawCases)
