@@ -3,42 +3,48 @@
 .searchContainer {
   background-color: #644419;
   padding: 0rem;
-  height: 400px;
-  width: 60%;
+  height: 420px;
+  width: 90%;
   border-radius: 20px;
-  margin: 50px auto; /* 하단 간격 추가 */
+  margin: 0px auto; /* 하단 간격 추가 */
 }
 
 .middleContainer {
-  background-color: #F8F0D6; /* 새 배경 색상 */
-  width: 100%;
-  padding: 20px; /* 내부 요소와의 간격 */
-  margin: 40px 0; /* 상단 및 하단 마진 추가 */
+  background-color: #F3E7C0; /* 새 배경 색상 */
+  width: 90%;
+  padding: 10px; /* 내부 요소와의 간격 */
+  margin: 20px auto; /* 상단 간격 추가 */
 }
 
 .categoryCardsContainer {
   display: flex;
-  width: 80%;
-  flex-direction: column;
-  gap: 40px; /* 카드 간의 간격 늘림 */
-  margin: 60px 80px; /* 검색 컨테이너와의 간격 추가 */
+  justify-content: space-between;
+  gap: 5%; /* 카드 간의 간격 늘림 */
+  margin: 0px 5%;
 }
 
 .singleCategoryCard {
-  padding: 15px; /* 카드 내부 패딩 조정 */
-  margin: 0 60px;
   border-radius: 20px; /* 카드의 모서리 둥글게 */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 카드에 그림자 추가 */
+  margin: 0 auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* 카드에 그림자 추가 */
   color: #644419;
   font-size: 16px;
   font-weight: 600;
+  width: 70%;
+  text-align: center;
+  transition: transform 0.3s ease-in-out; /* 마우스 오버 시 애니메이션 효과 */
+}
+
+.singleCategoryCard:hover {
+  transform: scale(1.05); /* 마우스 오버 시 확대 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* 마우스 오버 시 그림자 확대 */
 }
 
 .recentLawCaseContainer {
-  width: 58%;
+  width: 100%;
   margin: 40px 0px;
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 
@@ -47,19 +53,19 @@
 /* 모바일 화면에서의 스타일 조정 */
 @media screen and (max-width: 768px) {
   .searchContainer {
+    background-color: transparent;
     padding: 1rem;
-    width: 80%;
+    width: 100%;
     margin: 0px auto;
-    margin-top: 30px;
+    margin-top: 20px;
     height: 350px; /* 높이 조정 */
   }
 
   .middleContainer {
     flex-direction: column; /* 모바일 화면에서는 세로 방향으로 배열 */
-    padding: 40px 0; /* 위, 아래 패딩 조정 */
     gap: 10px; /* 카테고리 박스와 최근 본 판례 박스 사이의 간격 */
+    margin: 0 auto;
   }
-
 
   .title {
     font-size: 12px;
@@ -75,10 +81,16 @@
     margin: 0 10px; /* 좌우 마진 조정 */
   }
 
+  .recentLawCaseContainer {
+    width: 100%;
+    margin: 10px auto;
+  }
+
   .singleCategoryCard {
     width: 80%;
     padding: 0px; /* 모바일 화면에서 카드 패딩 조정 */
     font-size: 12px;
+    margin: 10px auto;
   }
 
   .recentLawCaseBackground, .recentLawCaseTitle {

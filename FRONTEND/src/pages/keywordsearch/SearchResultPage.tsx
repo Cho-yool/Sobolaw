@@ -12,17 +12,65 @@ const { Option } = Select;
 interface FilterOptions {
   court: string[];
   instance: string[];
-  date: string[];
+  period: string[];
 }
+
+// Select 결과 분류
+const classifyResults = (results: SearchResult[]) => {
+  return results.map((result) => {
+    let court = '';
+    let instance = '';
+    let period = '';
+
+    // 법원 분류
+    if (result.courtName?.includes('대법원')) {
+      court = '대법원';
+      instance = '3심';
+    } else if (result.courtName?.includes('고법') || result.courtName?.includes('고등법원')) {
+      court = '고등법원';
+      instance = '2심';
+    } else if (result.courtName?.includes('지법') || result.courtName?.includes('지방법원')) {
+      court = '지방법원';
+      instance = '1심';
+    }
+
+    // 기간 분류
+    const currentDate = new Date();
+    const currentDateString = currentDate.toISOString().slice(0, 10).replace(/-/g, '');
+
+    console.log('선고일:', result.judgmentDate);
+
+    if (result.judgmentDate) {
+      const judgmentDate = parseInt(result.judgmentDate, 10);
+
+      if (judgmentDate > parseInt(currentDateString, 10) - 100000) {
+        period = '10년';
+      } else if (judgmentDate > parseInt(currentDateString, 10) - 200000) {
+        period = '20년';
+      } else if (judgmentDate > parseInt(currentDateString, 10) - 300000) {
+        period = '30년';
+      }
+    } else {
+      period = '알 수 없음';
+    }
+
+    return {
+      ...result,
+      court,
+      instance,
+      period,
+    };
+  });
+};
 
 const SearchResultPage = () => {
   const location = useLocation();
   const initialPage = 1;
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [selectedCourt, setSelectedCourt] = useState<string>('');
-  const [selectedInstance, setSelectedInstance] = useState<string>('');
-  const [selectedDate, setSelectedDate] = useState<string>('');
+  const [selectedCourt, setSelectedCourt] = useState<string>('전체');
+  const [selectedInstance, setSelectedInstance] = useState<string>('전체');
+  const [selectedDate, setSelectedDate] = useState<string>('전체');
   const [loading, setLoading] = useState(false);
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const pageSize = 10;
@@ -53,11 +101,9 @@ const SearchResultPage = () => {
           results = response.data;
         }
       }
-      setSearchResults(results);
-      // navigate(`/search-results?query=${encodeURIComponent(searchQuery)}&tab=${activeTab}`, {
-      //   state: { searchResults: results, activeTab },
-      // });
-      console.log('Search results(SearchResultPage):', results);
+      const classifiedResults = classifyResults(results);
+      setSearchResults(classifiedResults);
+      console.log('Search results(SearchResultPage):', classifiedResults);
     } catch (error) {
       console.error('Error fetching search results:', error);
     } finally {
@@ -68,12 +114,14 @@ const SearchResultPage = () => {
   const filterResults = () => {
     if (!Array.isArray(searchResults)) return [];
 
-    const filtered = searchResults.filter(
-      (result) =>
-        (selectedCourt ? result.courtName === selectedCourt : true) &&
-        (selectedInstance ? result.instance === selectedInstance : true) &&
-        (selectedDate ? result.judgmentDate === selectedDate : true)
-    );
+    const filtered = searchResults.filter((result) => {
+      // console.log('필터링 조건:', result.court, selectedCourt, result.instance, selectedInstance, result.period, selectedDate); // 필터링 조건 확인
+      return (
+        (selectedCourt === '전체' || result.court === selectedCourt) &&
+        (selectedInstance === '전체' || result.instance === selectedInstance) &&
+        (selectedDate === '전체' || result.period === selectedDate)
+      );
+    });
     return filtered;
   };
 
@@ -96,23 +144,23 @@ const SearchResultPage = () => {
       children: (
         <>
           <div className={style.selectContainer}>
-            <Select defaultValue="법원" style={{ width: 95 }} onChange={onCourtChange} className={style.singleSelect}>
+            <Select value={selectedCourt === '전체' ? '법원' : selectedCourt} style={{ width: 100 }} onChange={onCourtChange} className={style.singleSelect}>
               <Option value="전체">전체</Option>
               <Option value="대법원">대법원</Option>
               <Option value="고등법원">고등법원</Option>
               <Option value="지방법원">지방법원</Option>
             </Select>
-            <Select defaultValue="심급" style={{ width: 70 }} onChange={onInstanceChange} className={style.singleSelect}>
+            <Select value={selectedInstance === '전체' ? '심급' : selectedInstance} style={{ width: 100, marginLeft: 10 }} onChange={onInstanceChange} className={style.singleSelect}>
               <Option value="전체">전체</Option>
               <Option value="1심">1심</Option>
               <Option value="2심">2심</Option>
               <Option value="3심">3심</Option>
             </Select>
-            <Select defaultValue="기간" style={{ width: 70 }} onChange={onDateChange} className={style.singleSelect}>
+            <Select value={selectedDate === '전체' ? '기간' : selectedDate} style={{ width: 100, marginLeft: 10 }} onChange={onDateChange} className={style.singleSelect}>
               <Option value="전체">전체</Option>
-              <Option value="1년">1년</Option>
-              <Option value="3년">3년</Option>
-              <Option value="5년">5년</Option>
+              <Option value="10년">10년</Option>
+              <Option value="20년">20년</Option>
+              <Option value="30년">30년</Option>
             </Select>
           </div>
           {loading ? (
@@ -149,7 +197,7 @@ const SearchResultPage = () => {
     <div className={style.searchPageBackground}>
       <div className={style.searchPageContainer}>
         <Input
-          prefix={<SearchOutlined />}
+          prefix={<SearchOutlined style={{ marginRight: 20 }} />}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           onPressEnter={handleSearch}

@@ -19,12 +19,6 @@ const tooltipMessage = (
   </>
 );
 
-const tooltipSearchMessage = (
-  <>
-    <span>사건분류를 입력하거나, 사건 번호, 관련 법률, 판결 날짜를 입력하여 검색하세요.</span>
-  </>
-);
-
 const RecommendPage: React.FC = () => {
   const [currentWord, setCurrentWord] = useState('');
   const [wordIndex, setWordIndex] = useState(0);
