@@ -58,7 +58,6 @@ public class MemberService {
     private final LawServiceClient lawServiceClient;
     private final RecommendServiceClient recommendServiceClient;
     private final JwtProvider jwtProvider;
-    private final RedisTokenService redisTokenService;
 
     /**
      * 멤버 정보.
@@ -86,7 +85,11 @@ public class MemberService {
         List<Long> recentIds = member.getMemberRecents().stream().map(MemberRecent::getPrecedentId).toList();
 
         Map<String, List<Long>> requestBody = Collections.singletonMap("precedentId", recentIds);
+        log.info("requestBody = " + requestBody);
         BaseResponse<List<PrecedentListResponseDTO>> baseResponse = lawServiceClient.getPrecedentList(requestBody);
+        if (baseResponse.getData() == null) {
+            throw new MemberException(MemberErrorCode.NOT_FOUND_RECENT);
+        }
         return baseResponse.getData();
 
     }
@@ -101,7 +104,16 @@ public class MemberService {
         Member member = memberRepository.findById(currentMemberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
-        return member.getMemberKeyword().stream().map(MemberKeywordDTO::from).collect(Collectors.toList());
+        List<MemberKeywordDTO> memberKeywords = member.getMemberKeyword().stream()
+            .map(MemberKeywordDTO::from)
+            .collect(Collectors.toList());
+
+        if (memberKeywords.isEmpty()) {
+            // 키워드가 없을 때 에러를 반환합니다.
+            throw new MemberException(MemberErrorCode.NOT_FOUND_KEYWORD);
+        }
+
+        return memberKeywords;
     }
 
     /**
@@ -118,6 +130,9 @@ public class MemberService {
 
         Map<String, List<Long>> requestBody = Collections.singletonMap("precedentId", precedentIds);
         BaseResponse<List<PrecedentListResponseDTO>> baseResponse = lawServiceClient.getPrecedentList(requestBody);
+        if (baseResponse.getData() == null) {
+            throw new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT);
+        }
         return baseResponse.getData();
     }
 
@@ -150,6 +165,9 @@ public class MemberService {
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT));
 
         BaseResponse<PrecedentResponseDTO> baseResponse = lawServiceClient.getPrecedentDetail(memberPrecedent.getPrecedentId());
+        if (baseResponse.getData() == null) {
+            throw new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT);
+        }
         return baseResponse.getData();
     }
 
@@ -170,7 +188,9 @@ public class MemberService {
         // lawServiceClient.getPrecedentDetail이 BaseResponse<PrecedentDTO>를 반환한다고 가정합니다.
         BaseResponse<PrecedentResponseDTO> baseResponse = lawServiceClient.getPrecedentDetail(memberRecent.getPrecedentId());
 
-        // BaseResponse에서 PrecedentDTO를 추출하여 반환합니다.
+        if (baseResponse.getData() == null) {
+            throw new MemberException(MemberErrorCode.NOT_FOUND_RECENT);
+        }
         return baseResponse.getData();
     }
 
@@ -186,7 +206,8 @@ public class MemberService {
         Member member = memberRepository.findById(currentMemberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
-        MemberKeyword keyword = memberKeywordRepository.findByMemberAndMemberKeywordId(member, keywordId).orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_KEYWORD));
+        MemberKeyword keyword = memberKeywordRepository.findByMemberAndMemberKeywordId(member, keywordId)
+            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_KEYWORD));
 
         return MemberKeywordDTO.from(keyword);
     }
@@ -209,6 +230,9 @@ public class MemberService {
 
         Map<String, List<Long>> requestBody = Collections.singletonMap("precedentId", precedentIds);
         BaseResponse<List<PrecedentListResponseDTO>> baseResponse = lawServiceClient.getPrecedentList(requestBody);
+        if (baseResponse.getData() == null) {
+            throw new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT);
+        }
         return baseResponse.getData();
     }
 
@@ -221,6 +245,9 @@ public class MemberService {
 
         Map<String, List<Long>> requestBody = Collections.singletonMap("precedentId", recentIds);
         BaseResponse<List<PrecedentListResponseDTO>> baseResponse = lawServiceClient.getPrecedentList(requestBody);
+        if (baseResponse.getData() == null) {
+            throw new MemberException(MemberErrorCode.NOT_FOUND_RECENT);
+        }
         return baseResponse.getData();
     }
 
@@ -229,7 +256,13 @@ public class MemberService {
      */
     public List<MemberKeywordDTO> getAllMemberKeywords() {
         List<MemberKeyword> allKeywords = memberKeywordRepository.findAll();
-        return allKeywords.stream().map(MemberKeywordDTO::from).collect(Collectors.toList());
+        List<MemberKeywordDTO> allMemberKeyword = allKeywords.stream().map(MemberKeywordDTO::from).toList();
+        if (allMemberKeyword.isEmpty()) {
+            // 키워드가 없을 때 에러를 반환합니다.
+            throw new MemberException(MemberErrorCode.NOT_FOUND_KEYWORD);
+        }
+
+        return allMemberKeyword;
     }
 
     /**
