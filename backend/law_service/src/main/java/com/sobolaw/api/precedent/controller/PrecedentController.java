@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 @RestController
-@RequestMapping("/precedent")
+@RequestMapping("/precedents")
 @Tag(name = "PrecedentController", description = "판례 관련 기능")
 @RequiredArgsConstructor
 public class PrecedentController {
@@ -40,9 +40,16 @@ public class PrecedentController {
     }
 
     @GetMapping("/search/{searchKeyword}")
-    @Operation(summary = "판례 검색", description = "키워드를 사용하여 판례 내용을 검색합니다.")
+    @Operation(
+        summary = "판례 검색",
+        description = "키워드를 사용하여 사건명, 사건번호, 판례내용, 판시사항, 참조판례, 참조조문 컬럼을 검색합니다."
+    )
     public BaseResponse<List<PrecedentDTO>> searchStatutes(@PathVariable String searchKeyword) throws IOException {
         List<PrecedentDTO> searchResults = precedentService.searchByKeyword(searchKeyword);
+        if (searchKeyword.isEmpty()) {
+            //검색 결과 없을 때
+            return BaseResponse.success(HttpStatus.OK.value(), "판례 검색 결과가 없습니다.",searchResults);
+        }
         return BaseResponse.success(HttpStatus.OK.value(), "판례 검색 성공!",searchResults);
     }
 

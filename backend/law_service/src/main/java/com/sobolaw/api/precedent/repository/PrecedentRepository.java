@@ -13,8 +13,6 @@ public interface PrecedentRepository extends JpaRepository<Precedent, Long> {
 
     List<Precedent> findByPrecedentIdIn(List<Long> precedentIds);
 
-    List<Precedent> findByCaseContentContaining(String searchKeyword);
-
     List<Precedent> findTop20ByOrderByHitDesc();
 
 }

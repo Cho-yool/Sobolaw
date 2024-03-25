@@ -207,6 +207,15 @@ public class MemberController {
     }
 
     /**
+     * 멤버가 키워드 저장.
+     */
+    @PatchMapping("/keywords")
+    @Operation(summary = "키워드 수정", description = "관심 키워드를 수정합니다.", tags = {"키워드"})
+    public BaseResponse<List<MemberKeywordDTO>> patchMemberKeyword(@RequestBody KeywordSaveRequestDTO keywordSaveRequestDTO) {
+        return BaseResponse.success(HttpStatus.ACCEPTED.value(), "키워드를 저장합니다.", memberService.patchMemberKeywords(keywordSaveRequestDTO));
+    }
+
+    /**
      * 멤버의 판례를 삭제.
      */
     @DeleteMapping("/precedents/{precedentId}")
