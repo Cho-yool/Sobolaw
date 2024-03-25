@@ -3,6 +3,8 @@ import { Pagination } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import style from '../../styles/search/HitLawCaseList.module.css';
 import { getHitPrecedentList } from '../../api/lawsearch';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMedal } from '@fortawesome/free-solid-svg-icons';
 
 export interface LawCase {
     precedentId: number;
@@ -27,7 +29,7 @@ const HitLawCaseList: React.FC = () => {
             const response = await getHitPrecedentList();
             console.log('판례 목록 조회 결과:', response); // 판례 목록 조회 결과 확인
             if (Array.isArray(response)) {
-                const sortedLawCases = response.sort((a,b) => b.hit - a.hit); // 조회수 내림차순 정렬
+                const sortedLawCases = response.sort((a, b) => b.hit - a.hit); // 조회수 내림차순 정렬
                 setLawCases(sortedLawCases)
                 setTotalCount(response.length);
             }
@@ -65,6 +67,9 @@ const HitLawCaseList: React.FC = () => {
                         onClick={() => handleListClick(item.precedentId)}
                     >
                         <div className={style.rankBox}>
+                            {currentPage === 1 && index === 0 && <FontAwesomeIcon icon={faMedal} className={`${style.medal} ${style.gold}`} />}
+                            {currentPage === 1 && index === 1 && <FontAwesomeIcon icon={faMedal} className={`${style.medal} ${style.silver}`} />}
+                            {currentPage === 1 && index === 2 && <FontAwesomeIcon icon={faMedal} className={`${style.medal} ${style.bronze}`} />}
                             {(currentPage - 1) * pageSize + index + 1}
                         </div>
                         <div className={style.titleContent}>
