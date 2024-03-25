@@ -15,6 +15,7 @@ public enum MemberErrorCode {
     NOT_FOUND_PRECEDENT(HttpStatus.BAD_REQUEST, "존재하지 않는 저장 판례입니다."),
     NOT_FOUND_RECENT(HttpStatus.BAD_REQUEST, "존재하지 않는 최근 판례입니다."),
     NOT_FOUND_KEYWORD(HttpStatus.BAD_REQUEST, "존재하지 않는 키워드입니다."),
+    DUPLICATE_KEYWORD(HttpStatus.CONFLICT, "이미 저장된 키워드 입니다."),
     NOT_FOUND_HIGHLIGHT(HttpStatus.BAD_REQUEST, "존재하지 않는 하이라이트입니다."),
     ILLEGAL_OAUTH2CLIENT_NAME(HttpStatus.UNAUTHORIZED, "유효하지 않은 수단입니다."),
     NOT_LOGGED_USER(HttpStatus.UNAUTHORIZED, "로그인 되어있지 않습니다.");

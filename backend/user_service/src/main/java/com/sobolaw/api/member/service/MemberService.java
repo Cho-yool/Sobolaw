@@ -289,9 +289,18 @@ public class MemberService {
         Member member = memberRepository.findById(currentMemberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
+        // 기존에 이미 존재하는 키워드들을 조회합니다.
+        List<String> existingKeywords = memberKeywordRepository.findByMember(member).stream()
+            .map(MemberKeyword::getWord)
+            .toList();
+
         List<MemberKeywordDTO> result = new ArrayList<>();
 
         for (String word : request.words()) {
+            // 기존에 이미 존재하는 키워드인지 확인합니다.
+            if (existingKeywords.contains(word)) {
+                throw new MemberException(MemberErrorCode.DUPLICATE_KEYWORD);
+            }
             MemberKeyword newMemberKeyword = MemberKeyword.of(word, KeywordType.DIRECT);
             newMemberKeyword.setMember(member);
             MemberKeyword memberKeyword = memberKeywordRepository.save(newMemberKeyword);

@@ -214,7 +214,7 @@ public class JwtProvider {
         log.info("auth = " + authentication);
         log.info("isAuth = " + authentication.isAuthenticated());
         log.info("principle = " + authentication.getPrincipal());
-        if (authentication != null && authentication.isAuthenticated()) {
+        if (authentication != null && authentication.isAuthenticated() && authentication.getPrincipal() != "anonymousUser") {
             Object principal = authentication.getPrincipal();
             if (principal instanceof CustomUserDetails) {
                 return ((CustomUserDetails) principal).getMemberId();
