@@ -2,12 +2,14 @@ package com.sobolaw.api.common.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * 서버 요청에 대한 기본 응답 정의.
  */
 @Getter
 @AllArgsConstructor
+@ToString
 public class BaseResponse<T> {
 
     private int status;
