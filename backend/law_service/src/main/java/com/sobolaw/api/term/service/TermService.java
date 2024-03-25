@@ -32,11 +32,11 @@ public class TermService {
 
         List<TermDTO> terms = termResponse.hits().hits().stream()
             .map(Hit::source)
-            .map(termDocument -> {
+            .map(termDocument -> { // 아래 변환방식 사용할 때 : DTO랑 순서 동일하게 작성
                 return new TermDTO(
                     termDocument.getTermId(),
-                    termDocument.getTermDefinition(),
-                    termDocument.getTermName()
+                    termDocument.getTermName(),
+                    termDocument.getTermDefinition()
                 );
             })
             .collect(Collectors.toList());

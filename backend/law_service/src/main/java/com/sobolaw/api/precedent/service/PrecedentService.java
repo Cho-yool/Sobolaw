@@ -48,6 +48,9 @@ public class PrecedentService {
 
         SearchResponse<PrecedentDocument> precedentResponse = elasticsearchClient.search(s -> s
                 .index("precedent_index")
+                .size(10)
+                .from()
+                .
                 .query(q -> q
                     .multiMatch(m -> m
                         .query(searchKeyword)
@@ -62,25 +65,24 @@ public class PrecedentService {
 
         List<PrecedentDTO> precedents = precedentResponse.hits().hits().stream()
             .map(Hit::source)
-            .map(precedentDocument -> {
+            .map(precedentDocument -> { // 아래 변환방식 사용할 때 : DTO랑 순서 동일하게 작성
                 return new PrecedentDTO (
                     precedentDocument.getPrecedentId(),
-                    precedentDocument.getCaseContent(),
-                    precedentDocument.getCaseName(),
                     precedentDocument.getCaseNumber(),
+                    precedentDocument.getCaseName(),
                     precedentDocument.getCaseType(),
-                    precedentDocument.getCourtName(),
+                    precedentDocument.getCaseContent(),
                     precedentDocument.getJudgment(),
                     precedentDocument.getJudgmentDate(),
                     precedentDocument.getJudicialNotice(),
+                    precedentDocument.getCourtName(),
+                    precedentDocument.getVerdictType(),
+                    precedentDocument.getVerdictSummary(),
                     precedentDocument.getReferencedCase(),
                     precedentDocument.getReferencedStatute(),
-                    precedentDocument.getVerdictSummary(),
-                    precedentDocument.getVerdictType(),
                     precedentDocument.getHit()
                 );
-            })
-            .collect(Collectors.toList());
+            }).collect(Collectors.toList());
 
         return precedents;
     }
