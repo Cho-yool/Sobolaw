@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 @RestController
-@RequestMapping("/precedent")
+@RequestMapping("/precedents")
 @Tag(name = "PrecedentController", description = "판례 관련 기능")
 @RequiredArgsConstructor
 public class PrecedentController {
