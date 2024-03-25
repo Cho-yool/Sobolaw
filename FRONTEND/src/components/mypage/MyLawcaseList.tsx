@@ -1,10 +1,14 @@
-import { useEffect, useState } from "react";
-import { Table, Space, Tag, Row, Col } from "antd";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Table, Space, Tag, Row, Col, Modal, Button } from "antd";
 import {
   MypaperWide,
   MypaperNarrow,
   MemberLawsuit,
 } from "../../types/DataTypes";
+import { RootState } from "../../redux/store/store";
+import { deleteInsult } from "../../api/lawsuit";
 import style from "../../styles/mypage/Mypaper.module.css";
 
 interface MyLawcaseTableProps {
@@ -12,13 +16,35 @@ interface MyLawcaseTableProps {
 }
 
 export default function MyLawcaseTable({ lawsuitList }: MyLawcaseTableProps) {
+  const accessToken = useSelector((state: RootState) => state.user.accessToken);
   const [dataWide, setDataWide] = useState<MypaperWide[]>([]);
   const [dataNarrow, setDataNarrow] = useState<MypaperNarrow[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+
+  const showModal = (id: number) => {
+    setSelectedItemId(id);
+    setIsModalOpen(true);
+  };
+
+  const handleOk = async () => {
+    if (selectedItemId !== null) {
+      try {
+        await deleteInsult(selectedItemId, accessToken);
+        setIsModalOpen(false);
+        setSelectedItemId(null);
+      } catch (error) {
+        console.error("Error deleting insult:", error);
+      }
+    }
+  };
 
   useEffect(() => {
     if (lawsuitList) {
       const wideData = lawsuitList.map((item, index) => ({
         key: index.toString(),
+        type: item.type,
+        id: item.id,
         name: item.title ? item.title : "제목없음",
         target: item.defendantName ? item.defendantName : "피고소인 미지정",
         date: item.createdTime ? item.createdTime.substring(0, 10) : "No Date",
@@ -29,6 +55,8 @@ export default function MyLawcaseTable({ lawsuitList }: MyLawcaseTableProps) {
       const narrowData = lawsuitList.map((item, index) => ({
         key: index.toString(),
         name: item.title ? item.title : "제목없음",
+        type: item.type,
+        id: item.id,
       }));
       setDataNarrow(narrowData);
     }
@@ -53,7 +81,9 @@ export default function MyLawcaseTable({ lawsuitList }: MyLawcaseTableProps) {
       title: "임시저장명",
       dataIndex: "name",
       key: "name",
-      render: (text: string) => <a>{text}</a>,
+      render: (text: string, record: MypaperWide) => (
+        <Link to={`/mylawsuit/${record.type}/${record.id}`}>{text}</Link>
+      ),
     },
     {
       title: "피고소인",
@@ -94,10 +124,10 @@ export default function MyLawcaseTable({ lawsuitList }: MyLawcaseTableProps) {
     {
       title: "설정",
       key: "action",
-      render: () => (
+      render: (record: MypaperWide) => (
         <Space size="middle">
-          <a>수정</a>
-          <a>삭제</a>
+          <Link to={`/plaint/edit/${record.id}`}>수정</Link>
+          <a onClick={() => showModal(record.id)}>삭제</a>
         </Space>
       ),
     },
@@ -108,7 +138,9 @@ export default function MyLawcaseTable({ lawsuitList }: MyLawcaseTableProps) {
       title: "임시저장명",
       dataIndex: "name",
       key: "name",
-      render: (text: string) => <a>{text}</a>,
+      render: (text: string, record: MypaperNarrow) => (
+        <Link to={`/mylawsuit/${record.type}/${record.id}`}>{text}</Link>
+      ),
     },
     {
       title: "설정",
@@ -134,6 +166,20 @@ export default function MyLawcaseTable({ lawsuitList }: MyLawcaseTableProps) {
           <Table columns={columnsNarrow} dataSource={dataNarrow} />
         </Col>
       </Row>
+      <Modal
+        title="삭제 시 복구되지 않습니다"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={() => setIsModalOpen(false)}
+        footer={[
+          <Button key="submit" type="primary" onClick={handleOk}>
+            확인
+          </Button>,
+        ]}
+      >
+        <br />
+        정말 삭제하시겠습니까?
+      </Modal>
     </>
   );
 }

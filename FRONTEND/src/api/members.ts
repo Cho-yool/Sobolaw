@@ -8,6 +8,7 @@ const headers = new AxiosHeaders();
 headers.set("Content-Type", "application/json;charset=utf-8");
 
 const url = "members";
+const testToken = "";
 
 // reissue token
 async function reissueToken(accessToken: string, refreshToken: string) {
@@ -17,7 +18,7 @@ async function reissueToken(accessToken: string, refreshToken: string) {
       Authorization: `Bearer ${accessToken}`,
     },
   });
-  console.log(response);
+  // console.log(response);
   const responseData = response.data;
   if (responseData.status == 401) {
     alert("세션이 만료되었습니다! 재로그인해주세요");
@@ -26,28 +27,12 @@ async function reissueToken(accessToken: string, refreshToken: string) {
   }
 }
 
-// async function reissueToken(refreshToken: string, navigate: Function) {
-//   try {
-//     const response = await http.post("token", { refreshToken }); // refreshToken을 객체 형태로 전달
-//     const responseData = response.data;
-//     if (responseData.status == 401) {
-//       alert("세션이 만료되었습니다! 재로그인해주세요");
-//       navigate("/login"); // navigate 함수를 통해 로그인 페이지로 이동
-//     } else {
-//       return responseData.data;
-//     }
-//   } catch (error) {
-//     console.error("토큰 재발급 에러:", error);
-//     navigate("/login"); // 에러 발생 시 로그인 페이지로 이동
-//   }
-// }
-
 // 멤버 정보 조회
 async function getUserInfo(accessToken: string) {
   const response = await http.get(`${url}`, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer " + accessToken,
+      Authorization: `Bearer ${accessToken}`,
     },
   });
   return response.data.data;
@@ -55,7 +40,6 @@ async function getUserInfo(accessToken: string) {
 
 // 로그아웃
 async function postLogout(accessToken: string, refreshToken: string) {
-  console.log(accessToken);
   const response = await http.post(`${url}/logout`, refreshToken, {
     headers: {
       "Content-Type": "application/json",
@@ -66,24 +50,37 @@ async function postLogout(accessToken: string, refreshToken: string) {
 }
 
 // 회원탈퇴
-async function deleteUser(accessToken: string) {
+async function deleteUser(accessToken: string, refreshToken: string) {
   await http.delete(`${url}/delete`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
+    data: {
+      refreshToken: refreshToken,
+    },
   });
 }
 
 // 멤버가 저장한 판례 조회
-async function getPrecedents(memberId: number) {
-  const response = await http.get(`${url}/${memberId}/precedents`);
+async function getPrecedents(accessToken: string) {
+  const response = await http.get(`${url}/precedents`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   return response.data.data;
 }
 
 // 멤버가 최근 본 판례
-async function getRecentPrecedents(memberId: number) {
-  const response = await http.get(`${url}/${memberId}/recent`);
+async function getRecentPrecedents(accessToken: string) {
+  const response = await http.get(`${url}/recent`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   return response.data.data;
 }
 
@@ -100,15 +97,6 @@ async function postMyKeyword(accessToken: string, words: string[]) {
     }
   );
 }
-
-// async function postMyKeyword(memberId: number, accessToken: string) {
-//   await http.post(`${url}/${blockedId}`, {
-//       headers: {
-//           "Content-Type": "application/json",
-//           "Authorization": "Bearer " + accessToken
-//       }
-//   });
-// }
 
 // 관리자용 API
 // 멤버 전체 리스트 조회
@@ -127,20 +115,3 @@ export {
   postLogout,
   deleteUser,
 };
-
-// async function getUserInfo(
-//   params: {
-//       page?: number;
-//       size?: number;
-//   },
-//   accessToken: string
-// ) {
-//   const response = await http.get(`${url}/${params}`, {
-//       params: params,
-//       headers: {
-//           "Content-Type": "application/json",
-//           Authorization: "Bearer " + accessToken,
-//       },
-//   });
-//   return response.data.data;
-// }
