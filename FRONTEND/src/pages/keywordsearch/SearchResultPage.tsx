@@ -38,8 +38,6 @@ const classifyResults = (results: SearchResult[]) => {
     const currentDate = new Date();
     const currentDateString = currentDate.toISOString().slice(0, 10).replace(/-/g, '');
 
-    console.log('선고일:', result.judgmentDate);
-
     if (result.judgmentDate) {
       const judgmentDate = parseInt(result.judgmentDate, 10);
 
@@ -103,7 +101,7 @@ const SearchResultPage = () => {
       }
       const classifiedResults = classifyResults(results);
       setSearchResults(classifiedResults);
-      console.log('Search results(SearchResultPage):', classifiedResults);
+      // console.log('Search results(SearchResultPage):', classifiedResults);
     } catch (error) {
       console.error('Error fetching search results:', error);
     } finally {
@@ -129,7 +127,7 @@ const SearchResultPage = () => {
   const paginatedResults = filteredResults.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const handleSearch = () => {
-    console.log(`검색어: ${searchTerm}`);
+    // console.log(`검색어: ${searchTerm}`);
     fetchSearchResults(searchTerm, 'precedent');
   };
 

@@ -30,7 +30,7 @@ const SearchResultList: React.FC<SearchResultListProps> = ({ searchResults, load
 
   // list 아이템 클릭 시 호출되는 함수
   const handleItemClick = async (precedentId: number) => {
-    console.log('handleItemClick', precedentId, accessToken)
+    // console.log('handleItemClick', precedentId, accessToken)
     try {
       if (accessToken) {
         await postRecentPrecedents(accessToken, precedentId);
