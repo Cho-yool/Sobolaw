@@ -129,7 +129,7 @@ export default function LawsuitInsult() {
       const [datePart, timePart] = dateStr.split(" ");
       // incidentDate 상태 변수에 날짜 부분을 할당합니다.
       setIncidentDate(datePart);
-      console.log(incidentDate);
+      // console.log(incidentDate);
       // // 시간 부분을 콜론을 기준으로 분리하여 각 시간 요소를 구합니다.
       const [hourStr, minuteStr, secondStr] = timePart.split(":");
       // const hour = parseInt(hourStr, 10);
@@ -138,7 +138,7 @@ export default function LawsuitInsult() {
       // // incidentTime 상태 변수에 시간 요소를 할당합니다.
       // setIncidentTime({ hour, minute, second, nano: 0 });
       setIncidentTime(timePart);
-      console.log(incidentTime);
+      // console.log(incidentTime);
       // 고소장에 파싱될 용도의 날짜/시간도 할당합니다
       // 용도에 맞게 날짜 형식을 변경합니다.
       const modifiedDatePart = datePart.replace(/-/g, ".");
@@ -337,32 +337,32 @@ export default function LawsuitInsult() {
     }
   }
 
-  console.log("title:", title);
-  console.log("plaintiffName:", plaintiffName);
-  console.log("plaintiffResidentRegistrationNumber:", plaintiffRRNumber);
-  console.log("plaintiffAddress:", plaintiffAddress);
-  console.log("plaintiffPhoneNumber:", plaintiffPhoneNumber);
-  console.log("plaintiffNickname:", plaintiffNickname);
-  console.log("defendantName:", defendantName);
-  console.log("defendantNickname:", defendantNickname);
-  console.log("defendantAddress:", defendantAddress);
-  console.log("defendantPhoneNumber:", defendantPhoneNumber);
-  console.log("incidentDate:", incidentDate);
-  console.log("incidentTime:", incidentTime);
-  console.log("onlineServiceType:", onlineServiceType);
-  console.log("webServiceDetails:", webServiceDetails);
-  console.log("problemSpeech:", problemSpeech);
-  console.log("reasonsForInsult:", reasonsForInsult);
-  console.log("relatedPeopleCount:", relatedPeopleCount);
-  console.log("witness1:", witness1);
-  console.log("witness2:", witness2);
-  console.log("witness3:", witness3);
-  console.log("insultDuration:", insultDuration);
-  console.log("insultFrequency:", insultFrequency);
-  console.log("circumstancesForIdentification:", circumstance);
-  console.log("evidence:", evidence);
-  console.log("submissionDate:", submissionDate);
-  console.log("policeStationTeam:", policeStationTeam);
+  // console.log("title:", title);
+  // console.log("plaintiffName:", plaintiffName);
+  // console.log("plaintiffResidentRegistrationNumber:", plaintiffRRNumber);
+  // console.log("plaintiffAddress:", plaintiffAddress);
+  // console.log("plaintiffPhoneNumber:", plaintiffPhoneNumber);
+  // console.log("plaintiffNickname:", plaintiffNickname);
+  // console.log("defendantName:", defendantName);
+  // console.log("defendantNickname:", defendantNickname);
+  // console.log("defendantAddress:", defendantAddress);
+  // console.log("defendantPhoneNumber:", defendantPhoneNumber);
+  // console.log("incidentDate:", incidentDate);
+  // console.log("incidentTime:", incidentTime);
+  // console.log("onlineServiceType:", onlineServiceType);
+  // console.log("webServiceDetails:", webServiceDetails);
+  // console.log("problemSpeech:", problemSpeech);
+  // console.log("reasonsForInsult:", reasonsForInsult);
+  // console.log("relatedPeopleCount:", relatedPeopleCount);
+  // console.log("witness1:", witness1);
+  // console.log("witness2:", witness2);
+  // console.log("witness3:", witness3);
+  // console.log("insultDuration:", insultDuration);
+  // console.log("insultFrequency:", insultFrequency);
+  // console.log("circumstancesForIdentification:", circumstance);
+  // console.log("evidence:", evidence);
+  // console.log("submissionDate:", submissionDate);
+  // console.log("policeStationTeam:", policeStationTeam);
 
   return (
     <div className={style["container"]}>

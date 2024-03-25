@@ -18,7 +18,7 @@ async function reissueToken(accessToken: string, refreshToken: string) {
       Authorization: `Bearer ${accessToken}`,
     },
   });
-  console.log(response);
+  // console.log(response);
   const responseData = response.data;
   if (responseData.status == 401) {
     alert("세션이 만료되었습니다! 재로그인해주세요");
@@ -40,7 +40,6 @@ async function getUserInfo(accessToken: string) {
 
 // 로그아웃
 async function postLogout(accessToken: string, refreshToken: string) {
-  console.log(accessToken);
   const response = await http.post(`${url}/logout`, refreshToken, {
     headers: {
       "Content-Type": "application/json",
@@ -51,11 +50,14 @@ async function postLogout(accessToken: string, refreshToken: string) {
 }
 
 // 회원탈퇴
-async function deleteUser(accessToken: string) {
+async function deleteUser(accessToken: string, refreshToken: string) {
   await http.delete(`${url}/delete`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
+    },
+    data: {
+      refreshToken: refreshToken,
     },
   });
 }
