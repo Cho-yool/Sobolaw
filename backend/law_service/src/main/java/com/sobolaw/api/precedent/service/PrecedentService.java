@@ -83,7 +83,22 @@ public class PrecedentService {
 
         return precedents;
     }
+    @Transactional
+    public void updateHit(Long precedentId){
+        Precedent precedent = precedentRepository.findByPrecedentId(precedentId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 판례가 없습니다. precedentId=" + precedentId));
+        precedent.setHit(precedent.getHit()+1);
+    }
 
+    public List<PrecedentDTO> findTop20ByOrderByHitDesc(){
+        List<Precedent> precedents = precedentRepository.findTop20ByOrderByHitDesc();
+
+        return precedents.stream()
+                .map(this::convertToPrecedentDTO)
+                .collect(Collectors.toList());
+    }
+
+    // entity -> DTO 변환
     private PrecedentDTO convertToPrecedentDTO(Precedent entity) { // 아래 변환방식 사용할 때 : DTO랑 순서 동일하게 작성
         return new PrecedentDTO(
             entity.getPrecedentId(),
@@ -101,21 +116,6 @@ public class PrecedentService {
             entity.getReferencedStatute(),
             entity.getHit()
         );
-    }
-
-    @Transactional
-    public void updateHit(Long precedentId){
-        Precedent precedent = precedentRepository.findByPrecedentId(precedentId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 판례가 없습니다. precedentId=" + precedentId));
-        precedent.setHit(precedent.getHit()+1);
-    }
-
-    public List<PrecedentDTO> findTop20ByOrderByHitDesc(){
-        List<Precedent> precedents = precedentRepository.findTop20ByOrderByHitDesc();
-
-        return precedents.stream()
-                .map(this::convertToPrecedentDTO)
-                .collect(Collectors.toList());
     }
 
 }
