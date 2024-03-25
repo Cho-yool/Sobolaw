@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { josa } from "josa";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
@@ -25,6 +26,7 @@ import style from "../../../styles/papers/Insult.module.css";
 const { Option } = Select;
 
 export default function LawsuitInsult() {
+  const navigate = useNavigate();
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
   const [insultContent, setInsultContent] =
     useState<InsultForm>(initialInsultContent);
@@ -327,13 +329,14 @@ export default function LawsuitInsult() {
         policeStationTeam: policeStationTeam,
       });
       // const response = await postInsult(1, insultContent);
-      await postInsult(accessToken, insultContent);
-      // if (response === 1) {
-      alert("소장 저장이 완료되었습니다");
-      //     navigate('')
-      // } else if (response === 33) {
-      //     alert("소장 저장 실패")
-      // }
+      await postInsult(accessToken, insultContent)
+        .then(() => {
+          alert("소장 저장이 완료되었습니다");
+          navigate("/mypage/papers");
+        })
+        .catch(() => {
+          alert("저장에 실패하였습니다. 내용을 다시 한 번 확인해주세요");
+        });
     }
   }
 
@@ -405,11 +408,18 @@ export default function LawsuitInsult() {
                 value={defendantAddress}
                 onChange={(e) => setDefendantAddress(e.target.value)}
               />
-              <Input
-                placeholder="전화번호"
-                value={defendantPhoneNumber}
-                onChange={(e) => setDefendantPhoneNumber(e.target.value)}
-              />
+              <Tooltip
+                // placement="bottom"
+                placement="top"
+                title={"숫자만 입력해주세요!"}
+                arrow={true}
+              >
+                <Input
+                  placeholder="전화번호"
+                  value={defendantPhoneNumber}
+                  onChange={(e) => setDefendantPhoneNumber(e.target.value)}
+                />
+              </Tooltip>
             </>
           )}
           {showDefendant === "일부알고있음" && (
@@ -429,11 +439,18 @@ export default function LawsuitInsult() {
                 value={defendantAddress}
                 onChange={(e) => setDefendantAddress(e.target.value)}
               />
-              <Input
-                placeholder="전화번호"
-                value={defendantPhoneNumber}
-                onChange={(e) => setDefendantPhoneNumber(e.target.value)}
-              />
+              <Tooltip
+                // placement="bottom"
+                placement="top"
+                title={"숫자만 입력해주세요!"}
+                arrow={true}
+              >
+                <Input
+                  placeholder="전화번호"
+                  value={defendantPhoneNumber}
+                  onChange={(e) => setDefendantPhoneNumber(e.target.value)}
+                />
+              </Tooltip>
             </>
           )}
           {showDefendant === "모름" && (
@@ -678,11 +695,18 @@ export default function LawsuitInsult() {
             value={plaintiffAddress}
             onChange={(e) => setPlaintiffAddress(e.target.value)}
           />
-          <Input
-            placeholder="전화번호"
-            value={plaintiffPhoneNumber}
-            onChange={(e) => setPlaintiffPhoneNumber(e.target.value)}
-          />
+          <Tooltip
+            // placement="bottom"
+            placement="top"
+            title={"숫자만 입력해주세요!"}
+            arrow={true}
+          >
+            <Input
+              placeholder="전화번호"
+              value={plaintiffPhoneNumber}
+              onChange={(e) => setPlaintiffPhoneNumber(e.target.value)}
+            />
+          </Tooltip>
         </div>
 
         <div className={style["menu-mini"]}>

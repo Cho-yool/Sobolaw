@@ -26,6 +26,11 @@ const theme = {
     },
   },
   components: {
+    Radio: {
+      colorPrimary: "#BF8438",
+      colorPrimaryActive: "#FEDA89",
+      colorPrimaryHover: "#BF8438",
+    },
     Switch: {
       colorPrimary: "#BF8438",
       algorithm: true,

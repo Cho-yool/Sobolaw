@@ -10,22 +10,28 @@ export default function InsultPrint({
 }) {
   const plaintiffRRNumber = insultData.plaintiffResidentRegistrationNumber;
   const circumstance = insultData.circumstancesForIdentification;
-  const paperIDate = insultData.incidentDate.replace(/-/g, ".");
+  const paperIDate = insultData.incidentDate
+    ? insultData.incidentDate.replace(/-/g, ".")
+    : "";
+
   const paperRPCount = `${insultData.relatedPeopleCount}명`;
-  const paperEvidence = insultData.evidence.split(", ");
+  const paperEvidence = insultData.evidence
+    ? insultData.evidence.split(", ")
+    : "";
   const [paperITime, setPaperITime] = useState("");
   const [paperWitness, setPaperWitness] = useState("의 ");
 
   useEffect(() => {
     const { incidentTime, witness1, witness2, witness3 } = insultData;
-    const [hourStr, minuteStr] = incidentTime.split(":");
-
-    if (minuteStr === "00") {
-      const modifiedTimePart = `${hourStr}시 경`;
-      setPaperITime(modifiedTimePart);
-    } else {
-      const modifiedTimePart = `${hourStr}시 ${minuteStr}분 경`;
-      setPaperITime(modifiedTimePart);
+    if (incidentTime !== null) {
+      const [hourStr, minuteStr] = incidentTime.split(":");
+      if (minuteStr === "00") {
+        const modifiedTimePart = `${hourStr}시 경`;
+        setPaperITime(modifiedTimePart);
+      } else {
+        const modifiedTimePart = `${hourStr}시 ${minuteStr}분 경`;
+        setPaperITime(modifiedTimePart);
+      }
     }
 
     if (witness1 === "" && witness2 === "" && witness3 === "") {
@@ -218,13 +224,12 @@ export default function InsultPrint({
         <div className={style["title"]}>첨부서류</div>
         <div>
           <strong>
-            {paperEvidence.map((item, index) => {
-              return (
-                <p>
+            {paperEvidence !== "" &&
+              paperEvidence.map((item, index) => (
+                <p key={index}>
                   {index + 1}. {item}
                 </p>
-              );
-            })}
+              ))}
           </strong>
         </div>
         <div className={style["title"]}>증거 자료</div>

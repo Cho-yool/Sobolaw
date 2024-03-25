@@ -8,8 +8,7 @@ const headers = new AxiosHeaders();
 headers.set("Content-Type", "application/json;charset=utf-8");
 
 const url = "members";
-const testToken =
-  "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLquYDtmITsp4AiLCJyb2xlIjoiUk9MRV9VU0VSIiwibWVtYmVySWQiOjEwLCJpYXQiOjE3MTEzMzk3NTcsImV4cCI6MTcxMjIwMzc1N30.kWJxKdwCu5WTN8CwbzRdxKkTyZZ6zx0xVIlcVm-gM-2OV_WtD5dq1i2K48v6nVTCnxGc7EuBoHFXoim-Z0ZXug";
+const testToken = "";
 
 // reissue token
 async function reissueToken(accessToken: string, refreshToken: string) {
@@ -33,7 +32,7 @@ async function getUserInfo(accessToken: string) {
   const response = await http.get(`${url}`, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${testToken}`,
+      Authorization: `Bearer ${accessToken}`,
     },
   });
   return response.data.data;
@@ -66,7 +65,7 @@ async function getPrecedents(accessToken: string) {
   const response = await http.get(`${url}/precedents`, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${testToken}`,
+      Authorization: `Bearer ${accessToken}`,
     },
   });
   return response.data.data;
@@ -77,7 +76,7 @@ async function getRecentPrecedents(accessToken: string) {
   const response = await http.get(`${url}/recent`, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${testToken}`,
+      Authorization: `Bearer ${accessToken}`,
     },
   });
   return response.data.data;
