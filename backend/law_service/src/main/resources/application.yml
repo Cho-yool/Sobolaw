@@ -22,7 +22,7 @@ spring:
 
   # elasticsearch
   elasticsearch:
-    host: loaclhost
+    host: j10a604.p.ssafy.io
     port: 9200
     indices:
       statutesIndexName: statute_index

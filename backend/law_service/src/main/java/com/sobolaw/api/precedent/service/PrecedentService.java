@@ -7,8 +7,6 @@ import com.sobolaw.api.precedent.document.PrecedentDocument;
 import com.sobolaw.api.precedent.dto.PrecedentDTO;
 import com.sobolaw.api.precedent.entity.Precedent;
 import com.sobolaw.api.precedent.repository.PrecedentRepository;
-import com.sobolaw.api.term.document.TermDocument;
-import com.sobolaw.api.term.dto.TermDTO;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;

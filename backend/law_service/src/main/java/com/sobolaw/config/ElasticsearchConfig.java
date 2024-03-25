@@ -3,48 +3,43 @@ package com.sobolaw.config;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 @Configuration
-@EnableElasticsearchRepositories(basePackages = "com.sobolaw.api.statute.repository.elasticsearch")
+@Slf4j
+@EnableElasticsearchRepositories
 public class ElasticsearchConfig {
 
-    @Value("${elasticsearch.host:localhost}")
+    @Value("${spring.elasticsearch.host}")
     private String host;
 
-    @Value("${elasticsearch.port:9200}")
+    @Value("${spring.elasticsearch.port}")
     private int port;
 
     @Bean
-    public ElasticsearchClient elasticsearchClient() {
-//        Logger log = null;
-//        log.info("Connecting to Elasticsearch at {}:{}", host, port);
-
-        RestClient restClient = RestClient.builder(new HttpHost(host, port)).build();
-        RestClientTransport transport = new RestClientTransport(restClient, new JacksonJsonpMapper());
-        return new ElasticsearchClient(transport);
-    
-        
-        
-        
-        
-//        // REST 클라이언트 생성
-//        RestClient restClient = RestClient.builder(new HttpHost(host, port)).build();
-//
-//        // RestClientTransport 객체를 생성
-//        // 객체는 RestClient와 ElasticsearchClient 사이의 통신을 담당
-//        RestClientTransport transport = new RestClientTransport(
-//            restClient, new JacksonJsonpMapper());
-//
-//        // ElasticsearchClient 객체를 생성합니다.
-//        ElasticsearchClient client = new ElasticsearchClient(transport);
-//
-//        return client;
+    public RestClient restClient() { // http클라이언트
+        RestClientBuilder builder = RestClient.builder(
+            new HttpHost(host, port, "http"));
+        return builder.build();
     }
 
+    @Bean
+    public ElasticsearchClient elasticsearchClient() {
+        // RestClient만 사용하면 응답 처리를 위한 추가적인 작업이 필요함
+        // service 계층에서 검색 요청을 구성하고 응답을 처리하는 코드를 직접 작성 해야함
+        // ElasticsearchClient를 사용하면 구현이 보다 간단해짐
+
+        log.info("host " + host);
+        log.info("port " + port);
+        RestClientTransport transport = new RestClientTransport(restClient(), new JacksonJsonpMapper());
+
+        return new ElasticsearchClient(transport);
+    }
 }
