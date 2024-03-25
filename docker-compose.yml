@@ -8,25 +8,6 @@ services:
     ports:
       - "6379:6379"
 
-  elasticsearch:
-    build:
-      context: ./elasticsearch
-      dockerfile: Dockerfile
-    image: elasticsearch_nori
-    container_name: elasticsearch
-    environment:
-      - node.name=es01
-      - cluster.name=es-docker-cluster
-      - discovery.type=single-node
-      - xpack.security.enabled=false
-      - xpack.security.http.ssl.enabled=false
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
-    volumes:
-      - /home/ubuntu/esdata1:/usr/share/elasticsearch/data
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-
   frontend:
     container_name: frontend
     image: frontend
@@ -73,7 +54,6 @@ services:
     image: law_service
     depends_on:
       - api_gateway
-      - elasticsearch
     ports:
       - "8003:8003"
   
@@ -84,4 +64,3 @@ services:
       - api_gateway
     ports:
       - "8004:8004"
-
