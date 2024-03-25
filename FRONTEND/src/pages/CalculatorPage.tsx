@@ -2,7 +2,7 @@ import { Select, Button, Radio, Collapse, Divider, Form } from "antd";
 import Title from "antd/es/typography/Title";
 import "../App.css";
 import style from "../styles/calculator/Calculator.module.css";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 const { Option } = Select;
 
