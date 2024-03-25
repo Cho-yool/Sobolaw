@@ -12,18 +12,18 @@ import lombok.Setter;
 public class PrecedentDTO {
 
     private Long precedentId;
-    private String caseName;
     private String caseNumber;
-    private String judgmentDate;
-    private String judgment;
-    private String courtName;
+    private String caseName;
     private String caseType;
-    private String verdictType;
-    private String judicialNotice;
-    private String verdictSummary;
-    private String referencedStatute;
-    private String referencedCase;
     private String caseContent;
+    private String judgment;
+    private String judgmentDate;
+    private String judicialNotice;
+    private String courtName;
+    private String verdictType;
+    private String verdictSummary;
+    private String referencedCase;
+    private String referencedStatute;
     private Long hit;
 
 }
