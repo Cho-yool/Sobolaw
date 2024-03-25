@@ -1,23 +1,25 @@
 /* RecentLawCase.module.css */
 .recentLawCaseContainer {
+  width: 100%;
   margin: 20px auto;
   position: relative; /* To position the background box */
   background-color: #ffffff;
-  padding: 60px; /* Provide space for the background box */
+  padding: 20px; /* Provide space for the background box */
   border-radius: 20px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .recentLawCaseTitle {
   color: #644419;
-  margin: 10px 20px;
+  margin: 0px 20px;
+  margin-top: 30px;
   font-size: 30px;
 }
 
 .recentLawCaseList {
   max-height: 350px;
   overflow-y: auto;
-  margin: 40px auto;
+  margin: 30px auto;
   padding: 20px; /* Provide space for the background box */
   position: relative; /* Ensure proper stacking context */
 }
@@ -56,6 +58,7 @@
   color: #bf8438;
   border-radius: 10px;
   padding: 5px;
+  transition: scale 0.3s ease;
 }
 
 
@@ -65,7 +68,8 @@
 
 @media screen and (max-width: 768px) {
   .recentLawCaseContainer {
-    width: 80%;
+    
+    width: 100px;
     margin: 10px 20px;
   }
 

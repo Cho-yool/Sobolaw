@@ -16,6 +16,9 @@ import MyCase from "./pages/mypage/MyCase";
 import DefamatinoPage from "./pages/lawsuit/defamation";
 import FraudPage from "./pages/lawsuit/fraud";
 import InsultPage from "./pages/lawsuit/insult";
+import PrintLawsuit from "./pages/mypage/Printlawsuit";
+import InsultEditPage from "./pages/lawsuit/insultEdit";
+import SearchHitPage from "./pages/keywordsearch/SearchHitPage";
 
 function App() {
   return (
@@ -27,6 +30,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/search-results" element={<SearchResultPage />} />
+        <Route path="/hit" element={<SearchHitPage />} />
         <Route path="/recommend" element={<RecommendPage />} />
         <Route path="/recommend-results" element={<RecommendResultPage />} />
         <Route path="/plaint" element={<FormPage />} />
@@ -41,6 +45,8 @@ function App() {
       <Route path="/plaint/1" element={<DefamatinoPage />} />
       <Route path="/plaint/2" element={<FraudPage />} />
       <Route path="/plaint/3" element={<InsultPage />} />
+      <Route path="/plaint/edit/:id" element={<InsultEditPage />} />
+      <Route path="mylawsuit/:type/:id" element={<PrintLawsuit />} />
       {/* 다른 Route도 추가가능~ */}
     </Routes>
   );
