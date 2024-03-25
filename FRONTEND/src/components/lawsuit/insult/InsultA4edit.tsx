@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import { josa } from "josa";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
@@ -17,18 +18,52 @@ import {
 } from "antd";
 import locale from "antd/es/date-picker/locale/ko_KR";
 import { RootState } from "../../../redux/store/store";
-import { postInsult } from "../../../api/lawsuit";
-import { InsultForm } from "../../../types/DataTypes";
-import { options, initialInsultContent } from "../../../types/LawsuitTypes";
+import { getInsult, patchInsult } from "../../../api/lawsuit";
+import { options } from "../../../types/LawsuitTypes";
 import style from "../../../styles/papers/Insult.module.css";
 
 const { Option } = Select;
 
 export default function LawsuitInsult() {
+  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const insultId = id ? parseInt(id) : 0;
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
-  const [insultContent, setInsultContent] =
-    useState<InsultForm>(initialInsultContent);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      // const response = await getUserInfo(accessToken);
+      const response = await getInsult(insultId, accessToken);
+      setTitle(response.title);
+      setPlaintiffName(response.plaintiffName);
+      setPlaintiffRRNumber(response.plaintiffResidentRegistrationNumber);
+      setPlaintiffAddress(response.plaintiffAddress);
+      setPlaintiffPhoneNumber(response.plaintiffPhoneNumber);
+      setPlaintiffNickname(response.plaintiffNickname);
+      setDefendantName(response.defendantName);
+      setDefendantNickname(response.defendantNickname);
+      setDefendantAddress(response.defendantAddress);
+      setDefendantPhoneNumber(response.defendantPhoneNumber);
+      setIncidentDate(response.incidentDate);
+      setIncidentTime(response.incidentTime);
+      setOnlineServiceType(response.onlineServiceType);
+      setWebServiceDetails(response.webServiceDetails);
+      setProblemSpeech(response.problemSpeech);
+      setReasonsForInsult(response.reasonsForInsult);
+      setRelatedPeopleCount(response.relatedPeopleCount);
+      setWitness1(response.witness1);
+      setWitness2(response.witness2);
+      setWitness3(response.witness3);
+      setInsultDuration(response.insultDuration);
+      setInsultFrequency(response.insultFrequency);
+      setCircumstance(response.circumstancesForIdentification);
+      setEvidence(response.evidence);
+      setSubmissionDate(response.submissionDate);
+      setPoliceStationTeam(response.policeStationTeam);
+    };
+    fetchData();
+    // }, [user.accessToken]
+  }, []);
   // 데이터 입력용 인풋모음들
 
   // 추후 아래로 전환하세요!!!!
@@ -297,8 +332,58 @@ export default function LawsuitInsult() {
     // 모든 조건이 True일 때 제출 가능 (필수입력 공백확인)
     if (title === "") {
       alert("소장 저장명을 확인해주세요!");
+    } else if (plaintiffName === "") {
+      alert("원고 성명을 확인해주세요!");
+    } else if (plaintiffRRNumber === "") {
+      alert("원고 주민등록번호를 확인해주세요!");
+    } else if (plaintiffAddress === "") {
+      alert("원고 주소를 확인해주세요!");
+    } else if (plaintiffPhoneNumber === "") {
+      alert("원고 연락처를 확인해주세요!");
+    } else if (plaintiffNickname === "") {
+      alert("원고 닉네임을 확인해주세요!");
+    } else if (defendantName === "") {
+      alert("피고 성명을 확인해주세요!");
+    } else if (defendantNickname === "") {
+      alert("피고 닉네임을 확인해주세요!");
+    } else if (defendantAddress === "") {
+      alert("피고 주소를 확인해주세요!");
+    } else if (defendantPhoneNumber === "") {
+      alert("피고 연락처를 확인해주세요!");
+    } else if (incidentDate === "") {
+      alert("사건 발생일을 확인해주세요!");
+    } else if (incidentTime === "") {
+      alert("사건 발생시간을 확인해주세요!");
+    } else if (onlineServiceType === "") {
+      alert("온라인 서비스 종류를 확인해주세요!");
+    } else if (webServiceDetails === "") {
+      alert("웹 서비스 상세정보를 확인해주세요!");
+    } else if (problemSpeech === "") {
+      alert("문제 발언 내용을 확인해주세요!");
+    } else if (reasonsForInsult === "") {
+      alert("모욕사유를 확인해주세요!");
+    } else if (relatedPeopleCount === "") {
+      alert("관련인원 수를 확인해주세요!");
+    } else if (witness1 === "") {
+      alert("증인1을 확인해주세요!");
+    } else if (witness2 === "") {
+      alert("증인2를 확인해주세요!");
+    } else if (witness3 === "") {
+      alert("증인3을 확인해주세요!");
+    } else if (insultDuration === "") {
+      alert("모욕기간을 확인해주세요!");
+    } else if (insultFrequency === "") {
+      alert("모욕빈도를 확인해주세요!");
+    } else if (circumstance === "") {
+      alert("식별 사정을 확인해주세요!");
+    } else if (evidence === "") {
+      alert("증거를 확인해주세요!");
+    } else if (submissionDate === "") {
+      alert("제출일을 확인해주세요!");
+    } else if (policeStationTeam === "") {
+      alert("관할 경찰서/단체를 확인해주세요!");
     } else {
-      setInsultContent({
+      const insultContent = {
         title: title,
         plaintiffName: plaintiffName,
         plaintiffResidentRegistrationNumber: plaintiffRRNumber,
@@ -325,15 +410,15 @@ export default function LawsuitInsult() {
         evidence: evidence,
         submissionDate: submissionDate,
         policeStationTeam: policeStationTeam,
-      });
-      // const response = await postInsult(1, insultContent);
-      await postInsult(accessToken, insultContent);
-      // if (response === 1) {
-      alert("소장 저장이 완료되었습니다");
-      //     navigate('')
-      // } else if (response === 33) {
-      //     alert("소장 저장 실패")
-      // }
+      };
+      await patchInsult(insultId, insultContent, accessToken)
+        .then(() => {
+          alert("소장 수정이 완료되었습니다");
+          navigate("/mypage/papers");
+        })
+        .catch(() => {
+          alert("수정에 실패하였습니다. 내용을 다시 한 번 확인해주세요");
+        });
     }
   }
 

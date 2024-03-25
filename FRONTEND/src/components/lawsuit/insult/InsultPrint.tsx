@@ -57,43 +57,25 @@ export default function InsultPrint({
       <div className={style["pages"]}>
         <div className={style["title"]}>모욕죄 고소장</div>
         <div>
-          <p>
-            원고(고소인) 성명 : <strong>{insultData.plaintiffName}</strong>
-          </p>
-          <p>
-            주민등록번호 : <strong>{plaintiffRRNumber}</strong>
-          </p>
-          <p>
-            ID(닉네임) : <strong>{insultData.plaintiffNickname}</strong>
-          </p>
-          <p>
-            주소 : <strong>{insultData.plaintiffAddress}</strong>
-          </p>
-          <p>
-            전화번호 : <strong>{insultData.plaintiffPhoneNumber}</strong>
-          </p>
+          <p>원고(고소인) 성명 : {insultData.plaintiffName}</p>
+          <p>주민등록번호 : {plaintiffRRNumber}</p>
+          <p>ID(닉네임) : {insultData.plaintiffNickname}</p>
+          <p>주소 : {insultData.plaintiffAddress}</p>
+          <p>전화번호 : {insultData.plaintiffPhoneNumber}</p>
         </div>
         <br />
         <div>
           {insultData.defendantName !== "" && (
-            <p>
-              피고(피고소인) 이름 : <strong>{insultData.defendantName}</strong>
-            </p>
+            <p>피고(피고소인) 이름 : {insultData.defendantName}</p>
           )}
           {insultData.defendantNickname !== "" && (
-            <p>
-              ID(닉네임) : <strong>{insultData.defendantNickname}</strong>
-            </p>
+            <p>ID(닉네임) : {insultData.defendantNickname}</p>
           )}
           {insultData.defendantAddress !== "" && (
-            <p>
-              주소 : <strong>{insultData.defendantAddress}</strong>
-            </p>
+            <p>주소 : {insultData.defendantAddress}</p>
           )}
           {insultData.defendantPhoneNumber !== "" && (
-            <p>
-              전화번호 : <strong>{insultData.defendantPhoneNumber}</strong>
-            </p>
+            <p>전화번호 : {insultData.defendantPhoneNumber}</p>
           )}
         </div>
         <div className={style["title"]}>고소취지</div>
@@ -105,32 +87,27 @@ export default function InsultPrint({
         <div className={style["numbers"]}>
           <ol>
             <li>
-              1. 고소인과 피고소인은 사건이 발생한{" "}
-              <strong>
-                {paperIDate} {paperITime} {insultData.onlineServiceType}{" "}
-                {insultData.webServiceDetails}
-              </strong>
-              의 이용자들 입니다.
+              1. 고소인과 피고소인은 사건이 발생한 {paperIDate} {paperITime}{" "}
+              {insultData.onlineServiceType} {insultData.webServiceDetails}의
+              이용자들 입니다.
             </li>
             <li>
-              2. 당시 피고소인은 <strong>{paperRPCount}</strong>의 이용자들이
-              접속하고 있던 위 <strong>{insultData.onlineServiceType}</strong>
-              에서 고소인에게 <strong>{insultData.reasonsForInsult}</strong>는
-              이유로 “<strong>{insultData.problemSpeech}</strong>” 라고 하며
-              고소인을 공연히 모욕하였습니다.
+              2. 당시 피고소인은 {paperRPCount}의 이용자들이 접속하고 있던 위{" "}
+              {insultData.onlineServiceType}
+              에서 고소인에게 {insultData.reasonsForInsult}는 이유로 “
+              {insultData.problemSpeech}” 라고 하며 고소인을 공연히
+              모욕하였습니다.
             </li>
             <li>
               3. 이에 고소인은 피고소인의 위와 같은 모욕 행위가 형법 제311조에
-              정한 모욕죄의 구성요건
-              <strong>
-                ({insultData.relatedPeopleCount !== "" && "공연성"},{" "}
-                {insultData.problemSpeech !== "" || insultData.witness1 !== ""
-                  ? "모욕성"
-                  : ""}
-                ,{circumstance !== "" && "특정성"})
-              </strong>
-              을 모두 갖추고 있고 이로 인해 고소인은 막대한 피해를 입었는바, 그
-              구체적인 이유는 아래와 같습니다.
+              정한 모욕죄의 구성요건 (
+              {insultData.relatedPeopleCount !== "" && "공연성"},{" "}
+              {insultData.problemSpeech !== "" || insultData.witness1 !== ""
+                ? "모욕성"
+                : ""}
+              ,{circumstance !== "" && "특정성"}) 을 모두 갖추고 있고 이로 인해
+              고소인은 막대한 피해를 입었는바, 그 구체적인 이유는 아래와
+              같습니다.
             </li>
           </ol>
         </div>
@@ -148,16 +125,14 @@ export default function InsultPrint({
             1990. 7. 24. 선고 90도1167판결 등 참조).
           </p>
           <p>
-            나. 본 사건이 발생한 <strong>{paperITime}</strong> 당시 해당
-            고소인과 피고소인을 제외하고도 다수의 이용자가 있었으며, 피고소인
-            <strong>
-              {paperWitness}"{insultData.problemSpeech}"
-            </strong>
-            라는 언행으로써 공연히 고소인에 대한 모욕을 일삼았고, 당시 위
-            이용자들은 고소인과 같은 서비스를 이용하는 자에 불과할 뿐 고소인에
-            대한 소문을 비밀로 지켜줄만한 특별한 신분관계는 없었던 만큼,
-            피고소인의 모욕행위는 명백히 불특정 다수에게 전파될 가능성을
-            내포하고 있다할 것이므로 공연성 요건 역시 충족하고 있습니다.
+            나. 본 사건이 발생한 {paperITime} 당시 해당 고소인과 피고소인을
+            제외하고도 다수의 이용자가 있었으며, 피고소인
+            {paperWitness}"{insultData.problemSpeech}" 라는 언행으로써 공연히
+            고소인에 대한 모욕을 일삼았고, 당시 위 이용자들은 고소인과 같은
+            서비스를 이용하는 자에 불과할 뿐 고소인에 대한 소문을 비밀로
+            지켜줄만한 특별한 신분관계는 없었던 만큼, 피고소인의 모욕행위는
+            명백히 불특정 다수에게 전파될 가능성을 내포하고 있다할 것이므로
+            공연성 요건 역시 충족하고 있습니다.
           </p>
         </div>
         <p className={style["menu-title"]}>2. 모욕성에 관하여</p>
@@ -170,15 +145,13 @@ export default function InsultPrint({
             판시하고 있습니다(대법원 2003. 11. 28 선고 2003도397 판결 참조).
           </p>{" "}
           <p>
-            나. 본 사건에서 피고소인의{" "}
-            <strong>"{insultData.problemSpeech}"</strong>
-            라는 언행은 표현이 다소 무례한 방법으로 표시된 것을 넘어 고소인의
-            사회적 평가를 저하시킬 만한 경멸적인 감정을 표현하였으며, 감정이
-            격해져 우발적 · 일회적으로 행한 행동이 아니라 고의로 고소인을
-            비방하기 위하여 <strong>{insultData.insultDuration}</strong>에 걸쳐{" "}
-            <strong>{insultData.insultFrequency}회</strong> 이상 지속적으로
-            고소인에게 모욕적인 발언을 일삼은 바, 이는 모욕죄의 구성요건인
-            모욕성을 충족하고 있습니다.
+            나. 본 사건에서 피고소인의 "{insultData.problemSpeech}" 라는 언행은
+            표현이 다소 무례한 방법으로 표시된 것을 넘어 고소인의 사회적 평가를
+            저하시킬 만한 경멸적인 감정을 표현하였으며, 감정이 격해져 우발적 ·
+            일회적으로 행한 행동이 아니라 고의로 고소인을 비방하기 위하여{" "}
+            {insultData.insultDuration}에 걸쳐 {insultData.insultFrequency}회
+            이상 지속적으로 고소인에게 모욕적인 발언을 일삼은 바, 이는 모욕죄의
+            구성요건인 모욕성을 충족하고 있습니다.
           </p>
         </div>
         <p className={style["menu-title"]}>3. 특정성에 대하여</p>
@@ -196,11 +169,11 @@ export default function InsultPrint({
       <div className={style["pages"]}>
         <div className={style["page-content"]}>
           나. 이에 비추어 피고소인의 행위가 모욕죄의 구성요건인 특정성을
-          충족하는지 여부를 판단하여보면, <strong>{circumstance}</strong> 통해
-          공개되어 당시 사건을 목격한 다른 이용자들이 고소인의 닉네임(ID)을
-          통하여 고소인을 현실에서 특정하여 인식할 수 있는 충분한 가능성이
-          있었던 상태였음이 인정된다할 것이므로, 피고소인의 모욕행위는 특정성
-          또한 충족하고 있습니다..
+          충족하는지 여부를 판단하여보면, {circumstance} 통해 공개되어 당시
+          사건을 목격한 다른 이용자들이 고소인의 닉네임(ID)을 통하여 고소인을
+          현실에서 특정하여 인식할 수 있는 충분한 가능성이 있었던 상태였음이
+          인정된다할 것이므로, 피고소인의 모욕행위는 특정성 또한 충족하고
+          있습니다..
         </div>
 
         <p>4. 고소인의 피해내용</p>
@@ -223,26 +196,22 @@ export default function InsultPrint({
         </div>
         <div className={style["title"]}>첨부서류</div>
         <div>
-          <strong>
-            {paperEvidence !== "" &&
-              paperEvidence.map((item, index) => (
-                <p key={index}>
-                  {index + 1}. {item}
-                </p>
-              ))}
-          </strong>
+          {paperEvidence !== "" &&
+            paperEvidence.map((item, index) => (
+              <p key={index}>
+                {index + 1}. {item}
+              </p>
+            ))}
         </div>
         <div className={style["title"]}>증거 자료</div>
         <div>
           <p>위 첨부서류 - 각 1부</p>
         </div>
-        <div className={style["date"]}>
-          <strong>{insultData.submissionDate}</strong>
-        </div>
+        <div className={style["date"]}>{insultData.submissionDate}</div>
 
         <div className={style["signature"]}>위 고소인</div>
         <div className={style["signature"]}>
-          <strong>{insultData.plaintiffName}</strong> (서명 또는 인)
+          {insultData.plaintiffName} (서명 또는 인)
         </div>
 
         <div className={style["date"]}>{insultData.policeStationTeam} 귀중</div>

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Button, Divider, Modal } from "antd";
 import { SmileTwoTone, MailTwoTone, HeartTwoTone } from "@ant-design/icons";
 import "../../App.css";
 import style from "../../styles/mypage/MyInfo.module.css";
-import { RootState } from "../../redux/store/store";
+import { RootState, AppDispatch } from "../../redux/store/store";
+import { resetAuth } from "../../redux/reducers/user/userSlice";
 import MyKeyword from "../../components/mypage/MyKeyword";
 import MyRecentCase from "../../components/mypage/MyRecentCase";
 import { MemberInfo } from "../../types/DataTypes";
@@ -13,6 +14,7 @@ import { getUserInfo, deleteUser } from "../../api/members";
 
 export default function MyInfo() {
   const navigate = useNavigate();
+  const dispatch: AppDispatch = useDispatch();
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
   const refreshToken = useSelector(
     (state: RootState) => state.user.refreshToken
@@ -39,7 +41,11 @@ export default function MyInfo() {
   };
 
   const handleDetAccount = () => {
-    deleteUser(accessToken, refreshToken);
+    deleteUser(accessToken, refreshToken).then(() => {
+      alert("회원탈퇴가 정상적으로 처리되었습니다.");
+      dispatch(resetAuth());
+      navigate("/");
+    });
   };
 
   return (

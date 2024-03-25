@@ -60,9 +60,14 @@ const ResponsiveNav = ({
 
   const handlelogout = () => {
     // postLogout(user.accessToken, user.refreshToken);
-    postLogout(user.accessToken, user.refreshToken);
-    dispatch(resetAuth());
-    navigate("/");
+    postLogout(user.accessToken, user.refreshToken)
+      .then(() => {
+        dispatch(resetAuth());
+        navigate("/");
+      })
+      .catch(() => {
+        alert("다시 로그아웃해주세요");
+      });
   };
 
   const handletoken = () => {
