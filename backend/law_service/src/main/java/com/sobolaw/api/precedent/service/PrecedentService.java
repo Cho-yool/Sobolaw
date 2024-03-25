@@ -84,22 +84,22 @@ public class PrecedentService {
         return precedents;
     }
 
-    private PrecedentDTO convertToPrecedentDTO(Precedent entity) {
+    private PrecedentDTO convertToPrecedentDTO(Precedent entity) { // 아래 변환방식 사용할 때 : DTO랑 순서 동일하게 작성
         return new PrecedentDTO(
             entity.getPrecedentId(),
-            entity.getCaseName(),
             entity.getCaseNumber(),
-            entity.getJudgmentDate(),
-            entity.getJudgment(),
-            entity.getCourtName(),
+            entity.getCaseName(),
             entity.getCaseType(),
-            entity.getVerdictType(),
-            entity.getJudicialNotice(),
-            entity.getVerdictSummary(),
-            entity.getReferencedStatute(),
-            entity.getReferencedCase(),
             entity.getCaseContent(),
-                entity.getHit()
+            entity.getJudgment(),
+            entity.getJudgmentDate(),
+            entity.getJudicialNotice(),
+            entity.getCourtName(),
+            entity.getVerdictType(),
+            entity.getVerdictSummary(),
+            entity.getReferencedCase(),
+            entity.getReferencedStatute(),
+            entity.getHit()
         );
     }
 
