@@ -29,7 +29,6 @@ import com.sobolaw.feign.service.LawServiceClient;
 import com.sobolaw.feign.service.RecommendServiceClient;
 import com.sobolaw.global.common.response.BaseResponse;
 import com.sobolaw.global.security.jwt.JwtProvider;
-import com.sobolaw.global.security.jwt.RedisTokenService;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -86,6 +85,10 @@ public class MemberService {
 
         Map<String, List<Long>> requestBody = Collections.singletonMap("precedentId", recentIds);
         log.info("requestBody = " + requestBody);
+        log.info("넘겨질 판례 Id값 여부 " + requestBody.get("precedentId").isEmpty());
+        if (requestBody.get("precedentId").isEmpty()) {
+            throw new MemberException(MemberErrorCode.NOT_FOUND_RECENT);
+        }
         BaseResponse<List<PrecedentListResponseDTO>> baseResponse = lawServiceClient.getPrecedentList(requestBody);
         if (baseResponse.getData() == null) {
             throw new MemberException(MemberErrorCode.NOT_FOUND_RECENT);
@@ -129,6 +132,10 @@ public class MemberService {
         List<Long> precedentIds = member.getMemberPrecedents().stream().map(MemberPrecedent::getPrecedentId).toList();
 
         Map<String, List<Long>> requestBody = Collections.singletonMap("precedentId", precedentIds);
+        log.info("넘겨질 판례 Id값 여부 " + requestBody.get("precedentId").isEmpty());
+        if (requestBody.get("precedentId").isEmpty()) {
+            throw new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT);
+        }
         BaseResponse<List<PrecedentListResponseDTO>> baseResponse = lawServiceClient.getPrecedentList(requestBody);
         if (baseResponse.getData() == null) {
             throw new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT);
@@ -229,6 +236,10 @@ public class MemberService {
         List<Long> precedentIds = allPrecedents.stream().map(MemberPrecedent::getPrecedentId).toList();
 
         Map<String, List<Long>> requestBody = Collections.singletonMap("precedentId", precedentIds);
+        log.info("넘겨질 판례 Id값 여부 " + requestBody.get("precedentId").isEmpty());
+        if (requestBody.get("precedentId").isEmpty()) {
+            throw new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT);
+        }
         BaseResponse<List<PrecedentListResponseDTO>> baseResponse = lawServiceClient.getPrecedentList(requestBody);
         if (baseResponse.getData() == null) {
             throw new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT);
@@ -244,6 +255,10 @@ public class MemberService {
         List<Long> recentIds = allRecents.stream().map(MemberRecent::getPrecedentId).toList();
 
         Map<String, List<Long>> requestBody = Collections.singletonMap("precedentId", recentIds);
+        log.info("넘겨질 판례 Id값 여부 " + requestBody.get("precedentId").isEmpty());
+        if (requestBody.get("precedentId").isEmpty()) {
+            throw new MemberException(MemberErrorCode.NOT_FOUND_RECENT);
+        }
         BaseResponse<List<PrecedentListResponseDTO>> baseResponse = lawServiceClient.getPrecedentList(requestBody);
         if (baseResponse.getData() == null) {
             throw new MemberException(MemberErrorCode.NOT_FOUND_RECENT);
