@@ -46,16 +46,12 @@ spring:
 #logging
 logging:
   level:
-    org.hibernate.SQL: INFO
-    org.hibernate.orm.jdbc.bind: trace
-    root: INFO
+    com.sobolaw.aop: TRACE
     org:
+      hibernate.orm.jdbc.bind: trace
       springframework:
-        web: INFO
-        apache:
-          tiles: DEBUG
-        springframework:
-          boot: DEBUG
+        web: DEBUG
+
 
 eureka:
   client:
