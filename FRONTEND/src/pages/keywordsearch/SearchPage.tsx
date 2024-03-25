@@ -18,12 +18,7 @@ const SearchPage = () => {
   const [recentCases, setRecentCases] = useState([]);
 
   useEffect(() => {
-    console.log('SearchPage 컴포넌트가 마운트되었습니다.', accessToken);
     fetchRecentPrecedents();
-
-    return () => {
-      console.log('SearchPage 컴포넌트가 언마운트되었습니다.');
-    };
   }, []);
 
   const fetchRecentPrecedents = async () => {
@@ -31,7 +26,6 @@ const SearchPage = () => {
       if (accessToken) {
         const response = await getRecentPrecedents(accessToken);
         setRecentCases(response);
-        // console.log('최근 본 판례 조회 결과:', response);
       }
     } catch (error) {
       console.error('최근 본 판례 조회 오류:', error);
