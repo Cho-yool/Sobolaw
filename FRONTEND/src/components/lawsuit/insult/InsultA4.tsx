@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { josa } from "josa";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
@@ -15,14 +16,16 @@ import {
   Checkbox,
 } from "antd";
 import locale from "antd/es/date-picker/locale/ko_KR";
-import { postInsult } from "../../api/lawsuit";
-import { InsultForm } from "../../types/DataTypes";
-import { options, initialInsultContent } from "../../types/LawsuitTypes";
-import style from "../../styles/papers/Insult.module.css";
+import { RootState } from "../../../redux/store/store";
+import { postInsult } from "../../../api/lawsuit";
+import { InsultForm } from "../../../types/DataTypes";
+import { options, initialInsultContent } from "../../../types/LawsuitTypes";
+import style from "../../../styles/papers/Insult.module.css";
 
 const { Option } = Select;
 
 export default function LawsuitInsult() {
+  const accessToken = useSelector((state: RootState) => state.user.accessToken);
   const [insultContent, setInsultContent] =
     useState<InsultForm>(initialInsultContent);
 
@@ -47,12 +50,7 @@ export default function LawsuitInsult() {
   const [defendantPhoneNumber, setDefendantPhoneNumber] = useState("");
   // 사건정보
   const [incidentDate, setIncidentDate] = useState("");
-  const [incidentTime, setIncidentTime] = useState({
-    hour: 0,
-    minute: 0,
-    second: 0,
-    nano: 0,
-  });
+  const [incidentTime, setIncidentTime] = useState("");
   const [onlineServiceType, setOnlineServiceType] = useState("");
   const [webServiceDetails, setWebServiceDetails] = useState("");
   const [problemSpeech, setProblemSpeech] = useState("");
@@ -131,13 +129,16 @@ export default function LawsuitInsult() {
       const [datePart, timePart] = dateStr.split(" ");
       // incidentDate 상태 변수에 날짜 부분을 할당합니다.
       setIncidentDate(datePart);
-      // 시간 부분을 콜론을 기준으로 분리하여 각 시간 요소를 구합니다.
+      console.log(incidentDate);
+      // // 시간 부분을 콜론을 기준으로 분리하여 각 시간 요소를 구합니다.
       const [hourStr, minuteStr, secondStr] = timePart.split(":");
-      const hour = parseInt(hourStr, 10);
-      const minute = parseInt(minuteStr, 10);
-      const second = parseInt(secondStr, 10);
-      // incidentTime 상태 변수에 시간 요소를 할당합니다.
-      setIncidentTime({ hour, minute, second, nano: 0 });
+      // const hour = parseInt(hourStr, 10);
+      // const minute = parseInt(minuteStr, 10);
+      // const second = parseInt(secondStr, 10);
+      // // incidentTime 상태 변수에 시간 요소를 할당합니다.
+      // setIncidentTime({ hour, minute, second, nano: 0 });
+      setIncidentTime(timePart);
+      console.log(incidentTime);
       // 고소장에 파싱될 용도의 날짜/시간도 할당합니다
       // 용도에 맞게 날짜 형식을 변경합니다.
       const modifiedDatePart = datePart.replace(/-/g, ".");
@@ -326,7 +327,7 @@ export default function LawsuitInsult() {
         policeStationTeam: policeStationTeam,
       });
       // const response = await postInsult(1, insultContent);
-      await postInsult(1, insultContent);
+      await postInsult(accessToken, insultContent);
       // if (response === 1) {
       alert("소장 저장이 완료되었습니다");
       //     navigate('')
@@ -336,32 +337,32 @@ export default function LawsuitInsult() {
     }
   }
 
-  // console.log("title:", title);
-  // console.log("plaintiffName:", plaintiffName);
-  // console.log("plaintiffResidentRegistrationNumber:", plaintiffRRNumber);
-  // console.log("plaintiffAddress:", plaintiffAddress);
-  // console.log("plaintiffPhoneNumber:", plaintiffPhoneNumber);
-  // console.log("plaintiffNickname:", plaintiffNickname);
-  // console.log("defendantName:", defendantName);
-  // console.log("defendantNickname:", defendantNickname);
-  // console.log("defendantAddress:", defendantAddress);
-  // console.log("defendantPhoneNumber:", defendantPhoneNumber);
-  // console.log("incidentDate:", incidentDate);
-  // console.log("incidentTime:", incidentTime);
-  // console.log("onlineServiceType:", onlineServiceType);
-  // console.log("webServiceDetails:", webServiceDetails);
-  // console.log("problemSpeech:", problemSpeech);
-  // console.log("reasonsForInsult:", reasonsForInsult);
-  // console.log("relatedPeopleCount:", relatedPeopleCount);
-  // console.log("witness1:", witness1);
-  // console.log("witness2:", witness2);
-  // console.log("witness3:", witness3);
-  // console.log("insultDuration:", insultDuration);
-  // console.log("insultFrequency:", insultFrequency);
-  // console.log("circumstancesForIdentification:", circumstance);
-  // console.log("evidence:", evidence);
-  // console.log("submissionDate:", submissionDate);
-  // console.log("policeStationTeam:", policeStationTeam);
+  console.log("title:", title);
+  console.log("plaintiffName:", plaintiffName);
+  console.log("plaintiffResidentRegistrationNumber:", plaintiffRRNumber);
+  console.log("plaintiffAddress:", plaintiffAddress);
+  console.log("plaintiffPhoneNumber:", plaintiffPhoneNumber);
+  console.log("plaintiffNickname:", plaintiffNickname);
+  console.log("defendantName:", defendantName);
+  console.log("defendantNickname:", defendantNickname);
+  console.log("defendantAddress:", defendantAddress);
+  console.log("defendantPhoneNumber:", defendantPhoneNumber);
+  console.log("incidentDate:", incidentDate);
+  console.log("incidentTime:", incidentTime);
+  console.log("onlineServiceType:", onlineServiceType);
+  console.log("webServiceDetails:", webServiceDetails);
+  console.log("problemSpeech:", problemSpeech);
+  console.log("reasonsForInsult:", reasonsForInsult);
+  console.log("relatedPeopleCount:", relatedPeopleCount);
+  console.log("witness1:", witness1);
+  console.log("witness2:", witness2);
+  console.log("witness3:", witness3);
+  console.log("insultDuration:", insultDuration);
+  console.log("insultFrequency:", insultFrequency);
+  console.log("circumstancesForIdentification:", circumstance);
+  console.log("evidence:", evidence);
+  console.log("submissionDate:", submissionDate);
+  console.log("policeStationTeam:", policeStationTeam);
 
   return (
     <div className={style["container"]}>
@@ -751,6 +752,7 @@ export default function LawsuitInsult() {
                 전화번호 : <strong>{plaintiffPhoneNumber}</strong>
               </p>
             </div>
+            <br />
             <div>
               {defendantName !== "" && (
                 <p>
