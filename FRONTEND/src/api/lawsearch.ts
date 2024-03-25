@@ -1,5 +1,5 @@
 import { lawAxios } from "./http";
-import { AxiosHeaders } from "axios"
+import { AxiosHeaders } from "axios";
 
 const http = lawAxios();
 const headers = new AxiosHeaders();
@@ -13,14 +13,14 @@ async function searchStatute(searchKeyword: string) {
 
 // 판례 목록 조회
 async function getPrecedentList() {
-    const response = await http.get("/precedent/list");
-    return response.data.data;
+  const response = await http.get("/precedents/list");
+  return response.data.data;
 }
 
 // 판례 검색
 async function searchPrecedent(searchKeyword: string) {
-    const response = await http.get(`/precedent/search/${searchKeyword}`);
-    return response.data;
+  const response = await http.get(`/precedents/search/${searchKeyword}`);
+  return response.data;
 }
 
 export { searchStatute, getPrecedentList, searchPrecedent };

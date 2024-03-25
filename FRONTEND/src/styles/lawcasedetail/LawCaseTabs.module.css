@@ -36,6 +36,7 @@
 }
 
 .content-box__contents {
+  position: relative;
   line-height: 2rem;
   display: flex;
   flex-direction: column;
@@ -44,4 +45,33 @@
 
 .tab-menu__title {
   font-size: 1.5rem;
+}
+
+.color-select {
+  position: absolute;
+  width: fit-content;
+  display: flex;
+  gap: 10px;
+  background-color: white;
+  padding: 0.5rem;
+  border-radius: 1rem;
+  border: 1px solid black;
+  z-index: 2;
+}
+
+.color-select div {
+  width: 45px;
+  height: 45px;
+  border-radius: 100%;
+  cursor: pointer;
+}
+
+.color-select::after {
+  content: "▼";
+  font-size: 1.5rem;
+  position: absolute;
+  bottom: -31%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: black;
 }

@@ -1,4 +1,4 @@
-import { Flex, Typography, Switch } from "antd";
+import { Flex, Typography } from "antd";
 import style from "../../styles/lawcasedetail/LawCaseDetail.module.css";
 import LawCaseTabs from "../../components/lawcasedetail/LawCaseTabs";
 import Sidebar from "../../components/lawcasedetail/Sidebar";
@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 interface getDataProps {
+  precdientId: number;
   caseContent: string;
   caseName: string;
   caseNumber: string;
