@@ -11,9 +11,9 @@ import InsultPrint from "../../components/lawsuit/insult/InsultPrint";
 const PrintLawsuit = () => {
   const navigate = useNavigate();
   const componentRef = useRef<HTMLDivElement>(null);
-  const { type, id } = useParams();
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
-  const insultid = parseInt(id);
+  const { type, id } = useParams<{ type: string; id: string }>();
+  const insultId = id ? parseInt(id) : 0;
   const [insultData, setInsultData] = useState<InsultForm>();
   const [loading, setLoading] = useState<boolean>(true);
   const [lawsuitType, setLawsuitType] = useState<string>("");
@@ -22,7 +22,7 @@ const PrintLawsuit = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getInsult(insultid, accessToken);
+        const response = await getInsult(insultId, accessToken);
         setInsultData(response);
       } catch (error) {
         console.error("Error fetching insult data:", error);
@@ -31,7 +31,7 @@ const PrintLawsuit = () => {
       }
     };
     fetchData();
-  }, [insultid, accessToken]);
+  }, [insultId, accessToken]);
 
   useEffect(() => {
     if (type === "Insult") {

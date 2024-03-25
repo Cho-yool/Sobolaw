@@ -73,8 +73,13 @@ async function getPrecedents(accessToken: string) {
 }
 
 // 멤버가 최근 본 판례
-async function getRecentPrecedents(memberId: number) {
-  const response = await http.get(`${url}/${memberId}/recent`);
+async function getRecentPrecedents(accessToken: string) {
+  const response = await http.get(`${url}/recent`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${testToken}`,
+    },
+  });
   return response.data.data;
 }
 
