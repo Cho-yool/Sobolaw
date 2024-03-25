@@ -14,6 +14,9 @@ import { getUserInfo, deleteUser } from "../../api/members";
 export default function MyInfo() {
   const navigate = useNavigate();
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
+  const refreshToken = useSelector(
+    (state: RootState) => state.user.refreshToken
+  );
   const [userInfo, setUserInfo] = useState<MemberInfo>();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -36,7 +39,7 @@ export default function MyInfo() {
   };
 
   const handleDetAccount = () => {
-    deleteUser(accessToken);
+    deleteUser(accessToken, refreshToken);
   };
 
   return (

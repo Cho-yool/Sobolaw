@@ -7,6 +7,8 @@ export type UserState = {
 
 export type MypaperWide = {
   key: string;
+  type: string;
+  id: number;
   name: string;
   target: string;
   date: string;
@@ -16,6 +18,8 @@ export type MypaperWide = {
 export type MypaperNarrow = {
   key: string;
   name: string;
+  type: string;
+  id: number;
 };
 
 export type KeywordType = {
@@ -70,6 +74,7 @@ export type MemberPrecedent = {
 };
 
 export type MemberLawsuit = {
+  id: number;
   type: "Insult" | "Fraud" | "Defamation";
   title: string | null;
   createdTime: string;
@@ -149,12 +154,7 @@ export type InsultForm = {
   defendantAddress: string;
   defendantPhoneNumber: string;
   incidentDate: string;
-  incidentTime: {
-    hour: number;
-    minute: number;
-    second: number;
-    nano: number;
-  };
+  incidentTime: string;
   onlineServiceType: string;
   webServiceDetails: string;
   problemSpeech: string;

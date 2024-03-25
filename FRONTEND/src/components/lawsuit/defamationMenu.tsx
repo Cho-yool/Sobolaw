@@ -12,7 +12,7 @@ export default function DefamationMenu() {
 
   const defaultValue = dayjs("2024-01-01");
   const onChange: DatePickerProps["onChange"] = (_, dateStr) => {
-    console.log("onChange:", dateStr);
+    // console.log("onChange:", dateStr);
   };
 
   const handleoffenderChange = (value: string) => {

@@ -7,11 +7,17 @@ const headers = new AxiosHeaders();
 headers.set("Content-Type", "application/json;charset=utf-8");
 
 const url = "lawsuit";
+const testToken = "";
 
 // 마이페이지
 // 멤버의 소장 리스트 조회
-async function getLawsuitList(memberId: number) {
-  const response = await http.get(`${url}/${memberId}`);
+async function getLawsuitList(accessToken: string) {
+  const response = await http.get(`${url}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   return response.data.data;
 }
 
@@ -19,8 +25,44 @@ async function getLawsuitList(memberId: number) {
 // const insult = "insult";
 
 // 멤버의 모욕죄 소장 추가
-async function postInsult(memberId: number, data: InsultForm) {
-  await http.post(`${url}/insults/${memberId}`, data);
+async function postInsult(accessToken: string, data: InsultForm) {
+  await http.post(`${url}/insults`, data, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+}
+
+// 멤버의 특정 모욕죄 소장 조회
+async function getInsult(insultId: number, accessToken: string) {
+  const response = await http.get(`${url}/insults/${insultId}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.data.data;
+}
+
+// 멤버의 특정 모욕죄 소장 수정
+async function patchInsult(insultId: number, accessToken: string) {
+  await http.patch(`${url}/insults/${insultId}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+}
+
+// 멤버의 특정 모욕죄 소장 삭제
+async function deleteInsult(insultId: number, accessToken: string) {
+  await http.delete(`${url}/insults/${insultId}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 }
 
 // // 사기죄
@@ -39,4 +81,12 @@ async function postDefamation(memberId: number, data: DefamationForm) {
   await http.post(`${url}/defamations/${memberId}`, data);
 }
 
-export { getLawsuitList, postDefamation, postFraud, postInsult };
+export {
+  getLawsuitList,
+  postDefamation,
+  postFraud,
+  postInsult,
+  getInsult,
+  patchInsult,
+  deleteInsult,
+};

@@ -24,7 +24,6 @@ const userSlice = createSlice({
     },
     // 처음 user의 정보를 저장하는 함수
     loadInfo(state, action) {
-      console.log(action);
       state.userId = action.payload.userId;
       state.nickname = action.payload.nickname;
     },
