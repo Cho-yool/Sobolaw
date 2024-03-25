@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { josa } from "josa";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
@@ -6,7 +8,6 @@ import type { DatePickerProps, CheckboxProps, GetProp } from "antd";
 import {
   Button,
   Input,
-  InputNumber,
   DatePicker,
   Cascader,
   Tooltip,
@@ -15,16 +16,16 @@ import {
   Checkbox,
 } from "antd";
 import locale from "antd/es/date-picker/locale/ko_KR";
-import { postInsult } from "../../api/lawsuit";
-import { InsultForm } from "../../types/DataTypes";
-import { options, initialInsultContent } from "../../types/LawsuitTypes";
-import style from "../../styles/papers/Insult.module.css";
+import { RootState } from "../../../redux/store/store";
+import { postInsult } from "../../../api/lawsuit";
+import { options } from "../../../types/LawsuitTypes";
+import style from "../../../styles/papers/Insult.module.css";
 
 const { Option } = Select;
 
 export default function LawsuitInsult() {
-  const [insultContent, setInsultContent] =
-    useState<InsultForm>(initialInsultContent);
+  const navigate = useNavigate();
+  const accessToken = useSelector((state: RootState) => state.user.accessToken);
 
   // 데이터 입력용 인풋모음들
 
@@ -47,12 +48,7 @@ export default function LawsuitInsult() {
   const [defendantPhoneNumber, setDefendantPhoneNumber] = useState("");
   // 사건정보
   const [incidentDate, setIncidentDate] = useState("");
-  const [incidentTime, setIncidentTime] = useState({
-    hour: 0,
-    minute: 0,
-    second: 0,
-    nano: 0,
-  });
+  const [incidentTime, setIncidentTime] = useState("");
   const [onlineServiceType, setOnlineServiceType] = useState("");
   const [webServiceDetails, setWebServiceDetails] = useState("");
   const [problemSpeech, setProblemSpeech] = useState("");
@@ -77,6 +73,7 @@ export default function LawsuitInsult() {
   const [paperRPCount, setPaperRPCount] = useState("다수");
   const [paperWitness, setPaperWitness] = useState("의 ");
   const [paperEvidence, setPaperEvidence] = useState<string[]>([]);
+  const [paperSubmissionDate, setPaperSubmissionDate] = useState("");
   const [agreements, setAgreements] = useState(false);
 
   // input 효과들
@@ -131,13 +128,16 @@ export default function LawsuitInsult() {
       const [datePart, timePart] = dateStr.split(" ");
       // incidentDate 상태 변수에 날짜 부분을 할당합니다.
       setIncidentDate(datePart);
-      // 시간 부분을 콜론을 기준으로 분리하여 각 시간 요소를 구합니다.
+      // console.log(incidentDate);
+      // // 시간 부분을 콜론을 기준으로 분리하여 각 시간 요소를 구합니다.
       const [hourStr, minuteStr, secondStr] = timePart.split(":");
-      const hour = parseInt(hourStr, 10);
-      const minute = parseInt(minuteStr, 10);
-      const second = parseInt(secondStr, 10);
-      // incidentTime 상태 변수에 시간 요소를 할당합니다.
-      setIncidentTime({ hour, minute, second, nano: 0 });
+      // const hour = parseInt(hourStr, 10);
+      // const minute = parseInt(minuteStr, 10);
+      // const second = parseInt(secondStr, 10);
+      // // incidentTime 상태 변수에 시간 요소를 할당합니다.
+      // setIncidentTime({ hour, minute, second, nano: 0 });
+      setIncidentTime(timePart);
+      // console.log(incidentTime);
       // 고소장에 파싱될 용도의 날짜/시간도 할당합니다
       // 용도에 맞게 날짜 형식을 변경합니다.
       const modifiedDatePart = datePart.replace(/-/g, ".");
@@ -167,8 +167,9 @@ export default function LawsuitInsult() {
   };
 
   // 이용자 수
-  const onChangeUser = (value: null | string) => {
-    if (value === null) {
+  const onChangeUser: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    const value = event.target.value;
+    if (value === "") {
       setPaperRPCount("다수");
       setRelatedPeopleCount("다수");
     } else {
@@ -283,9 +284,10 @@ export default function LawsuitInsult() {
   // 제출일자
   const onChangeSubmitDate: DatePickerProps["onChange"] = (_, dateStr) => {
     if (typeof dateStr === "string") {
+      setSubmissionDate(dateStr);
       const date = new Date(dateStr);
       const modifieddateStr = `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
-      setSubmissionDate(modifieddateStr);
+      setPaperSubmissionDate(modifieddateStr);
     }
   };
 
@@ -296,8 +298,58 @@ export default function LawsuitInsult() {
     // 모든 조건이 True일 때 제출 가능 (필수입력 공백확인)
     if (title === "") {
       alert("소장 저장명을 확인해주세요!");
+    } else if (plaintiffName === "") {
+      alert("원고 성명을 확인해주세요!");
+    } else if (plaintiffRRNumber === "") {
+      alert("원고 주민등록번호를 확인해주세요!");
+    } else if (plaintiffAddress === "") {
+      alert("원고 주소를 확인해주세요!");
+    } else if (plaintiffPhoneNumber === "") {
+      alert("원고 연락처를 확인해주세요!");
+    } else if (plaintiffNickname === "") {
+      alert("원고 닉네임을 확인해주세요!");
+    } else if (defendantName === "") {
+      alert("피고 성명을 확인해주세요!");
+    } else if (defendantNickname === "") {
+      alert("피고 닉네임을 확인해주세요!");
+    } else if (defendantAddress === "") {
+      alert("피고 주소를 확인해주세요!");
+    } else if (defendantPhoneNumber === "") {
+      alert("피고 연락처를 확인해주세요!");
+    } else if (incidentDate === "") {
+      alert("사건 발생일을 확인해주세요!");
+    } else if (incidentTime === "") {
+      alert("사건 발생시간을 확인해주세요!");
+    } else if (onlineServiceType === "") {
+      alert("온라인 서비스 종류를 확인해주세요!");
+    } else if (webServiceDetails === "") {
+      alert("웹 서비스 상세정보를 확인해주세요!");
+    } else if (problemSpeech === "") {
+      alert("문제 발언 내용을 확인해주세요!");
+    } else if (reasonsForInsult === "") {
+      alert("모욕사유를 확인해주세요!");
+    } else if (relatedPeopleCount === "") {
+      alert("관련인원 수를 확인해주세요!");
+    } else if (witness1 === "") {
+      alert("증인1을 확인해주세요!");
+    } else if (witness2 === "") {
+      alert("증인2를 확인해주세요!");
+    } else if (witness3 === "") {
+      alert("증인3을 확인해주세요!");
+    } else if (insultDuration === "") {
+      alert("모욕기간을 확인해주세요!");
+    } else if (insultFrequency === "") {
+      alert("모욕빈도를 확인해주세요!");
+    } else if (circumstance === "") {
+      alert("식별 사정을 확인해주세요!");
+    } else if (evidence === "") {
+      alert("증거를 확인해주세요!");
+    } else if (submissionDate === "") {
+      alert("제출일을 확인해주세요!");
+    } else if (policeStationTeam === "") {
+      alert("관할 경찰서/단체를 확인해주세요!");
     } else {
-      setInsultContent({
+      const insultContent = {
         title: title,
         plaintiffName: plaintiffName,
         plaintiffResidentRegistrationNumber: plaintiffRRNumber,
@@ -324,15 +376,15 @@ export default function LawsuitInsult() {
         evidence: evidence,
         submissionDate: submissionDate,
         policeStationTeam: policeStationTeam,
-      });
-      // const response = await postInsult(1, insultContent);
-      await postInsult(1, insultContent);
-      // if (response === 1) {
-      alert("소장 저장이 완료되었습니다");
-      //     navigate('')
-      // } else if (response === 33) {
-      //     alert("소장 저장 실패")
-      // }
+      };
+      await postInsult(accessToken, insultContent)
+        .then(() => {
+          alert("소장 저장이 완료되었습니다");
+          navigate("/mypage/papers");
+        })
+        .catch(() => {
+          alert("저장에 실패하였습니다. 내용을 다시 한 번 확인해주세요");
+        });
     }
   }
 
@@ -404,11 +456,18 @@ export default function LawsuitInsult() {
                 value={defendantAddress}
                 onChange={(e) => setDefendantAddress(e.target.value)}
               />
-              <Input
-                placeholder="전화번호"
-                value={defendantPhoneNumber}
-                onChange={(e) => setDefendantPhoneNumber(e.target.value)}
-              />
+              <Tooltip
+                // placement="bottom"
+                placement="top"
+                title={"숫자만 입력해주세요!"}
+                arrow={true}
+              >
+                <Input
+                  placeholder="전화번호"
+                  value={defendantPhoneNumber}
+                  onChange={(e) => setDefendantPhoneNumber(e.target.value)}
+                />
+              </Tooltip>
             </>
           )}
           {showDefendant === "일부알고있음" && (
@@ -428,11 +487,18 @@ export default function LawsuitInsult() {
                 value={defendantAddress}
                 onChange={(e) => setDefendantAddress(e.target.value)}
               />
-              <Input
-                placeholder="전화번호"
-                value={defendantPhoneNumber}
-                onChange={(e) => setDefendantPhoneNumber(e.target.value)}
-              />
+              <Tooltip
+                // placement="bottom"
+                placement="top"
+                title={"숫자만 입력해주세요!"}
+                arrow={true}
+              >
+                <Input
+                  placeholder="전화번호"
+                  value={defendantPhoneNumber}
+                  onChange={(e) => setDefendantPhoneNumber(e.target.value)}
+                />
+              </Tooltip>
             </>
           )}
           {showDefendant === "모름" && (
@@ -484,7 +550,7 @@ export default function LawsuitInsult() {
             공연성: 불특정 또는 다수인이 인식할 수 있는 상태
           </p>
           <p>웹사이트의 이용자 수</p>
-          <InputNumber
+          <Input
             addonBefore={
               <Select
                 defaultValue="모름"
@@ -677,11 +743,18 @@ export default function LawsuitInsult() {
             value={plaintiffAddress}
             onChange={(e) => setPlaintiffAddress(e.target.value)}
           />
-          <Input
-            placeholder="전화번호"
-            value={plaintiffPhoneNumber}
-            onChange={(e) => setPlaintiffPhoneNumber(e.target.value)}
-          />
+          <Tooltip
+            // placement="bottom"
+            placement="top"
+            title={"숫자만 입력해주세요!"}
+            arrow={true}
+          >
+            <Input
+              placeholder="전화번호"
+              value={plaintiffPhoneNumber}
+              onChange={(e) => setPlaintiffPhoneNumber(e.target.value)}
+            />
+          </Tooltip>
         </div>
 
         <div className={style["menu-mini"]}>
@@ -751,6 +824,7 @@ export default function LawsuitInsult() {
                 전화번호 : <strong>{plaintiffPhoneNumber}</strong>
               </p>
             </div>
+            <br />
             <div>
               {defendantName !== "" && (
                 <p>
@@ -919,7 +993,7 @@ export default function LawsuitInsult() {
               <p>위 첨부서류 - 각 1부</p>
             </div>
             <div className={style["date"]}>
-              <strong>{submissionDate}</strong>
+              <strong>{paperSubmissionDate}</strong>
             </div>
             {agreements && (
               <>

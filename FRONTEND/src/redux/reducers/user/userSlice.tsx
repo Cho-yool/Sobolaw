@@ -17,28 +17,22 @@ const userSlice = createSlice({
   reducers: {
     // 초기화 함수
     resetAuth: (state) => {
+      state.userId = 0;
+      state.nickname = "";
       state.accessToken = "";
+      state.refreshToken = "";
     },
     // 처음 user의 정보를 저장하는 함수
     loadInfo(state, action) {
-      state.userId = action.payload.id;
+      state.userId = action.payload.userId;
       state.nickname = action.payload.nickname;
     },
-    saveAccessToken: (state, action) => {
+    saveToken(state, action) {
       state.accessToken = action.payload.accessToken;
+      state.refreshToken = action.payload.refreshToken;
     },
-    // // 로그아웃(초기화 해주기)
-    // logoutUser(state) {
-    //   initialState;
-    // },
   },
-  // extraReducers: (builder) => {
-  //   builder
-  //     .addCase(
-  //       //
-  //     )
-  // },
 });
 
-export const { loadInfo, resetAuth, saveAccessToken } = userSlice.actions;
+export const { loadInfo, resetAuth, saveToken } = userSlice.actions;
 export default userSlice.reducer;

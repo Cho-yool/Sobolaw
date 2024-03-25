@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Tag,
   Layout,
@@ -17,6 +18,9 @@ import {
   EditTwoTone,
   CopyTwoTone,
 } from "@ant-design/icons";
+import { postLogout, reissueToken } from "../../api/members";
+import { RootState, AppDispatch } from "../../redux/store/store";
+import { resetAuth } from "../../redux/reducers/user/userSlice";
 import logo from "/NavLogo.png";
 import MypageMenu from "./MypageMenu";
 import style from "../../styles/common/Navbar.module.css";
@@ -42,14 +46,32 @@ const ResponsiveNav = ({
   setSelectedKeys,
   setSelectedSubKeys,
 }: ResponsiveNavProps) => {
-  const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
+  const dispatch: AppDispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user);
+  const [visible, setVisible] = useState(false);
   const showDrawer = () => {
     setVisible(true);
   };
 
   const onClose = () => {
     setVisible(false);
+  };
+
+  const handlelogout = () => {
+    // postLogout(user.accessToken, user.refreshToken);
+    postLogout(user.accessToken, user.refreshToken)
+      .then(() => {
+        dispatch(resetAuth());
+        navigate("/");
+      })
+      .catch(() => {
+        alert("다시 로그아웃해주세요");
+      });
+  };
+
+  const handletoken = () => {
+    reissueToken(user.accessToken, user.refreshToken);
   };
 
   return (
@@ -100,24 +122,38 @@ const ResponsiveNav = ({
               />
             </Col>
             <Col xs={0} sm={0} md={4}>
-              <MypageMenu
-                mode={"horizontal"}
-                setSelectedKeys={setSelectedKeys}
-                selectedSubKeys={selectedSubKeys}
-                setSelectedSubKeys={setSelectedSubKeys}
-              />
+              {user.accessToken != "" && (
+                <MypageMenu
+                  username={user.nickname}
+                  mode={"horizontal"}
+                  setSelectedKeys={setSelectedKeys}
+                  selectedSubKeys={selectedSubKeys}
+                  setSelectedSubKeys={setSelectedSubKeys}
+                />
+              )}
             </Col>
             <Col xs={0} sm={0} md={2}>
-              <Button
-                type="primary"
-                shape="round"
-                style={{ marginRight: "10px" }}
-                onClick={() => {
-                  navigate("/login");
-                }}
-              >
-                로그인
-              </Button>
+              {user.accessToken === "" ? (
+                <Button
+                  type="primary"
+                  shape="round"
+                  style={{ marginRight: "10px" }}
+                  onClick={() => {
+                    navigate("/login");
+                  }}
+                >
+                  로그인
+                </Button>
+              ) : (
+                <Button
+                  type="primary"
+                  shape="round"
+                  style={{ marginRight: "10px" }}
+                  onClick={handlelogout}
+                >
+                  로그아웃
+                </Button>
+              )}
             </Col>
           </Row>
           {/* 로그인시 활성화 */}
@@ -156,81 +192,100 @@ const ResponsiveNav = ({
               color: "644419",
             }}
           >
-            로그인이 필요합니다
-            <Button
-              type="primary"
-              shape="round"
-              style={{ marginRight: "10px", marginTop: "1rem" }}
-              onClick={() => {
-                navigate("/login");
-              }}
-            >
-              로그인
-            </Button>
+            {user.accessToken === "" ? (
+              <div>
+                로그인이 필요합니다
+                <Button
+                  type="primary"
+                  shape="round"
+                  style={{ marginRight: "10px", marginTop: "1rem" }}
+                  onClick={() => {
+                    navigate("/login");
+                  }}
+                >
+                  로그인
+                </Button>
+              </div>
+            ) : (
+              <div>
+                {user.nickname}님! 안녕하세요
+                <Button
+                  type="primary"
+                  shape="round"
+                  style={{ marginRight: "10px" }}
+                  onClick={handlelogout}
+                >
+                  로그아웃
+                </Button>
+                <Button onClick={handletoken}>리이슈토큰</Button>
+              </div>
+            )}
           </div>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-around",
-              margin: "1.5rem",
-            }}
-          >
+          {user.accessToken != "" && (
             <div
               style={{
                 display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                cursor: "pointer",
-              }}
-              onClick={() => {
-                navigate("/mypage/user");
+                justifyContent: "space-around",
+                margin: "1.5rem",
               }}
             >
-              <SmileTwoTone
-                style={{ fontSize: "3rem" }}
-                twoToneColor="#BF8438"
-              />
-              <Tag bordered={false}>회원정보</Tag>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  navigate("/mypage/user");
+                }}
+              >
+                <SmileTwoTone
+                  style={{ fontSize: "3rem" }}
+                  twoToneColor="#BF8438"
+                />
+                <Tag bordered={false}>회원정보</Tag>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  navigate("/mypage/papers");
+                }}
+              >
+                <EditTwoTone
+                  style={{ fontSize: "3rem" }}
+                  twoToneColor="#BF8438"
+                />
+                <Tag bordered={false}>내가쓴소장</Tag>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  navigate("/mypage/case");
+                }}
+              >
+                <CopyTwoTone
+                  style={{ fontSize: "3rem" }}
+                  twoToneColor="#BF8438"
+                />
+                <Tag bordered={false}>저장한판례</Tag>
+              </div>
             </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                cursor: "pointer",
-              }}
-              onClick={() => {
-                navigate("/mypage/papers");
-              }}
-            >
-              <EditTwoTone
-                style={{ fontSize: "3rem" }}
-                twoToneColor="#BF8438"
-              />
-              <Tag bordered={false}>내가쓴소장</Tag>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                cursor: "pointer",
-              }}
-              onClick={() => {
-                navigate("/mypage/case");
-              }}
-            >
-              <CopyTwoTone
-                style={{ fontSize: "3rem" }}
-                twoToneColor="#BF8438"
-              />
-              <Tag bordered={false}>저장한판례</Tag>
-            </div>
-          </div>
+          )}
 
           <Menu
             mode="vertical"

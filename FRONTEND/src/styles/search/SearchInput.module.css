@@ -2,15 +2,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
 }
 
 .title {
   color: #ffffff;
-  font-size: 30px;
+  font-size: 36px;
   font-weight: 600;
   text-align: center;
   margin-top: 50px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   width: 100%; /* 제목이 무조건 두 줄로 나누어지도록 너비를 100%로 설정 */
   white-space: pre-wrap; /* 줄바꿈 허용 */
   line-height: 1.5;
