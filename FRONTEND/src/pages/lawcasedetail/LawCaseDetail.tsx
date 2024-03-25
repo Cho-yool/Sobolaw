@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 interface getDataProps {
-  precdientId: number;
+  precedentId: number;
   caseContent: string;
   caseName: string;
   caseNumber: string;
@@ -44,8 +44,7 @@ const LawCaseDetail = () => {
     <Flex className={style["detail-page"]} justify="center">
       <Sidebar
         referencedStatute={getData.referencedStatute}
-        referencedCase={getData.referencedCase}
-      ></Sidebar>
+        referencedCase={getData.referencedCase}></Sidebar>
       <Flex className={style["container"]} vertical>
         <Title className={style["container__title"]}>
           {getData ? getData.caseName : null}

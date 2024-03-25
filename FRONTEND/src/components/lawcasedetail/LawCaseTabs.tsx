@@ -11,7 +11,7 @@ interface TabMenusProps {
 
 interface getDataProps {
   getData: {
-    precdientId: number;
+    precedentId: number;
     caseContent: string;
     caseName: string;
     caseNumber: string;
@@ -47,7 +47,7 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
   const [isSaved, setIsSaved] = useState<boolean>(false);
   const [onEditing, setOnEditing] = useState<boolean>(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [selectionNode, setSelectionNode] = useState<any>();
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectionPos, setSelectionPos] = useState<any>();
   const [isSummary, setIsSummary] = useState<boolean>(false);
@@ -96,9 +96,9 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
       </div>
     );
   };
-  const savePrecedent = (precdientId: number) => {
+  const savePrecedent = (precedentId: number) => {
     try {
-      const response = saveLawDetail(precdientId);
+      const response = saveLawDetail(precedentId);
       console.log(response);
       setIsSaved(true);
     } catch (error) {
@@ -122,7 +122,7 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
     selectionPos.deleteContents();
     selectionPos.insertNode(span);
     if (!isSaved) {
-      savePrecedent(getData.precdientId);
+      savePrecedent(getData.precedentId);
     }
   };
   const handleTabClick = (id: number) => {
@@ -156,17 +156,13 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
       const selection = window.getSelection();
       if (selection) {
         setSelectionPos(selection.getRangeAt(0));
-        setSelectionNode(selection);
       }
     }
   };
   // 마우스 클릭이 끝났을때
-  const onMouseOutHandler = (event: React.MouseEvent<HTMLDivElement>) => {
+  const onMouseOutHandler = () => {
     setOnEditing(false);
     if (selectionPos) {
-      console.log(selectionPos.commonAncestorContainer.parentNode);
-      console.log(selectionPos.startOffset);
-      console.log(selectionPos.endOffset);
       setShowOptions(true);
     }
   };
@@ -192,8 +188,7 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
                 ? `${style["tab"]} ${style["active"]}`
                 : style["tab"]
             }
-            onClick={() => handleTabClick(tab.id)}
-          >
+            onClick={() => handleTabClick(tab.id)}>
             <p className={style["tab-title"]}>{tab.title}</p>
           </div>
         ))}
@@ -217,8 +212,7 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
         className={style["content-box__contents"]}
         dangerouslySetInnerHTML={{
           __html: getData.judicialNotice,
-        }}
-      ></p>
+        }}></p>
       <br />
       <br />
       <p className={style["tab-menu__title"]} ref={rulingRef}>
@@ -230,8 +224,7 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
         className={style["content-box__contents"]}
         dangerouslySetInnerHTML={{
           __html: getData.verdictSummary,
-        }}
-      ></p>
+        }}></p>
       <br />
       <br />
       <p className={style["tab-menu__title"]} ref={precedentRef}>
@@ -251,15 +244,13 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
             className={style["content-box__contents"]}
             dangerouslySetInnerHTML={{
               __html: summaryData,
-            }}
-          ></p>
+            }}></p>
         ) : (
           <div
             className={style["content-box__contents"]}
             onMouseDown={onMouseClickHandler}
             onMouseMove={onMouseMoveHandler}
-            onMouseUp={onMouseOutHandler}
-          >
+            onMouseUp={onMouseOutHandler}>
             {" "}
             {showOptions
               ? optionSelectDiv(selectionPosition.x, selectionPosition.y)

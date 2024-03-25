@@ -17,6 +17,7 @@ export async function getLawDetailSummary(params?: { precedentId: number }) {
 
 export async function saveLawDetail(precedentId: number) {
   const url = `/user-service/members/precedents`;
+  console.log(precedentId);
   return await http.post(
     url,
     {
@@ -25,7 +26,7 @@ export async function saveLawDetail(precedentId: number) {
     {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLqt7zsmIEiLCJyb2xlIjoiUk9MRV9VU0VSIiwibWVtYmVySWQiOjE4LCJpYXQiOjE3MTEzNTczMjMsImV4cCI6MTcxMjIyMTMyM30.DPykTxXmhykv_raR_45OEnqghrVqhb3w0F3D6iTGRo6v56vUjQrPvlPvScDc9gIwuPNHlTLpPfrRrJCUxN1yNQ`,
+        Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLqt7zsmIEiLCJyb2xlIjoiUk9MRV9VU0VSIiwibWVtYmVySWQiOjE4LCJpYXQiOjE3MTEzODcxMDIsImV4cCI6MTcxMjI1MTEwMn0.RkQVC095BRBw8Ldo2kwTljfxl0sgp7jBlSe6Z45gBhpi0FWG5nemiV03BbQpC7-IjiLgQ_8rjq8zkiN1Y-UwVg`,
       },
     }
   );
