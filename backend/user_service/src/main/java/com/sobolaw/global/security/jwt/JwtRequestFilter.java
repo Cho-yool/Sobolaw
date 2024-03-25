@@ -52,14 +52,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         ) {
             log.info("토큰 검사 pass");
             filterChain.doFilter(request, response);
-        } else if (header == null || !header.startsWith("Bearer ")) {
+        } else if (header == null) {
             log.info("토큰이 없습니다.");
-
-//            responseDto = new BaseResponse<>(HttpStatus.NOT_ACCEPTABLE.value(), "access token 이 존재하지 않음.", null);
-//            response.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
-//            response.setContentType("application/json");
-//            response.setCharacterEncoding("UTF-8");
-//            response.getWriter().write(new ObjectMapper().writeValueAsString(responseDto));
             filterChain.doFilter(request, response);
         } else if (!header.startsWith("Bearer ")) {
             log.info("토큰형식이 잘못되었습니다.");

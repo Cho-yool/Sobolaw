@@ -2,6 +2,7 @@ package com.sobolaw.api.member.repository;
 
 import com.sobolaw.api.member.entity.Member;
 import com.sobolaw.api.member.entity.MemberKeyword;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -17,4 +18,6 @@ public interface MemberKeywordRepository extends JpaRepository<MemberKeyword, Lo
     Optional<MemberKeyword> findByMemberKeywordId(Long memberKeywordId);
 
     MemberKeyword findByMemberPrecedent_MemberPrecedentId(Long precedentId);
+
+    List<MemberKeyword> findByMember(Member member);
 }
