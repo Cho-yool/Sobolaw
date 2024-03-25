@@ -48,7 +48,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         log.info("servletPath : " + servletPath);
 //        log.info("예외처리 주소 : " + servletPath.contains("/api/user-service/swagger-ui/index.html"));
         if (
-            servletPath.contains("swaggers") || servletPath.startsWith("/oauth2/") || servletPath.startsWith("/oauth2/login") || servletPath.startsWith("/token/refresh")
+            servletPath.contains("swaggers") || servletPath.startsWith("/oauth2") || servletPath.startsWith("/login") || servletPath.startsWith("/token/refresh")
         ) {
             log.info("토큰 검사 pass");
             filterChain.doFilter(request, response);
