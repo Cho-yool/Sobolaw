@@ -7,7 +7,7 @@ import SearchResultList, { SearchResult } from "../../components/search/SearchRe
 import style from "../../styles/search/SearchResultList.module.css";
 import { searchPrecedent, searchStatute } from "../../api/lawsearch";
 
-const { Option } = Select;
+const { Option } = Select
 
 interface FilterOptions {
   court: string[];
@@ -71,37 +71,50 @@ const SearchResultPage = () => {
   const [selectedDate, setSelectedDate] = useState<string>('전체');
   const [loading, setLoading] = useState(false);
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [selectedTab, setSelectedTab] = useState<string>('1');
+  const [precedentResults, setPrecedentResults] = useState<SearchResult[]>([]);
+  const [statuteResults, setStatuteResults] = useState<SearchResult[]>([]);
   const pageSize = 10;
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const searchQuery = queryParams.get('query');
-    const activeTab = location.state?.activeTab || 'precedent';
+    const activeTab = queryParams.get('tab') || 'precedent';
 
     if (searchQuery) {
       setSearchTerm(searchQuery);
-      fetchSearchResults(searchQuery, activeTab);
+      setSelectedTab(activeTab);
+      fetchSearchResults(searchQuery, selectedTab);
     }
+
+    // setSelectedTab(activeTab);
   }, [location]);
 
   const fetchSearchResults = async (searchQuery: string, activeTab: string) => {
     setLoading(true);
     try {
-      let results: SearchResult[] = [];
-      if (activeTab === 'precedent') {
-        const response = await searchPrecedent(searchQuery);
-        if (response.data && Array.isArray(response.data)) {
-          results = response.data;
-        }
-      } else if (activeTab === 'statute') {
-        const response = await searchStatute(searchQuery);
-        if (response.data && Array.isArray(response.data)) {
-          results = response.data;
-        }
+      const precedentResponse = await searchPrecedent(searchQuery);
+      const statuteResponse = await searchStatute(searchQuery);
+
+      if (precedentResponse.data && Array.isArray(precedentResponse.data)) {
+        const classifiedResults = classifyResults(precedentResponse.data);
+        setPrecedentResults(classifiedResults);
       }
-      const classifiedResults = classifyResults(results);
-      setSearchResults(classifiedResults);
-      // console.log('Search results(SearchResultPage):', classifiedResults);
+
+      if (statuteResponse.data && Array.isArray(statuteResponse.data)) {
+        const results = statuteResponse.data.map((statue: any) => ({
+          statuteNumber: statue.statuteNumber,
+          statuteName: statue.statuteName,
+          statuteType: statue.statuteType,
+          department: statue.department,
+          publicationNumber: statue.publicationNumber,
+          publicationDate: statue.publicationDate,
+          enforcementDate: statue.enforcementDate,
+        }));
+        setStatuteResults(results);
+      }
+
+      setSelectedTab(activeTab);
     } catch (error) {
       console.error('Error fetching search results:', error);
     } finally {
@@ -109,11 +122,15 @@ const SearchResultPage = () => {
     }
   };
 
-  const filterResults = () => {
-    if (!Array.isArray(searchResults)) return [];
+  const onTabChange = (key: string) => {
+    setSelectedTab(key);
+    setCurrentPage(1);
+  };
 
-    const filtered = searchResults.filter((result) => {
-      // console.log('필터링 조건:', result.court, selectedCourt, result.instance, selectedInstance, result.period, selectedDate); // 필터링 조건 확인
+  const filterResults = (results: SearchResult[]) => {
+    if (!Array.isArray(results)) return [];
+
+    const filtered = results.filter((result) => {
       return (
         (selectedCourt === '전체' || result.court === selectedCourt) &&
         (selectedInstance === '전체' || result.instance === selectedInstance) &&
@@ -123,13 +140,24 @@ const SearchResultPage = () => {
     return filtered;
   };
 
-  const filteredResults = useMemo(() => filterResults(), [searchResults, selectedCourt, selectedInstance, selectedDate]);
+  const filteredResults = useMemo(() => {
+    if (selectedTab === '1') {
+      return filterResults(precedentResults);
+    } else if (selectedTab === '2') {
+      return statuteResults;
+    }
+    return [];
+  }, [selectedTab, precedentResults, statuteResults, selectedCourt, selectedInstance, selectedDate]);
+
+  console.log('판례 검색 결과:', precedentResults);
+  console.log('법령 검색 결과:', statuteResults);
+  console.log('필터링된 결과:', filteredResults);
+
   const paginatedResults = filteredResults.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const handleSearch = () => {
-    // console.log(`검색어: ${searchTerm}`);
-    fetchSearchResults(searchTerm, 'precedent');
-  };
+    fetchSearchResults(searchTerm, selectedTab === '1' ? 'precedent' : 'statute');
+  }
 
   const onCourtChange = (value: string): void => setSelectedCourt(value);
   const onInstanceChange = (value: string): void => setSelectedInstance(value);
@@ -176,7 +204,7 @@ const SearchResultPage = () => {
             </div>
           ) : (
             <div className={style.searchResultList}>
-              <SearchResultList searchResults={paginatedResults} loading={loading} />
+              <SearchResultList searchResults={paginatedResults} loading={loading} activeTab={selectedTab} />
             </div>
           )}
         </>
@@ -186,7 +214,26 @@ const SearchResultPage = () => {
       label: '법령',
       key: '2',
       children: (
-        <div>법령 관련 내용</div>
+        <>
+          {loading ? (
+            <div>
+              {Array.from({ length: 5 }).map((_, index) => (
+                <Skeleton
+                  key={index}
+                  active
+                  avatar
+                  title={{ width: '100%' }}
+                  paragraph={{ rows: 3, width: '400px' }}
+                  style={{ marginBottom: 20 }}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className={style.searchResultList}>
+              <SearchResultList searchResults={paginatedResults} loading={loading} activeTab={selectedTab} />
+            </div>
+          )}
+        </>
       ),
     },
   ];
@@ -206,6 +253,8 @@ const SearchResultPage = () => {
           <Tabs
             items={tabsItems}
             tabBarGutter={40}
+            activeKey={selectedTab}
+            onChange={onTabChange}
           />
         </div>
         <Pagination
