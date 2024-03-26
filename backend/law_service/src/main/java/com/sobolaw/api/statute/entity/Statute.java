@@ -1,8 +1,11 @@
 package com.sobolaw.api.statute.entity;
 
+import com.sobolaw.api.statute.document.StatuteTextDocument;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -10,8 +13,7 @@ import lombok.Setter;
 public class Statute {
 
     @Id
-    @Column
-    private Long statuteNumber;
+    private Long sjqtatuteNumber;
 
     @Column(columnDefinition = "TEXT")
     private String statuteName;
@@ -34,4 +36,10 @@ public class Statute {
     @Column
     private String enforcementDate;
 
+    // 1:N 관계 설정
+    // Statute : StatuteTextDocument
+    @OneToMany(mappedBy = "statute", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<StatuteText> statuteTexts;
+
 }
+

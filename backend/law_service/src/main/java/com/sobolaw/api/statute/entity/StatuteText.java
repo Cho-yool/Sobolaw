@@ -1,10 +1,6 @@
 package com.sobolaw.api.statute.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,12 +10,10 @@ import lombok.Setter;
 public class StatuteText {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
     private Long statuteId;
 
-    @Column
-    private Long statuteNumber;
+//    @Column
+//    private Long statuteNumber;
 
     @Column
     private Long articleNumber;
@@ -42,4 +36,7 @@ public class StatuteText {
     @Column
     private String articleEffectiveDate;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "statuteNumber")
+    private Statute statute; // Statute 엔티티와의 Many-to-One 관계를 나타냄
 }
