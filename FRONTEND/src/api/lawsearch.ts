@@ -17,6 +17,12 @@ async function getStatuteDetail(statuteNumber: number) {
     return response.data;
 }
 
+// 판례 검색
+async function searchPrecedent(searchKeyword: string) {
+    const response = await http.get(`/precedents/search/${searchKeyword}`);
+    return response.data;
+}
+
 
 // 판례 목록 조회
 async function getPrecedentList() {
@@ -30,10 +36,11 @@ async function getHitPrecedentList() {
     return response.data.data;
 }
 
-// 판례 검색
-async function searchPrecedent(searchKeyword: string) {
-    const response = await http.get(`/precedents/search/${searchKeyword}`);
-    return response.data;
+// 조회수별 법령 목록 조회
+async function getHitStatuteList() {
+    const response = await http.get("/statutes/list");
+    return response.data.data;
 }
 
-export { searchStatute, getPrecedentList, getHitPrecedentList, searchPrecedent };
+
+export { searchStatute, getStatuteDetail, getPrecedentList, getHitPrecedentList, getHitStatuteList, searchPrecedent };
