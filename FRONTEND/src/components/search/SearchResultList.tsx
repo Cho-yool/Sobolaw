@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import style from '../../styles/search/SearchResultList.module.css';
 import { postRecentPrecedents } from '../../api/members';
 
-
 export interface SearchResult {
   precedentId?: number;
   caseName: string;
@@ -17,48 +16,51 @@ export interface SearchResult {
   judgmentDate?: string;
   court?: string;
   period?: string;
-  statuteNumber?: number;
-  statuteName?: string;
-  statuteType?: string;
-  department?: string;
+  statuteNumber: number;
+  statuteName: string;
+  statuteType: string;
+  department: string;
   publicationNumber?: number;
   publicationDate: string;
   enforcementDate: string;
+  amendmentType: string;
+  statuteTexts?: Article[];
 }
 
+interface Article {
+  statute_id: number;
+  statute_number: number;
+  article_content: string;
+  article_content_sub: string;
+  article_effective_date: string;
+  article_number: string;
+  article_number_sub: string;
+  article_title: string;
+  article_type: string;
+}
 interface SearchResultListProps {
   searchResults: SearchResult[];
   loading: boolean;
   activeTab: string;
 }
 
-const formatDate = (dateString: string): string => {
-  const date = new Date(dateString);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}.${month}.${day}`;
-}
-
 const SearchResultList: React.FC<SearchResultListProps> = ({ searchResults, loading, activeTab }) => {
   const navigate = useNavigate();
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
 
-  // list 아이템 클릭 시 호출되는 함수
   const handleItemClick = async (item: SearchResult, type: string) => {
-    // console.log('handleItemClick', precedentId, accessToken)
+    console.log("Navigating with item:", item);
     try {
-      const id = type === 'precedent' ? item.precedentId : item.statuteNumber;
       if (accessToken && type === 'precedent' && item.precedentId) {
         await postRecentPrecedents(accessToken, item.precedentId);
       }
-      navigate(`/${type === 'precedent' ? 'laws' : 'statutes'}/${id}`);
+      // navigate(`/${type === 'precedent' ? 'laws' : 'statutes'}/${type === 'precedent' ? item.precedentId : item.statuteNumber}`, { state: item });
+      navigate(`/details/${item.statuteNumber}`, { state: { statute: item } });
     } catch (error) {
-      const id = type === 'precedent' ? item.precedentId : item.statuteNumber;
-      // console.error('최근 본 판례 등록 오류:', error);
-      navigate(`/${type === 'precedent' ? 'laws' : 'statutes'}/${id}`);
+      navigate(`/${type === 'precedent' ? 'laws' : 'statutes'}/${type === 'precedent' ? item.precedentId : item.statuteNumber}`, { state: item });
     }
   };
+
 
 
   // HTML 태그 지우고 텍스트만 반환
@@ -66,6 +68,7 @@ const SearchResultList: React.FC<SearchResultListProps> = ({ searchResults, load
     return html.replace(/<[^>]*>?/gm, '');
   };
 
+  searchResults.forEach(item => console.log(item.statuteTexts));
 
   return (
     <>
@@ -97,7 +100,7 @@ const SearchResultList: React.FC<SearchResultListProps> = ({ searchResults, load
                   ) : (
                     <>
                       <p className={style.itemContent}>
-                        법률 제 {item.publicationNumber}호, 공포일 {formatDate(item.enforcementDate)}, 시행일 {formatDate(item.publicationDate)}
+                        법률 제 {item.publicationNumber}호, 공포일 {item.enforcementDate}, 시행일 {item.publicationDate}
                       </p>
                       <div className={style.itemMeta}>
                         {item.department && <span className={style.metaItem}>{item.department}</span>}

@@ -7,7 +7,7 @@ headers.set("Content-Type", "application/json;charset=utf-8");
 
 // 판례 상세 조회
 export async function getLawDetail(params: number ) {
-  const url = `/law-service/precedent/detail/${params}`;
+  const url = `/law-service/precedents/detail/${params}`;
   return await http.get(url);
 }
 
