@@ -78,6 +78,15 @@ pipeline {
                     }
                 }
             }
+
+            stage('notification_service'){
+                steps {
+                    echo 'notification_service build!'
+                    dir('backend/notification_service'){
+                        sh 'docker build -t notification_service .'
+                    }
+                }
+            }
             
             stage('start container'){
                 steps{
