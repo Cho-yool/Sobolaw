@@ -1,6 +1,6 @@
-/* HitLawCaseList.module.css */
+/* HitStatuteList.module.css */
 
-.hitLawCaseContainer {
+.hitStatuteContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,7 +8,7 @@
     margin-top: 20px;
   }
   
-  .hitLawCaseItem {
+  .hitStatuteItem {
     width: 70%;
     height: 150px;
     display: flex;
@@ -27,12 +27,12 @@
     transition: transform 0.3s ease-in-out;
   }
   
-  .hitLawCaseItem:hover {
+  .hitStatuteItem:hover {
     transform: scale(1.03);
   }
   
   .rankBox {
-    background-color: #644419;
+    background-color: #194464;
     padding: 10px 16px;
     border-radius: 10px;
     font-weight: bold;
@@ -67,7 +67,7 @@
   .medal.bronze {
     color: #cd7f32; /* 동색 */
   }
-
+  
   .titleContent {
     display: flex;
     flex-direction: column;
@@ -105,12 +105,12 @@
     bottom: 20px;
     right: 20px;
     font-size: 18px;
-    color: #644419;
+    color: #194464;
     font-weight: bold;
   }
   
   @media (max-width: 768px) {
-    .hitLawCaseItem {
+    .hitStatuteItem {
       flex-direction: column;
       position: relative;
       height: auto;
