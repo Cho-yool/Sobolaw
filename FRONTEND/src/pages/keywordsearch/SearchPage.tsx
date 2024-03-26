@@ -48,11 +48,11 @@ const SearchPage = () => {
             {/* Category cards on the left side */}
             <Col span={24}>
               <div className={pageStyle.categoryCardsContainer}>
-                <Card hoverable onClick={() => navigate('/hit')} className={pageStyle.singleCategoryCard}>
+                <Card hoverable onClick={() => navigate('/hit/precedent')} className={pageStyle.singleCategoryCard}>
                   <BookOutlined style={{ marginRight: 20, color: '#644419' }} />
                   인기 판례 둘러보기
                 </Card>
-                <Card hoverable onClick={() => navigate('/hit')} className={pageStyle.singleCategoryCard}>
+                <Card hoverable onClick={() => navigate('/hit/statute')} className={pageStyle.singleCategoryCard}>
                   <CommentOutlined style={{ marginRight: 20, color: '#644419' }} />
                   인기 법령 둘러보기
                 </Card>

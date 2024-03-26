@@ -5,11 +5,13 @@ const http = mainAxios();
 const headers = new AxiosHeaders();
 headers.set("Content-Type", "application/json;charset=utf-8");
 
-export async function getLawDetail(params: number) {
-  const url = `/law-service/precedents/detail/${params}`;
+// 판례 상세 조회
+export async function getLawDetail(params: number ) {
+  const url = `/law-service/precedent/detail/${params}`;
   return await http.get(url);
 }
 
+// 판례 요약 조회
 export async function getLawDetailSummary(params?: { precedentId: number }) {
   const url = "/ai-service/summarys/64453";
   return await http.get(url);
