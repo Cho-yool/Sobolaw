@@ -14,6 +14,7 @@ public enum MemberErrorCode {
     DUPLICATED_EMAIL(HttpStatus.CONFLICT, "이미 가입된 이메일 입니다."),
     NOT_FOUND_PRECEDENT(HttpStatus.NOT_FOUND, "저장된 판례가 존재하지 않습니다."),
     NOT_FOUND_RECENT(HttpStatus.NOT_FOUND, "최근 본 판례가 존재하지 않습니다."),
+    DUPLICATE_PRECEDENT(HttpStatus.CONFLICT, "이미 저장된 판례 입니다."),
     NOT_FOUND_KEYWORD(HttpStatus.NOT_FOUND, "존재하지 않는 키워드입니다."),
     DUPLICATE_KEYWORD(HttpStatus.CONFLICT, "이미 저장된 키워드 입니다."),
     NOT_FOUND_HIGHLIGHT(HttpStatus.NOT_FOUND, "존재하지 않는 하이라이트입니다."),
