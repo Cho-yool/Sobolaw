@@ -1,5 +1,5 @@
 import { lawAxios } from "./http";
-import { AxiosHeaders } from "axios"
+import { AxiosHeaders } from "axios";
 
 const http = lawAxios();
 const headers = new AxiosHeaders();
