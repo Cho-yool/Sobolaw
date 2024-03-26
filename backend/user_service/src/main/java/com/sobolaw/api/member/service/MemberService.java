@@ -34,6 +34,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -290,6 +292,13 @@ public class MemberService {
         Long currentMemberId = jwtProvider.getMemberId();
         Member member = memberRepository.findById(currentMemberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
+        // 요청으로 받은 판례 ID로 이미 존재하는 멤버 저장 판례를 찾습니다.
+
+        Optional<MemberPrecedent> existingMemberPrecedentOptional = memberPrecedentRepository.findByPrecedentId(request.precedentId());
+        log.info("판례 보유 여부 : " + existingMemberPrecedentOptional);
+        if (existingMemberPrecedentOptional.isPresent()) {
+            throw new MemberException(MemberErrorCode.DUPLICATE_PRECEDENT);
+        }
 
         // 멤버 저장 판례 생성 및 저장
         MemberPrecedent newMemberPrecedent = MemberPrecedent.of(request.precedentId());
@@ -318,6 +327,14 @@ public class MemberService {
         Long currentMemberId = jwtProvider.getMemberId();
         Member member = memberRepository.findById(currentMemberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
+
+        // 요청으로 받은 판례 ID로 이미 존재하는 멤버 최근 판례를 찾습니다.
+        Optional<MemberRecent> existingMemberRecentOptional = memberRecentRepository.findByPrecedentId(request.precedentId());
+        if (existingMemberRecentOptional.isPresent()) {
+            MemberRecent existingMemberPrecedent = existingMemberRecentOptional.get();
+            existingMemberPrecedent.softDelete(); // soft delete 수행
+            memberRecentRepository.save(existingMemberPrecedent); // 변경사항 저장
+        }
 
         // 멤버 저장 판례 생성 및 저장
         MemberRecent newMemberRecent = MemberRecent.of(request.precedentId());
@@ -397,8 +414,6 @@ public class MemberService {
 
     /**
      * 멤버의 판례 삭제.
-     *
-     * @param precedentId 삭제할 판례 ID.
      */
     @Transactional
     public void deleteMemberPrecedent(Long precedentId) {
@@ -412,7 +427,7 @@ public class MemberService {
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT));
 
         // 저장된 키워드 찾기
-        MemberKeyword memberKeyword = memberKeywordRepository.findByMemberPrecedent_MemberPrecedentId(precedentId);
+        MemberKeyword memberKeyword = memberKeywordRepository.findByMemberPrecedent(precedent);
 
         // 키워드가 존재할 경우에만 삭제 처리
         if (memberKeyword != null) {
@@ -428,8 +443,6 @@ public class MemberService {
 
     /**
      * 멤버가 본 판례 삭제.
-     *
-     * @param recentId 삭제할 조회한 판례 ID.
      */
     @Transactional
     public void deleteMemberRecent(Long recentId) {
@@ -451,8 +464,6 @@ public class MemberService {
 
     /**
      * 멤버의 키워드 삭제.
-     *
-     * @param keywordId 삭제할 키워드 ID.
      */
     @Transactional
     public void deleteMemberKeyword(Long keywordId) {
@@ -472,8 +483,14 @@ public class MemberService {
     @Transactional
     public MemberPrecedentHighlightDTO saveMemberPrecedentHighlight(Long precedentId, HighlightCreateUpdateRequestDTO request) {
         MemberPrecedent precedent = memberPrecedentRepository.findById(precedentId).orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT));
+        MemberPrecedentHighlight highlight = memberPrecedentHighlightRepository.findByMemberPrecedent(precedent);
+        if (highlight != null) {
+            if (Objects.equals(highlight.getMain(), request.main())) {
+                highlight.softDelete();
+            }
+        }
 
-        MemberPrecedentHighlight newMemberPrecedentHighlight = MemberPrecedentHighlight.of(request.location(), request.highlightType(), request.content());
+        MemberPrecedentHighlight newMemberPrecedentHighlight = MemberPrecedentHighlight.of(request.main(), request.location(), request.highlightType(), request.content());
         newMemberPrecedentHighlight.setMemberPrecedent(precedent);
         MemberPrecedentHighlight memberPrecedentHighlight = memberPrecedentHighlightRepository.save(newMemberPrecedentHighlight);
 

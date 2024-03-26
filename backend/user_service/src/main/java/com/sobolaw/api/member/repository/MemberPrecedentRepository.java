@@ -14,4 +14,5 @@ public interface MemberPrecedentRepository extends JpaRepository<MemberPrecedent
 
     Optional<MemberPrecedent> findByMemberAndPrecedentId(Member member, Long precedentId);
 
+    Optional<MemberPrecedent> findByPrecedentId(Long precedentId);
 }

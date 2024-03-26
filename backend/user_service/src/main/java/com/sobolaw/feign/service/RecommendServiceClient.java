@@ -17,6 +17,6 @@ public interface RecommendServiceClient {
     /**
      * 판례의 키워드 가져오기.
      */
-    @GetMapping("precedents/{precedentsId}/keywords")
+    @GetMapping("/precedents/{precedentsId}/keywords")
     BaseResponse<List<PrecedentKeywordResponseDTO>> getPrecedentKeyword(@PathVariable Long precedentsId);
 }
