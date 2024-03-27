@@ -33,6 +33,11 @@ spring:
             - Path=/api/notification-service/**
           uri: lb://NOTIFICATION-SERVICE
 
+        - id: board-service
+          predicates:
+            - Path=/api/board-service/**
+          uri: lb://BOARD-SERVICE
+
 eureka:
   client:
     register-with-eureka: true
