@@ -21,13 +21,13 @@ public interface LawServiceClient {
     /**
      * 판례 하나 가져오기.
      */
-    @GetMapping("/precedent/detail/{precedentId}")
+    @GetMapping("/precedents/detail/{precedentId}")
     BaseResponse<PrecedentResponseDTO> getPrecedentDetail(@PathVariable("precedentId") Long precedentId);
 
     /**
      * 판례 리스트 가져오기.
      */
-    @PostMapping("/precedent/list")
+    @PostMapping("/precedents/list")
     BaseResponse<List<PrecedentListResponseDTO>> getPrecedentList(@RequestBody Map<String, List<Long>> requestBody);
 
 

@@ -41,9 +41,12 @@ public class MemberPrecedentHighlight extends BaseEntity {
     private String main;
 
     @Setter
-    @ElementCollection
     @Column(nullable = false)
-    private List<Integer> location;
+    private Long startPoint;
+
+    @Setter
+    @Column(nullable = false)
+    private Long endPoint;
 
     @Setter
     @Column(nullable = false)
@@ -60,9 +63,10 @@ public class MemberPrecedentHighlight extends BaseEntity {
     /**
      * 멤버 저장 판례의 하이라이트 파라미터 생성자.
      */
-    private MemberPrecedentHighlight(String main, List<Integer> location, HighlightType highlightType, String content) {
+    private MemberPrecedentHighlight(String main, Long startPoint, Long endPoint, HighlightType highlightType, String content) {
         this.main = main;
-        this.location = location;
+        this.startPoint = startPoint;
+        this.endPoint = endPoint;
         this.highlightType = highlightType;
         this.content = content;
     }
@@ -70,8 +74,8 @@ public class MemberPrecedentHighlight extends BaseEntity {
     /**
      * 파라미터로 멤버 저장 판례의 하이라이트 엔티티 객체 생성하는 함수.
      */
-    public static MemberPrecedentHighlight of(String main, List<Integer> location, HighlightType highlightType, String content) {
-        return new MemberPrecedentHighlight(main, location, highlightType, content);
+    public static MemberPrecedentHighlight of(String main, Long startPoint, Long endPoint, HighlightType highlightType, String content) {
+        return new MemberPrecedentHighlight(main, startPoint, endPoint, highlightType, content);
     }
 
     @Override
