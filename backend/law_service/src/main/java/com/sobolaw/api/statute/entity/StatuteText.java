@@ -3,17 +3,17 @@ package com.sobolaw.api.statute.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 @Entity(name = "statute_text")
 public class StatuteText {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long statuteId;
-
-//    @Column
-//    private Long statuteNumber;
 
     @Column
     private Long articleNumber;

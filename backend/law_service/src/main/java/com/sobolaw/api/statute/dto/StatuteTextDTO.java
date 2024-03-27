@@ -1,10 +1,10 @@
 package com.sobolaw.api.statute.dto;
 
-import com.sobolaw.api.statute.entity.Statute;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -24,5 +24,14 @@ public class StatuteTextDTO {
     private String articleType;
 
     public StatuteTextDTO(Long statuteId, String articleContent, String articleContentSub, String articleEffectiveDate, Long articleNumber, Long articleNumberSub, String articleTitle, String articleType) {
+        this.statuteId = statuteId;
+        this.articleContent = articleContent;
+        this.articleContentSub = articleContentSub;
+        this.articleEffectiveDate = articleEffectiveDate;
+        this.articleNumber = articleNumber;
+        this.articleNumberSub = articleNumberSub;
+        this.articleTitle = articleTitle;
+        this.articleType = articleType;
+
     }
 }

@@ -6,26 +6,23 @@ import co.elastic.clients.elasticsearch.core.search.Hit;
 import com.sobolaw.api.statute.document.StatuteDocument;
 import com.sobolaw.api.statute.document.StatuteTextDocument;
 import com.sobolaw.api.statute.dto.StatuteDTO;
+import com.sobolaw.api.statute.dto.StatuteTextDTO;
+import com.sobolaw.api.statute.entity.Statute;
+import com.sobolaw.api.statute.entity.StatuteText;
+import com.sobolaw.api.statute.repository.jpa.StatuteRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import com.sobolaw.api.statute.dto.StatuteTextDTO;
-import com.sobolaw.api.statute.entity.Statute;
-import com.sobolaw.api.statute.entity.StatuteText;
-import com.sobolaw.api.statute.repository.jpa.StatuteRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-@Slf4j
 public class StatuteSearchService {
 
     private final StatuteRepository statuteRepository;
@@ -139,13 +136,14 @@ public class StatuteSearchService {
     public StatuteDTO getStatuteByNumber(Long statuteNumber) {
         Statute statute = statuteRepository.findByStatuteNumber(statuteNumber)
                 .orElseThrow(() -> new IllegalArgumentException("해당 법령이 없습니다. statute = " + statuteNumber));
+
         return convertToStatuteDTO(statute);
     }
 
     // entity -> DTO 변환
     private StatuteDTO convertToStatuteDTO(Statute entity) {
         StatuteDTO statuteDTO = new StatuteDTO();
-//        statuteDTO.setStatuteNumber(entity.getStatuteNumber());
+        statuteDTO.setStatuteNumber(entity.getStatuteNumber());
         statuteDTO.setStatuteName(entity.getStatuteName());
         statuteDTO.setStatuteType(entity.getStatuteType());
         statuteDTO.setAmendmentType(entity.getAmendmentType());
@@ -160,12 +158,6 @@ public class StatuteSearchService {
                 .collect(Collectors.toList());
         statuteDTO.setStatuteTexts(statuteTexts);
 
-        System.out.println("==============================값 확인1");
-        statuteTexts.stream()
-                .forEach(System.out::println);
-        System.out.println("==============================값 확인2");
-        System.out.println(statuteDTO.getStatuteTexts());
-        // 여기에 다른 필드 설정 추가
         return statuteDTO;
     }
 

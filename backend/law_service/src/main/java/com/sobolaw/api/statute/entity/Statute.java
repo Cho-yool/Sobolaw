@@ -1,11 +1,15 @@
 package com.sobolaw.api.statute.entity;
 
-import com.sobolaw.api.statute.document.StatuteTextDocument;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -13,7 +17,7 @@ import java.util.List;
 public class Statute {
 
     @Id
-    private Long sjqtatuteNumber;
+    private Long statuteNumber;
 
     @Column(columnDefinition = "TEXT")
     private String statuteName;
@@ -38,8 +42,9 @@ public class Statute {
 
     // 1:N 관계 설정
     // Statute : StatuteTextDocument
-    @OneToMany(mappedBy = "statute", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<StatuteText> statuteTexts;
+    @OneToMany(mappedBy = "statute", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "statuteNumber")
+    private List<StatuteText> statuteTexts = new ArrayList<>();
 
 }
 
