@@ -41,23 +41,27 @@ interface HighLightProps {
   precedentId: number;
   main: string;
   highlightType?: string;
-  location: number[];
+  startPoint: number;
+  endPoint: number;
   content: string;
 }
 
 export async function saveHighLight({
   precedentId,
   main,
-  location,
+  startPoint,
+  endPoint,
   content,
 }: HighLightProps) {
   const url = `/user-service/members/precedents/${precedentId}/highlights`;
+
   return await http.post(
     url,
     {
       main,
-      location,
-      highlightType: "MEMO",
+      startPoint,
+      endPoint,
+      highlightType: 0,
       content,
     },
     {

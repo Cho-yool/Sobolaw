@@ -51,8 +51,6 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
   const [isSaved, setIsSaved] = useState<boolean>(false);
   const [onEditing, setOnEditing] = useState<boolean>(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectionPos, setSelectionPos] = useState<any>();
   const [isSummary, setIsSummary] = useState<boolean>(false);
   const judgmentRef = useRef<HTMLDivElement>(null);
@@ -72,7 +70,13 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
 
   const optionSelectDiv = (x: number, y: number) => {
     return (
-      <div className={style["color-select"]} style={{ left: x, top: y }}>
+      <div
+        className={style["color-select"]}
+        style={{
+          left: x + "px",
+          top: y + "px",
+        }}
+      >
         <div
           className={style["color-option"]}
           style={{ backgroundColor: "#f3e7c0" }}
@@ -129,8 +133,9 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
     }
     saveHighLight({
       precedentId: getData.precedentId,
-      main: selectionPos.startContainer.data,
-      location: selectRange,
+      main: selectionPos.startContainer.textContent,
+      startPoint: selectRange[0],
+      endPoint: selectRange[1],
       content: selectionPos.toString(),
     });
   };
@@ -154,7 +159,6 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
       ref.current.scrollIntoView({ behavior: "smooth" });
     }
   };
-
   // 마우스 눌렀을때
   const onMouseClickHandler = () => {
     setOnEditing(true);
@@ -169,20 +173,32 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
     }
   };
   // 마우스 클릭이 끝났을때
-  const onMouseOutHandler = () => {
+  const onMouseOutHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     setOnEditing(false);
+    const { top, left } = selectionPos.getBoundingClientRect();
+    const parentTop = e.currentTarget.getBoundingClientRect().top;
+    setSelectionPosition({
+      x: left,
+      y: -parentTop + top,
+    });
+    console.log(selectionPos.startContainer.wholeText);
     if (selectionPos) {
       setShowOptions(true);
     }
+    console.log(selectionPos.textContent);
     setSelectRange([selectionPos.startOffset, selectionPos.endOffset]);
-    console.log(selectionPos);
   };
 
   useEffect(() => {
     if (getData && Object.keys(getData).length !== 0) {
       const renderText = getData.caseContent.split("<br/>");
       const newText = renderText.map((text) => {
-        return <span>{text}</span>;
+        return (
+          <>
+            <span>{text.replace(/\n|\r/g, "").trim()}</span>
+            <div></div>
+          </>
+        );
       });
       setNewRenderText(newText);
     }
@@ -199,7 +215,8 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
                 ? `${style["tab"]} ${style["active"]}`
                 : style["tab"]
             }
-            onClick={() => handleTabClick(tab.id)}>
+            onClick={() => handleTabClick(tab.id)}
+          >
             <p className={style["tab-title"]}>{tab.title}</p>
           </div>
         ))}
@@ -223,7 +240,8 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
         className={style["content-box__contents"]}
         dangerouslySetInnerHTML={{
           __html: getData.judicialNotice,
-        }}></p>
+        }}
+      ></p>
       <br />
       <br />
       <p className={style["tab-menu__title"]} ref={rulingRef}>
@@ -235,7 +253,8 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
         className={style["content-box__contents"]}
         dangerouslySetInnerHTML={{
           __html: getData.verdictSummary,
-        }}></p>
+        }}
+      ></p>
       <br />
       <br />
       <p className={style["tab-menu__title"]} ref={precedentRef}>
@@ -249,23 +268,24 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
           <p>요약 보기</p>
           <Switch onChange={onChange} />
         </div>
-
+        {showOptions
+          ? optionSelectDiv(selectionPosition.x, selectionPosition.y)
+          : null}
         {isSummary ? (
           <p
             className={style["content-box__contents"]}
             dangerouslySetInnerHTML={{
               __html: summaryData,
-            }}></p>
+            }}
+          ></p>
         ) : (
           <div
             className={style["content-box__contents"]}
             onMouseDown={onMouseClickHandler}
             onMouseMove={onMouseMoveHandler}
-            onMouseUp={onMouseOutHandler}>
+            onMouseUp={onMouseOutHandler}
+          >
             {" "}
-            {showOptions
-              ? optionSelectDiv(selectionPosition.x, selectionPosition.y)
-              : null}
             {newRenderText ? <>{newRenderText}</> : null}
           </div>
         )}
