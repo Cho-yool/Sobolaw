@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store/store";
 import { saveToken, loadInfo } from "../redux/reducers/user/userSlice";
 import { getUserInfo } from "../api/members";
-// import { tempgetUserInfo } from "../api/members";
+import { memberPrecedents } from "../types/DataTypes";
 import style from "../styles/common/Login.module.css";
 import backImg from "/images/loginBg.jpg";
 import LoginBtnKaKao from "/images/KAKAO_LOGIN.png";
@@ -28,7 +28,7 @@ function LoginPage() {
       getUserInfo(accessToken)
         .then((res) => {
           const precedentIds = res.memberPrecedents.map(
-            (precedent) => precedent.precedentId
+            (precedent: memberPrecedents) => precedent?.precedentId
           );
           dispatch(
             loadInfo({

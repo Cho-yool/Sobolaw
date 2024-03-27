@@ -10,7 +10,15 @@ interface MyRecentCaseProps {
 export default function MyRecentCase({ cases }: MyRecentCaseProps) {
   const navigate = useNavigate();
 
-  return cases?.map((item) => (
+  // cases가 없거나 빈 배열인 경우 빈 배열 반환
+  if (!cases || cases.length === 0) {
+    return null;
+  }
+
+  // cases 배열의 길이가 3보다 작은 경우 전체 배열을 사용
+  const displayCases = cases.length <= 3 ? cases : cases.slice(-3);
+
+  return displayCases.map((item) => (
     <div
       key={item.recentPrecedentId}
       onClick={() => {
@@ -21,9 +29,8 @@ export default function MyRecentCase({ cases }: MyRecentCaseProps) {
         color: "#de9159",
       }}
     >
-      <LuChefHat color="#de9159" /> 판례제목
+      <LuChefHat color="#de9159" /> {item.precedentId}
       <Divider />
     </div>
   ));
 }
-// precedentId
