@@ -482,7 +482,8 @@ public class MemberService {
      */
     @Transactional
     public MemberPrecedentHighlightDTO saveMemberPrecedentHighlight(Long precedentId, HighlightCreateUpdateRequestDTO request) {
-        MemberPrecedent precedent = memberPrecedentRepository.findById(precedentId).orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT));
+        MemberPrecedent precedent = memberPrecedentRepository.findByPrecedentId(precedentId)
+            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT));
         MemberPrecedentHighlight highlight = memberPrecedentHighlightRepository.findByMemberPrecedent(precedent);
         if (highlight != null) {
             if (Objects.equals(highlight.getMain(), request.main())) {
