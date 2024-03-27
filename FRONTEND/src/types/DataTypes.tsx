@@ -3,6 +3,7 @@ export type UserState = {
   nickname: string;
   accessToken: string;
   refreshToken: string;
+  precedents: number[];
 };
 
 export type MypaperWide = {

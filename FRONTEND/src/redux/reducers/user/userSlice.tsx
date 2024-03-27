@@ -6,6 +6,7 @@ const initialState: UserState = {
   nickname: "",
   accessToken: "",
   refreshToken: "",
+  precedents: [],
 };
 
 // 초기값 선언
@@ -26,6 +27,7 @@ const userSlice = createSlice({
     loadInfo(state, action) {
       state.userId = action.payload.userId;
       state.nickname = action.payload.nickname;
+      state.precedents = action.payload.precedents;
     },
     saveToken(state, action) {
       state.accessToken = action.payload.accessToken;

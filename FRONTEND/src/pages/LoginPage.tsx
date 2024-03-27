@@ -27,7 +27,16 @@ function LoginPage() {
     if (accessToken) {
       getUserInfo(accessToken)
         .then((res) => {
-          dispatch(loadInfo({ userId: res.memberId, nickname: res.name }));
+          const precedentIds = res.memberPrecedents.map(
+            (precedent) => precedent.precedentId
+          );
+          dispatch(
+            loadInfo({
+              userId: res.memberId,
+              nickname: res.name,
+              precedents: precedentIds,
+            })
+          );
         })
         .catch((err) => {
           console.log(err);
