@@ -6,6 +6,10 @@ import co.elastic.clients.elasticsearch.core.search.Hit;
 import com.sobolaw.api.statute.document.StatuteDocument;
 import com.sobolaw.api.statute.document.StatuteTextDocument;
 import com.sobolaw.api.statute.dto.StatuteDTO;
+import com.sobolaw.api.statute.dto.StatuteTextDTO;
+import com.sobolaw.api.statute.entity.Statute;
+import com.sobolaw.api.statute.entity.StatuteText;
+import com.sobolaw.api.statute.repository.jpa.StatuteRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class StatuteSearchService {
 
+    private final StatuteRepository statuteRepository;
     private final ElasticsearchClient elasticsearchClient;
 
     public List<StatuteDTO> searchByKeyword(String searchKeyword) throws Exception {
@@ -111,20 +116,62 @@ public class StatuteSearchService {
 
             // StatuteDTO 구성
             StatuteDTO statuteDTO = new StatuteDTO();
-            statuteDTO.setStatuteNumber(statuteDocument.getStatuteNumber());
-            statuteDTO.setStatuteName(statuteDocument.getStatuteName());
-            statuteDTO.setAmendmentType(statuteDocument.getAmendmentType());
-            statuteDTO.setDepartment(statuteDocument.getDepartment());
-            statuteDTO.setEnforcementDate(statuteDocument.getEnforcementDate());
-            statuteDTO.setPublicationDate(statuteDocument.getPublicationDate());
-            statuteDTO.setPublicationNumber(statuteDocument.getPublicationNumber());
-            statuteDTO.setStatuteType(statuteDocument.getStatuteType());
-            statuteDTO.setStatuteTexts(statuteTexts); // StatuteTextDocument 리스트 설정
-
+            if (statuteDocument != null) {
+                statuteDTO.setStatuteNumber(statuteDocument.getStatuteNumber());
+                statuteDTO.setStatuteName(statuteDocument.getStatuteName());
+                statuteDTO.setAmendmentType(statuteDocument.getAmendmentType());
+                statuteDTO.setDepartment(statuteDocument.getDepartment());
+                statuteDTO.setEnforcementDate(statuteDocument.getEnforcementDate());
+                statuteDTO.setPublicationDate(statuteDocument.getPublicationDate());
+                statuteDTO.setPublicationNumber(statuteDocument.getPublicationNumber());
+                statuteDTO.setStatuteType(statuteDocument.getStatuteType());
+                statuteDTO.setStatuteTextDocuments(statuteTexts); // StatuteTextDocument 리스트 설정
+            }
             statutes.add(statuteDTO);
         }
-
         return statutes;
     }
 
+    // statuteNumber로 법령 내용 조회
+    public StatuteDTO getStatuteByNumber(Long statuteNumber) {
+        Statute statute = statuteRepository.findByStatuteNumber(statuteNumber)
+                .orElseThrow(() -> new IllegalArgumentException("해당 법령이 없습니다. statute = " + statuteNumber));
+
+        return convertToStatuteDTO(statute);
+    }
+
+    // entity -> DTO 변환
+    private StatuteDTO convertToStatuteDTO(Statute entity) {
+        StatuteDTO statuteDTO = new StatuteDTO();
+        statuteDTO.setStatuteNumber(entity.getStatuteNumber());
+        statuteDTO.setStatuteName(entity.getStatuteName());
+        statuteDTO.setStatuteType(entity.getStatuteType());
+        statuteDTO.setAmendmentType(entity.getAmendmentType());
+        statuteDTO.setDepartment(entity.getDepartment());
+        statuteDTO.setEnforcementDate(entity.getEnforcementDate());
+        statuteDTO.setPublicationDate(entity.getPublicationDate());
+        statuteDTO.setPublicationNumber(entity.getPublicationNumber());
+
+        // StatuteText 리스트를 StatuteDTO에 설정
+        List<StatuteTextDTO> statuteTexts = entity.getStatuteTexts().stream()
+                .map(this::convertToStatuteTextDTO)
+                .collect(Collectors.toList());
+        statuteDTO.setStatuteTexts(statuteTexts);
+
+        return statuteDTO;
+    }
+
+    // entity -> DTO 변환
+    private StatuteTextDTO convertToStatuteTextDTO(StatuteText entity) { // 아래 변환방식 사용할 때 : DTO랑 순서 동일하게 작성
+        return new StatuteTextDTO(
+            entity.getStatuteId(),
+            entity.getArticleContent(),
+            entity.getArticleContentSub(),
+            entity.getArticleEffectiveDate(),
+            entity.getArticleNumber(),
+            entity.getArticleNumberSub(),
+            entity.getArticleTitle(),
+            entity.getArticleType()
+        );
+    }
 }
