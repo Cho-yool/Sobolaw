@@ -1,163 +1,53 @@
-// src/pages/SearchResultPage.tsx
-import { useState, useEffect, useMemo } from "react";
-import { useLocation } from "react-router-dom";
-import { Pagination, Input, Tabs, Select, Skeleton } from "antd";
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Pagination, Input, Tabs, Select } from "antd";
 import { SearchOutlined } from '@ant-design/icons';
-import SearchResultList, { SearchResult } from "../../components/search/SearchResultList";
+import SearchResultList from "../../components/search/SearchResultList";
 import style from "../../styles/search/SearchResultList.module.css";
-import { searchPrecedent, searchStatute } from "../../api/lawsearch";
+import queryString from "query-string"; // query-string 라이브러리를 사용하여 쿼리스트링을 파싱
 
-const { Option } = Select
-
-interface FilterOptions {
-  court: string[];
-  instance: string[];
-  period: string[];
-}
-
-// Select 결과 분류
-const classifyResults = (results: SearchResult[]) => {
-  return results.map((result) => {
-    let court = '';
-    let instance = '';
-    let period = '';
-
-    // 법원 분류
-    if (result.courtName?.includes('대법원')) {
-      court = '대법원';
-      instance = '3심';
-    } else if (result.courtName?.includes('고법') || result.courtName?.includes('고등법원')) {
-      court = '고등법원';
-      instance = '2심';
-    } else if (result.courtName?.includes('지법') || result.courtName?.includes('지방법원')) {
-      court = '지방법원';
-      instance = '1심';
-    }
-
-    // 기간 분류
-    const currentDate = new Date();
-    const currentDateString = currentDate.toISOString().slice(0, 10).replace(/-/g, '');
-
-    if (result.judgmentDate) {
-      const judgmentDate = parseInt(result.judgmentDate, 10);
-
-      if (judgmentDate > parseInt(currentDateString, 10) - 100000) {
-        period = '10년';
-      } else if (judgmentDate > parseInt(currentDateString, 10) - 200000) {
-        period = '20년';
-      } else if (judgmentDate > parseInt(currentDateString, 10) - 300000) {
-        period = '30년';
-      }
-    } else {
-      period = '알 수 없음';
-    }
-
-    return {
-      ...result,
-      court,
-      instance,
-      period,
-    };
-  });
-};
+const { Option } = Select;
 
 const SearchResultPage = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const initialPage = 1;
+  const queryParams = queryString.parse(location.search); // 쿼리스트링을 파싱하여 객체로 변환
   const [currentPage, setCurrentPage] = useState(initialPage);
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>(queryParams.query as string || '');
+  const [selectedTab, setSelectedTab] = useState<string>(queryParams.tab as string || '1');
+  const [finalSearchTerm, setFinalSearchTerm] = useState<string>(queryParams.query as string || '');
   const [selectedCourt, setSelectedCourt] = useState<string>('전체');
   const [selectedInstance, setSelectedInstance] = useState<string>('전체');
   const [selectedDate, setSelectedDate] = useState<string>('전체');
-  const [loading, setLoading] = useState(false);
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
-  const [selectedTab, setSelectedTab] = useState<string>('1');
-  const [precedentResults, setPrecedentResults] = useState<SearchResult[]>([]);
-  const [statuteResults, setStatuteResults] = useState<SearchResult[]>([]);
   const pageSize = 10;
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const searchQuery = queryParams.get('query');
-    const activeTab = queryParams.get('tab') || 'precedent';
+    // URL이 변경될 때마다 쿼리스트링을 파싱하여 상태를 업데이트
+    const queryParams = queryString.parse(location.search);
+    setSearchTerm(queryParams.query as string || '');
+    setSelectedTab(queryParams.tab as string || '1');
+    setFinalSearchTerm(queryParams.query as string || '');
+    // 페이지 번호도 업데이트
+    setCurrentPage(initialPage);
 
-    if (searchQuery) {
-      setSearchTerm(searchQuery);
-      setSelectedTab(activeTab);
-      fetchSearchResults(searchQuery, selectedTab);
+    if(queryParams.query) {
+      handleSearch();
     }
-
-    // setSelectedTab(activeTab);
-  }, [location]);
-
-  const fetchSearchResults = async (searchQuery: string, activeTab: string) => {
-    setLoading(true);
-    try {
-      const precedentResponse = await searchPrecedent(searchQuery);
-      const statuteResponse = await searchStatute(searchQuery);
-
-      if (precedentResponse.data && Array.isArray(precedentResponse.data)) {
-        const classifiedResults = classifyResults(precedentResponse.data);
-        setPrecedentResults(classifiedResults);
-      }
-
-      if (statuteResponse.data && Array.isArray(statuteResponse.data)) {
-        const results = statuteResponse.data.map((statue: any) => ({
-          statuteNumber: statue.statuteNumber,
-          statuteName: statue.statuteName,
-          statuteType: statue.statuteType,
-          department: statue.department,
-          publicationNumber: statue.publicationNumber,
-          publicationDate: statue.publicationDate,
-          enforcementDate: statue.enforcementDate,
-        }));
-        setStatuteResults(results);
-      }
-
-      setSelectedTab(activeTab);
-    } catch (error) {
-      console.error('Error fetching search results:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [location.search]);
 
   const onTabChange = (key: string) => {
     setSelectedTab(key);
     setCurrentPage(1);
+    // 탭 변경 시 쿼리스트링을 업데이트
+    navigate(`/search-results?query=${encodeURIComponent(searchTerm)}&tab=${key}`);
   };
-
-  const filterResults = (results: SearchResult[]) => {
-    if (!Array.isArray(results)) return [];
-
-    const filtered = results.filter((result) => {
-      return (
-        (selectedCourt === '전체' || result.court === selectedCourt) &&
-        (selectedInstance === '전체' || result.instance === selectedInstance) &&
-        (selectedDate === '전체' || result.period === selectedDate)
-      );
-    });
-    return filtered;
-  };
-
-  const filteredResults = useMemo(() => {
-    if (selectedTab === '1') {
-      return filterResults(precedentResults);
-    } else if (selectedTab === '2') {
-      return statuteResults;
-    }
-    return [];
-  }, [selectedTab, precedentResults, statuteResults, selectedCourt, selectedInstance, selectedDate]);
-
-  console.log('판례 검색 결과:', precedentResults);
-  console.log('법령 검색 결과:', statuteResults);
-  console.log('필터링된 결과:', filteredResults);
-
-  const paginatedResults = filteredResults.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const handleSearch = () => {
-    fetchSearchResults(searchTerm, selectedTab === '1' ? 'precedent' : 'statute');
-  }
+    setFinalSearchTerm(searchTerm); // 엔터를 누르면 검색어를 저장
+    // navigate를 사용하여 쿼리 스트링을 업데이트
+    navigate(`/search-results?query=${encodeURIComponent(searchTerm)}&tab=${selectedTab}`);
+  };
 
   const onCourtChange = (value: string): void => setSelectedCourt(value);
   const onInstanceChange = (value: string): void => setSelectedInstance(value);
@@ -189,52 +79,14 @@ const SearchResultPage = () => {
               <Option value="30년">30년</Option>
             </Select>
           </div>
-          {loading ? (
-            <div>
-              {Array.from({ length: 5 }).map((_, index) => (
-                <Skeleton
-                  key={index}
-                  active
-                  avatar
-                  title={{ width: '100%' }}
-                  paragraph={{ rows: 3, width: '400px' }}
-                  style={{ marginBottom: 20 }}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className={style.searchResultList}>
-              <SearchResultList searchResults={paginatedResults} loading={loading} activeTab={selectedTab} />
-            </div>
-          )}
+          <SearchResultList searchTerm={finalSearchTerm} activeTab={selectedTab} />
         </>
       ),
     },
     {
       label: '법령',
       key: '2',
-      children: (
-        <>
-          {loading ? (
-            <div>
-              {Array.from({ length: 5 }).map((_, index) => (
-                <Skeleton
-                  key={index}
-                  active
-                  avatar
-                  title={{ width: '100%' }}
-                  paragraph={{ rows: 3, width: '400px' }}
-                  style={{ marginBottom: 20 }}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className={style.searchResultList}>
-              <SearchResultList searchResults={paginatedResults} loading={loading} activeTab={selectedTab} />
-            </div>
-          )}
-        </>
-      ),
+      children: <SearchResultList searchTerm={finalSearchTerm} activeTab={selectedTab} />,
     },
   ];
 
@@ -260,7 +112,7 @@ const SearchResultPage = () => {
         <Pagination
           current={currentPage}
           pageSize={pageSize}
-          total={filteredResults.length}
+          total={0}
           onChange={(page) => setCurrentPage(page)}
           className={style.pagination}
         />

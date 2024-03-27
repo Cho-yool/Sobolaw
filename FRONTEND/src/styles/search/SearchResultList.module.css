@@ -115,6 +115,8 @@
   overflow: hidden;
   text-overflow: ellipsis; /* 내용이 3줄을 넘어가면 말줄임표(...) 표시 */
   margin-right: 50px;
+  /* 줄 간 간격 늘리기 */
+  margin-bottom: 10px;
 }
 
 .meta {

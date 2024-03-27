@@ -1,11 +1,11 @@
-// src/components/search/SearchResultList.tsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store/store';
-import { List } from 'antd';
+import { List, Skeleton } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import style from '../../styles/search/SearchResultList.module.css';
 import { postRecentPrecedents } from '../../api/members';
+import { searchPrecedent, searchStatute } from '../../api/lawsearch';
 
 export interface SearchResult {
   precedentId?: number;
@@ -39,80 +39,130 @@ interface Article {
   article_type: string;
 }
 interface SearchResultListProps {
-  searchResults: SearchResult[];
-  loading: boolean;
+  searchTerm: string;
   activeTab: string;
 }
 
-const SearchResultList: React.FC<SearchResultListProps> = ({ searchResults, loading, activeTab }) => {
+const SearchResultList: React.FC<SearchResultListProps> = ({ searchTerm, activeTab }) => {
   const navigate = useNavigate();
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
+  const [loading, setLoading] = useState(false);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+
+  useEffect(() => {
+    fetchSearchResults(searchTerm, activeTab);
+  }, [searchTerm, activeTab]);
+
+  const fetchSearchResults = async (searchQuery: string, activeTab: string) => {
+     // 검색 쿼리가 비어 있는지 확인
+     if (!searchQuery.trim()) {
+      console.error('Search query is empty.');
+      // 여기서 사용자에게 입력을 요청하는 메시지를 표시하거나,
+      // 다른 로직을 실행할 수 있습니다.
+      setLoading(false); // 로딩 상태 업데이트
+      return; // 함수 실행을 여기서 중단
+  }
+  
+    setLoading(true);
+    try {
+      if (activeTab === '1') {
+        const precedentResponse = await searchPrecedent(searchQuery);
+        if (precedentResponse.data && Array.isArray(precedentResponse.data)) {
+          setSearchResults(precedentResponse.data);
+        }
+      } else if (activeTab === '2') {
+        const statuteResponse = await searchStatute(searchQuery);
+        if (statuteResponse.data && Array.isArray(statuteResponse.data)) {
+          setSearchResults(statuteResponse.data);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleItemClick = async (item: SearchResult, type: string) => {
-    console.log("Navigating with item:", item);
     try {
       if (accessToken && type === 'precedent' && item.precedentId) {
         await postRecentPrecedents(accessToken, item.precedentId);
       }
-      // navigate(`/${type === 'precedent' ? 'laws' : 'statutes'}/${type === 'precedent' ? item.precedentId : item.statuteNumber}`, { state: item });
-      navigate(`/details/${item.statuteNumber}`, { state: { statute: item } });
+      navigate(`/${type === 'precedent' ? 'laws' : 'statutes'}/${type === 'precedent' ? item.precedentId : item.statuteNumber}`, { state: item });
     } catch (error) {
       navigate(`/${type === 'precedent' ? 'laws' : 'statutes'}/${type === 'precedent' ? item.precedentId : item.statuteNumber}`, { state: item });
     }
   };
 
-
-
-  // HTML 태그 지우고 텍스트만 반환
   const cleanHtmlTags = (html: string): string => {
-    return html.replace(/<[^>]*>?/gm, '');
+    return html ? html.replace(/<[^>]*>?/gm, '') : '';
   };
-
-  searchResults.forEach(item => console.log(item.statuteTexts));
 
   return (
     <>
-      <List
-        className={style.searchResultList}
-        itemLayout="vertical"
-        dataSource={searchResults}
-        renderItem={item => (
-          <List.Item
-            key={activeTab === '1' ? item.precedentId : item.statuteNumber}
-            className={style.item}
-            onClick={() => handleItemClick(item, activeTab === '1' ? 'precedent' : 'statute')}
-          >
-            <List.Item.Meta
-              title={<span className={style.itemTitle} onClick={() => handleItemClick(item, activeTab === '1' ? 'precedent' : 'statute')}>
-                {activeTab === '1' ? item.caseName : item.statuteName}
-              </span>}
-              description={
-                <div>
-                  {activeTab === '1' ? (
-                    <>
-                      <p className={style.itemContent}>{cleanHtmlTags(item.caseContent)}</p>
-                      <div className={style.itemMeta}>
-                        {item.courtName && <span className={style.metaItem}>{item.courtName}&nbsp;</span>}
-                        {item.instance && <span className={style.metaItem}>{item.instance}</span>}
-                        {item.judgmentDate && <span className={style.metaItem}>{item.judgmentDate}</span>}
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <p className={style.itemContent}>
-                        법률 제 {item.publicationNumber}호, 공포일 {item.enforcementDate}, 시행일 {item.publicationDate}
-                      </p>
-                      <div className={style.itemMeta}>
-                        {item.department && <span className={style.metaItem}>{item.department}</span>}
-                      </div>
-                    </>
-                  )}
-                </div>
-              }
+      {loading ? (
+        <div>
+          {Array.from({ length: 5 }).map((_, index) => (
+            <Skeleton
+              key={index}
+              active
+              avatar
+              title={{ width: '100%' }}
+              paragraph={{ rows: 3, width: '400px' }}
+              style={{ marginBottom: 20 }}
             />
-          </List.Item>
-        )}
-      />
+          ))}
+        </div>
+      ) : (
+        <List
+          className={style.searchResultList}
+          itemLayout="vertical"
+          dataSource={searchResults}
+          loading={loading}
+          renderItem={item => (
+            <List.Item
+              key={activeTab === '1' ? item.precedentId : item.statuteNumber}
+              className={style.item}
+              onClick={() => handleItemClick(item, activeTab === '1' ? 'precedent' : 'statute')}
+            >
+              <List.Item.Meta
+                title={<span className={style.itemTitle} onClick={() => handleItemClick(item, activeTab === '1' ? 'precedent' : 'statute')}>
+                  {activeTab === '1' ? item.caseName : item.statuteName}
+                </span>}
+                description={
+                  <div>
+                    {activeTab === '1' ? (
+                      <>
+                        <p className={style.itemContent}>{item.caseContent ? cleanHtmlTags(item.caseContent) : ''}</p>
+                        <div className={style.itemMeta}>
+                          {item.courtName && <span className={style.metaItem}>{item.courtName}&nbsp;</span>}
+                          {item.instance && <span className={style.metaItem}>{item.instance}</span>}
+                          {item.judgmentDate && <span className={style.metaItem}>{item.judgmentDate}</span>}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <p className={style.itemContent}>
+                          법률 제 {item.publicationNumber}호,
+                          공포일 {item.enforcementDate ? item.enforcementDate.slice(0, 4) : ''}.{' '}
+                          {item.enforcementDate ? item.enforcementDate.slice(4, 6) : ''}.{' '}
+                          {item.enforcementDate ? item.enforcementDate.slice(6, 8) : ''},
+                          시행일 {item.publicationDate ? item.publicationDate.slice(0, 4) : ''}.{' '}
+                          {item.publicationDate ? item.publicationDate.slice(4, 6) : ''}.{' '}
+                          {item.publicationDate ? item.publicationDate.slice(6, 8) : ''}
+                        </p>
+                        <div className={style.itemMeta}>
+                          {item.department && <span className={style.metaItem}>{item.department}</span>}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                }
+              />
+            </List.Item>
+          )}
+        />
+      )}
     </>
   );
 };
