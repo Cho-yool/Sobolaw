@@ -80,27 +80,27 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
         <div
           className={style["color-option"]}
           style={{ backgroundColor: "#f3e7c0" }}
-          onClick={() => colorChange("#f3e7c0")}
+          onClick={() => colorChange({ color: "#f3e7c0", value: 1 })}
         />
         <div
           className={style["color-option"]}
           style={{ backgroundColor: "#feda89" }}
-          onClick={() => colorChange("#feda89")}
+          onClick={() => colorChange({ color: "#feda89", value: 2 })}
         />
         <div
           className={style["color-option"]}
           style={{ backgroundColor: "#dba651" }}
-          onClick={() => colorChange("#dba651")}
+          onClick={() => colorChange({ color: "#dba651", value: 3 })}
         />
         <div
           className={style["color-option"]}
           style={{ backgroundColor: "#bf8538" }}
-          onClick={() => colorChange("#bf8538")}
+          onClick={() => colorChange({ color: "#bf8538", value: 4 })}
         />
         <div
           className={style["color-option"]}
           style={{ backgroundColor: "#644419" }}
-          onClick={() => colorChange("#644419")}
+          onClick={() => colorChange({ color: "#644419", value: 5 })}
         />
       </div>
     );
@@ -121,9 +121,10 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
       console.error(error);
     },
   });
-  const colorChange = (color: string) => {
+  const colorChange = ({ color, value }: { color: string; value: number }) => {
     setShowOptions(false);
     const span = document.createElement("span");
+    const wholeText = selectionPos.startContainer.textContent;
     span.style.backgroundColor = color;
     span.innerText = selectionPos.toString();
     selectionPos.deleteContents();
@@ -133,9 +134,10 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
     }
     saveHighLight({
       precedentId: getData.precedentId,
-      main: selectionPos.startContainer.textContent,
+      main: wholeText,
       startPoint: selectRange[0],
       endPoint: selectRange[1],
+      highlightType: value,
       content: selectionPos.toString(),
     });
   };
@@ -185,7 +187,6 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
     if (selectionPos) {
       setShowOptions(true);
     }
-    console.log(selectionPos.textContent);
     setSelectRange([selectionPos.startOffset, selectionPos.endOffset]);
   };
 
