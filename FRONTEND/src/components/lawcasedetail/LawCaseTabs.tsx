@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import style from "../../styles/lawcasedetail/LawCaseTabs.module.css";
 import { Switch } from "antd";
-import { getLawDetailSummary, saveLawDetail } from "../../api/lawdetail";
+import {
+  getLawDetailSummary,
+  saveHighLight,
+  saveLawDetail,
+} from "../../api/lawdetail";
 import { useQuery } from "react-query";
 
 interface TabMenusProps {
@@ -57,6 +61,7 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
   const [summaryData, setSummaryData] = useState<string>("");
   const [newRenderText, setNewRenderText] = useState<React.ReactNode[]>([]);
   const [showOptions, setShowOptions] = useState<boolean>(false);
+  const [selectRange, setSelectRange] = useState<number[]>([]);
   const [selectionPosition, setSelectionPosition] = useState<{
     x: number;
     y: number;
@@ -98,8 +103,7 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
   };
   const savePrecedent = (precedentId: number) => {
     try {
-      const response = saveLawDetail(precedentId);
-      console.log(response);
+      saveLawDetail(precedentId);
       setIsSaved(true);
     } catch (error) {
       console.error(error);
@@ -114,7 +118,6 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
     },
   });
   const colorChange = (color: string) => {
-    console.log(isSaved);
     setShowOptions(false);
     const span = document.createElement("span");
     span.style.backgroundColor = color;
@@ -124,6 +127,12 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
     if (!isSaved) {
       savePrecedent(getData.precedentId);
     }
+    saveHighLight({
+      precedentId: getData.precedentId,
+      main: selectionPos.startContainer.data,
+      location: selectRange,
+      content: selectionPos.toString(),
+    });
   };
   const handleTabClick = (id: number) => {
     setActiveTab(id);
@@ -165,6 +174,8 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
     if (selectionPos) {
       setShowOptions(true);
     }
+    setSelectRange([selectionPos.startOffset, selectionPos.endOffset]);
+    console.log(selectionPos);
   };
 
   useEffect(() => {

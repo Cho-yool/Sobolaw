@@ -1,12 +1,11 @@
-// src/components/search/SearchResultList.tsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store/store';
-import { List } from 'antd';
+import { List, Skeleton } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import style from '../../styles/search/SearchResultList.module.css';
 import { postRecentPrecedents } from '../../api/members';
-
+import { searchPrecedent, searchStatute } from '../../api/lawsearch';
 
 export interface SearchResult {
   precedentId?: number;
@@ -17,99 +16,153 @@ export interface SearchResult {
   judgmentDate?: string;
   court?: string;
   period?: string;
-  statuteNumber?: number;
-  statuteName?: string;
-  statuteType?: string;
-  department?: string;
+  statuteNumber: number;
+  statuteName: string;
+  statuteType: string;
+  department: string;
   publicationNumber?: number;
   publicationDate: string;
   enforcementDate: string;
+  amendmentType: string;
+  statuteTexts?: Article[];
 }
 
+interface Article {
+  statute_id: number;
+  statute_number: number;
+  article_content: string;
+  article_content_sub: string;
+  article_effective_date: string;
+  article_number: string;
+  article_number_sub: string;
+  article_title: string;
+  article_type: string;
+}
 interface SearchResultListProps {
-  searchResults: SearchResult[];
-  loading: boolean;
+  searchTerm: string;
   activeTab: string;
 }
 
-const formatDate = (dateString: string): string => {
-  const date = new Date(dateString);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}.${month}.${day}`;
-}
-
-const SearchResultList: React.FC<SearchResultListProps> = ({ searchResults, loading, activeTab }) => {
+const SearchResultList: React.FC<SearchResultListProps> = ({ searchTerm, activeTab }) => {
   const navigate = useNavigate();
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
+  const [loading, setLoading] = useState(false);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 
-  // list 아이템 클릭 시 호출되는 함수
-  const handleItemClick = async (item: SearchResult, type: string) => {
-    // console.log('handleItemClick', precedentId, accessToken)
+  useEffect(() => {
+    fetchSearchResults(searchTerm, activeTab);
+  }, [searchTerm, activeTab]);
+
+  const fetchSearchResults = async (searchQuery: string, activeTab: string) => {
+     // 검색 쿼리가 비어 있는지 확인
+     if (!searchQuery.trim()) {
+      console.error('Search query is empty.');
+      // 여기서 사용자에게 입력을 요청하는 메시지를 표시하거나,
+      // 다른 로직을 실행할 수 있습니다.
+      setLoading(false); // 로딩 상태 업데이트
+      return; // 함수 실행을 여기서 중단
+  }
+  
+    setLoading(true);
     try {
-      const id = type === 'precedent' ? item.precedentId : item.statuteNumber;
-      if (accessToken && type === 'precedent' && item.precedentId) {
-        await postRecentPrecedents(accessToken, item.precedentId);
+      if (activeTab === '1') {
+        const precedentResponse = await searchPrecedent(searchQuery);
+        if (precedentResponse.data && Array.isArray(precedentResponse.data)) {
+          setSearchResults(precedentResponse.data);
+        }
+      } else if (activeTab === '2') {
+        const statuteResponse = await searchStatute(searchQuery);
+        if (statuteResponse.data && Array.isArray(statuteResponse.data)) {
+          setSearchResults(statuteResponse.data);
+        }
       }
-      navigate(`/${type === 'precedent' ? 'laws' : 'statutes'}/${id}`);
     } catch (error) {
-      const id = type === 'precedent' ? item.precedentId : item.statuteNumber;
-      // console.error('최근 본 판례 등록 오류:', error);
-      navigate(`/${type === 'precedent' ? 'laws' : 'statutes'}/${id}`);
+      console.error('Error fetching search results:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
-
-  // HTML 태그 지우고 텍스트만 반환
-  const cleanHtmlTags = (html: string): string => {
-    return html.replace(/<[^>]*>?/gm, '');
+  const handleItemClick = async (item: SearchResult, type: string) => {
+    try {
+      if (accessToken && type === 'precedent' && item.precedentId) {
+        await postRecentPrecedents(accessToken, item.precedentId);
+      }
+      navigate(`/${type === 'precedent' ? 'laws' : 'statutes'}/${type === 'precedent' ? item.precedentId : item.statuteNumber}`, { state: item });
+    } catch (error) {
+      navigate(`/${type === 'precedent' ? 'laws' : 'statutes'}/${type === 'precedent' ? item.precedentId : item.statuteNumber}`, { state: item });
+    }
   };
 
+  const cleanHtmlTags = (html: string): string => {
+    return html ? html.replace(/<[^>]*>?/gm, '') : '';
+  };
 
   return (
     <>
-      <List
-        className={style.searchResultList}
-        itemLayout="vertical"
-        dataSource={searchResults}
-        renderItem={item => (
-          <List.Item
-            key={activeTab === '1' ? item.precedentId : item.statuteNumber}
-            className={style.item}
-            onClick={() => handleItemClick(item, activeTab === '1' ? 'precedent' : 'statute')}
-          >
-            <List.Item.Meta
-              title={<span className={style.itemTitle} onClick={() => handleItemClick(item, activeTab === '1' ? 'precedent' : 'statute')}>
-                {activeTab === '1' ? item.caseName : item.statuteName}
-              </span>}
-              description={
-                <div>
-                  {activeTab === '1' ? (
-                    <>
-                      <p className={style.itemContent}>{cleanHtmlTags(item.caseContent)}</p>
-                      <div className={style.itemMeta}>
-                        {item.courtName && <span className={style.metaItem}>{item.courtName}&nbsp;</span>}
-                        {item.instance && <span className={style.metaItem}>{item.instance}</span>}
-                        {item.judgmentDate && <span className={style.metaItem}>{item.judgmentDate}</span>}
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <p className={style.itemContent}>
-                        법률 제 {item.publicationNumber}호, 공포일 {formatDate(item.enforcementDate)}, 시행일 {formatDate(item.publicationDate)}
-                      </p>
-                      <div className={style.itemMeta}>
-                        {item.department && <span className={style.metaItem}>{item.department}</span>}
-                      </div>
-                    </>
-                  )}
-                </div>
-              }
+      {loading ? (
+        <div>
+          {Array.from({ length: 5 }).map((_, index) => (
+            <Skeleton
+              key={index}
+              active
+              avatar
+              title={{ width: '100%' }}
+              paragraph={{ rows: 3, width: '400px' }}
+              style={{ marginBottom: 20 }}
             />
-          </List.Item>
-        )}
-      />
+          ))}
+        </div>
+      ) : (
+        <List
+          className={style.searchResultList}
+          itemLayout="vertical"
+          dataSource={searchResults}
+          loading={loading}
+          renderItem={item => (
+            <List.Item
+              key={activeTab === '1' ? item.precedentId : item.statuteNumber}
+              className={style.item}
+              onClick={() => handleItemClick(item, activeTab === '1' ? 'precedent' : 'statute')}
+            >
+              <List.Item.Meta
+                title={<span className={style.itemTitle} onClick={() => handleItemClick(item, activeTab === '1' ? 'precedent' : 'statute')}>
+                  {activeTab === '1' ? item.caseName : item.statuteName}
+                </span>}
+                description={
+                  <div>
+                    {activeTab === '1' ? (
+                      <>
+                        <p className={style.itemContent}>{item.caseContent ? cleanHtmlTags(item.caseContent) : ''}</p>
+                        <div className={style.itemMeta}>
+                          {item.courtName && <span className={style.metaItem}>{item.courtName}&nbsp;</span>}
+                          {item.instance && <span className={style.metaItem}>{item.instance}</span>}
+                          {item.judgmentDate && <span className={style.metaItem}>{item.judgmentDate}</span>}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <p className={style.itemContent}>
+                          법률 제 {item.publicationNumber}호,
+                          공포일 {item.enforcementDate ? item.enforcementDate.slice(0, 4) : ''}.{' '}
+                          {item.enforcementDate ? item.enforcementDate.slice(4, 6) : ''}.{' '}
+                          {item.enforcementDate ? item.enforcementDate.slice(6, 8) : ''},
+                          시행일 {item.publicationDate ? item.publicationDate.slice(0, 4) : ''}.{' '}
+                          {item.publicationDate ? item.publicationDate.slice(4, 6) : ''}.{' '}
+                          {item.publicationDate ? item.publicationDate.slice(6, 8) : ''}
+                        </p>
+                        <div className={style.itemMeta}>
+                          {item.department && <span className={style.metaItem}>{item.department}</span>}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                }
+              />
+            </List.Item>
+          )}
+        />
+      )}
     </>
   );
 };

@@ -120,8 +120,8 @@ const MyKeyword: React.FC<MemberKeywordProps> = ({ keywords, accessToken }) => {
 
   const handleCheck = () => {
     postMyKeyword(accessToken, targetKeys)
-      .then((res) => {
-        console.log(res);
+      .then(() => {
+        alert("키워드가 저장되었습니다");
       })
       .catch((err) => {
         console.log(err);

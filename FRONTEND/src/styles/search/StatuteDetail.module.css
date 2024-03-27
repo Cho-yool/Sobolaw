@@ -1,19 +1,19 @@
 .container {
-    max-width: 800px;
-    margin: 0 auto;
+    max-width: 900px;
+    margin: 20px auto;
     padding: 20px;
   }
   
   .title {
-    font-size: 24px;
+    font-size: 30px;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin: 5% auto;
   }
   
   .subtitle {
-    font-size: 14px;
+    font-size: 18px;
     color: #666;
-    margin-bottom: 20px;
+    margin-bottom: 5%;
   }
   
   .info {
@@ -21,29 +21,31 @@
     justify-content: space-between;
     font-size: 14px;
     color: #666;
-    margin-bottom: 20px;
-  }
-  
-  .chapterTitle {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .chapterContent {
-    font-size: 16px;
-    line-height: 1.6;
-    margin-bottom: 20px;
+    margin-bottom: 5%;
   }
   
   .articleTitle {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 2%;
   }
   
   .articleContent {
     font-size: 16px;
     line-height: 1.6;
-    margin-bottom: 20px;
+    margin-bottom: 5%;
+  }
+
+  .articleContentSub {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 5%;
+    color: #666;
+  }
+
+  .toggleIcon {
+    font-size: 14px;
+    margin-left: 1%;
+    color: #999;
+    cursor: pointer;
   }
