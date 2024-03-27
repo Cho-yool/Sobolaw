@@ -257,3 +257,10 @@ export interface FraudDetails {
   policeStation: string;
   setPoliceStation: React.Dispatch<React.SetStateAction<string>>;
 }
+
+export type NotificationData = {
+  memberId: number;
+  token: string;
+  title: string;
+  body: string;
+};
