@@ -3,13 +3,15 @@ package com.sobolaw.api.statute.service;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
+import com.sobolaw.api.precedent.dto.PrecedentDTO;
+import com.sobolaw.api.precedent.entity.Precedent;
 import com.sobolaw.api.statute.document.StatuteDocument;
 import com.sobolaw.api.statute.document.StatuteTextDocument;
 import com.sobolaw.api.statute.dto.StatuteDTO;
 import com.sobolaw.api.statute.dto.StatuteTextDTO;
 import com.sobolaw.api.statute.entity.Statute;
 import com.sobolaw.api.statute.entity.StatuteText;
-import com.sobolaw.api.statute.repository.jpa.StatuteRepository;
+import com.sobolaw.api.statute.repository.StatuteRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -23,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class StatuteSearchService {
+public class StatuteService {
 
     private final StatuteRepository statuteRepository;
     private final ElasticsearchClient elasticsearchClient;
@@ -139,6 +141,16 @@ public class StatuteSearchService {
 
         return convertToStatuteDTO(statute);
     }
+
+    // 법령 조회수 높은 순으로 20개 반환
+    public List<StatuteDTO> findTop20ByOrderByHitDesc(){
+        List<Statute> statutes = statuteRepository.findTop20ByOrderByHitDesc();
+
+        return statutes.stream()
+                .map(this::convertToStatuteDTO)
+                .collect(Collectors.toList());
+    }
+
 
     // entity -> DTO 변환
     private StatuteDTO convertToStatuteDTO(Statute entity) {
