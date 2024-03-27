@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Pagination } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import style from '../../styles/search/HitLawCaseList.module.css';
+import style from '../../styles/search/HitPrecedentList.module.css';
 import { getHitPrecedentList } from '../../api/lawsearch';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMedal } from '@fortawesome/free-solid-svg-icons';
@@ -13,7 +13,7 @@ export interface LawCase {
     hit: number;
 }
 
-const HitLawCaseList: React.FC = () => {
+const HitPrecedentList: React.FC = () => {
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 10;
@@ -94,4 +94,4 @@ const HitLawCaseList: React.FC = () => {
     );
 };
 
-export default HitLawCaseList;
+export default HitPrecedentList;

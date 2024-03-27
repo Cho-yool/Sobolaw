@@ -18,9 +18,8 @@ const RecentLawCase: React.FC<RecentLawCaseProps> = ({ recentCases }) => {
   const navigate = useNavigate();
 
   // 상세 페이지로 이동하는 함수
-  const handleNavigate = (precedentId: number, caseType: string) => {
-    const path = caseType === '판례' ? `/laws/${precedentId}` : `/statutes/${precedentId}`;
-    navigate(path);
+  const handleNavigate = (precedentId: number) => {
+    navigate(`/laws/${precedentId}`); // 상세 페이지로 이동
   };
 
   return (
@@ -34,7 +33,7 @@ const RecentLawCase: React.FC<RecentLawCaseProps> = ({ recentCases }) => {
         renderItem={(lawCase, index) => (
           <List.Item 
           className={`{style.listItem} ${index >= 5 ? style.hiddenItem : ''}`}
-          onClick={() => handleNavigate(lawCase.precedentId, lawCase.caseType)}> 
+          onClick={() => handleNavigate(lawCase.precedentId)}> 
             <div className={style.caseTypeBox}>{lawCase.caseType}</div>
             <div className={style.caseTitle}>{lawCase.caseName}</div>
           </List.Item>

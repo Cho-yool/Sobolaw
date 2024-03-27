@@ -1,4 +1,4 @@
-import { Flex, Typography, Switch } from "antd";
+import { Flex, Typography } from "antd";
 import style from "../../styles/lawcasedetail/LawCaseDetail.module.css";
 import LawCaseTabs from "../../components/lawcasedetail/LawCaseTabs";
 import Sidebar from "../../components/lawcasedetail/Sidebar";
@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 interface getDataProps {
+  precedentId: number;
   caseContent: string;
   caseName: string;
   caseNumber: string;
@@ -25,10 +26,12 @@ interface getDataProps {
 const LawCaseDetail = () => {
   const { Title } = Typography;
   const [getData, setGetData] = useState<getDataProps>(Object());
-  const location = useLocation()
-  const [currentLocation, setCurrentLocation] = useState<number>(Number(location.pathname.split("/")[2]))
+  const location = useLocation();
+  const [currentLocation, setCurrentLocation] = useState<number>(
+    Number(location.pathname.split("/")[2])
+  );
 
-  const onChange = useQuery("lawDetail", () => getLawDetail(currentLocation), {
+  useQuery("lawDetail", () => getLawDetail(currentLocation), {
     onSuccess: (response) => {
       setGetData(response.data.data);
     },
@@ -41,8 +44,7 @@ const LawCaseDetail = () => {
     <Flex className={style["detail-page"]} justify="center">
       <Sidebar
         referencedStatute={getData.referencedStatute}
-        referencedCase={getData.referencedCase}
-      ></Sidebar>
+        referencedCase={getData.referencedCase}></Sidebar>
       <Flex className={style["container"]} vertical>
         <Title className={style["container__title"]}>
           {getData ? getData.caseName : null}

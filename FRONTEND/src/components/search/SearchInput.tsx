@@ -1,3 +1,4 @@
+// src/components/search/SearchInput.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Input, Tabs } from 'antd';

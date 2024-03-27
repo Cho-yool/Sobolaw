@@ -17,6 +17,7 @@ const theme = {
     fontFamily: "Orbit-Regular",
     Tabs: {
       itemColor: "#aaaaaa",
+      itemActiveColor: "#E0B88A",
       itemHoverColor: "#E0B88A",
       itemSelectedColor: "#E0B88A",
       inkBarColor: "#E0B88A",

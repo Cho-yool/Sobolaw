@@ -30,7 +30,8 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/search-results" element={<SearchResultPage />} />
-        <Route path="/hit" element={<SearchHitPage />} />
+        <Route path="/hit/precedent" element={<SearchHitPage />} />
+        <Route path="/hit/statute" element={<SearchHitPage />} />
         <Route path="/recommend" element={<RecommendPage />} />
         <Route path="/recommend-results" element={<RecommendResultPage />} />
         <Route path="/plaint" element={<FormPage />} />

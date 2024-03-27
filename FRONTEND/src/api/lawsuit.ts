@@ -15,7 +15,7 @@ async function getLawsuitList(accessToken: string) {
   const response = await http.get(`${url}`, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLqt7zsmIEiLCJyb2xlIjoiUk9MRV9VU0VSIiwibWVtYmVySWQiOjE4LCJpYXQiOjE3MTEzODcxMDIsImV4cCI6MTcxMjI1MTEwMn0.RkQVC095BRBw8Ldo2kwTljfxl0sgp7jBlSe6Z45gBhpi0FWG5nemiV03BbQpC7-IjiLgQ_8rjq8zkiN1Y-UwVg`,
     },
   });
   return response.data.data;
@@ -29,7 +29,7 @@ async function postInsult(accessToken: string, data: InsultForm) {
   await http.post(`${url}/insults`, data, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLqt7zsmIEiLCJyb2xlIjoiUk9MRV9VU0VSIiwibWVtYmVySWQiOjE4LCJpYXQiOjE3MTEzODcxMDIsImV4cCI6MTcxMjI1MTEwMn0.RkQVC095BRBw8Ldo2kwTljfxl0sgp7jBlSe6Z45gBhpi0FWG5nemiV03BbQpC7-IjiLgQ_8rjq8zkiN1Y-UwVg`,
     },
   });
 }
@@ -39,7 +39,7 @@ async function getInsult(insultId: number, accessToken: string) {
   const response = await http.get(`${url}/insults/${insultId}`, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLqt7zsmIEiLCJyb2xlIjoiUk9MRV9VU0VSIiwibWVtYmVySWQiOjE4LCJpYXQiOjE3MTEzODcxMDIsImV4cCI6MTcxMjI1MTEwMn0.RkQVC095BRBw8Ldo2kwTljfxl0sgp7jBlSe6Z45gBhpi0FWG5nemiV03BbQpC7-IjiLgQ_8rjq8zkiN1Y-UwVg`,
     },
   });
   return response.data.data;
