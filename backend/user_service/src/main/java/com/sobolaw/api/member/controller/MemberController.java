@@ -82,6 +82,15 @@ public class MemberController {
     }
 
     /**
+     * 멤버 정보 조회.
+     */
+    @GetMapping("/{memberId}")
+    @Operation(summary = "멤버 조회", description = "멤버 정보를 조회합니다.", tags = {"멤버"})
+    public BaseResponse<MemberResponseDTO> getMemberInfo(@PathVariable Long memberId) {
+        return BaseResponse.success(HttpStatus.OK.value(), "멤버 조회에 성공하였습니다!", memberService.getMemberInfo(memberId));
+    }
+
+    /**
      * 멤버의 최근 본 판례 조회.
      */
     @GetMapping("/recents")

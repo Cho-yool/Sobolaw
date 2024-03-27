@@ -12,7 +12,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MemberRecentRepository extends JpaRepository<MemberRecent, Long> {
 
-    Optional<MemberRecent> findByMemberAndPrecedentId(Member member, Long recentId);
-
-    Optional<MemberRecent> findByPrecedentId(Long precedentId);
+    Optional<MemberRecent> findByPrecedentIdAndMember(Long precedentId, Member member);
 }

@@ -74,6 +74,18 @@ public class MemberService {
     }
 
     /**
+     * 멤버 정보 조회.
+     *
+     * @return 멤버 정보들.
+     */
+    public MemberResponseDTO getMemberInfo(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
+
+        return MemberResponseDTO.from(member);
+    }
+
+    /**
      * 멤버의 최근 본 판례들.
      *
      * @return 최근 본 판례 리스트.
@@ -236,13 +248,16 @@ public class MemberService {
     public List<PrecedentListResponseDTO> getAllMemberPrecedents() {
         List<MemberPrecedent> allPrecedents = memberPrecedentRepository.findAll();
         List<Long> precedentIds = allPrecedents.stream().map(MemberPrecedent::getPrecedentId).toList();
-
+        log.info("전체 저장 판례 객체 : " + allPrecedents);
         Map<String, List<Long>> requestBody = Collections.singletonMap("precedentId", precedentIds);
-        log.info("넘겨질 판례 Id값 여부 " + requestBody.get("precedentId").isEmpty());
+        log.info("전체 저장 판례 값 : " + requestBody);
+        log.info("넘겨질 판례 Id값 여부 : " + requestBody.get("precedentId").isEmpty());
         if (requestBody.get("precedentId").isEmpty()) {
             throw new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT);
         }
         BaseResponse<List<PrecedentListResponseDTO>> baseResponse = lawServiceClient.getPrecedentList(requestBody);
+        log.info("넘어오는 판례 : " + baseResponse);
+        log.info("넘어오는 판례 : " + baseResponse.getData());
         if (baseResponse.getData() == null) {
             throw new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT);
         }
@@ -294,7 +309,7 @@ public class MemberService {
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
         // 요청으로 받은 판례 ID로 이미 존재하는 멤버 저장 판례를 찾습니다.
 
-        Optional<MemberPrecedent> existingMemberPrecedentOptional = memberPrecedentRepository.findByPrecedentId(request.precedentId());
+        Optional<MemberPrecedent> existingMemberPrecedentOptional = memberPrecedentRepository.findByMemberAndPrecedentId(member, request.precedentId());
         log.info("판례 보유 여부 : " + existingMemberPrecedentOptional);
         if (existingMemberPrecedentOptional.isPresent()) {
             throw new MemberException(MemberErrorCode.DUPLICATE_PRECEDENT);
@@ -329,7 +344,7 @@ public class MemberService {
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
         // 요청으로 받은 판례 ID로 이미 존재하는 멤버 최근 판례를 찾습니다.
-        Optional<MemberRecent> existingMemberRecentOptional = memberRecentRepository.findByPrecedentId(request.precedentId());
+        Optional<MemberRecent> existingMemberRecentOptional = memberRecentRepository.findByPrecedentIdAndMember(request.precedentId(), member);
         if (existingMemberRecentOptional.isPresent()) {
             MemberRecent existingMemberPrecedent = existingMemberRecentOptional.get();
             existingMemberPrecedent.softDelete(); // soft delete 수행
@@ -482,7 +497,12 @@ public class MemberService {
      */
     @Transactional
     public MemberPrecedentHighlightDTO saveMemberPrecedentHighlight(Long precedentId, HighlightCreateUpdateRequestDTO request) {
-        MemberPrecedent precedent = memberPrecedentRepository.findByPrecedentId(precedentId)
+        // 멤버 찾기
+        Long currentMemberId = jwtProvider.getMemberId();
+        Member member = memberRepository.findById(currentMemberId)
+            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
+
+        MemberPrecedent precedent = memberPrecedentRepository.findByMemberAndPrecedentId(member, precedentId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT));
         MemberPrecedentHighlight highlight = memberPrecedentHighlightRepository.findByMemberPrecedent(precedent);
         if (highlight != null) {
@@ -490,8 +510,8 @@ public class MemberService {
                 highlight.softDelete();
             }
         }
-
-        MemberPrecedentHighlight newMemberPrecedentHighlight = MemberPrecedentHighlight.of(request.main(), request.location(), request.highlightType(), request.content());
+        log.info("request" + request);
+        MemberPrecedentHighlight newMemberPrecedentHighlight = MemberPrecedentHighlight.of(request.main(), request.startPoint(), request.endPoint(), request.highlightType(), request.content());
         newMemberPrecedentHighlight.setMemberPrecedent(precedent);
         MemberPrecedentHighlight memberPrecedentHighlight = memberPrecedentHighlightRepository.save(newMemberPrecedentHighlight);
 
@@ -516,8 +536,11 @@ public class MemberService {
     @Transactional
     public MemberPrecedentHighlightDTO updateMemberPrecedentHighlgiht(Long highlightId, HighlightCreateUpdateRequestDTO request) {
         MemberPrecedentHighlight highlight = memberPrecedentHighlightRepository.findById(highlightId).orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_HIGHLIGHT));
-        if (request.location() != null) {
-            highlight.setLocation(request.location());
+        if (request.startPoint() != null) {
+            highlight.setStartPoint(request.startPoint());
+        }
+        if (request.endPoint() != null) {
+            highlight.setEndPoint(request.endPoint());
         }
         if (request.highlightType() != null) {
             highlight.setHighlightType(request.highlightType());
