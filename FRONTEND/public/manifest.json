@@ -1,7 +1,7 @@
 {
   "version": "0.0.0",
   "name": "소보로:소송 초보들을 위한 law지침서",
-  "short_name": "판례도움소보로",
+  "short_name": "소보로",
   "start_url": "",
   "display": "standalone",
   "background_color": "#F8F7DA",
@@ -14,19 +14,19 @@
       "type": "image/x-icon"
     },
     {
-      "src": "icons/favicon-196x196.png",
+      "src": "icons/icon-72x72.png",
       "type": "image/png",
-      "sizes": "196x196"
+      "sizes": "72x72"
     },
     {
-      "src": "icons/logo-512x512.png",
+      "src": "icons/icon-144x144.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "144x144"
     },
     {
-      "src": "icons/logo-512x512.png",
+      "src": "icons/icon-152x152.png",
       "type": "image/png",
-      "sizes": "512x512",
+      "sizes": "152x152",
       "purpose": "any maskable"
     }
   ]

@@ -20,7 +20,7 @@ export default function MyCase() {
     };
     fetchData();
     // }, [user.accessToken]
-  }, []);
+  }, [caseList]);
 
   return (
     <>

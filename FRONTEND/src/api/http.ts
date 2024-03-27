@@ -5,7 +5,6 @@ const BASEURL = "j10a604.p.ssafy.io/api/";
 // 중앙 axios를 선언하고, 사이트명/경로에 따라 api 문서를 나눠서 사용
 function mainAxios() {
   return axios.create({
-    // baseURL: "https://" + BASEURL,
     baseURL: "https://" + BASEURL,
     headers: {
       "Content-Type": "application/json;charset=utf-8",
@@ -17,13 +16,13 @@ function mainAxios() {
 // 재성이 파트
 function userAxios() {
   return axios.create({
-    // baseURL: "https://" + BASEURL,
     baseURL: "https://" + BASEURL + "user-service/",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
     },
   });
 }
+
 // 재성이 로컬
 function localuserAxios() {
   return axios.create({
