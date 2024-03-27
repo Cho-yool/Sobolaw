@@ -8,10 +8,10 @@ import com.sobolaw.api.member.dto.MemberRecentDTO;
 import com.sobolaw.api.member.dto.request.HighlightCreateUpdateRequestDTO;
 import com.sobolaw.api.member.dto.request.KeywordSaveRequestDTO;
 import com.sobolaw.api.member.dto.request.PrecedentSaveRequestDTO;
+import com.sobolaw.api.member.dto.response.MemberPrecedentResponseDTO;
+import com.sobolaw.api.member.dto.response.MemberRecentResponseDTO;
 import com.sobolaw.api.member.dto.response.MemberResponseDTO;
 import com.sobolaw.api.member.service.MemberService;
-import com.sobolaw.feign.dto.response.PrecedentListResponseDTO;
-import com.sobolaw.feign.dto.response.PrecedentResponseDTO;
 import com.sobolaw.global.common.response.BaseResponse;
 import com.sobolaw.global.security.jwt.JwtProvider;
 import com.sobolaw.global.security.jwt.RedisTokenService;
@@ -95,7 +95,7 @@ public class MemberController {
      */
     @GetMapping("/recents")
     @Operation(summary = "멤버의 최근 본 판례 조회", description = "최근 본 판례 리스트를 조회합니다.", tags = {"판례"})
-    public BaseResponse<List<PrecedentListResponseDTO>> getMemberRecent() {
+    public BaseResponse<List<MemberRecentResponseDTO>> getMemberRecent() {
         return BaseResponse.success(HttpStatus.OK.value(), "멤버의 최근 본 판례 조회에 성공하였습니다!", memberService.getMemberRecents());
     }
 
@@ -113,7 +113,7 @@ public class MemberController {
      */
     @GetMapping("/precedents")
     @Operation(summary = "멤버의 저장된 판례 조회", description = "멤버의 저장 판례 리스트를 조회합니다.", tags = {"판례"})
-    public BaseResponse<List<PrecedentListResponseDTO>> getMemberPrecedents() {
+    public BaseResponse<List<MemberPrecedentResponseDTO>> getMemberPrecedents() {
         return BaseResponse.success(HttpStatus.OK.value(), "멤버의 저장 판례 조회에 성공하였습니다!", memberService.getMemberPrecedents());
     }
 
@@ -122,7 +122,7 @@ public class MemberController {
      */
     @GetMapping("/precedents/{precedentId}")
     @Operation(summary = "멤버의 저장된 특정 판례 조회", description = "멤버의 저장된 특정 판례를 조회합니다.", tags = {"판례"})
-    public BaseResponse<PrecedentResponseDTO> getSingleMemberPrecedent(
+    public BaseResponse<MemberPrecedentResponseDTO> getSingleMemberPrecedent(
         @PathVariable Long precedentId) {
         return BaseResponse.success(HttpStatus.OK.value(), "멤버의 특정 저장 판례 조회에 성공하였습니다!",
             memberService.getMemberPrecedentDetail(precedentId));
@@ -133,7 +133,7 @@ public class MemberController {
      */
     @GetMapping("/recents/{recentId}")
     @Operation(summary = "멤버의 최근 본 특정 판례를 조회", description = "멤버의 최근 본 특정 판례를 조회합니다.", tags = {"판례"})
-    public BaseResponse<PrecedentResponseDTO> getSingleMemberRecent(
+    public BaseResponse<MemberRecentResponseDTO> getSingleMemberRecent(
         @PathVariable Long recentId) {
         return BaseResponse.success(HttpStatus.OK.value(), "멤버의 특정 최근 판례 조회에 성공하였습니다!",
             memberService.getMemberRecentDetail(recentId));
@@ -165,7 +165,7 @@ public class MemberController {
      */
     @GetMapping("/precedents/list")
     @Operation(summary = "전체 저장 판례 조회", description = "전체 저장 판례를 조회합니다.", tags = {"판례"})
-    public BaseResponse<List<PrecedentListResponseDTO>> getAllMemberPrecedents() {
+    public BaseResponse<List<MemberPrecedentResponseDTO>> getAllMemberPrecedents() {
         return BaseResponse.success(HttpStatus.OK.value(), "전체 저장 판례 조회에 성공하였습니다!", memberService.getAllMemberPrecedents());
     }
 
@@ -174,7 +174,7 @@ public class MemberController {
      */
     @GetMapping("/recents/list")
     @Operation(summary = "전체 최근 본 판례 조회", description = "전체 최근 본 판례를 조회합니다.", tags = {"판례"})
-    public BaseResponse<List<PrecedentListResponseDTO>> getAllMemberRecents() {
+    public BaseResponse<List<MemberRecentResponseDTO>> getAllMemberRecents() {
         return BaseResponse.success(HttpStatus.OK.value(), "전체 최근 본 판례 조회에 성공하였습니다!", memberService.getAllMemberRecents());
     }
 

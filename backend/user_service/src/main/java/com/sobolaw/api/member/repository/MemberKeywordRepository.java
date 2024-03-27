@@ -21,4 +21,6 @@ public interface MemberKeywordRepository extends JpaRepository<MemberKeyword, Lo
     MemberKeyword findByMemberPrecedent(MemberPrecedent memberPrecedent);
 
     List<MemberKeyword> findByMember(Member member);
+
+    MemberKeyword findByWord(String word);
 }
