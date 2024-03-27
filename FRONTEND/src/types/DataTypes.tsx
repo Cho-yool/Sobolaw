@@ -3,6 +3,7 @@ export type UserState = {
   nickname: string;
   accessToken: string;
   refreshToken: string;
+  precedents: number[];
 };
 
 export type MypaperWide = {
@@ -39,6 +40,22 @@ export type MemberRecent = {
   precedentId: number;
 };
 
+export type Highlights = {
+  memberPrecedentHightlightId: number;
+  memberPrecedentId: number;
+  main: string;
+  location: number[];
+  highlightType: string;
+  content: string;
+};
+
+export type memberPrecedents = {
+  memberPrecedentId: number;
+  memberId: number;
+  precedentId: number;
+  highlights: Highlights;
+};
+
 export type MemberInfo = {
   memberId: number;
   name: string;
@@ -46,18 +63,12 @@ export type MemberInfo = {
   birthday: string | null;
   memberKeyword: MemberKeyword[];
   memberRecents: MemberRecent[];
+  memberPrecedents: memberPrecedents[];
 };
-
-// interface Highlight {
-//   memberPrecedentHighlightId: number;
-//   memberPrecedent: string;
-//   location: string;
-//   highlightType: string;
-//   content: number;
-// }
 
 export type MemberPrecedent = {
   precedentId: number;
+  memberPrecedentId: number;
   caseName: string;
   caseNumber: string;
   judgmentDate: string;
