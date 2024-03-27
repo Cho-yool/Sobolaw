@@ -19,6 +19,7 @@ import InsultPage from "./pages/lawsuit/insult";
 import PrintLawsuit from "./pages/mypage/Printlawsuit";
 import InsultEditPage from "./pages/lawsuit/insultEdit";
 import SearchHitPage from "./pages/keywordsearch/SearchHitPage";
+import StatuteDetailPage from "./pages/keywordsearch/StatuteDetailPage";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
       <Route element={<LayoutPage />}>
         <Route path="" element={<MainPage />} />
         <Route path="/laws/:id" element={<LawCaseDetail />} />
+        <Route path="/statutes/:id" element={<StatuteDetailPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/search-results" element={<SearchResultPage />} />

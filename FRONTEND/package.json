@@ -19,6 +19,7 @@
     "antd": "^5.14.2",
     "axios": "^1.6.7",
     "josa": "^3.0.1",
+    "query-string": "^9.0.0",
     "react": "^18.2.0",
     "react-canvas-confetti": "^2.0.7",
     "react-countup": "^6.5.2",
