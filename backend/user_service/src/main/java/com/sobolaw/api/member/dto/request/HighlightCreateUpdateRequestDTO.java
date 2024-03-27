@@ -6,6 +6,6 @@ import java.util.List;
 /**
  * 판례 하이라이트 생성 변경 DTO.
  */
-public record HighlightCreateUpdateRequestDTO(String main, List<Integer> location, HighlightType highlightType, String content) {
+public record HighlightCreateUpdateRequestDTO(String main, Long startPoint, Long endPoint, HighlightType highlightType, String content) {
 
 }

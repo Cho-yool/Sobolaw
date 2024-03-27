@@ -4,6 +4,7 @@ import com.sobolaw.api.lawsuit.dto.LawsuitDefamationDTO;
 import com.sobolaw.api.lawsuit.dto.LawsuitFraudDTO;
 import com.sobolaw.api.lawsuit.dto.LawsuitInsultDTO;
 import com.sobolaw.api.member.entity.Member;
+import com.sobolaw.api.member.entity.Type.RoleType;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
@@ -12,13 +13,13 @@ import java.util.stream.Collectors;
 /**
  * DTO for {@link Member}.
  */
-public record MemberDTO(Long memberId, String name, String email, LocalDate birthday, List<MemberKeywordDTO> memberKeyword, List<MemberRecentDTO> memberRecents,
+public record MemberDTO(Long memberId, String name, String email, RoleType role, LocalDate birthday, List<MemberKeywordDTO> memberKeyword, List<MemberRecentDTO> memberRecents,
                         List<MemberPrecedentDTO> memberPrecedents, List<LawsuitFraudDTO> lawsuitFrauds, List<LawsuitInsultDTO> lawsuitInsults, List<LawsuitDefamationDTO> lawsuitDefamations) implements
     Serializable {
 
-    public static MemberDTO of(Long memberId, String name, String email, LocalDate birthday, List<MemberKeywordDTO> memberKeyword, List<MemberRecentDTO> memberRecents,
+    public static MemberDTO of(Long memberId, String name, String email, LocalDate birthday, RoleType role, List<MemberKeywordDTO> memberKeyword, List<MemberRecentDTO> memberRecents,
         List<MemberPrecedentDTO> memberPrecedents, List<LawsuitFraudDTO> lawsuitFrauds, List<LawsuitInsultDTO> lawsuitInsults, List<LawsuitDefamationDTO> lawsuitDefamations) {
-        return new MemberDTO(memberId, name, email, birthday, memberKeyword, memberRecents, memberPrecedents, lawsuitFrauds, lawsuitInsults, lawsuitDefamations);
+        return new MemberDTO(memberId, name, email, role, birthday, memberKeyword, memberRecents, memberPrecedents, lawsuitFrauds, lawsuitInsults, lawsuitDefamations);
     }
 
     /**
@@ -37,7 +38,7 @@ public record MemberDTO(Long memberId, String name, String email, LocalDate birt
 
         List<LawsuitDefamationDTO> lawsuitDefamationDTOS = entity.getLawsuitDefamations().stream().map(LawsuitDefamationDTO::from).toList();
 
-        return new MemberDTO(entity.getMemberId(), entity.getName(), entity.getEmail(), entity.getBirthday(), memberKeywordDTOs, memberRecentDTOs, memberPrecedentDTOs, lawsuitFraudDTOS,
+        return new MemberDTO(entity.getMemberId(), entity.getName(), entity.getEmail(), entity.getRole(), entity.getBirthday(), memberKeywordDTOs, memberRecentDTOs, memberPrecedentDTOs, lawsuitFraudDTOS,
             lawsuitInsultDTOS, lawsuitDefamationDTOS);
     }
 
