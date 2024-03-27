@@ -9,6 +9,7 @@ import com.sobolaw.api.precedent.entity.Precedent;
 import com.sobolaw.api.precedent.repository.PrecedentRepository;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,10 +24,8 @@ public class PrecedentService {
 
     // precedentId로 판례 내용 조회
     public PrecedentDTO findPrecedentById(Long precedentId) {
-
         Precedent precedent = precedentRepository.findByPrecedentId(precedentId)
             .orElseThrow(() -> new IllegalArgumentException("해당 판례가 없습니다. precedentId=" + precedentId));
-
         return convertToPrecedentDTO(precedent);
     }
 
@@ -62,6 +61,7 @@ public class PrecedentService {
 
         List<PrecedentDTO> precedents = precedentResponse.hits().hits().stream()
             .map(Hit::source)
+            .filter(Objects::nonNull)
             .map(precedentDocument -> { // 아래 변환방식 사용할 때 : DTO랑 순서 동일하게 작성
                 return new PrecedentDTO (
                     precedentDocument.getPrecedentId(),

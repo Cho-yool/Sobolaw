@@ -25,7 +25,7 @@ public class PrecedentController {
     private final PrecedentService precedentService;
 
     @GetMapping("/detail/{precedentId}")
-    @Operation(summary = "관심판례 내용 조회", description = "저장된 판례ID로 판례 내용 조회")
+    @Operation(summary = "판례 내용 조회", description = "precedentId로 판례 내용 조회")
     public BaseResponse<PrecedentDTO> getPrecedentDetail (@PathVariable Long precedentId) {
         PrecedentDTO precedent = precedentService.findPrecedentById(precedentId);
         return BaseResponse.success(HttpStatus.OK.value(), "판례 상세 조회 성공!", precedent);

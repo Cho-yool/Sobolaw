@@ -1,6 +1,7 @@
 package com.sobolaw.api.statute.controller;
 
 import com.sobolaw.api.common.response.BaseResponse;
+import com.sobolaw.api.precedent.dto.PrecedentDTO;
 import com.sobolaw.api.statute.dto.StatuteDTO;
 import com.sobolaw.api.statute.service.StatuteSearchService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,5 +33,12 @@ public class StatuteController {
             return BaseResponse.success(HttpStatus.OK.value(), "법령 검색 결과가 없습니다.", searchResults);
         }
         return BaseResponse.success(HttpStatus.OK.value(), "법령 검색 성공!", searchResults);
+    }
+
+    @GetMapping("/detail/{statuteNumber}")
+    @Operation(summary = "법령 내용 조회", description = "statuteNumber로 법령 내용 조회")
+    public BaseResponse<StatuteDTO> getStatuteDetail (@PathVariable Long statuteNumber) {
+        StatuteDTO precedent = statuteSearchService.getStatuteByNumber(statuteNumber);
+        return BaseResponse.success(HttpStatus.OK.value(), "법령 상세 조회 성공!", precedent);
     }
 }

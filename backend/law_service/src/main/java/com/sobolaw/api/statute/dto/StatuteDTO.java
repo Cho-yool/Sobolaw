@@ -20,9 +20,8 @@ public class StatuteDTO {
     private String enforcementDate;
     private String publicationDate;
     private String publicationNumber;
-    private List<StatuteTextDocument> statuteTexts;
 
-    public void setStatuteTexts(List<StatuteTextDocument> statuteTexts) {
-        this.statuteTexts = statuteTexts;
-    }
+    private List<StatuteTextDocument> statuteTextDocuments;
+    private List<StatuteTextDTO> statuteTexts;
+
 }
