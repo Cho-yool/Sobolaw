@@ -21,6 +21,9 @@ export default function MyCaseList({ cases }: { cases: MemberPrecedent[] }) {
   const dispatch: AppDispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+  const [selectedPrecedentId, setSelectedPrecedentId] = useState<number | null>(
+    null
+  );
   const precedentIds = cases.map(
     (precedent: MemberPrecedent) => precedent?.precedentId
   );
@@ -28,8 +31,9 @@ export default function MyCaseList({ cases }: { cases: MemberPrecedent[] }) {
     return text.replace(/<br\s*\/?>/gi, "");
   };
 
-  const showModal = (id: number) => {
-    setSelectedItemId(id);
+  const showModal = (memberPrecedentId: number, precedentId: number) => {
+    setSelectedItemId(memberPrecedentId);
+    setSelectedPrecedentId(precedentId);
     setIsModalOpen(true);
   };
 
@@ -37,10 +41,11 @@ export default function MyCaseList({ cases }: { cases: MemberPrecedent[] }) {
     if (selectedItemId !== null) {
       try {
         const newPrecedentIds = precedentIds.filter(
-          (id) => id !== selectedItemId
+          (id) => id !== selectedPrecedentId
         );
         console.log(selectedItemId);
         await delPrecedents(accessToken, selectedItemId);
+        console.log(newPrecedentIds);
         dispatch(updatePrecedents(newPrecedentIds));
         setIsModalOpen(false);
         setSelectedItemId(null);
@@ -73,7 +78,9 @@ export default function MyCaseList({ cases }: { cases: MemberPrecedent[] }) {
             extra={
               <div
                 style={{ cursor: "pointer" }}
-                onClick={() => showModal(item.memberPrecedentId)}
+                onClick={() =>
+                  showModal(item.memberPrecedentId, item.precedentId)
+                }
                 onMouseEnter={(e) => (e.currentTarget.style.color = "red")}
                 onMouseLeave={(e) => (e.currentTarget.style.color = "inherit")}
               >
