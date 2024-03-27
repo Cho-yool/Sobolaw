@@ -73,3 +73,11 @@ services:
       - redis
     ports:
       - "8005:8005"
+
+  board_service:
+    container_name: board_service
+    image: board_service
+    depends_on:
+      - api_gateway
+    ports:
+      - "8006:8006"

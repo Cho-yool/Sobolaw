@@ -87,6 +87,15 @@ pipeline {
                     }
                 }
             }
+
+            stage('board_service'){
+                steps {
+                    echo 'board_service build!'
+                    dir('backend/board_service'){
+                        sh 'docker build -t board_service .'
+                    }
+                }
+            }
             
             stage('start container'){
                 steps{
