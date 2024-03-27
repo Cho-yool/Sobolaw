@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { List, Space } from "antd";
+import { useSelector, useDispatch } from "react-redux";
+import { List, Space, Modal, Button } from "antd";
 import { GoLaw } from "react-icons/go";
-import { FieldTimeOutlined } from "@ant-design/icons";
-// import CaseDetail from "../../components/mypage/MyCaseDetail";
+import { FieldTimeOutlined, DeleteFilled } from "@ant-design/icons";
+import { updatePrecedents } from "../../redux/reducers/user/userSlice";
+import { RootState, AppDispatch } from "../../redux/store/store";
+import { delPrecedents } from "../../api/members";
 import { MemberPrecedent } from "../../types/DataTypes";
 
-const IconText = ({ icon, text }: { icon: React.FC<any>; text: string }) => (
+const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
   <Space>
     {React.createElement(icon)}
     {text}
@@ -14,6 +17,44 @@ const IconText = ({ icon, text }: { icon: React.FC<any>; text: string }) => (
 );
 
 export default function MyCaseList({ cases }: { cases: MemberPrecedent[] }) {
+  const accessToken = useSelector((state: RootState) => state.user.accessToken);
+  const dispatch: AppDispatch = useDispatch();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+  const [selectedPrecedentId, setSelectedPrecedentId] = useState<number | null>(
+    null
+  );
+  const precedentIds = cases.map(
+    (precedent: MemberPrecedent) => precedent?.precedentId
+  );
+  const removeBreakTags = (text: string) => {
+    return text.replace(/<br\s*\/?>/gi, "");
+  };
+
+  const showModal = (memberPrecedentId: number, precedentId: number) => {
+    setSelectedItemId(memberPrecedentId);
+    setSelectedPrecedentId(precedentId);
+    setIsModalOpen(true);
+  };
+
+  const handleOk = async () => {
+    if (selectedItemId !== null) {
+      try {
+        const newPrecedentIds = precedentIds.filter(
+          (id) => id !== selectedPrecedentId
+        );
+        console.log(selectedItemId);
+        await delPrecedents(accessToken, selectedItemId);
+        console.log(newPrecedentIds);
+        dispatch(updatePrecedents(newPrecedentIds));
+        setIsModalOpen(false);
+        setSelectedItemId(null);
+      } catch (error) {
+        console.error("Error deleting insult:", error);
+      }
+    }
+  };
+
   return (
     <>
       <Space
@@ -34,20 +75,50 @@ export default function MyCaseList({ cases }: { cases: MemberPrecedent[] }) {
                 key="list-vertical-star-o"
               />,
             ]}
+            extra={
+              <div
+                style={{ cursor: "pointer" }}
+                onClick={() =>
+                  showModal(item.memberPrecedentId, item.precedentId)
+                }
+                onMouseEnter={(e) => (e.currentTarget.style.color = "red")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "inherit")}
+              >
+                <IconText
+                  icon={DeleteFilled}
+                  text={"삭제하기"}
+                  key="list-vertical-star-o"
+                />
+              </div>
+            }
           >
             <List.Item.Meta
               avatar={<GoLaw />}
               title={
-                <Link to={`/detail/${item.precedentId}`}>
+                <Link to={`/laws/${item.precedentId}`}>
                   {item.courtName} {item.judgmentDate} {item.judgment}{" "}
                   {item.caseName}
                 </Link>
               }
-              description={item.judicialNotice}
+              description={removeBreakTags(item.judicialNotice)}
             />
           </List.Item>
         )}
       />
+      <Modal
+        title="삭제 시 복구되지 않습니다"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={() => setIsModalOpen(false)}
+        footer={[
+          <Button key="submit" type="primary" onClick={handleOk}>
+            확인
+          </Button>,
+        ]}
+      >
+        <br />
+        정말 삭제하시겠습니까?
+      </Modal>
     </>
   );
 }
