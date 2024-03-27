@@ -9,7 +9,7 @@ import CountUp from 'react-countup';
 const SearchInput: React.FC = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<string>('precedent');
+  const [activeTab, setActiveTab] = useState<string>('1');
 
   const handleSearch = (): void => {
     window.scrollTo(0, 0);
@@ -23,11 +23,11 @@ const SearchInput: React.FC = () => {
   const tabItems = [
     {
       label: '판례 검색',
-      key: 'precedent',
+      key: '1',
     },
     {
       label: '법령 검색',
-      key: 'statute',
+      key: '2',
     },
   ];
 
