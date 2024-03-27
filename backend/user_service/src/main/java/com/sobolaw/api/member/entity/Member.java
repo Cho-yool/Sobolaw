@@ -35,7 +35,7 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String name; // 유저 이름
 
-    @Column(unique = true)
+    @Column
     private String email; // 이메일
     
     @Column

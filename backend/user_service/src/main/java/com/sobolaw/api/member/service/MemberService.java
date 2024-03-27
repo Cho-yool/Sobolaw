@@ -8,6 +8,8 @@ import com.sobolaw.api.member.dto.MemberRecentDTO;
 import com.sobolaw.api.member.dto.request.HighlightCreateUpdateRequestDTO;
 import com.sobolaw.api.member.dto.request.KeywordSaveRequestDTO;
 import com.sobolaw.api.member.dto.request.PrecedentSaveRequestDTO;
+import com.sobolaw.api.member.dto.response.MemberPrecedentResponseDTO;
+import com.sobolaw.api.member.dto.response.MemberRecentResponseDTO;
 import com.sobolaw.api.member.dto.response.MemberResponseDTO;
 import com.sobolaw.api.member.entity.Member;
 import com.sobolaw.api.member.entity.MemberKeyword;
@@ -23,7 +25,6 @@ import com.sobolaw.api.member.repository.MemberPrecedentRepository;
 import com.sobolaw.api.member.repository.MemberRecentRepository;
 import com.sobolaw.api.member.repository.MemberRepository;
 import com.sobolaw.feign.dto.response.PrecedentKeywordResponseDTO;
-import com.sobolaw.feign.dto.response.PrecedentListResponseDTO;
 import com.sobolaw.feign.dto.response.PrecedentResponseDTO;
 import com.sobolaw.feign.service.LawServiceClient;
 import com.sobolaw.feign.service.RecommendServiceClient;
@@ -33,7 +34,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -90,24 +90,67 @@ public class MemberService {
      *
      * @return 최근 본 판례 리스트.
      */
-    public List<PrecedentListResponseDTO> getMemberRecents() {
+    public List<MemberRecentResponseDTO> getMemberRecents() {
         Long currentMemberId = jwtProvider.getMemberId();
         Member member = memberRepository.findById(currentMemberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
-        List<Long> recentIds = member.getMemberRecents().stream().map(MemberRecent::getPrecedentId).toList();
+        List<MemberRecent> recentList = member.getMemberRecents();
 
-        Map<String, List<Long>> requestBody = Collections.singletonMap("precedentId", recentIds);
-        log.info("requestBody = " + requestBody);
-        log.info("넘겨질 판례 Id값 여부 " + requestBody.get("precedentId").isEmpty());
-        if (requestBody.get("precedentId").isEmpty()) {
-            throw new MemberException(MemberErrorCode.NOT_FOUND_RECENT);
+        List<MemberRecentResponseDTO> responseDTOs = new ArrayList<>();
+
+        // 최근 본 판례마다 정보를 가져와서 DTO에 담기
+        for (MemberRecent recent : recentList) {
+            Long recentPrecedentId = recent.getRecentPrecedentId();
+            Long precedentId = recent.getPrecedentId();
+
+            // 판례 ID에 해당하는 판례 정보 가져오기
+            BaseResponse<PrecedentResponseDTO> precedentResponse = lawServiceClient.getPrecedentDetail(precedentId);
+            PrecedentResponseDTO precedentDTO = precedentResponse.getData();
+
+            // 판례 정보가 null이면 예외 처리
+            if (precedentDTO == null) {
+                throw new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT);
+            }
+
+            // 판례 정보를 DTO에 담기
+            MemberRecentResponseDTO responseDTO = new MemberRecentResponseDTO(
+                recentPrecedentId,
+                precedentDTO.precedentId(),
+                precedentDTO.caseName(),
+                precedentDTO.caseNumber(),
+                precedentDTO.judgmentDate(),
+                precedentDTO.judgment(),
+                precedentDTO.courtName(),
+                precedentDTO.caseType(),
+                precedentDTO.verdictType(),
+                precedentDTO.judicialNotice(),
+                precedentDTO.verdictSummary(),
+                precedentDTO.referencedStatute(),
+                precedentDTO.referencedCase(),
+                precedentDTO.caseContent(),
+                precedentDTO.hit()
+
+            );
+
+            responseDTOs.add(responseDTO);
         }
-        BaseResponse<List<PrecedentListResponseDTO>> baseResponse = lawServiceClient.getPrecedentList(requestBody);
-        if (baseResponse.getData() == null) {
-            throw new MemberException(MemberErrorCode.NOT_FOUND_RECENT);
-        }
-        return baseResponse.getData();
+
+        return responseDTOs;
+
+//        List<Long> recentIds = member.getMemberRecents().stream().map(MemberRecent::getPrecedentId).toList();
+//
+//        Map<String, List<Long>> requestBody = Collections.singletonMap("precedentId", recentIds);
+//        log.info("requestBody = " + requestBody);
+//        log.info("넘겨질 판례 Id값 여부 " + requestBody.get("precedentId").isEmpty());
+//        if (requestBody.get("precedentId").isEmpty()) {
+//            throw new MemberException(MemberErrorCode.NOT_FOUND_RECENT);
+//        }
+//        BaseResponse<List<PrecedentListResponseDTO>> baseResponse = lawServiceClient.getPrecedentList(requestBody);
+//        if (baseResponse.getData() == null) {
+//            throw new MemberException(MemberErrorCode.NOT_FOUND_RECENT);
+//        }
+//        return baseResponse.getData();
 
     }
 
@@ -138,23 +181,53 @@ public class MemberService {
      *
      * @return 저장한 판례 리스트.
      */
-    public List<PrecedentListResponseDTO> getMemberPrecedents() {
+    public List<MemberPrecedentResponseDTO> getMemberPrecedents() {
         Long currentMemberId = jwtProvider.getMemberId();
         Member member = memberRepository.findById(currentMemberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
-        List<Long> precedentIds = member.getMemberPrecedents().stream().map(MemberPrecedent::getPrecedentId).toList();
+        List<MemberPrecedent> precedentIds = member.getMemberPrecedents();
 
-        Map<String, List<Long>> requestBody = Collections.singletonMap("precedentId", precedentIds);
-        log.info("넘겨질 판례 Id값 여부 " + requestBody.get("precedentId").isEmpty());
-        if (requestBody.get("precedentId").isEmpty()) {
-            throw new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT);
+        List<MemberPrecedentResponseDTO> responseDTOs = new ArrayList<>();
+
+        // 최근 본 판례마다 정보를 가져와서 DTO에 담기
+        for (MemberPrecedent memberPrecedent : precedentIds) {
+            Long memberPrecedentId = memberPrecedent.getMemberPrecedentId();
+            Long precedentId = memberPrecedent.getPrecedentId();
+
+            // 판례 ID에 해당하는 판례 정보 가져오기
+            BaseResponse<PrecedentResponseDTO> precedentResponse = lawServiceClient.getPrecedentDetail(precedentId);
+            PrecedentResponseDTO precedentDTO = precedentResponse.getData();
+
+            // 판례 정보가 null이면 예외 처리
+            if (precedentDTO == null) {
+                throw new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT);
+            }
+
+            // 판례 정보를 DTO에 담기
+            MemberPrecedentResponseDTO responseDTO = new MemberPrecedentResponseDTO(
+                memberPrecedentId,
+                precedentDTO.precedentId(),
+                precedentDTO.caseName(),
+                precedentDTO.caseNumber(),
+                precedentDTO.judgmentDate(),
+                precedentDTO.judgment(),
+                precedentDTO.courtName(),
+                precedentDTO.caseType(),
+                precedentDTO.verdictType(),
+                precedentDTO.judicialNotice(),
+                precedentDTO.verdictSummary(),
+                precedentDTO.referencedStatute(),
+                precedentDTO.referencedCase(),
+                precedentDTO.caseContent(),
+                precedentDTO.hit()
+
+            );
+
+            responseDTOs.add(responseDTO);
         }
-        BaseResponse<List<PrecedentListResponseDTO>> baseResponse = lawServiceClient.getPrecedentList(requestBody);
-        if (baseResponse.getData() == null) {
-            throw new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT);
-        }
-        return baseResponse.getData();
+
+        return responseDTOs;
     }
 
 
@@ -181,15 +254,38 @@ public class MemberService {
      * @param precedentId 판례Id
      * @return 특정 저장 판례.
      */
-    public PrecedentResponseDTO getMemberPrecedentDetail(Long precedentId) {
+    public MemberPrecedentResponseDTO getMemberPrecedentDetail(Long precedentId) {
         MemberPrecedent memberPrecedent = memberPrecedentRepository.findById(precedentId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT));
 
         BaseResponse<PrecedentResponseDTO> baseResponse = lawServiceClient.getPrecedentDetail(memberPrecedent.getPrecedentId());
-        if (baseResponse.getData() == null) {
+        PrecedentResponseDTO precedentDTO = baseResponse.getData();
+
+        // 판례 정보가 null이면 예외 처리
+        if (precedentDTO == null) {
             throw new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT);
         }
-        return baseResponse.getData();
+
+        // 판례 정보를 DTO에 담기
+        MemberPrecedentResponseDTO responseDTO = new MemberPrecedentResponseDTO(
+            precedentId,
+            precedentDTO.precedentId(),
+            precedentDTO.caseName(),
+            precedentDTO.caseNumber(),
+            precedentDTO.judgmentDate(),
+            precedentDTO.judgment(),
+            precedentDTO.courtName(),
+            precedentDTO.caseType(),
+            precedentDTO.verdictType(),
+            precedentDTO.judicialNotice(),
+            precedentDTO.verdictSummary(),
+            precedentDTO.referencedStatute(),
+            precedentDTO.referencedCase(),
+            precedentDTO.caseContent(),
+            precedentDTO.hit()
+
+        );
+        return responseDTO;
     }
 
     /**
@@ -198,7 +294,7 @@ public class MemberService {
      * @param recentId 최근 판례Id
      * @return 특정 최근 본 판례.
      */
-    public PrecedentResponseDTO getMemberRecentDetail(Long recentId) {
+    public MemberRecentResponseDTO getMemberRecentDetail(Long recentId) {
         Long currentMemberId = jwtProvider.getMemberId();
         Member member = memberRepository.findById(currentMemberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
@@ -208,11 +304,34 @@ public class MemberService {
 
         // lawServiceClient.getPrecedentDetail이 BaseResponse<PrecedentDTO>를 반환한다고 가정합니다.
         BaseResponse<PrecedentResponseDTO> baseResponse = lawServiceClient.getPrecedentDetail(memberRecent.getPrecedentId());
+        PrecedentResponseDTO precedentDTO = baseResponse.getData();
 
-        if (baseResponse.getData() == null) {
-            throw new MemberException(MemberErrorCode.NOT_FOUND_RECENT);
+        // 판례 정보가 null이면 예외 처리
+        if (precedentDTO == null) {
+            throw new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT);
         }
-        return baseResponse.getData();
+
+        // 판례 정보를 DTO에 담기
+        MemberRecentResponseDTO responseDTO = new MemberRecentResponseDTO(
+            recentId,
+            precedentDTO.precedentId(),
+            precedentDTO.caseName(),
+            precedentDTO.caseNumber(),
+            precedentDTO.judgmentDate(),
+            precedentDTO.judgment(),
+            precedentDTO.courtName(),
+            precedentDTO.caseType(),
+            precedentDTO.verdictType(),
+            precedentDTO.judicialNotice(),
+            precedentDTO.verdictSummary(),
+            precedentDTO.referencedStatute(),
+            precedentDTO.referencedCase(),
+            precedentDTO.caseContent(),
+            precedentDTO.hit()
+
+        );
+
+        return responseDTO;
     }
 
 
@@ -245,42 +364,96 @@ public class MemberService {
     /**
      * 저장된 판례 전체 조회.
      */
-    public List<PrecedentListResponseDTO> getAllMemberPrecedents() {
+    public List<MemberPrecedentResponseDTO> getAllMemberPrecedents() {
         List<MemberPrecedent> allPrecedents = memberPrecedentRepository.findAll();
-        List<Long> precedentIds = allPrecedents.stream().map(MemberPrecedent::getPrecedentId).toList();
-        log.info("전체 저장 판례 객체 : " + allPrecedents);
-        Map<String, List<Long>> requestBody = Collections.singletonMap("precedentId", precedentIds);
-        log.info("전체 저장 판례 값 : " + requestBody);
-        log.info("넘겨질 판례 Id값 여부 : " + requestBody.get("precedentId").isEmpty());
-        if (requestBody.get("precedentId").isEmpty()) {
-            throw new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT);
+        List<MemberPrecedentResponseDTO> responseDTOs = new ArrayList<>();
+
+        // 최근 본 판례마다 정보를 가져와서 DTO에 담기
+        for (MemberPrecedent memberPrecedent : allPrecedents) {
+            Long memberPrecedentId = memberPrecedent.getMemberPrecedentId();
+            Long precedentId = memberPrecedent.getPrecedentId();
+
+            // 판례 ID에 해당하는 판례 정보 가져오기
+            BaseResponse<PrecedentResponseDTO> precedentResponse = lawServiceClient.getPrecedentDetail(precedentId);
+            PrecedentResponseDTO precedentDTO = precedentResponse.getData();
+
+            // 판례 정보가 null이면 예외 처리
+            if (precedentDTO == null) {
+                throw new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT);
+            }
+
+            // 판례 정보를 DTO에 담기
+            MemberPrecedentResponseDTO responseDTO = new MemberPrecedentResponseDTO(
+                memberPrecedentId,
+                precedentDTO.precedentId(),
+                precedentDTO.caseName(),
+                precedentDTO.caseNumber(),
+                precedentDTO.judgmentDate(),
+                precedentDTO.judgment(),
+                precedentDTO.courtName(),
+                precedentDTO.caseType(),
+                precedentDTO.verdictType(),
+                precedentDTO.judicialNotice(),
+                precedentDTO.verdictSummary(),
+                precedentDTO.referencedStatute(),
+                precedentDTO.referencedCase(),
+                precedentDTO.caseContent(),
+                precedentDTO.hit()
+
+            );
+
+            responseDTOs.add(responseDTO);
         }
-        BaseResponse<List<PrecedentListResponseDTO>> baseResponse = lawServiceClient.getPrecedentList(requestBody);
-        log.info("넘어오는 판례 : " + baseResponse);
-        log.info("넘어오는 판례 : " + baseResponse.getData());
-        if (baseResponse.getData() == null) {
-            throw new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT);
-        }
-        return baseResponse.getData();
+
+        return responseDTOs;
     }
 
     /**
      * 최근 본 판례 전체 조회.
      */
-    public List<PrecedentListResponseDTO> getAllMemberRecents() {
+    public List<MemberRecentResponseDTO> getAllMemberRecents() {
         List<MemberRecent> allRecents = memberRecentRepository.findAll();
-        List<Long> recentIds = allRecents.stream().map(MemberRecent::getPrecedentId).toList();
 
-        Map<String, List<Long>> requestBody = Collections.singletonMap("precedentId", recentIds);
-        log.info("넘겨질 판례 Id값 여부 " + requestBody.get("precedentId").isEmpty());
-        if (requestBody.get("precedentId").isEmpty()) {
-            throw new MemberException(MemberErrorCode.NOT_FOUND_RECENT);
+        List<MemberRecentResponseDTO> responseDTOs = new ArrayList<>();
+
+        // 최근 본 판례마다 정보를 가져와서 DTO에 담기
+        for (MemberRecent recent : allRecents) {
+            Long recentPrecedentId = recent.getRecentPrecedentId();
+            Long precedentId = recent.getPrecedentId();
+
+            // 판례 ID에 해당하는 판례 정보 가져오기
+            BaseResponse<PrecedentResponseDTO> precedentResponse = lawServiceClient.getPrecedentDetail(precedentId);
+            PrecedentResponseDTO precedentDTO = precedentResponse.getData();
+
+            // 판례 정보가 null이면 예외 처리
+            if (precedentDTO == null) {
+                throw new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT);
+            }
+
+            // 판례 정보를 DTO에 담기
+            MemberRecentResponseDTO responseDTO = new MemberRecentResponseDTO(
+                recentPrecedentId,
+                precedentDTO.precedentId(),
+                precedentDTO.caseName(),
+                precedentDTO.caseNumber(),
+                precedentDTO.judgmentDate(),
+                precedentDTO.judgment(),
+                precedentDTO.courtName(),
+                precedentDTO.caseType(),
+                precedentDTO.verdictType(),
+                precedentDTO.judicialNotice(),
+                precedentDTO.verdictSummary(),
+                precedentDTO.referencedStatute(),
+                precedentDTO.referencedCase(),
+                precedentDTO.caseContent(),
+                precedentDTO.hit()
+
+            );
+
+            responseDTOs.add(responseDTO);
         }
-        BaseResponse<List<PrecedentListResponseDTO>> baseResponse = lawServiceClient.getPrecedentList(requestBody);
-        if (baseResponse.getData() == null) {
-            throw new MemberException(MemberErrorCode.NOT_FOUND_RECENT);
-        }
-        return baseResponse.getData();
+
+        return responseDTOs;
     }
 
     /**
@@ -324,13 +497,15 @@ public class MemberService {
         BaseResponse<List<PrecedentKeywordResponseDTO>> baseResponse = recommendServiceClient.getPrecedentKeyword(request.precedentId());
         // 가져온 10개의 키워드 리스트 중에서 가장 높은 value값을 가진 단어 추출
         PrecedentKeywordResponseDTO maxKeyword = Collections.max(baseResponse.getData(), Comparator.comparingDouble(PrecedentKeywordResponseDTO::value));
-        MemberKeyword newMemberKeyword = MemberKeyword.of(maxKeyword.word(), KeywordType.RELATED);
-        newMemberKeyword.setMemberPrecedent(memberPrecedent);
-        newMemberKeyword.setMember(member);
+        log.info("멤버 키워드 있는지 여부 : " + memberKeywordRepository.findByWord(maxKeyword.word()));
+        if (memberKeywordRepository.findByWord(maxKeyword.word()) == null) {
+            MemberKeyword newMemberKeyword = MemberKeyword.of(maxKeyword.word(), KeywordType.RELATED);
+            newMemberKeyword.setMemberPrecedent(memberPrecedent);
+            newMemberKeyword.setMember(member);
 
-        memberKeywordRepository.save(newMemberKeyword);
+            memberKeywordRepository.save(newMemberKeyword);
+        }
 
-        // 저장된 멤버 저장 판례 DTO로 변환
         return MemberPrecedentDTO.from(memberPrecedent);
     }
 
