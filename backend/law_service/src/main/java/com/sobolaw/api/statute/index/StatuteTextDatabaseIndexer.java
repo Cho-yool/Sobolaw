@@ -35,11 +35,15 @@ public class StatuteTextDatabaseIndexer {
     private final ObjectMapper objectMapper;
 
     public void indexDataFromDatabase() throws IOException {
+        // 작업 시작 로그
+        logger.info("Starting the indexing : statutetext_index");
 
         String query = "SELECT st.* FROM statute_text st";
 
         // 퀴리 결과 (MariaDB에서 데이터 select 한 것들)
         List<Map<String, Object>> queryResults = jdbcTemplate.queryForList(query);
+
+        int indexedCount = 0; // 성공적으로 색인된 문서의 수
 
         for (Map<String, Object> row : queryResults) {
             String statuteId = String.valueOf(row.get("statute_id"));
@@ -53,49 +57,12 @@ public class StatuteTextDatabaseIndexer {
 
                 // Elasticsearch에 요청 보내기
                 Response response = restClient.performRequest(request);
-                logger.info("Indexed document with ID: " + statuteId + ", Response: " + response.getStatusLine());
+                indexedCount++;
             } catch (IOException e) {
                 logger.error("Error indexing document with ID: " + statuteId, e);
             }
         }
-
-//            Long statuteId = null;
-//            if (row.get("statute_id") != null) {
-//                statuteId = Long.valueOf(String.valueOf(row.get("statute_id")));
-//            }
-//
-//            Long statuteNumber = null;
-//            if (row.get("statute_number") != null) {
-//                statuteNumber = Long.valueOf(String.valueOf(row.get("statute_number")));
-//            }
-//            String articleTitle = String.valueOf(row.get("article_title"));
-//            String articleEffectiveDate = String.valueOf(row.get("article_effective_date"));
-//            String articleNumber = String.valueOf(row.get("article_number"));
-//            String articleNumberSub = String.valueOf(row.get("article_number_sub"));
-//            String articleType = String.valueOf(row.get("article_type"));
-//
-//
-//
-//            // Elasticsearch에 데이터 색인을 위한 JSON 문자열 생성
-//            String jsonString = String.format(
-//                "{\"statuteId\": %d, \"statuteNumber\": %d, \"articleTitle\": \"%s\", " +
-//                    "\"articleEffectiveDate\": \"%s\", " +
-//                    "\"articleNumber\": \"%s\", \"articleNumberSub\": \"%s\", \"articleType\": \"%s\"}",
-//                statuteId, statuteNumber, articleTitle, articleEffectiveDate, articleNumber, articleNumberSub, articleType
-//            );
-//
-//
-//            // Elasticsearch에 데이터 색인을 위한 요청 생성
-//            Request request = new Request("POST", "/statuteText_index/_doc/" + row.get("statute_id"));
-//            request.setEntity(new NStringEntity(jsonString, ContentType.APPLICATION_JSON));
-//
-//            try {
-//                // Elasticsearch에 요청 보내기 및 응답 로그 출력
-//                Response response = restClient.performRequest(request);
-//                logger.info("Indexed document with ID: " + row.get("statute_id") + ", Response: " + EntityUtils.toString(response.getEntity()));
-//            } catch (IOException e) {
-//                logger.error("Error indexing document with ID: " + row.get("statute_id"), e);
-//            }
-
+        // 작업 완료 로그
+        logger.info("Completed indexing data  : statutetext_index / Total documents indexed: " + indexedCount);
     }
 }
