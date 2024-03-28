@@ -30,7 +30,17 @@ strong {
 .box1-content-title-left-title {
   white-space: nowrap;
   font-size: 4rem;
-  padding-bottom: 2rem;
+  padding-bottom: 3rem;
+}
+
+.box1-content-title-left-title-a {
+  display: inline-block;
+  font-weight: 900;
+  font-size: 6rem;
+}
+
+.box1-content-title-left-title-b {
+  display: inline-block;
 }
 
 .box1-content-title-left-content {
@@ -326,6 +336,12 @@ strong {
     white-space: nowrap;
     font-size: 2rem;
     padding-bottom: 2rem;
+  }
+
+  .box1-content-title-left-title-a {
+    display: inline-block;
+    font-weight: 900;
+    font-size: 3.5rem;
   }
 
   .box1-content-title-left-content {
