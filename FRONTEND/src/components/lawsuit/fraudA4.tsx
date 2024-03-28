@@ -1,21 +1,53 @@
-import { Button } from "antd";
-import style from "../../styles/papers/A4.module.css";
-import { FraudDetails } from "../../types/DataTypes";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { Button, Input } from "antd";
+import { RootState } from "../../redux/store/store";
+import { FraudDetails } from "../../types/DataTypes";
+import style from "../../styles/papers/A4.module.css";
 
 const FraudA4 = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
   const [directEvidence, setDirectEvidence] = useState<string>(
     fraudDetails.evidence
   );
+  const [title, setTitle] = useState("");
+  const accessToken = useSelector((state: RootState) => state.user.accessToken);
+
   useEffect(() => {
     console.log("A4", fraudDetails);
   }, [fraudDetails]);
+
+  // 저장 제출 함수
+  async function onSubmit(event: React.SyntheticEvent): Promise<void> {
+    event.preventDefault();
+    // TODO: 소장작성 비동기 통신
+    // 모든 조건이 True일 때 제출 가능 (필수입력 공백확인)
+    if (accessToken === "") {
+      alert("로그인 시 이용 가능합니다! ");
+    }
+  }
+
   return (
     <div className={style["container"]}>
       {fraudDetails ? (
         <>
-          <div className={style["button-box"]}>
-            <Button type="primary">저장하기</Button>
+          <div className={style["contents-center"]}>
+            {/* 상단 저장 버튼 */}
+            <div className={style["button-box"]}>
+              <Input
+                className={style["button"]}
+                placeholder="고소장 저장 제목"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                style={{ width: "100%" }}
+              />
+              <Button
+                className={style["button"]}
+                type="primary"
+                onClick={onSubmit}
+              >
+                저장하기
+              </Button>
+            </div>
           </div>
           <div className={style["pages"]}>
             <div className={style["title"]}>사기죄 고소장</div>

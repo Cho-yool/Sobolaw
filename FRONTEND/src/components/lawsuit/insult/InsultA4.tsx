@@ -78,9 +78,8 @@ export default function LawsuitInsult() {
 
   // input 효과들
   const defaultValue = dayjs("2024-01-01");
-  const [showDefendant, setShowDefendant] = useState("모름");
+  const [showDefendant, setShowDefendant] = useState("알고있음");
   const [showWebDetailInput, setShowWebDetailInput] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("모름");
   const [showWitness1, setShowWitness1] = useState(false);
   const [showDuration, setShowDuration] = useState(false);
 
@@ -115,10 +114,6 @@ export default function LawsuitInsult() {
     setPaperEvidence(checkedValues.map((value) => String(value)));
   };
 
-  const handleOptionChange = (value: string) => {
-    setSelectedOption(value);
-  };
-
   // handle 함수들
   // 날짜 지정
   const onChangeDate: DatePickerProps["onChange"] = (_, dateStr) => {
@@ -130,7 +125,7 @@ export default function LawsuitInsult() {
       setIncidentDate(datePart);
       // console.log(incidentDate);
       // // 시간 부분을 콜론을 기준으로 분리하여 각 시간 요소를 구합니다.
-      const [hourStr, minuteStr, secondStr] = timePart.split(":");
+      const [hourStr, minuteStr] = timePart.split(":");
       // const hour = parseInt(hourStr, 10);
       // const minute = parseInt(minuteStr, 10);
       // const second = parseInt(secondStr, 10);
@@ -296,7 +291,9 @@ export default function LawsuitInsult() {
     event.preventDefault();
     // TODO: 소장작성 비동기 통신
     // 모든 조건이 True일 때 제출 가능 (필수입력 공백확인)
-    if (title === "") {
+    if (accessToken === "") {
+      alert("로그인 시 이용 가능합니다! ");
+    } else if (title === "") {
       alert("소장 저장명을 확인해주세요!");
     } else if (plaintiffName === "") {
       alert("원고 성명을 확인해주세요!");
@@ -420,368 +417,390 @@ export default function LawsuitInsult() {
       <div className={style["menu"]}>
         <div className={style["menu-mini"]}>
           <div className={style["menu-title"]}>당사자</div>
-          <p>고소하는 사람</p>
-          <Input
-            placeholder="김종범"
-            addonBefore="성명"
-            value={plaintiffName}
-            onChange={(e) => {
-              setPlaintiffName(e.target.value);
-            }}
-          />
-          <p>고소할 사람(상대방)</p>
-          <Radio.Group
-            value={showDefendant}
-            onChange={(e) => setShowDefendant(e.target.value)}
-            style={{ width: "100%" }}
-          >
-            <Radio.Button value="알고있음">알고있음</Radio.Button>
-            <Radio.Button value="일부알고있음">일부알고있음</Radio.Button>
-            <Radio.Button value="모름">모름</Radio.Button>
-          </Radio.Group>
-          {showDefendant === "알고있음" && (
-            <>
-              <Input
-                placeholder="이름"
-                value={defendantName}
-                onChange={(e) => setDefendantName(e.target.value)}
-              />
-              <Input
-                placeholder="닉네임"
-                value={defendantNickname}
-                onChange={(e) => setDefendantNickname(e.target.value)}
-              />
-              <Input
-                placeholder="주소"
-                value={defendantAddress}
-                onChange={(e) => setDefendantAddress(e.target.value)}
-              />
-              <Tooltip
-                // placement="bottom"
-                placement="top"
-                title={"숫자만 입력해주세요!"}
-                arrow={true}
-              >
-                <Input
-                  placeholder="전화번호"
-                  value={defendantPhoneNumber}
-                  onChange={(e) => setDefendantPhoneNumber(e.target.value)}
-                />
-              </Tooltip>
-            </>
-          )}
-          {showDefendant === "일부알고있음" && (
-            <>
-              <Input
-                placeholder="이름"
-                value={defendantName}
-                onChange={(e) => setDefendantName(e.target.value)}
-              />
-              <Input
-                placeholder="닉네임"
-                value={defendantNickname}
-                onChange={(e) => setDefendantNickname(e.target.value)}
-              />
-              <Input
-                placeholder="주소"
-                value={defendantAddress}
-                onChange={(e) => setDefendantAddress(e.target.value)}
-              />
-              <Tooltip
-                // placement="bottom"
-                placement="top"
-                title={"숫자만 입력해주세요!"}
-                arrow={true}
-              >
-                <Input
-                  placeholder="전화번호"
-                  value={defendantPhoneNumber}
-                  onChange={(e) => setDefendantPhoneNumber(e.target.value)}
-                />
-              </Tooltip>
-            </>
-          )}
-          {showDefendant === "모름" && (
+          <div className={style["menu-content"]}>
+            <p>고소하는 사람</p>
             <Input
-              placeholder="닉네임"
-              value={defendantNickname}
-              onChange={(e) => setDefendantNickname(e.target.value)}
+              placeholder="김종범"
+              addonBefore="성명"
+              value={plaintiffName}
+              onChange={(e) => {
+                setPlaintiffName(e.target.value);
+              }}
             />
-          )}
+            <p>고소할 사람(상대방)</p>
+            <Radio.Group
+              value={showDefendant}
+              onChange={(e) => setShowDefendant(e.target.value)}
+              style={{ width: "100%" }}
+            >
+              <Radio.Button value="알고있음">알고있음</Radio.Button>
+              <Radio.Button value="일부알고있음">일부알고있음</Radio.Button>
+              <Radio.Button value="모름">모름</Radio.Button>
+            </Radio.Group>
+            {showDefendant === "알고있음" && (
+              <>
+                <Input
+                  placeholder="이름"
+                  value={defendantName}
+                  onChange={(e) => setDefendantName(e.target.value)}
+                />
+                <Input
+                  placeholder="닉네임"
+                  value={defendantNickname}
+                  onChange={(e) => setDefendantNickname(e.target.value)}
+                />
+                <Input
+                  placeholder="주소"
+                  value={defendantAddress}
+                  onChange={(e) => setDefendantAddress(e.target.value)}
+                />
+                <Tooltip
+                  // placement="bottom"
+                  placement="top"
+                  title={"숫자만 입력해주세요!"}
+                  arrow={true}
+                >
+                  <Input
+                    placeholder="전화번호"
+                    value={defendantPhoneNumber}
+                    onChange={(e) => setDefendantPhoneNumber(e.target.value)}
+                  />
+                </Tooltip>
+              </>
+            )}
+            {showDefendant === "일부알고있음" && (
+              <>
+                <Input
+                  placeholder="이름"
+                  value={defendantName}
+                  onChange={(e) => setDefendantName(e.target.value)}
+                />
+                <Input
+                  placeholder="닉네임"
+                  value={defendantNickname}
+                  onChange={(e) => setDefendantNickname(e.target.value)}
+                />
+                <Input
+                  placeholder="주소"
+                  value={defendantAddress}
+                  onChange={(e) => setDefendantAddress(e.target.value)}
+                />
+                <Tooltip
+                  // placement="bottom"
+                  placement="top"
+                  title={"숫자만 입력해주세요!"}
+                  arrow={true}
+                >
+                  <Input
+                    placeholder="전화번호"
+                    value={defendantPhoneNumber}
+                    onChange={(e) => setDefendantPhoneNumber(e.target.value)}
+                  />
+                </Tooltip>
+              </>
+            )}
+            {showDefendant === "모름" && (
+              <Input
+                placeholder="닉네임"
+                value={defendantNickname}
+                onChange={(e) => setDefendantNickname(e.target.value)}
+              />
+            )}
+          </div>
         </div>
 
         <div className={style["menu-mini"]}>
           <div className={style["menu-title"]}>사건경위</div>
-          <Tooltip
-            // placement="bottom"
-            placement="top"
-            title={"날짜는 필수! 시간대는 모르면 대략적인 '시'만 체크해주세요"}
-            arrow={true}
-          >
-            <p>발생한 날과 시간대</p>
-            <DatePicker
-              defaultValue={defaultValue}
-              showTime
-              locale={locale}
-              onChange={onChangeDate}
+          <div className={style["menu-content"]}>
+            <Tooltip
+              // placement="bottom"
+              placement="top"
+              title={
+                "날짜는 필수! 시간대는 모르면 대략적인 '시'만 체크해주세요"
+              }
+              arrow={true}
+            >
+              <p>발생한 날과 시간대</p>
+              <DatePicker
+                defaultValue={defaultValue}
+                showTime
+                locale={locale}
+                onChange={onChangeDate}
+                style={{ width: "100%" }}
+              />
+            </Tooltip>
+            <p>온라인 서비스 유형</p>
+            <Cascader
+              options={options}
+              onChange={onChangeOnline}
+              placeholder="사건이 발생한 웹서비스 유형"
               style={{ width: "100%" }}
             />
-          </Tooltip>
-          <p>온라인 서비스 유형</p>
-          <Cascader
-            options={options}
-            onChange={onChangeOnline}
-            placeholder="사건이 발생한 웹서비스 유형"
-            style={{ width: "100%" }}
-          />
-          {showWebDetailInput == true && (
-            <>
-              <p>상세 URL 혹은 채팅방 이름</p>
-              <Input
-                placeholder="웹서비스의 이름이나 주소 등"
-                value={webServiceDetails}
-                onChange={(e) => setWebServiceDetails(e.target.value)}
-              />
-            </>
-          )}
+            {showWebDetailInput == true && (
+              <>
+                <p>상세 URL 혹은 채팅방 이름</p>
+                <Input
+                  placeholder="웹서비스의 이름이나 주소 등"
+                  value={webServiceDetails}
+                  onChange={(e) => setWebServiceDetails(e.target.value)}
+                />
+              </>
+            )}
+          </div>
         </div>
         <div className={style["menu-mini"]}>
           <p className={style["menu-title"]}>
             공연성: 불특정 또는 다수인이 인식할 수 있는 상태
           </p>
-          <p>웹사이트의 이용자 수</p>
-          <Input
-            addonBefore={
-              <Select
-                defaultValue="모름"
-                style={{ width: 200 }}
-                onChange={handleOptionChange}
-              >
-                <Option value="알고있음">알고있음</Option>
-                <Option value="모름">모름</Option>
-              </Select>
-            }
-            addonAfter="명"
-            disabled={selectedOption === "모름"}
-            value={relatedPeopleCount}
-            onChange={onChangeUser}
-          />
-          <p>목격자여부</p>
-          <Cascader
-            options={[
-              {
-                value: "알고있음",
-                label: "알고있음",
-              },
-              {
-                value: "모름",
-                label: "모름",
-              },
-            ]}
-            onChange={onChangeWitness}
-            placeholder="목격자들의 ID를 알고계신가요?"
-            style={{ width: "100%" }}
-          />
-          {showWitness1 == true && (
-            <>
-              <p>목격자 ID 1</p>
-              <Input
-                placeholder="예시: ssafy123"
-                value={witness1}
-                onChange={handleWitness1Change}
-              />
-              <p>목격자 ID 2 </p>
-              <Input
-                placeholder="예시: 루찌털이범"
-                value={witness2}
-                onChange={handleWitness2Change}
-              />
-              <p>목격자 ID 3</p>
-              <Input
-                placeholder="예시: 잔나랑듀오할래"
-                value={witness3}
-                onChange={handleWitness3Change}
-              />
-            </>
-          )}
+          <div className={style["menu-content"]}>
+            <p>웹사이트의 이용자 수</p>
+            <Input
+              addonBefore={
+                <Select defaultValue="알고있음" style={{ width: 200 }}>
+                  <Option value="알고있음">알고있음</Option>
+                </Select>
+              }
+              addonAfter="명"
+              // disabled={selectedOption === "모름"}
+              value={relatedPeopleCount}
+              onChange={onChangeUser}
+            />
+            <p>목격자여부</p>
+            <Cascader
+              options={[
+                {
+                  value: "알고있음",
+                  label: "알고있음",
+                },
+                {
+                  value: "모름",
+                  label: "모름",
+                },
+              ]}
+              onChange={onChangeWitness}
+              placeholder="목격자들의 ID를 알고계신가요?"
+              style={{ width: "100%" }}
+            />
+            {showWitness1 == true && (
+              <>
+                <p>목격자 ID 1</p>
+                <Input
+                  placeholder="예시: ssafy123"
+                  value={witness1}
+                  onChange={handleWitness1Change}
+                />
+                <p>목격자 ID 2 </p>
+                <Input
+                  placeholder="예시: 루찌털이범"
+                  value={witness2}
+                  onChange={handleWitness2Change}
+                />
+                <p>목격자 ID 3</p>
+                <Input
+                  placeholder="예시: 잔나랑듀오할래"
+                  value={witness3}
+                  onChange={handleWitness3Change}
+                />
+              </>
+            )}
+          </div>
         </div>
         <div className={style["menu-mini"]}>
           <p className={style["menu-title"]}>
             모욕성: 사실을 적시하지 아니하고 사람의 사회적 평가를 저하시킬 만한
             추상적 판단 또는 경멸적 감정을 표현하는 것
           </p>
-          <p>문제발언</p>
-          <Input
-            placeholder="예시: 한심한 꼬맹이녀석 게임접어라"
-            value={problemSpeech}
-            onChange={(e) => {
-              setProblemSpeech(e.target.value);
-            }}
-          />
-          <p>가해자가 모욕한 이유</p>
-          <Input
-            placeholder="예시: 자신과 정치색이 다르다"
-            addonAfter="는 이유"
-            value={reasonsForInsult}
-            onChange={(e) => {
-              setReasonsForInsult(e.target.value);
-            }}
-          />
-          <p>모욕이 지속된 시간</p>
-          <Cascader
-            options={[
-              {
-                value: "수 분 동안 수 차례 모욕행위가 지속됨",
-                label: "수 분 동안 수 차례 모욕행위가 지속됨",
-              },
-              {
-                value: "어느 정도 모욕 행위가 지속됨",
-                label: "어느 정도 모욕 행위가 지속됨",
-              },
-            ]}
-            onChange={onChangeDuration}
-            defaultValue={["어느 정도 모욕 행위가 지속됨"]}
-            style={{ width: "100%" }}
-          />
-          {showDuration == true && (
-            <>
-              <Input
-                placeholder="15분"
-                addonAfter="동안"
-                value={insultDuration}
-                onChange={(e) => {
-                  setInsultDuration(e.target.value);
-                }}
-              />
-              <Input
-                placeholder="20"
-                addonAfter="회"
-                value={insultFrequency}
-                onChange={(e) => {
-                  setInsultFrequency(e.target.value);
-                }}
-              />
-            </>
-          )}
+          <div className={style["menu-content"]}>
+            <p>문제발언</p>
+            <Input
+              placeholder="예시: 한심한 꼬맹이녀석 게임접어라"
+              value={problemSpeech}
+              onChange={(e) => {
+                setProblemSpeech(e.target.value);
+              }}
+            />
+            <p>가해자가 모욕한 이유</p>
+            <Input
+              placeholder="예시: 자신과 정치색이 다르다"
+              addonAfter="는 이유"
+              value={reasonsForInsult}
+              onChange={(e) => {
+                setReasonsForInsult(e.target.value);
+              }}
+            />
+            <p>모욕이 지속된 시간</p>
+            <Cascader
+              options={[
+                // {
+                //   value: "수 분 동안 수 차례 모욕행위가 지속됨",
+                //   label: "수 분 동안 수 차례 모욕행위가 지속됨",
+                // },
+                {
+                  value: "어느 정도 모욕 행위가 지속됨",
+                  label: "어느 정도 모욕 행위가 지속됨",
+                },
+              ]}
+              onChange={onChangeDuration}
+              defaultValue={["수 분 동안 수 차례 모욕행위가 지속됨"]}
+              style={{ width: "100%" }}
+            />
+            {showDuration == true && (
+              <>
+                <Input
+                  placeholder="15분"
+                  addonAfter="동안"
+                  value={insultDuration}
+                  onChange={(e) => {
+                    setInsultDuration(e.target.value);
+                  }}
+                />
+                <Input
+                  placeholder="20"
+                  addonAfter="회"
+                  value={insultFrequency}
+                  onChange={(e) => {
+                    setInsultFrequency(e.target.value);
+                  }}
+                />
+              </>
+            )}
+          </div>
         </div>
 
         <div className={style["menu-mini"]}>
           <p className={style["menu-title"]}>
             특정성: '피해자가 누구인지를 알 수 있는가'
           </p>
-          <Checkbox onChange={onchangeSpecific1}>
-            닉네임 외 피해자 특정 가능 내용
-          </Checkbox>
-          {showCircumInput1 && (
-            <Input
-              placeholder="신상정보를 포함한 닉네임"
-              value={circum1}
-              onChange={onchangeCircum1}
-            />
-          )}
-          <Checkbox onChange={onchangeSpecific2}>온라인 프로필</Checkbox>
-          {showCircumInput2 == true && (
-            <Input
-              placeholder="증명사진이 있는 온라인 프로필"
-              value={circum2}
-              onChange={onchangeCircum2}
-            />
-          )}
-          <Checkbox onChange={onchangeSpecific3}>
-            인터넷 스트리밍(방송)
-          </Checkbox>
-          {showCircumInput3 == true && (
-            <Input
-              placeholder="얼굴이 공개된 방송"
-              value={circum3}
-              onChange={onchangeCircum3}
-            />
-          )}
-          <Checkbox onChange={onchangeSpecific4}>가해자와의 대화과정</Checkbox>
-          {showCircumInput4 == true && (
-            <Input
-              placeholder="고소인의 정보가 포함된 대화과정"
-              value={circum4}
-              onChange={onchangeCircum4}
-            />
-          )}
-          <Checkbox onChange={onchangeSpecific5}>기타</Checkbox>
-          {showCircumInput5 == true && (
-            <Input
-              placeholder="오프라인 모임(정모) 등"
-              value={circum5}
-              onChange={onchangeCircum5}
-            />
-          )}
+          <div className={style["menu-content"]}>
+            <Checkbox onChange={onchangeSpecific1}>
+              닉네임 외 피해자 특정 가능 내용
+            </Checkbox>
+            {showCircumInput1 && (
+              <Input
+                placeholder="신상정보를 포함한 닉네임"
+                value={circum1}
+                onChange={onchangeCircum1}
+              />
+            )}
+            <Checkbox onChange={onchangeSpecific2}>온라인 프로필</Checkbox>
+            {showCircumInput2 == true && (
+              <Input
+                placeholder="증명사진이 있는 온라인 프로필"
+                value={circum2}
+                onChange={onchangeCircum2}
+              />
+            )}
+            <Checkbox onChange={onchangeSpecific3}>
+              인터넷 스트리밍(방송)
+            </Checkbox>
+            {showCircumInput3 == true && (
+              <Input
+                placeholder="얼굴이 공개된 방송"
+                value={circum3}
+                onChange={onchangeCircum3}
+              />
+            )}
+            <Checkbox onChange={onchangeSpecific4}>
+              가해자와의 대화과정
+            </Checkbox>
+            {showCircumInput4 == true && (
+              <Input
+                placeholder="고소인의 정보가 포함된 대화과정"
+                value={circum4}
+                onChange={onchangeCircum4}
+              />
+            )}
+            <Checkbox onChange={onchangeSpecific5}>기타</Checkbox>
+            {showCircumInput5 == true && (
+              <Input
+                placeholder="오프라인 모임(정모) 등"
+                value={circum5}
+                onChange={onchangeCircum5}
+              />
+            )}
+          </div>
         </div>
 
         <div className={style["menu-mini"]}>
           <p className={style["menu-title"]}>첨부할 증거</p>
-          <Checkbox.Group options={evidenceOptions} onChange={onChangeCheck} />
+          <div className={style["menu-content"]}>
+            <Checkbox.Group
+              options={evidenceOptions}
+              onChange={onChangeCheck}
+            />
+          </div>
         </div>
 
         <div className={style["menu-mini"]}>
           <div className={style["menu-title"]}>고소인(본인) 상세 정보</div>
-
-          <Input
-            placeholder="성명"
-            value={plaintiffName}
-            onChange={(e) => setPlaintiffName(e.target.value)}
-          />
-          <Input
-            placeholder="주민등록번호"
-            value={plaintiffRRNumber}
-            onChange={(e) => setPlaintiffRRNumber(e.target.value)}
-          />
-          <Input
-            placeholder="닉네임"
-            value={plaintiffNickname}
-            onChange={(e) => setPlaintiffNickname(e.target.value)}
-          />
-          <Input
-            placeholder="주소"
-            value={plaintiffAddress}
-            onChange={(e) => setPlaintiffAddress(e.target.value)}
-          />
-          <Tooltip
-            // placement="bottom"
-            placement="top"
-            title={"숫자만 입력해주세요!"}
-            arrow={true}
-          >
+          <div className={style["menu-content"]}>
             <Input
-              placeholder="전화번호"
-              value={plaintiffPhoneNumber}
-              onChange={(e) => setPlaintiffPhoneNumber(e.target.value)}
+              placeholder="성명"
+              value={plaintiffName}
+              onChange={(e) => setPlaintiffName(e.target.value)}
             />
-          </Tooltip>
+            <Input
+              placeholder="주민등록번호"
+              value={plaintiffRRNumber}
+              onChange={(e) => setPlaintiffRRNumber(e.target.value)}
+            />
+            <Input
+              placeholder="닉네임"
+              value={plaintiffNickname}
+              onChange={(e) => setPlaintiffNickname(e.target.value)}
+            />
+            <Input
+              placeholder="주소"
+              value={plaintiffAddress}
+              onChange={(e) => setPlaintiffAddress(e.target.value)}
+            />
+            <Tooltip
+              // placement="bottom"
+              placement="top"
+              title={"숫자만 입력해주세요!"}
+              arrow={true}
+            >
+              <Input
+                placeholder="전화번호"
+                value={plaintiffPhoneNumber}
+                onChange={(e) => setPlaintiffPhoneNumber(e.target.value)}
+              />
+            </Tooltip>
+          </div>
         </div>
 
         <div className={style["menu-mini"]}>
           <p className={style["menu-title"]}>관할경찰서</p>
-          <Input
-            placeholder="@@경찰서 형사팀/사이버수사팀"
-            value={policeStationTeam}
-            onChange={(e) => setPoliceStationTeam(e.target.value)}
-          />
+          <div className={style["menu-content"]}>
+            <Input
+              placeholder="@@경찰서 형사팀/사이버수사팀"
+              value={policeStationTeam}
+              onChange={(e) => setPoliceStationTeam(e.target.value)}
+            />
+          </div>
         </div>
 
         <div className={style["menu-mini"]}>
           <p className={style["menu-title"]}>제출 전 주의사항</p>
-          <Checkbox onChange={onchangeAgree}>
-            <strong>
-              허위사실에 근거한 고소는 무고죄로 처벌받을 수 있음을 잘 알고 있음
-            </strong>
-          </Checkbox>
+          <div className={style["menu-content"]}>
+            <Checkbox onChange={onchangeAgree}>
+              <strong>
+                허위사실에 근거한 고소는 무고죄로 처벌받을 수 있음을 잘 알고
+                있음
+              </strong>
+            </Checkbox>
+          </div>
         </div>
 
         <div className={style["menu-mini"]}>
           <p className={style["menu-title"]}>제출일자</p>
-          <DatePicker
-            locale={locale}
-            onChange={onChangeSubmitDate}
-            style={{ width: "100%" }}
-          />
+          <div className={style["menu-content"]}>
+            <DatePicker
+              locale={locale}
+              onChange={onChangeSubmitDate}
+              style={{ width: "100%" }}
+            />
+          </div>
         </div>
       </div>
 

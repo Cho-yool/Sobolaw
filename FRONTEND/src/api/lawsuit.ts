@@ -7,7 +7,6 @@ const headers = new AxiosHeaders();
 headers.set("Content-Type", "application/json;charset=utf-8");
 
 const url = "lawsuit";
-const testToken = "";
 
 // 마이페이지
 // 멤버의 소장 리스트 조회
@@ -15,7 +14,7 @@ async function getLawsuitList(accessToken: string) {
   const response = await http.get(`${url}`, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLqt7zsmIEiLCJyb2xlIjoiUk9MRV9VU0VSIiwibWVtYmVySWQiOjE4LCJpYXQiOjE3MTEzODcxMDIsImV4cCI6MTcxMjI1MTEwMn0.RkQVC095BRBw8Ldo2kwTljfxl0sgp7jBlSe6Z45gBhpi0FWG5nemiV03BbQpC7-IjiLgQ_8rjq8zkiN1Y-UwVg`,
+      Authorization: `Bearer ${accessToken}`,
     },
   });
   return response.data.data;
@@ -29,7 +28,7 @@ async function postInsult(accessToken: string, data: InsultForm) {
   await http.post(`${url}/insults`, data, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLqt7zsmIEiLCJyb2xlIjoiUk9MRV9VU0VSIiwibWVtYmVySWQiOjE4LCJpYXQiOjE3MTEzODcxMDIsImV4cCI6MTcxMjI1MTEwMn0.RkQVC095BRBw8Ldo2kwTljfxl0sgp7jBlSe6Z45gBhpi0FWG5nemiV03BbQpC7-IjiLgQ_8rjq8zkiN1Y-UwVg`,
+      Authorization: `Bearer ${accessToken}`,
     },
   });
 }
@@ -39,7 +38,7 @@ async function getInsult(insultId: number, accessToken: string) {
   const response = await http.get(`${url}/insults/${insultId}`, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLqt7zsmIEiLCJyb2xlIjoiUk9MRV9VU0VSIiwibWVtYmVySWQiOjE4LCJpYXQiOjE3MTEzODcxMDIsImV4cCI6MTcxMjI1MTEwMn0.RkQVC095BRBw8Ldo2kwTljfxl0sgp7jBlSe6Z45gBhpi0FWG5nemiV03BbQpC7-IjiLgQ_8rjq8zkiN1Y-UwVg`,
+      Authorization: `Bearer ${accessToken}`,
     },
   });
   return response.data.data;
