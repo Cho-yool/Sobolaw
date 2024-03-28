@@ -16,7 +16,13 @@ const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
   </Space>
 );
 
-export default function MyCaseList({ cases }: { cases: MemberPrecedent[] }) {
+export default function MyCaseList({
+  cases,
+  onUpdate,
+}: {
+  cases: MemberPrecedent[];
+  onUpdate: (updatedList: MemberPrecedent[]) => void;
+}) {
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
   const dispatch: AppDispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,10 +49,14 @@ export default function MyCaseList({ cases }: { cases: MemberPrecedent[] }) {
         const newPrecedentIds = precedentIds.filter(
           (id) => id !== selectedPrecedentId
         );
-        console.log(selectedItemId);
+        const newPrecednetsList = cases.filter(
+          (item) => item.precedentId !== selectedPrecedentId
+        );
+        // console.log(selectedItemId);
         await delPrecedents(accessToken, selectedItemId);
-        console.log(newPrecedentIds);
+        // console.log(newPrecedentIds);
         dispatch(updatePrecedents(newPrecedentIds));
+        onUpdate(newPrecednetsList);
         setIsModalOpen(false);
         setSelectedItemId(null);
       } catch (error) {

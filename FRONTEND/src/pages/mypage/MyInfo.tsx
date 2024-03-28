@@ -7,10 +7,10 @@ import "../../App.css";
 import style from "../../styles/mypage/MyInfo.module.css";
 import { RootState, AppDispatch } from "../../redux/store/store";
 import { resetAuth } from "../../redux/reducers/user/userSlice";
+import { MemberInfo, MemberKeyword } from "../../types/DataTypes";
+import { getUserInfo, deleteUser } from "../../api/members";
 import MyKeyword from "../../components/mypage/MyKeyword";
 import MyRecentCase from "../../components/mypage/MyRecentCase";
-import { MemberInfo } from "../../types/DataTypes";
-import { getUserInfo, deleteUser } from "../../api/members";
 
 export default function MyInfo() {
   const navigate = useNavigate();
@@ -21,16 +21,31 @@ export default function MyInfo() {
   );
   const [userInfo, setUserInfo] = useState<MemberInfo>();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [directKeyword, setDirectKeyword] = useState<MemberKeyword[]>();
+  const [relatedKeyword, setRelatedKeyword] = useState<MemberKeyword[]>();
 
   useEffect(() => {
     const fetchData = async () => {
-      // const response = await getUserInfo(accessToken);
       const response = await getUserInfo(accessToken);
       setUserInfo(response);
     };
     fetchData();
-    // }, [user.accessToken]
   }, []);
+
+  useEffect(() => {
+    // userInfo가 존재하고 memberKeyword가 존재할 때만 처리
+    if (userInfo && userInfo.memberKeyword) {
+      // "DIRECT" 키워드와 "RELATED" 키워드를 분리하여 각각의 배열에 저장
+      const direct = userInfo.memberKeyword.filter(
+        (keyword) => keyword.keywordType === "DIRECT"
+      );
+      const related = userInfo.memberKeyword.filter(
+        (keyword) => keyword.keywordType === "RELATED"
+      );
+      setDirectKeyword(direct);
+      setRelatedKeyword(related);
+    }
+  }, [userInfo]); // userInfo가 업데이트될 때마다 실행됨
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -83,10 +98,22 @@ export default function MyInfo() {
           <div className={style["box2"]}>
             <div className={style["box-title"]}>관심 키워드</div>
             <MyKeyword
-              keywords={userInfo?.memberKeyword}
+              keywords={directKeyword}
               accessToken={accessToken}
+              patchwords={relatedKeyword}
             />
           </div>
+
+          {relatedKeyword !== undefined && relatedKeyword.length > 0 && (
+            <div className={style["box2"]}>
+              <div className={style["box-title"]}>내가 많이 찾는 키워드</div>
+              <div className={style["box-content"]}>
+                <div>
+                  {relatedKeyword?.map((item) => <div>{item.word}</div>)}
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className={style["box3"]}>
             <div className={style["box-title"]}>최근본 판례</div>

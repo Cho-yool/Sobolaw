@@ -31,7 +31,9 @@ export type KeywordType = {
 export type MemberKeyword = {
   memberKeywordId: number;
   memberId: number;
+  memberPrecedentId: number | null;
   word: string;
+  keywordType: "DIRECT" | "RELATED";
 };
 
 export type MemberRecent = {

@@ -13,9 +13,13 @@ import style from "../../styles/mypage/Mypaper.module.css";
 
 interface MyLawcaseTableProps {
   lawsuitList: MemberLawsuit[] | undefined;
+  onUpdate: (updatedList: MemberLawsuit[]) => void; // onUpdate 함수 타입 추가
 }
 
-export default function MyLawcaseTable({ lawsuitList }: MyLawcaseTableProps) {
+export default function MyLawcaseTable({
+  lawsuitList,
+  onUpdate,
+}: MyLawcaseTableProps) {
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
   const [dataWide, setDataWide] = useState<MypaperWide[]>([]);
   const [dataNarrow, setDataNarrow] = useState<MypaperNarrow[]>([]);
@@ -26,12 +30,17 @@ export default function MyLawcaseTable({ lawsuitList }: MyLawcaseTableProps) {
     setSelectedItemId(id);
     setIsModalOpen(true);
   };
+  console.log(lawsuitList);
 
   const handleOk = async () => {
-    if (selectedItemId !== null) {
+    if (selectedItemId !== null && lawsuitList) {
       try {
+        const newLawcaseList = lawsuitList.filter(
+          (item) => item.id !== selectedItemId
+        );
         await deleteInsult(selectedItemId, accessToken);
         setIsModalOpen(false);
+        onUpdate(newLawcaseList);
         setSelectedItemId(null);
       } catch (error) {
         console.error("Error deleting insult:", error);
