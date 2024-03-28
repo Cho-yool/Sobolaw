@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import {
   FormOutlined,
-  // UndoOutlined,
   CloseOutlined,
   ExclamationCircleOutlined,
 } from "@ant-design/icons";
 import { Button, Modal, Divider } from "antd";
+import { RootState } from "../../redux/store/store";
 import style from "../../styles/papers/Tab.module.css";
 
 interface LawsuitTabProps {
@@ -15,6 +16,7 @@ interface LawsuitTabProps {
 
 export default function LawsuitTab({ cates }: LawsuitTabProps) {
   const navigate = useNavigate();
+  const accessToken = useSelector((state: RootState) => state.user.accessToken);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCloseModalOpen, setIsCloseModalOpen] = useState(false);
   const showModal = () => {
@@ -31,6 +33,14 @@ export default function LawsuitTab({ cates }: LawsuitTabProps) {
 
   const handleCloseCancel = () => {
     setIsCloseModalOpen(false);
+  };
+
+  const handleLeavePage = () => {
+    if (accessToken != "") {
+      navigate("/mypage/papers");
+    } else {
+      navigate("/plaint");
+    }
   };
 
   return (
@@ -56,12 +66,19 @@ export default function LawsuitTab({ cates }: LawsuitTabProps) {
             <Divider />
             <p>
               모욕죄는 <br />
-              1. 공연성 <br />
-              2. 특정성 <br />
-              3. 모욕성 <br />위 3가지를 모두 충족시켜야 성립됩니다.
+              <br />
+              <strong>
+                1. 공연성 <br />
+                2. 특정성 <br />
+                3. 모욕성
+              </strong>
+              <br />
+              <br />위 3가지를 모두 충족시켜야 성립됩니다.
             </p>
             <Divider />
-            <p>주요상황</p>
+            <strong>주요상황</strong>
+            <br />
+            <br />
             <p>SNS에서 제3자가 공개적으로 나에게 욕설이나 비하를 한 경우</p>
             <p>네이버카페 등 커뮤니티에서 나에게 모욕적인 말을 댓글로 한경우</p>
             <p>운영하는 블로그에 찾아와 지속적으로 욕설, 험담 등을 하는 경우</p>
@@ -85,8 +102,42 @@ export default function LawsuitTab({ cates }: LawsuitTabProps) {
             ]}
           >
             <Divider />
-            <p>수정예정</p>
-            <Divider />
+            사기죄에 대한 고소장을 작성할 때 다음과 같은 유의사항을 고려해야
+            합니다:
+            <br />
+            <br />
+            <strong>1. 사실 기반의 기술</strong>: 고소장에는 명확하고 사실적인
+            사건의 개요를 포함해야 합니다. 가능한 한 구체적으로 명예훼손 행위를
+            설명하는 것이 중요합니다.
+            <br />
+            <strong>2. 증거 자료 첨부</strong>: 고소장에는 피고인이 명예훼손을
+            저지른 사실을 뒷받침하는 증거 자료를 첨부하는 것이 좋습니다. 예를
+            들어, 명예를 훼손한 메시지의 스크린샷이나 기타 증거들을 포함할 수
+            있습니다.
+            <br />
+            <strong>3. 증인 명시</strong>: 고소장에는 가능한 한 명예훼손 행위를
+            목격한 증인들의 정보를 포함하는 것이 좋습니다. 증인의 이름, 연락처,
+            그리고 목격한 사건에 대한 진술을 포함할 수 있습니다.
+            <br />
+            <strong>4. 법적 절차 따름</strong>: 고소를 위한 적절한 법적 절차를
+            따라야 합니다. 이를 위해 변호사나 법률 전문가의 도움을 받는 것이
+            좋습니다.
+            <br />
+            <strong>5. 상대방의 신원 보호</strong>: 고소장에는 피고인의 개인
+            정보나 기타 민감한 정보를 공개하지 않아야 합니다. 대신, 피고인을
+            명확하게 식별할 수 있는 정보를 포함해야 합니다.
+            <br />
+            <strong>6. 객관적인 표현</strong>: 고소장에는 주관적인 의견보다는
+            객관적인 사실과 증거를 중심으로 작성하는 것이 좋습니다.
+            <br />
+            <strong>7. 적절한 수신자 지정</strong>: 고소장을 올바른 수신자에게
+            제출하는 것이 중요합니다. 따라서 고소할 대상이 되는 당사자나 해당
+            사건과 관련된 당사자에게 고소장을 보내는 것이 좋습니다.
+            <br />
+            <br />
+            위의 유의사항을 준수하여 명예훼손죄 고소를 위한 고소장을 작성하면 더
+            효과적으로 법적 절차를 진행할 수 있습니다. 단, 법률상의 문제에
+            대해서는 항상 전문가의 조언을 구하는 것이 좋습니다.
           </Modal>
         )}
         {cates == "명예훼손" && (
@@ -101,7 +152,46 @@ export default function LawsuitTab({ cates }: LawsuitTabProps) {
             ]}
           >
             <Divider />
-            <p>알아서 써주셍용</p>
+            명예훼손죄에 대한 고소장을 작성할 때 다음과 같은 유의사항을 고려해야
+            합니다:
+            <br />
+            <br />
+            <strong>1. 사실의 명확한 기술</strong>: 고소장에는 명확하고 사실적인
+            사건의 개요를 포함해야 합니다. 이 때 관련된 사실들은 가능한 한
+            구체적으로 기술해야 합니다.
+            <br />
+            <strong>2. 증거 자료 첨부</strong>: 고소장에는 피고인이 명예훼손을
+            저지른 사실을 뒷받침하는 증거 자료를 첨부하는 것이 좋습니다. 예를
+            들어, 명예를 훼손한 메시지의 스크린샷이나 기타 증거들을 포함할 수
+            있습니다.
+            <br />
+            <strong>3. 법적 용어 사용</strong>: 고소장을 작성할 때는 법적 용어를
+            사용하는 것이 중요합니다. 법적 용어는 명확하고 강력한 주장을
+            전달하는 데 도움이 될 수 있습니다.
+            <br />
+            <strong>4. 문서 형식 준수</strong>: 고소장은 보통 특정한 형식을
+            따라야 합니다. 따라서 주변의 법률 전문가나 변호사의 도움을 받는 것이
+            좋습니다.
+            <br />
+            <strong>5. 상대방의 신원 보호</strong>: 고소장에는 피고인의 개인
+            정보나 기타 민감한 정보를 공개하지 않아야 합니다. 대신, 피고인을
+            명확하게 식별할 수 있는 정보를 포함해야 합니다.
+            <br />
+            <strong>6. 적절한 법적 절차 따름</strong>: 고소를 위한 절차나 필요한
+            서류 등을 올바르게 따르는 것이 중요합니다. 이를 위해 변호사나 법률
+            전문가의 조언을 구하는 것이 좋습니다.
+            <br />
+            <strong>7. 객관적인 표현</strong>: 고소장에는 주관적인 의견보다는
+            객관적인 사실과 증거를 중심으로 작성하는 것이 좋습니다.
+            <br />
+            <strong>8. 적절한 수신자 지정</strong>: 고소장을 올바른 수신자에게
+            제출하는 것이 중요합니다. 따라서 고소할 대상이 되는 당사자나 해당
+            사건과 관련된 당사자에게 고소장을 보내는 것이 좋습니다.
+            <br />
+            <br />
+            위의 유의사항을 준수하여 명예훼손죄 고소를 위한 고소장을 작성하면 더
+            효과적으로 법적 절차를 진행할 수 있습니다. 단, 법률상의 문제에
+            대해서는 항상 전문가의 조언을 구하는 것이 좋습니다.
             <Divider />
           </Modal>
         )}
@@ -122,13 +212,7 @@ export default function LawsuitTab({ cates }: LawsuitTabProps) {
             <Button key="back" onClick={handleCloseCancel}>
               취소
             </Button>,
-            <Button
-              key="link"
-              type="primary"
-              onClick={() => {
-                navigate("/mypage/papers");
-              }}
-            >
+            <Button key="link" type="primary" onClick={handleLeavePage}>
               나가기
             </Button>,
           ]}
