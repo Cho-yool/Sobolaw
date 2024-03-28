@@ -20,7 +20,11 @@ export default function MyCase() {
     };
     fetchData();
     // }, [user.accessToken]
-  }, [caseList]);
+  }, []);
+
+  const handleCaseListUpdate = (updatedList: MemberPrecedent[]) => {
+    setCaseList(updatedList);
+  };
 
   return (
     <>
@@ -38,7 +42,7 @@ export default function MyCase() {
               판례 추천받기
             </Button>
           </div>
-          <MyCaseList cases={caseList} />
+          <MyCaseList cases={caseList} onUpdate={handleCaseListUpdate} />
         </div>
       </div>
     </>

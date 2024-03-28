@@ -20,7 +20,11 @@ export default function Mypaper() {
       setLawsuitList(response);
     };
     fetchData();
-  }, [lawsuitList]);
+  }, []);
+
+  const handleLawsuitListUpdate = (updatedList: MemberLawsuit[]) => {
+    setLawsuitList(updatedList);
+  };
 
   return (
     <div className="pages">
@@ -38,7 +42,10 @@ export default function Mypaper() {
           </Button>
         </div>
         <Divider />
-        <MyLawcaseTable lawsuitList={lawsuitList} />
+        <MyLawcaseTable
+          lawsuitList={lawsuitList}
+          onUpdate={handleLawsuitListUpdate}
+        />
       </div>
     </div>
   );
