@@ -110,8 +110,13 @@ public class StatuteService {
                 StatuteTextDocument.class
             );
 
-            List<StatuteTextDocument> statuteTexts = statuteTextResponse.hits().hits().stream()
+            List<StatuteTextDocument> statuteTextDocuments = statuteTextResponse.hits().hits().stream()
                 .map(Hit::source)
+                .collect(Collectors.toList());
+
+            // StatuteTextDocument 리스트를 StatuteTextDTO 리스트로 변환
+            List<StatuteTextDTO> statuteTexts = statuteTextDocuments.stream()
+                .map(this::DocumentToStatuteTextDTO)
                 .collect(Collectors.toList());
 
             // StatuteDTO 구성
@@ -126,11 +131,26 @@ public class StatuteService {
                 statuteDTO.setPublicationNumber(statuteDocument.getPublicationNumber());
                 statuteDTO.setStatuteType(statuteDocument.getStatuteType());
                 statuteDTO.setHit(statuteDocument.getHit());
-                statuteDTO.setStatuteTextDocuments(statuteTexts); // StatuteTextDocument 리스트 설정
+                statuteDTO.setStatuteTexts(statuteTexts);
             }
             statutes.add(statuteDTO);
         }
         return statutes;
+    }
+
+    // Document -> DTO 변환
+    private StatuteTextDTO DocumentToStatuteTextDTO(StatuteTextDocument document) {
+        return new StatuteTextDTO(
+            document.getStatuteId(),
+            document.getStatuteNumber(),
+            document.getArticleContent(),
+            document.getArticleContentSub(),
+            document.getArticleEffectiveDate(),
+            document.getArticleNumber(),
+            document.getArticleNumberSub(),
+            document.getArticleTitle(),
+            document.getArticleType()
+        );
     }
 
     // statuteNumber로 법령 내용 조회
