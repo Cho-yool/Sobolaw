@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { List } from "antd";
-// import { RootState } from "../redux/store/store";
+import { RootState } from "../redux/store/store";
 import AcceptLawyer from "../components/admin/AcceptLawyer";
 import LawsuitAll from "../components/admin/LawsuitAll";
 import MemberAll from "../components/admin/MemberAll";
 import PrecedentAll from "../components/admin/PrecedentsAll";
 
 export default function AdminPage() {
-  // const user = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.user);
   const [boxHeight, setBoxHeight] = useState("85vh");
   const [tab, setTab] = useState(0);
   const [categoryTabs, setCategoryTabs] = useState([
@@ -31,7 +31,7 @@ export default function AdminPage() {
       component: <LawsuitAll />,
     },
     {
-      id: 2,
+      id: 3,
       isSelected: false,
       name: "저장된 판례 전체 조회",
       component: <PrecedentAll />,
@@ -56,61 +56,76 @@ export default function AdminPage() {
     <div
       style={{ minHeight: "100vh", marginBottom: "10px", paddingBlock: "6rem" }}
     >
-      <div
-        style={{ display: "flex", justifyContent: "center", marginTop: "2rem" }}
-      >
+      {user.auth === "ADMIN" ? (
         <div
           style={{
-            border: "2px solid purple",
-            borderRadius: "10px",
-            overflow: "hidden",
-            width: "85vw",
-            maxHeight: boxHeight,
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "2rem",
           }}
         >
           <div
             style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-
-              paddingTop: "2rem",
+              border: "2px solid purple",
+              borderRadius: "10px",
+              overflow: "hidden",
+              width: "85vw",
+              maxHeight: boxHeight,
             }}
           >
             <div
-              style={{ width: "100%", marginTop: "2rem", paddingTop: "2rem" }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                paddingTop: "2rem",
+              }}
             >
-              <List
-                dataSource={categoryTabs}
-                renderItem={(category) => (
-                  <List.Item
-                    key={category.id}
-                    className={category.isSelected ? "active" : ""}
-                    onClick={() => changeSelect(category.id)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    {category.name}
-                  </List.Item>
-                )}
-              />
+              <div
+                style={{ width: "100%", marginTop: "2rem", paddingTop: "2rem" }}
+              >
+                <List
+                  dataSource={categoryTabs}
+                  renderItem={(category) => (
+                    <List.Item
+                      key={category.id}
+                      className={category.isSelected ? "active" : ""}
+                      onClick={() => changeSelect(category.id)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {category.name}
+                    </List.Item>
+                  )}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div
+            style={{
+              width: "75%",
+              backgroundColor: "white",
+              borderRadius: "10px",
+              marginLeft: "1rem",
+            }}
+          >
+            <div style={{ textAlign: "center", padding: "2rem" }}>
+              {categoryTabs[tab].component}
             </div>
           </div>
         </div>
-
+      ) : (
         <div
           style={{
-            width: "75%",
-            backgroundColor: "white",
-            borderRadius: "10px",
-            marginLeft: "1rem",
+            textAlign: "center",
+            fontSize: "1.5rem",
+            paddingTop: "2rem",
           }}
         >
-          <div style={{ textAlign: "center", padding: "2rem" }}>
-            {categoryTabs[tab].component}
-          </div>
+          관리자 전용 페이지입니다.
         </div>
-      </div>
+      )}
     </div>
   );
 }

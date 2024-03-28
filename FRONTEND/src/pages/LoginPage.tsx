@@ -35,6 +35,7 @@ function LoginPage() {
               userId: res.memberId,
               nickname: res.name,
               precedents: precedentIds,
+              auth: res.role,
             })
           );
         })

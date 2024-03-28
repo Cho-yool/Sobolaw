@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "antd";
 import { GoLaw } from "react-icons/go";
 import { FaPencil } from "react-icons/fa6";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import mainImg from "/images/mainLawyer.png";
 import sosongjunbi from "/images/checking-contract-terms.jpg";
 import jaryojiwon from "/images/hand-using.jpg";
@@ -18,6 +20,12 @@ export default function MainPage() {
     setIsOpen(!isOpen);
   }
 
+  useEffect(() => {
+    AOS.init({
+      useClassNames: true,
+    });
+  }, []);
+
   return (
     <div className="pages">
       <div className={style["box1"]}>
@@ -26,25 +34,100 @@ export default function MainPage() {
             <div className={style["box1-content-title-left"]}>
               <div>
                 <div className={style["box1-content-title-left-title"]}>
-                  <strong>소</strong>송 초<strong>보</strong>들은 여기
-                  <strong>로</strong>
+                  <div
+                    data-aos="flip-up"
+                    data-aos-delay="0"
+                    className={style["box1-content-title-left-title-a"]}
+                  >
+                    소
+                  </div>
+                  <div
+                    data-aos="flip-down"
+                    data-aos-delay="100"
+                    className={style["box1-content-title-left-title-b"]}
+                  >
+                    송
+                  </div>
+                  <div
+                    data-aos="flip-up"
+                    data-aos-delay="200"
+                    className={style["box1-content-title-left-title-b"]}
+                  >
+                    초
+                  </div>
+                  <div
+                    data-aos="flip-down"
+                    data-aos-delay="0"
+                    className={style["box1-content-title-left-title-a"]}
+                  >
+                    보
+                  </div>
+                  <div
+                    data-aos="flip-up"
+                    data-aos-delay="100"
+                    className={style["box1-content-title-left-title-b"]}
+                  >
+                    들
+                  </div>
+                  <div
+                    data-aos="flip-down"
+                    data-aos-delay="200"
+                    className={style["box1-content-title-left-title-b"]}
+                  >
+                    은
+                  </div>
+                  <div
+                    data-aos="flip-up"
+                    data-aos-delay="0"
+                    className={style["box1-content-title-left-title-b"]}
+                  >
+                    여
+                  </div>
+                  <div
+                    data-aos="flip-down"
+                    data-aos-delay="100"
+                    className={style["box1-content-title-left-title-b"]}
+                  >
+                    기
+                  </div>
+                  <div
+                    data-aos="flip-up"
+                    data-aos-delay="200"
+                    className={style["box1-content-title-left-title-a"]}
+                  >
+                    로
+                  </div>
                 </div>
-                <span className={style["box1-content-title-left-content"]}>
+                <div
+                  data-aos="flip-down"
+                  data-aos-delay="350"
+                  className={style["box1-content-title-left-content"]}
+                >
                   <p>고소장 작성을 어디서 어떻게 해야될지</p>
                   <p>
-                    내 상황과 유사한 판례가 있는지 궁금하시다면{" "}
+                    내 상황과 유사한 판례가 있는지 궁금하시x다면{" "}
                     <strong>소.보.로</strong>
                   </p>
-                </span>
+                </div>
               </div>
             </div>
-            <div className={style["box1-content-title-right"]}>
+            <div
+              data-aos="fade-up"
+              data-aos-delay="500"
+              className={style["box1-content-title-right"]}
+            >
               <img src={mainImg} alt="" />
             </div>
           </div>
 
-          <div className={style["box1-content-whitebox"]}>
+          <div
+            data-aos="fade-up"
+            data-aos-delay="350"
+            className={style["box1-content-whitebox"]}
+          >
             <div
+              data-aos="fade-up"
+              data-aos-delay="600"
               className={style["whitebox-content"]}
               onClick={() => {
                 navigate("/recommend");
@@ -65,6 +148,8 @@ export default function MainPage() {
 
             <div className={style["whitebox-dashed"]} />
             <div
+              data-aos="fade-up"
+              data-aos-delay="600"
               className={style["whitebox-content"]}
               onClick={() => {
                 navigate("/plaint");
@@ -88,24 +173,28 @@ export default function MainPage() {
       </div>
 
       <div className={style["box2"]}>
-        <div className={style["box3-title"]}>
+        <div
+          className={style["box3-title"]}
+          data-aos="fade-up"
+          data-aos-delay="800"
+        >
           <strong>내 주변에서 일어나는 사건의 답을 모르겠을 때</strong>
         </div>
-        <div className={style["box2-img"]} />
-        <div className={style["box3-title"]}>
+        <div className={style["box2-img"]} data-aos="fade-up" />
+        <div className={style["box3-title"]} data-aos="fade-up">
           <strong>과거에는 어떻게 해결했는지 알아보세요</strong>
         </div>
       </div>
 
       <div className={style["box3"]}>
-        <div className={style["box3-title"]}>
+        <div className={style["box3-title"]} data-aos="fade-up">
           <p>법률제도도 이해가 쏙쏙</p>
-          <div className={style["point-green"]}>
+          <div className={style["point-green"]} data-aos="fade-up">
             <strong>지금 바로 시작해보세요!</strong>
           </div>
         </div>
 
-        <div className={style["box3-cards"]}>
+        <div className={style["box3-cards"]} data-aos="fade-up">
           <div className={style["box3-cards-content"]}>
             <div
               className={style["image-card"]}

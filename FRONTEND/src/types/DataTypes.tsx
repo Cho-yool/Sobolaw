@@ -4,6 +4,7 @@ export type UserState = {
   accessToken: string;
   refreshToken: string;
   precedents: number[];
+  auth: string;
 };
 
 export type MypaperWide = {
@@ -66,6 +67,7 @@ export type MemberInfo = {
   memberKeyword: MemberKeyword[];
   memberRecents: MemberRecent[];
   memberPrecedents: memberPrecedents[];
+  roll: string;
 };
 
 export type MemberPrecedent = {

@@ -7,6 +7,7 @@ const initialState: UserState = {
   accessToken: "",
   refreshToken: "",
   precedents: [],
+  auth: "",
 };
 
 // 초기값 선언
@@ -23,12 +24,14 @@ const userSlice = createSlice({
       state.accessToken = "";
       state.refreshToken = "";
       state.precedents = [];
+      state.auth = "";
     },
     // 처음 user의 정보를 저장하는 함수
     loadInfo(state, action) {
       state.userId = action.payload.userId;
       state.nickname = action.payload.nickname;
       state.precedents = action.payload.precedents;
+      state.auth = action.payload.auth;
     },
     saveToken(state, action) {
       state.accessToken = action.payload.accessToken;

@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Button, Divider, Modal } from "antd";
-import { SmileTwoTone, MailTwoTone, HeartTwoTone } from "@ant-design/icons";
+import { Button, Divider, Modal, Tooltip, Tag } from "antd";
+import {
+  SmileTwoTone,
+  MailTwoTone,
+  HeartTwoTone,
+  SafetyCertificateTwoTone,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 import "../../App.css";
 import style from "../../styles/mypage/MyInfo.module.css";
 import { RootState, AppDispatch } from "../../redux/store/store";
@@ -23,6 +29,20 @@ export default function MyInfo() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [directKeyword, setDirectKeyword] = useState<MemberKeyword[]>();
   const [relatedKeyword, setRelatedKeyword] = useState<MemberKeyword[]>();
+  const tagColors = [
+    "processing",
+    "success",
+    "magenta",
+    "red",
+    "orange",
+    "gold",
+    "lime",
+    "green",
+    "cyan",
+    "blue",
+    "geekblue",
+    "purple",
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -93,6 +113,22 @@ export default function MyInfo() {
                 </div>
               </>
             )}
+            <Divider />
+            <div className={style["box-content"]}>
+              <div>
+                <SafetyCertificateTwoTone twoToneColor="#de9159" /> 전문가 여부:
+              </div>
+              <div>{userInfo?.roll}</div>
+              <Button
+                shape="round"
+                type="primary"
+                className={style["mypaper-button"]}
+                // onClick={handleCheck}
+                // disabled={isDisabled}
+              >
+                변호사 전환 신청하기
+              </Button>
+            </div>
           </div>
 
           <div className={style["box2"]}>
@@ -106,10 +142,31 @@ export default function MyInfo() {
 
           {relatedKeyword !== undefined && relatedKeyword.length > 0 && (
             <div className={style["box2"]}>
-              <div className={style["box-title"]}>내가 많이 찾는 키워드</div>
+              <div className={style["box-title"]}>
+                추천 키워드{" "}
+                <Tooltip
+                  // placement="bottom"
+                  placement="top"
+                  title={
+                    "내가 저장한 판례를 바탕으로 관련 높은 키워드를 보여드려요!"
+                  }
+                  arrow={true}
+                >
+                  <QuestionCircleOutlined />
+                </Tooltip>
+              </div>
               <div className={style["box-content"]}>
                 <div>
-                  {relatedKeyword?.map((item) => <div>{item.word}</div>)}
+                  {relatedKeyword?.map((item, index) => (
+                    <Tag
+                      bordered={false}
+                      closable
+                      color={tagColors[index]}
+                      style={{ fontSize: "1rem" }}
+                    >
+                      {item.word}
+                    </Tag>
+                  ))}
                 </div>
               </div>
             </div>
