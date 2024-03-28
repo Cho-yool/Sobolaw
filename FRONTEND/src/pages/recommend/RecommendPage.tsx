@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Row, Tooltip } from 'antd';
+import { Layout, Row, Tooltip, Steps } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import RecommendCards from '../../components/recommend/RecommendCard';
 import RecommendSearch from '../../components/recommend/RecommendSearch';
@@ -30,7 +30,7 @@ const RecommendPage: React.FC = () => {
     const cardsShowPoint = 365; // `recommendCardSection`을 표시할 스크롤 위치
     const searchShowPoint = 1100; // `recommendSearchSection`을 표시할 스크롤 위치
     const currentScroll = window.scrollY;
-    
+
     setIsCardsVisible(currentScroll > cardsShowPoint);
     setIsSearchVisible(currentScroll > searchShowPoint);
   };
@@ -93,14 +93,14 @@ const RecommendPage: React.FC = () => {
           </Row>
         </Content>
       </Layout>
-        <div className={`${style.recommendCardSection} ${isCardsVisible ? style.visible : ''}`}>
-          <h2>소보로 추천 검색은 무엇이 다를까요?</h2>
-          <RecommendCards />
-        </div>
-        <div className={`${style.recommendSearchSection} ${isSearchVisible ? style.visible : ''}`}>
-          <h2>소보로 추천 검색 이용하기</h2>
-          <RecommendSearch />
-        </div>
+      <div className={`${style.recommendCardSection} ${isCardsVisible ? style.visible : ''}`}>
+        <h2>소보로 추천 검색은 무엇이 다를까요?</h2>
+        <RecommendCards />
+      </div>
+      <div className={`${style.recommendSearchSection} ${isSearchVisible ? style.visible : ''}`}>
+        <h2>소보로 추천 검색 이용하기</h2>
+        <RecommendSearch />
+      </div>
     </div>
   );
 };
