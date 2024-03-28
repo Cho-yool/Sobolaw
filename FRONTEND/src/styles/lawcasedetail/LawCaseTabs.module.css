@@ -67,7 +67,7 @@
   cursor: pointer;
 }
 
-.color-select::after {
+/* .color-select::after {
   content: "▼";
   font-size: 1.5rem;
   position: absolute;
@@ -75,4 +75,4 @@
   left: 50%;
   transform: translateX(-50%);
   color: black;
-}
+} */

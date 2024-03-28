@@ -219,12 +219,11 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
   // 마우스 클릭이 끝났을때
   const onMouseOutHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     setOnEditing(false);
-    const { top } = selectionPos.getBoundingClientRect();
+    const { top, left } = selectionPos.getBoundingClientRect();
     const parentTop = e.currentTarget.getBoundingClientRect().top;
-    const parentLeft = e.currentTarget.getBoundingClientRect().left;
 
     setSelectionPosition({
-      x: parentLeft,
+      x: e.clientX - left,
       y: -parentTop + top,
     });
     if (selectionPos) {
