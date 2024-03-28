@@ -1,9 +1,11 @@
 package com.sobolaw.api.statute.dto;
 
-import com.sobolaw.api.statute.document.StatuteTextDocument;
 import java.util.List;
-
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -21,8 +23,6 @@ public class StatuteDTO {
     private String publicationDate;
     private String publicationNumber;
     private Long hit;
-
-    private List<StatuteTextDocument> statuteTextDocuments;
     private List<StatuteTextDTO> statuteTexts;
 
 }
