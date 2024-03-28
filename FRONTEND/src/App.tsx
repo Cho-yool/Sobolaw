@@ -20,6 +20,7 @@ import PrintLawsuit from "./pages/mypage/Printlawsuit";
 import InsultEditPage from "./pages/lawsuit/insultEdit";
 import SearchHitPage from "./pages/keywordsearch/SearchHitPage";
 import StatuteDetailPage from "./pages/keywordsearch/StatuteDetailPage";
+import AdminPage from "./pages/AdminPage";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
           <Route path="papers" element={<Mypaper />} />
           <Route path="case" element={<MyCase />} />
         </Route>
+        <Route path="/admin" element={<AdminPage />} />
       </Route>
       <Route path="/plaint/1" element={<DefamatinoPage />} />
       <Route path="/plaint/2" element={<FraudPage />} />

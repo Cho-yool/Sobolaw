@@ -84,6 +84,13 @@ async function postDefamation(memberId: number, data: DefamationForm) {
   await http.post(`${url}/defamations`, data);
 }
 
+// 관리자용
+// 작성된 소장 전체 조회
+async function getLawsuitAll() {
+  const response = await http.get(`${url}/list`);
+  return response.data.data;
+}
+
 export {
   getLawsuitList,
   postDefamation,
@@ -92,4 +99,5 @@ export {
   getInsult,
   patchInsult,
   deleteInsult,
+  getLawsuitAll,
 };
