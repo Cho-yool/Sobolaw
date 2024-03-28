@@ -27,9 +27,7 @@ const LawCaseDetail = () => {
   const { Title } = Typography;
   const [getData, setGetData] = useState<getDataProps>(Object());
   const location = useLocation();
-  const [currentLocation, setCurrentLocation] = useState<number>(
-    Number(location.pathname.split("/")[2])
-  );
+  const currentLocation = Number(location.pathname.split("/")[2]);
 
   useQuery("lawDetail", () => getLawDetail(currentLocation), {
     onSuccess: (response) => {
@@ -44,14 +42,17 @@ const LawCaseDetail = () => {
     <Flex className={style["detail-page"]} justify="center">
       <Sidebar
         referencedStatute={getData.referencedStatute}
-        referencedCase={getData.referencedCase}></Sidebar>
+        referencedCase={getData.referencedCase}
+      ></Sidebar>
       <Flex className={style["container"]} vertical>
         <Title className={style["container__title"]}>
           {getData ? getData.caseName : null}
         </Title>
         <br />
         <Flex className={style["content-box"]}>
-          {getData ? <LawCaseTabs getData={getData} /> : null}
+          {getData ? (
+            <LawCaseTabs getData={getData} currentLocation={currentLocation} />
+          ) : null}
         </Flex>
       </Flex>
     </Flex>

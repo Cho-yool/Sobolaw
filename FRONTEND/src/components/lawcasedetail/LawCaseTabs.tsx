@@ -1,12 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import style from "../../styles/lawcasedetail/LawCaseTabs.module.css";
-import { Switch } from "antd";
+import { Switch, Spin } from "antd";
 import {
   getLawDetailSummary,
   saveHighLight,
   saveLawDetail,
 } from "../../api/lawdetail";
-import { useQuery } from "react-query";
 
 interface TabMenusProps {
   id: number;
@@ -29,6 +28,7 @@ interface getDataProps {
     verdictSummary: string;
     verdictType: string;
   };
+  currentLocation: number;
 }
 
 const TABMENUS: TabMenusProps[] = [
@@ -46,12 +46,10 @@ const TABMENUS: TabMenusProps[] = [
   },
 ];
 
-const LawCaseTabs = ({ getData }: getDataProps) => {
+const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
   const [activeTab, setActiveTab] = useState<number>(0);
   const [isSaved, setIsSaved] = useState<boolean>(false);
   const [onEditing, setOnEditing] = useState<boolean>(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectionPos, setSelectionPos] = useState<any>();
   const [isSummary, setIsSummary] = useState<boolean>(false);
@@ -62,62 +60,93 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
   const [newRenderText, setNewRenderText] = useState<React.ReactNode[]>([]);
   const [showOptions, setShowOptions] = useState<boolean>(false);
   const [selectRange, setSelectRange] = useState<number[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const [selectionPosition, setSelectionPosition] = useState<{
     x: number;
     y: number;
   }>({ x: 0, y: 0 });
-  const onChange = () => {
-    setIsSummary(!isSummary);
-  };
 
   const optionSelectDiv = (x: number, y: number) => {
     return (
-      <div className={style["color-select"]} style={{ left: x, top: y }}>
+      <div
+        className={style["color-select"]}
+        style={{
+          left: x + "px",
+          top: y + "px",
+        }}
+      >
         <div
           className={style["color-option"]}
           style={{ backgroundColor: "#f3e7c0" }}
-          onClick={() => colorChange("#f3e7c0")}
+          onClick={() => colorChange({ color: "#f3e7c0", value: 1 })}
         />
         <div
           className={style["color-option"]}
           style={{ backgroundColor: "#feda89" }}
-          onClick={() => colorChange("#feda89")}
+          onClick={() => colorChange({ color: "#feda89", value: 2 })}
         />
         <div
           className={style["color-option"]}
           style={{ backgroundColor: "#dba651" }}
-          onClick={() => colorChange("#dba651")}
+          onClick={() => colorChange({ color: "#dba651", value: 3 })}
         />
         <div
           className={style["color-option"]}
           style={{ backgroundColor: "#bf8538" }}
-          onClick={() => colorChange("#bf8538")}
+          onClick={() => colorChange({ color: "#bf8538", value: 4 })}
         />
         <div
           className={style["color-option"]}
           style={{ backgroundColor: "#644419" }}
-          onClick={() => colorChange("#644419")}
+          onClick={() => colorChange({ color: "#644419", value: 5 })}
         />
       </div>
     );
   };
-  const savePrecedent = (precedentId: number) => {
+  useEffect(() => {
+    if (getData && Object.keys(getData).length !== 0) {
+      const renderText = getData.caseContent.split("<br/>");
+      const newText = renderText.map((text, index) => {
+        return (
+          <Fragment key={index}>
+            <span>{text.replace(/\n|\r/g, "").trim()}</span>
+            <div></div>
+          </Fragment>
+        );
+      });
+      setNewRenderText(newText);
+    }
+  }, [getData]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  const savePrecedent = async (precedentId: number) => {
     try {
-      saveLawDetail(precedentId);
+      await saveLawDetail(precedentId);
       setIsSaved(true);
     } catch (error) {
       console.error(error);
     }
   };
-  useQuery("detailSummary", () => getLawDetailSummary(), {
-    onSuccess: (response) => {
-      setSummaryData(response.data.summary);
-    },
-    onError: (error) => {
+
+  const summareyHandler = async () => {
+    try {
+      setIsSummary(!isSummary);
+      if (!summaryData) {
+        const response = await getLawDetailSummary(currentLocation);
+        setSummaryData(response.data.summary);
+      }
+    } catch (error) {
       console.error(error);
-    },
-  });
-  const colorChange = (color: string) => {
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const colorChange = ({ color, value }: { color: string; value: number }) => {
     setShowOptions(false);
     const span = document.createElement("span");
     span.style.backgroundColor = color;
@@ -125,15 +154,32 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
     selectionPos.deleteContents();
     selectionPos.insertNode(span);
     if (!isSaved) {
-      savePrecedent(getData.precedentId);
+      try {
+        savePrecedent(getData.precedentId);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        saveHighLight({
+          precedentId: getData.precedentId,
+          main: selectionPos.startContainer.textContent,
+          highlightType: value,
+          startPoint: selectRange[0],
+          endPoint: selectRange[1],
+          content: selectionPos.toString(),
+        });
+      }
+    } else {
+      saveHighLight({
+        precedentId: getData.precedentId,
+        main: selectionPos.startContainer.textContent,
+        highlightType: value,
+        startPoint: selectRange[0],
+        endPoint: selectRange[1],
+        content: selectionPos.toString(),
+      });
     }
-    saveHighLight({
-      precedentId: getData.precedentId,
-      main: selectionPos.startContainer.data,
-      location: selectRange,
-      content: selectionPos.toString(),
-    });
   };
+
   const handleTabClick = (id: number) => {
     setActiveTab(id);
     let ref;
@@ -159,6 +205,7 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
   const onMouseClickHandler = () => {
     setOnEditing(true);
   };
+
   // 마우스가 누른채로 움직일때 선택한 범위를 가져옴
   const onMouseMoveHandler = () => {
     if (onEditing) {
@@ -168,25 +215,23 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
       }
     }
   };
+
   // 마우스 클릭이 끝났을때
-  const onMouseOutHandler = () => {
+  const onMouseOutHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     setOnEditing(false);
+    const { top } = selectionPos.getBoundingClientRect();
+    const parentTop = e.currentTarget.getBoundingClientRect().top;
+    const parentLeft = e.currentTarget.getBoundingClientRect().left;
+
+    setSelectionPosition({
+      x: parentLeft,
+      y: -parentTop + top,
+    });
     if (selectionPos) {
       setShowOptions(true);
     }
     setSelectRange([selectionPos.startOffset, selectionPos.endOffset]);
-    console.log(selectionPos);
   };
-
-  useEffect(() => {
-    if (getData && Object.keys(getData).length !== 0) {
-      const renderText = getData.caseContent.split("<br/>");
-      const newText = renderText.map((text) => {
-        return <span>{text}</span>;
-      });
-      setNewRenderText(newText);
-    }
-  }, [getData]);
 
   return (
     <div className={style["tab-container"]}>
@@ -199,7 +244,8 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
                 ? `${style["tab"]} ${style["active"]}`
                 : style["tab"]
             }
-            onClick={() => handleTabClick(tab.id)}>
+            onClick={() => handleTabClick(tab.id)}
+          >
             <p className={style["tab-title"]}>{tab.title}</p>
           </div>
         ))}
@@ -223,7 +269,8 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
         className={style["content-box__contents"]}
         dangerouslySetInnerHTML={{
           __html: getData.judicialNotice,
-        }}></p>
+        }}
+      ></p>
       <br />
       <br />
       <p className={style["tab-menu__title"]} ref={rulingRef}>
@@ -235,7 +282,8 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
         className={style["content-box__contents"]}
         dangerouslySetInnerHTML={{
           __html: getData.verdictSummary,
-        }}></p>
+        }}
+      ></p>
       <br />
       <br />
       <p className={style["tab-menu__title"]} ref={precedentRef}>
@@ -247,25 +295,38 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
       <div className={style["tab-menu__summary"]}>
         <div className={style["tab-menu__summary__btn"]}>
           <p>요약 보기</p>
-          <Switch onChange={onChange} />
+          <Switch onChange={summareyHandler} />
         </div>
-
+        {showOptions
+          ? optionSelectDiv(selectionPosition.x, selectionPosition.y)
+          : null}
         {isSummary ? (
-          <p
-            className={style["content-box__contents"]}
-            dangerouslySetInnerHTML={{
-              __html: summaryData,
-            }}></p>
+          isLoading ? (
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <Spin size="large" />
+            </div>
+          ) : (
+            <p
+              className={style["content-box__contents"]}
+              dangerouslySetInnerHTML={{
+                __html: summaryData,
+              }}
+            ></p>
+          )
         ) : (
           <div
             className={style["content-box__contents"]}
             onMouseDown={onMouseClickHandler}
             onMouseMove={onMouseMoveHandler}
-            onMouseUp={onMouseOutHandler}>
+            onMouseUp={onMouseOutHandler}
+          >
             {" "}
-            {showOptions
-              ? optionSelectDiv(selectionPosition.x, selectionPosition.y)
-              : null}
             {newRenderText ? <>{newRenderText}</> : null}
           </div>
         )}
