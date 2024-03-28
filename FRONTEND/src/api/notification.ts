@@ -8,8 +8,8 @@ const headers = new AxiosHeaders();
 headers.set("Content-Type", "application/json;charset=utf-8");
 
 // 토큰 저장
-async function postTokens(data: { memberId: number; token: string }) {
-  await http.post(`tokens`, data);
+async function postTokens(memberId: number, token: unknown) {
+  await http.post(`tokens`, { memberId, token });
 }
 
 // 토큰 확인

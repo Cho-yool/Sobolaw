@@ -5,6 +5,7 @@ import { AppDispatch, RootState } from "../redux/store/store";
 import { saveToken, loadInfo } from "../redux/reducers/user/userSlice";
 import { getUserInfo } from "../api/members";
 import { requestPermission } from "../utils/notifications";
+import { postTokens } from "../api/notification";
 import { memberPrecedents } from "../types/DataTypes";
 import style from "../styles/common/Login.module.css";
 import backImg from "/images/loginBg.jpg";
@@ -38,7 +39,20 @@ function LoginPage() {
               precedents: precedentIds,
             })
           );
-          requestPermission();
+          // requestPermission 함수가 Promise를 반환하므로, then 함수를 사용하여 결과를 받아와야 합니다.
+          requestPermission()
+            .then((fcmToken) => {
+              console.log(fcmToken);
+              // 토큰을 저장하는 함수 호출
+              postTokens(res.memberId, fcmToken)
+                .then(() => {
+                  console.log("redis에 token이랑 memberId 저장");
+                })
+                .catch((err) => console.error("토큰 저장 중 에러 발생:", err));
+            })
+            .catch((err) =>
+              console.error("푸시 토큰을 가져오는 중 에러 발생:", err)
+            );
         })
         .catch((err) => {
           console.log(err);
@@ -46,7 +60,8 @@ function LoginPage() {
       navigate("/");
     }
   }, [accessToken]);
-
+  // const data = { memberId: res.memberId, token: fcmToken };
+  // postTokens(data);
   // 로그인버튼을 누르면 각 로그인 창으로 간다
   const kakaoLogin = function () {
     window.location.href = `${tokenURL}/kakao`;
