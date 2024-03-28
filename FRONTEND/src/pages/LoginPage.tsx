@@ -38,11 +38,11 @@ function LoginPage() {
               precedents: precedentIds,
             })
           );
+          requestPermission();
         })
         .catch((err) => {
           console.log(err);
         });
-      requestPermission();
       navigate("/");
     }
   }, [accessToken]);
