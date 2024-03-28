@@ -23,7 +23,7 @@ export async function getChatAnswer(message: string) {
   return await http.post(url, data);
 }
 
-export function getWordList(page = 1) {
+export async function getWordList(page = 1) {
   const url = `terms/list?page=${page}`;
-  return lawHttp.get(url);
+  return await lawHttp.get(url);
 }
