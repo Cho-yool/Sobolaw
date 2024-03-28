@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 //@FeignClient(name="law-service", url = "https://j10a604.p.ssafy.io/api/law-service")
 public interface LawServiceClient {
 
-    @GetMapping("/precedents/detail/{precedent Id}")
+    @GetMapping("/precedents/detail/{precedentId}")
     BaseResponse<PrecedentDto> getPrecedent(@PathVariable("precedentId") Long precedentId);
 
 }
