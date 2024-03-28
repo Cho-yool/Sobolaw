@@ -1,7 +1,6 @@
 import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
-import { useRef } from "react";
+import { getMessaging, getToken } from "firebase/messaging";
 
 navigator.serviceWorker
   .register("firebase-messaging-sw.js")
@@ -26,27 +25,28 @@ export const firebaseConfig = {
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const messaging = getMessaging(app);
-const response = null;
 // const analytics = getAnalytics(app);
-onMessage(messaging, (payload) => {
-  console.log("Message received. ", payload);
-  response.value = payload.notification;
-  if (Notification.permission === "granted") {
-    navigator.serviceWorker.ready
-      .then((registration) => {
-        registration
-          .showNotification(payload.notification.title, {
-            body: payload.notification.body,
-            icon: "../img/maru.jpeg",
-            vibrate: [200, 100, 200, 100, 200, 100, 200],
-          })
-          .finally((arg) => console.log(arg));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-});
+
+// const response = null;
+// onMessage(messaging, (payload) => {
+//   console.log("Message received. ", payload);
+//   response.value = payload.notification;
+//   if (Notification.permission === "granted") {
+//     navigator.serviceWorker.ready
+//       .then((registration) => {
+//         registration
+//           .showNotification(payload.notification.title, {
+//             body: payload.notification.body,
+//             icon: "../img/maru.jpeg",
+//             vibrate: [200, 100, 200, 100, 200, 100, 200],
+//           })
+//           .finally((arg) => console.log(arg));
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
+//   }
+// });
 
 // 허가 요청
 export function requestPermission() {
