@@ -123,9 +123,9 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  const savePrecedent = (precedentId: number) => {
+  const savePrecedent = async (precedentId: number) => {
     try {
-      saveLawDetail(precedentId);
+      await saveLawDetail(precedentId);
       setIsSaved(true);
     } catch (error) {
       console.error(error);
@@ -146,10 +146,9 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
     }
   };
 
-  const colorChange = (color: string) => {
+  const colorChange = ({ color, value }: { color: string; value: number }) => {
     setShowOptions(false);
     const span = document.createElement("span");
-    const wholeText = selectionPos.startContainer.textContent;
     span.style.backgroundColor = color;
     span.innerText = selectionPos.toString();
     selectionPos.deleteContents();
@@ -163,6 +162,7 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
         saveHighLight({
           precedentId: getData.precedentId,
           main: selectionPos.startContainer.textContent,
+          highlightType: value,
           startPoint: selectRange[0],
           endPoint: selectRange[1],
           content: selectionPos.toString(),
@@ -172,6 +172,7 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
       saveHighLight({
         precedentId: getData.precedentId,
         main: selectionPos.startContainer.textContent,
+        highlightType: value,
         startPoint: selectRange[0],
         endPoint: selectRange[1],
         content: selectionPos.toString(),
