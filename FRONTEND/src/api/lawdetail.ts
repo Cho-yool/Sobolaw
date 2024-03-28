@@ -12,8 +12,8 @@ export async function getLawDetail(params: number) {
 }
 
 // 판례 요약 조회
-export async function getLawDetailSummary(params?: { precedentId: number }) {
-  const url = "/ai-service/summarys/64453";
+export async function getLawDetailSummary(params: number) {
+  const url = `/ai-service/summarys/${params}`;
   return await http.get(url);
 }
 

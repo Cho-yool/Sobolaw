@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import style from "../../styles/lawcasedetail/LawCaseTabs.module.css";
-import { Switch } from "antd";
+import { Switch, Spin } from "antd";
 import {
   getLawDetailSummary,
   saveHighLight,
@@ -29,6 +29,7 @@ interface getDataProps {
     verdictSummary: string;
     verdictType: string;
   };
+  currentLocation: number;
 }
 
 const TABMENUS: TabMenusProps[] = [
@@ -46,7 +47,7 @@ const TABMENUS: TabMenusProps[] = [
   },
 ];
 
-const LawCaseTabs = ({ getData }: getDataProps) => {
+const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
   const [activeTab, setActiveTab] = useState<number>(0);
   const [isSaved, setIsSaved] = useState<boolean>(false);
   const [onEditing, setOnEditing] = useState<boolean>(false);
@@ -60,13 +61,11 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
   const [newRenderText, setNewRenderText] = useState<React.ReactNode[]>([]);
   const [showOptions, setShowOptions] = useState<boolean>(false);
   const [selectRange, setSelectRange] = useState<number[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectionPosition, setSelectionPosition] = useState<{
     x: number;
     y: number;
   }>({ x: 0, y: 0 });
-  const onChange = () => {
-    setIsSummary(!isSummary);
-  };
 
   const optionSelectDiv = (x: number, y: number) => {
     return (
@@ -105,6 +104,7 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
       </div>
     );
   };
+
   const savePrecedent = (precedentId: number) => {
     try {
       saveLawDetail(precedentId);
@@ -113,14 +113,21 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
       console.error(error);
     }
   };
-  useQuery("detailSummary", () => getLawDetailSummary(), {
-    onSuccess: (response) => {
-      setSummaryData(response.data.summary);
-    },
-    onError: (error) => {
+
+  const summareyHandler = async () => {
+    try {
+      setIsSummary(!isSummary);
+      if (!summaryData) {
+        const response = await getLawDetailSummary(currentLocation);
+        setSummaryData(response.data.summary);
+      }
+    } catch (error) {
       console.error(error);
-    },
-  });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const colorChange = (color: string) => {
     setShowOptions(false);
     const span = document.createElement("span");
@@ -139,6 +146,7 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
       content: selectionPos.toString(),
     });
   };
+
   const handleTabClick = (id: number) => {
     setActiveTab(id);
     let ref;
@@ -159,10 +167,12 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
       ref.current.scrollIntoView({ behavior: "smooth" });
     }
   };
+
   // 마우스 눌렀을때
   const onMouseClickHandler = () => {
     setOnEditing(true);
   };
+
   // 마우스가 누른채로 움직일때 선택한 범위를 가져옴
   const onMouseMoveHandler = () => {
     if (onEditing) {
@@ -172,6 +182,7 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
       }
     }
   };
+
   // 마우스 클릭이 끝났을때
   const onMouseOutHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     setOnEditing(false);
@@ -266,18 +277,22 @@ const LawCaseTabs = ({ getData }: getDataProps) => {
       <div className={style["tab-menu__summary"]}>
         <div className={style["tab-menu__summary__btn"]}>
           <p>요약 보기</p>
-          <Switch onChange={onChange} />
+          <Switch onChange={summareyHandler} />
         </div>
         {showOptions
           ? optionSelectDiv(selectionPosition.x, selectionPosition.y)
           : null}
         {isSummary ? (
-          <p
-            className={style["content-box__contents"]}
-            dangerouslySetInnerHTML={{
-              __html: summaryData,
-            }}
-          ></p>
+          isLoading ? (
+            <Spin style={{ margin: "0 auto" }} />
+          ) : (
+            <p
+              className={style["content-box__contents"]}
+              dangerouslySetInnerHTML={{
+                __html: summaryData,
+              }}
+            ></p>
+          )
         ) : (
           <div
             className={style["content-box__contents"]}
