@@ -81,6 +81,7 @@ const TableTransfer = ({
 
 interface MemberKeywordProps {
   keywords: MemberKeyword[] | undefined;
+  patchwords: MemberKeyword[] | undefined;
   accessToken: string;
 }
 
@@ -100,14 +101,22 @@ const rightTableColumns: TableColumnsType<KeywordType> = [
   },
 ];
 
-const MyKeyword: React.FC<MemberKeywordProps> = ({ keywords, accessToken }) => {
+const MyKeyword: React.FC<MemberKeywordProps> = ({
+  keywords,
+  patchwords,
+  accessToken,
+}) => {
   const [targetKeys, setTargetKeys] = useState<string[]>([]);
   const [isDisabled, setIsDisabled] = useState(true);
+  const [patchKeys, setPatchKeys] = useState<string[]>();
 
   useEffect(() => {
     const originTargetKeys =
       keywords?.filter((item) => item.word).map((item) => item.word) ?? [];
+    const originPatchKeys =
+      patchwords?.filter((item) => item.word).map((item) => item.word) ?? [];
     setTargetKeys(originTargetKeys);
+    setPatchKeys(originPatchKeys);
   }, [keywords]);
 
   useEffect(() => {
@@ -119,7 +128,8 @@ const MyKeyword: React.FC<MemberKeywordProps> = ({ keywords, accessToken }) => {
   };
 
   const handleCheck = () => {
-    postMyKeyword(accessToken, targetKeys)
+    const combinedKeys = targetKeys.concat(patchKeys ?? []);
+    postMyKeyword(accessToken, combinedKeys)
       .then(() => {
         alert("키워드가 저장되었습니다");
       })

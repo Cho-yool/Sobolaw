@@ -1,16 +1,22 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Button, Divider, Modal } from "antd";
-import { SmileTwoTone, MailTwoTone, HeartTwoTone } from "@ant-design/icons";
+import { Button, Divider, Modal, Tooltip, Tag } from "antd";
+import {
+  SmileTwoTone,
+  MailTwoTone,
+  HeartTwoTone,
+  SafetyCertificateTwoTone,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 import "../../App.css";
 import style from "../../styles/mypage/MyInfo.module.css";
 import { RootState, AppDispatch } from "../../redux/store/store";
 import { resetAuth } from "../../redux/reducers/user/userSlice";
+import { MemberInfo, MemberKeyword } from "../../types/DataTypes";
+import { getUserInfo, deleteUser } from "../../api/members";
 import MyKeyword from "../../components/mypage/MyKeyword";
 import MyRecentCase from "../../components/mypage/MyRecentCase";
-import { MemberInfo } from "../../types/DataTypes";
-import { getUserInfo, deleteUser } from "../../api/members";
 
 export default function MyInfo() {
   const navigate = useNavigate();
@@ -21,16 +27,45 @@ export default function MyInfo() {
   );
   const [userInfo, setUserInfo] = useState<MemberInfo>();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [directKeyword, setDirectKeyword] = useState<MemberKeyword[]>();
+  const [relatedKeyword, setRelatedKeyword] = useState<MemberKeyword[]>();
+  const tagColors = [
+    "processing",
+    "success",
+    "magenta",
+    "red",
+    "orange",
+    "gold",
+    "lime",
+    "green",
+    "cyan",
+    "blue",
+    "geekblue",
+    "purple",
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
-      // const response = await getUserInfo(accessToken);
       const response = await getUserInfo(accessToken);
       setUserInfo(response);
     };
     fetchData();
-    // }, [user.accessToken]
   }, []);
+
+  useEffect(() => {
+    // userInfo가 존재하고 memberKeyword가 존재할 때만 처리
+    if (userInfo && userInfo.memberKeyword) {
+      // "DIRECT" 키워드와 "RELATED" 키워드를 분리하여 각각의 배열에 저장
+      const direct = userInfo.memberKeyword.filter(
+        (keyword) => keyword.keywordType === "DIRECT"
+      );
+      const related = userInfo.memberKeyword.filter(
+        (keyword) => keyword.keywordType === "RELATED"
+      );
+      setDirectKeyword(direct);
+      setRelatedKeyword(related);
+    }
+  }, [userInfo]); // userInfo가 업데이트될 때마다 실행됨
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -78,15 +113,64 @@ export default function MyInfo() {
                 </div>
               </>
             )}
+            <Divider />
+            <div className={style["box-content"]}>
+              <div>
+                <SafetyCertificateTwoTone twoToneColor="#de9159" /> 전문가 여부:
+              </div>
+              <div>{userInfo?.roll}</div>
+              <Button
+                shape="round"
+                type="primary"
+                className={style["mypaper-button"]}
+                // onClick={handleCheck}
+                // disabled={isDisabled}
+              >
+                변호사 전환 신청하기
+              </Button>
+            </div>
           </div>
 
           <div className={style["box2"]}>
             <div className={style["box-title"]}>관심 키워드</div>
             <MyKeyword
-              keywords={userInfo?.memberKeyword}
+              keywords={directKeyword}
               accessToken={accessToken}
+              patchwords={relatedKeyword}
             />
           </div>
+
+          {relatedKeyword !== undefined && relatedKeyword.length > 0 && (
+            <div className={style["box2"]}>
+              <div className={style["box-title"]}>
+                추천 키워드{" "}
+                <Tooltip
+                  // placement="bottom"
+                  placement="top"
+                  title={
+                    "내가 저장한 판례를 바탕으로 관련 높은 키워드를 보여드려요!"
+                  }
+                  arrow={true}
+                >
+                  <QuestionCircleOutlined />
+                </Tooltip>
+              </div>
+              <div className={style["box-content"]}>
+                <div>
+                  {relatedKeyword?.map((item, index) => (
+                    <Tag
+                      bordered={false}
+                      closable
+                      color={tagColors[index]}
+                      style={{ fontSize: "1rem" }}
+                    >
+                      {item.word}
+                    </Tag>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className={style["box3"]}>
             <div className={style["box-title"]}>최근본 판례</div>
