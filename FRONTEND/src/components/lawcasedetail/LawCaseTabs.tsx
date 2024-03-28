@@ -6,6 +6,8 @@ import {
   saveHighLight,
   saveLawDetail,
 } from "../../api/lawdetail";
+import { store } from "../../redux/store/store";
+import { useLocation } from "react-router-dom";
 
 interface TabMenusProps {
   id: number;
@@ -47,6 +49,7 @@ const TABMENUS: TabMenusProps[] = [
 ];
 
 const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState<number>(0);
   const [isSaved, setIsSaved] = useState<boolean>(false);
   const [onEditing, setOnEditing] = useState<boolean>(false);
@@ -61,7 +64,6 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
   const [showOptions, setShowOptions] = useState<boolean>(false);
   const [selectRange, setSelectRange] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
   const [selectionPosition, setSelectionPosition] = useState<{
     x: number;
     y: number;
@@ -121,6 +123,14 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+    const precedents = store.getState().user.precedents;
+    const currentPrecedent =
+      location.pathname.split("/")[location.pathname.split("/").length - 1];
+    if (
+      precedents.find((prece: number) => prece === Number(currentPrecedent))
+    ) {
+      setIsSaved(!isSaved);
+    }
   }, []);
 
   const savePrecedent = async (precedentId: number) => {
@@ -150,6 +160,11 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
     setShowOptions(false);
     const span = document.createElement("span");
     span.style.backgroundColor = color;
+    if (value === 5) {
+      span.style.color = "white";
+    } else {
+      span.style.color = "black";
+    }
     span.innerText = selectionPos.toString();
     selectionPos.deleteContents();
     selectionPos.insertNode(span);
