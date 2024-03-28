@@ -1,14 +1,23 @@
 .container {
   display: flex;
+  background-color: aliceblue;
 }
 
 .left-menu {
-  width: 30%;
-  min-height: 80vh;
-  background-color: rgb(240, 240, 240);
-  resize: horizontal;
+  box-sizing: border-box;
+  width: 25rem;
+  height: 94vh;
+  overflow: auto;
+  padding: 1rem;
+  background-color: #fffbe2;
+  line-height: 40px;
 }
 
 .right-menu {
-  width: 70%;
+  box-sizing: border-box;
+  background-color: aliceblue;
+  width: calc(100% - 27rem);
+  height: 94vh;
+  justify-content: center;
+  overflow: auto;
 }

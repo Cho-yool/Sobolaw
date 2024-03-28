@@ -1,12 +1,12 @@
-import dayjs from "dayjs";
+import { useEffect } from "react";
 import "dayjs/locale/ko";
+import dayjs from "dayjs";
 import locale from "antd/es/date-picker/locale/ko_KR";
 import { Flex, Input, DatePicker, Tooltip, Radio } from "antd";
 import type { DatePickerProps } from "antd";
-import style from "../../styles/papers/FraudMenu.module.css";
 import CheckBox from "../common/CheckBox";
-import { useEffect } from "react";
 import { FraudDetails } from "../../types/DataTypes";
+import style from "../../styles/papers/FraudMenu.module.css";
 
 const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
   const defaultValue = dayjs("2024-01-01");

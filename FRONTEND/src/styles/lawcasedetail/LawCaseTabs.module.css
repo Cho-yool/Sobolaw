@@ -57,6 +57,7 @@
   border-radius: 1rem;
   border: 1px solid black;
   z-index: 2;
+  transform: translateY(-120%);
 }
 
 .color-select div {
@@ -70,7 +71,7 @@
   content: "▼";
   font-size: 1.5rem;
   position: absolute;
-  bottom: -31%;
+  bottom: -27%;
   left: 50%;
   transform: translateX(-50%);
   color: black;
