@@ -24,6 +24,9 @@
     },
     "enforcementDate": {
       "type": "keyword"
+    },
+    "hit": {
+      "type": "long"
     }
   }
 }
