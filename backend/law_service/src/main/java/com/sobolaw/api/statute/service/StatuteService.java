@@ -3,8 +3,6 @@ package com.sobolaw.api.statute.service;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
-import com.sobolaw.api.precedent.dto.PrecedentDTO;
-import com.sobolaw.api.precedent.entity.Precedent;
 import com.sobolaw.api.statute.document.StatuteDocument;
 import com.sobolaw.api.statute.document.StatuteTextDocument;
 import com.sobolaw.api.statute.dto.StatuteDTO;
@@ -127,6 +125,7 @@ public class StatuteService {
                 statuteDTO.setPublicationDate(statuteDocument.getPublicationDate());
                 statuteDTO.setPublicationNumber(statuteDocument.getPublicationNumber());
                 statuteDTO.setStatuteType(statuteDocument.getStatuteType());
+                statuteDTO.setHit(statuteDocument.getHit());
                 statuteDTO.setStatuteTextDocuments(statuteTexts); // StatuteTextDocument 리스트 설정
             }
             statutes.add(statuteDTO);
