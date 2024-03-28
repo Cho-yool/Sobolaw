@@ -18,6 +18,7 @@
     "@reduxjs/toolkit": "^2.2.1",
     "@types/aos": "^3.0.7",
     "antd": "^5.14.2",
+    "aos": "^2.3.4",
     "axios": "^1.6.7",
     "firebase": "^10.9.0",
     "josa": "^3.0.1",
