@@ -7,8 +7,6 @@ interface CheckBoxProps {
 }
 
 const CheckBox = ({ boxList, onChange }: CheckBoxProps) => {
-  const [renderBox, setRenderBox] = useState<string[]>([]);
-
   const newLists = boxList.map((list) => {
     return (
       <Flex key={list} gap={5}>

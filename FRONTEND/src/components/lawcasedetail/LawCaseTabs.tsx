@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import style from "../../styles/lawcasedetail/LawCaseTabs.module.css";
 import { Switch, Spin } from "antd";
 import {
@@ -6,7 +6,6 @@ import {
   saveHighLight,
   saveLawDetail,
 } from "../../api/lawdetail";
-import { useQuery } from "react-query";
 
 interface TabMenusProps {
   id: number;
@@ -62,6 +61,7 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
   const [showOptions, setShowOptions] = useState<boolean>(false);
   const [selectRange, setSelectRange] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const [selectionPosition, setSelectionPosition] = useState<{
     x: number;
     y: number;
@@ -104,6 +104,24 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
       </div>
     );
   };
+  useEffect(() => {
+    if (getData && Object.keys(getData).length !== 0) {
+      const renderText = getData.caseContent.split("<br/>");
+      const newText = renderText.map((text, index) => {
+        return (
+          <Fragment key={index}>
+            <span>{text.replace(/\n|\r/g, "").trim()}</span>
+            <div></div>
+          </Fragment>
+        );
+      });
+      setNewRenderText(newText);
+    }
+  }, [getData]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   const savePrecedent = (precedentId: number) => {
     try {
@@ -136,15 +154,28 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
     selectionPos.deleteContents();
     selectionPos.insertNode(span);
     if (!isSaved) {
-      savePrecedent(getData.precedentId);
+      try {
+        savePrecedent(getData.precedentId);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        saveHighLight({
+          precedentId: getData.precedentId,
+          main: selectionPos.startContainer.textContent,
+          startPoint: selectRange[0],
+          endPoint: selectRange[1],
+          content: selectionPos.toString(),
+        });
+      }
+    } else {
+      saveHighLight({
+        precedentId: getData.precedentId,
+        main: selectionPos.startContainer.textContent,
+        startPoint: selectRange[0],
+        endPoint: selectRange[1],
+        content: selectionPos.toString(),
+      });
     }
-    saveHighLight({
-      precedentId: getData.precedentId,
-      main: selectionPos.startContainer.textContent,
-      startPoint: selectRange[0],
-      endPoint: selectRange[1],
-      content: selectionPos.toString(),
-    });
   };
 
   const handleTabClick = (id: number) => {
@@ -186,34 +217,19 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
   // 마우스 클릭이 끝났을때
   const onMouseOutHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     setOnEditing(false);
-    const { top, left } = selectionPos.getBoundingClientRect();
+    const { top } = selectionPos.getBoundingClientRect();
     const parentTop = e.currentTarget.getBoundingClientRect().top;
+    const parentLeft = e.currentTarget.getBoundingClientRect().left;
+
     setSelectionPosition({
-      x: left,
+      x: parentLeft,
       y: -parentTop + top,
     });
-    console.log(selectionPos.startContainer.wholeText);
     if (selectionPos) {
       setShowOptions(true);
     }
-    console.log(selectionPos.textContent);
     setSelectRange([selectionPos.startOffset, selectionPos.endOffset]);
   };
-
-  useEffect(() => {
-    if (getData && Object.keys(getData).length !== 0) {
-      const renderText = getData.caseContent.split("<br/>");
-      const newText = renderText.map((text) => {
-        return (
-          <>
-            <span>{text.replace(/\n|\r/g, "").trim()}</span>
-            <div></div>
-          </>
-        );
-      });
-      setNewRenderText(newText);
-    }
-  }, [getData]);
 
   return (
     <div className={style["tab-container"]}>
@@ -284,7 +300,15 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
           : null}
         {isSummary ? (
           isLoading ? (
-            <Spin style={{ margin: "0 auto" }} />
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <Spin size="large" />
+            </div>
           ) : (
             <p
               className={style["content-box__contents"]}
