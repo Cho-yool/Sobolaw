@@ -1,8 +1,6 @@
-import React from "react";
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+// import { getAnalytics } from "firebase/analytics";
 import { getMessaging, getToken } from "firebase/messaging";
-import { getTokens } from "../api/notification";
 
 navigator.serviceWorker
   .register("firebase-messaging-sw.js")
@@ -27,7 +25,7 @@ export const firebaseConfig = {
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const messaging = getMessaging(app);
-const analytics = getAnalytics(app);
+// const analytics = getAnalytics(app);
 
 // 허가 요청
 export function requestPermission() {

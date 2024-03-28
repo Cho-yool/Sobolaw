@@ -20,7 +20,9 @@ export default function Mypaper() {
       setLawsuitList(response);
     };
     fetchData();
-  }, [lawsuitList]);
+  }, []);
+
+  console.log(lawsuitList);
 
   return (
     <div className="pages">

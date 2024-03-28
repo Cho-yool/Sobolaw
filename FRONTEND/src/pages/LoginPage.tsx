@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store/store";
 import { saveToken, loadInfo } from "../redux/reducers/user/userSlice";
 import { getUserInfo } from "../api/members";
+import { requestPermission } from "../utils/notifications";
 import { memberPrecedents } from "../types/DataTypes";
 import style from "../styles/common/Login.module.css";
 import backImg from "/images/loginBg.jpg";
@@ -41,6 +42,7 @@ function LoginPage() {
         .catch((err) => {
           console.log(err);
         });
+      requestPermission();
       navigate("/");
     }
   }, [accessToken]);
