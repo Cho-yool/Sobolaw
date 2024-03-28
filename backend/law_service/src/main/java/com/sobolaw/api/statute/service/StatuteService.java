@@ -162,6 +162,7 @@ public class StatuteService {
         statuteDTO.setEnforcementDate(entity.getEnforcementDate());
         statuteDTO.setPublicationDate(entity.getPublicationDate());
         statuteDTO.setPublicationNumber(entity.getPublicationNumber());
+        statuteDTO.setHit(entity.getHit());
 
         // StatuteText 리스트를 StatuteDTO에 설정
         List<StatuteTextDTO> statuteTexts = entity.getStatuteTexts().stream()
