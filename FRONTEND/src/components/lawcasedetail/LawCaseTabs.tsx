@@ -79,27 +79,27 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
         <div
           className={style["color-option"]}
           style={{ backgroundColor: "#f3e7c0" }}
-          onClick={() => colorChange("#f3e7c0")}
+          onClick={() => colorChange({ color: "#f3e7c0", value: 1 })}
         />
         <div
           className={style["color-option"]}
           style={{ backgroundColor: "#feda89" }}
-          onClick={() => colorChange("#feda89")}
+          onClick={() => colorChange({ color: "#feda89", value: 2 })}
         />
         <div
           className={style["color-option"]}
           style={{ backgroundColor: "#dba651" }}
-          onClick={() => colorChange("#dba651")}
+          onClick={() => colorChange({ color: "#dba651", value: 3 })}
         />
         <div
           className={style["color-option"]}
           style={{ backgroundColor: "#bf8538" }}
-          onClick={() => colorChange("#bf8538")}
+          onClick={() => colorChange({ color: "#bf8538", value: 4 })}
         />
         <div
           className={style["color-option"]}
           style={{ backgroundColor: "#644419" }}
-          onClick={() => colorChange("#644419")}
+          onClick={() => colorChange({ color: "#644419", value: 5 })}
         />
       </div>
     );
@@ -149,6 +149,7 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
   const colorChange = (color: string) => {
     setShowOptions(false);
     const span = document.createElement("span");
+    const wholeText = selectionPos.startContainer.textContent;
     span.style.backgroundColor = color;
     span.innerText = selectionPos.toString();
     selectionPos.deleteContents();

@@ -40,7 +40,7 @@ export async function saveLawDetail(precedentId: number) {
 interface HighLightProps {
   precedentId: number;
   main: string;
-  highlightType?: string;
+  highlightType: number;
   startPoint: number;
   endPoint: number;
   content: string;
@@ -49,6 +49,7 @@ interface HighLightProps {
 export async function saveHighLight({
   precedentId,
   main,
+  highlightType,
   startPoint,
   endPoint,
   content,
@@ -61,7 +62,7 @@ export async function saveHighLight({
       main,
       startPoint,
       endPoint,
-      highlightType: 0,
+      highlightType,
       content,
     },
     {
