@@ -45,14 +45,14 @@ const Sidebar = ({ referencedStatute, referencedCase }: SidebarProps) => {
               key={index}
               className={style[`sidebar__content__box__content__text`]}
             >
-              {text}
+              {text.replace(/\n|\r/g, "").trim()}
             </li>
           </>
         );
       });
       setRenderRefStatute(newStatute);
     }
-  }, []);
+  }, [referencedStatute, referencedCase]);
 
   return (
     <article
