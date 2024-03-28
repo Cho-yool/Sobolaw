@@ -9,7 +9,7 @@ import com.sobolaw.api.statute.dto.StatuteDTO;
 import com.sobolaw.api.statute.dto.StatuteTextDTO;
 import com.sobolaw.api.statute.entity.Statute;
 import com.sobolaw.api.statute.entity.StatuteText;
-import com.sobolaw.api.statute.repository.jpa.StatuteRepository;
+import com.sobolaw.api.statute.repository.StatuteRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class StatuteSearchService {
+public class StatuteService {
 
     private final StatuteRepository statuteRepository;
     private final ElasticsearchClient elasticsearchClient;
@@ -125,6 +125,7 @@ public class StatuteSearchService {
                 statuteDTO.setPublicationDate(statuteDocument.getPublicationDate());
                 statuteDTO.setPublicationNumber(statuteDocument.getPublicationNumber());
                 statuteDTO.setStatuteType(statuteDocument.getStatuteType());
+                statuteDTO.setHit(statuteDocument.getHit());
                 statuteDTO.setStatuteTextDocuments(statuteTexts); // StatuteTextDocument 리스트 설정
             }
             statutes.add(statuteDTO);
@@ -140,6 +141,16 @@ public class StatuteSearchService {
         return convertToStatuteDTO(statute);
     }
 
+    // 법령 조회수 높은 순으로 20개 반환
+    public List<StatuteDTO> findTop20ByOrderByHitDesc(){
+        List<Statute> statutes = statuteRepository.findTop20ByOrderByHitDesc();
+
+        return statutes.stream()
+                .map(this::convertToStatuteDTO)
+                .collect(Collectors.toList());
+    }
+
+
     // entity -> DTO 변환
     private StatuteDTO convertToStatuteDTO(Statute entity) {
         StatuteDTO statuteDTO = new StatuteDTO();
@@ -151,6 +162,7 @@ public class StatuteSearchService {
         statuteDTO.setEnforcementDate(entity.getEnforcementDate());
         statuteDTO.setPublicationDate(entity.getPublicationDate());
         statuteDTO.setPublicationNumber(entity.getPublicationNumber());
+        statuteDTO.setHit(entity.getHit());
 
         // StatuteText 리스트를 StatuteDTO에 설정
         List<StatuteTextDTO> statuteTexts = entity.getStatuteTexts().stream()

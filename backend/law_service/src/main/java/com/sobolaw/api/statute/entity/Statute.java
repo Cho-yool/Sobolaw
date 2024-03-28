@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Setter
@@ -39,6 +40,10 @@ public class Statute {
 
     @Column
     private String enforcementDate;
+
+    @Column
+    @ColumnDefault("0")
+    private Long hit;
 
     // 1:N 관계 설정
     // Statute : StatuteTextDocument

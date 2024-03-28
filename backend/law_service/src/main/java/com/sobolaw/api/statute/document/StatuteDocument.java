@@ -3,19 +3,14 @@ package com.sobolaw.api.statute.document;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sobolaw.api.statute.dto.StatuteDTO;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.annotations.Mapping;
 import org.springframework.data.elasticsearch.annotations.Setting;
 
@@ -53,6 +48,9 @@ public class StatuteDocument {
     @JsonProperty("enforcement_date")
     private String enforcementDate;
 
+    @JsonProperty("hit")
+    private Long hit;
+
 
     // Elasticsearch로부터 받은 source 맵을 기반으로 StatuteDocument 객체를 생성하는 생성자
     public StatuteDocument(Map source) {
@@ -64,6 +62,7 @@ public class StatuteDocument {
         this.publicationNumber = source.get("publicationNumber").toString();
         this.publicationDate = source.get("publicationDate").toString();
         this.enforcementDate = source.get("enforcementDate").toString();
+        this.hit = Long.parseLong(source.get("hit").toString());
     }
 
     public static StatuteDocument of(StatuteDTO dto) {
