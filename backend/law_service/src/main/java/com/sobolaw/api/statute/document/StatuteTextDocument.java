@@ -38,10 +38,10 @@ public class StatuteTextDocument {
     private String articleEffectiveDate;
 
     @JsonProperty("article_number")
-    private String articleNumber;
+    private Long articleNumber;
 
     @JsonProperty("article_number_sub")
-    private String articleNumberSub;
+    private Long articleNumberSub;
 
     @JsonProperty("article_title")
     private String articleTitle;
