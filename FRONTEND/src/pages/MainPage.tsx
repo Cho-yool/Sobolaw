@@ -173,7 +173,11 @@ export default function MainPage() {
       </div>
 
       <div className={style["box2"]}>
-        <div className={style["box3-title"]}>
+        <div
+          className={style["box3-title"]}
+          data-aos="fade-up"
+          data-aos-delay="800"
+        >
           <strong>내 주변에서 일어나는 사건의 답을 모르겠을 때</strong>
         </div>
         <div className={style["box2-img"]} data-aos="fade-up" />
