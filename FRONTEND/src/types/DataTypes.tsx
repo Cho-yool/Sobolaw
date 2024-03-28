@@ -260,3 +260,10 @@ export type MemberList = {
   lawsuitInsults: InsultForm[];
   lawsuitDefamations: DefamationForm[];
 };
+
+export type NotificationData = {
+  memberId: number;
+  token: string;
+  title: string;
+  body: string;
+};

@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import "./utils/notifications.ts";
 import LayoutPage from "./components/common/Layout";
 import LawCaseDetail from "./pages/lawcasedetail/LawCaseDetail";
 import LoginPage from "./pages/LoginPage";
