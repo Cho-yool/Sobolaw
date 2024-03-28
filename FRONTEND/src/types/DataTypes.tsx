@@ -4,6 +4,7 @@ export type UserState = {
   accessToken: string;
   refreshToken: string;
   precedents: number[];
+  auth: string;
 };
 
 export type MypaperWide = {
