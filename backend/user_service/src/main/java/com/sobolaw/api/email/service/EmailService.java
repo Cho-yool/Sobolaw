@@ -1,5 +1,7 @@
-package com.sobolaw.api.mail.service;
+package com.sobolaw.api.email.service;
 
+import com.sobolaw.api.email.exception.EmailErrorCode;
+import com.sobolaw.api.email.exception.EmailException;
 import com.sobolaw.api.member.entity.Member;
 import com.sobolaw.api.member.exception.MemberErrorCode;
 import com.sobolaw.api.member.exception.MemberException;
@@ -8,8 +10,6 @@ import com.sobolaw.global.security.jwt.JwtProvider;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class MailService {
+public class EmailService {
 
     private final MemberRepository memberRepository;
     private final JavaMailSender emailSender;
@@ -35,7 +35,7 @@ public class MailService {
     /**
      * 메일 전송.
      */
-    public void sendEmail(MultipartFile file) throws MessagingException, IOException {
+    public void sendEmail(MultipartFile file) throws MessagingException, IOException, EmailException {
         Long currentMemberId = jwtProvider.getMemberId();
         Member member = memberRepository.findById(currentMemberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
@@ -67,7 +67,8 @@ public class MailService {
         try {
             emailSender.send(message);
         } catch (MailException e) {
-            throw new MessagingException("이메일 전송 중 오류가 발생했습니다.", e);
+            log.error("메일 전송 중 에러 발생", e);
+            throw new EmailException(EmailErrorCode.FAIL_SEND_MAIL);
         }
     }
 

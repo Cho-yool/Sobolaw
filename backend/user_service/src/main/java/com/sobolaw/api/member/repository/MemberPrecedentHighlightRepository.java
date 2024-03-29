@@ -2,6 +2,7 @@ package com.sobolaw.api.member.repository;
 
 import com.sobolaw.api.member.entity.MemberPrecedent;
 import com.sobolaw.api.member.entity.MemberPrecedentHighlight;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,5 +12,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MemberPrecedentHighlightRepository extends JpaRepository<MemberPrecedentHighlight, Long> {
 
-    MemberPrecedentHighlight findByMemberPrecedent(MemberPrecedent precedent);
+    List<MemberPrecedentHighlight> findListByMemberPrecedent(MemberPrecedent memberPrecedent);
 }

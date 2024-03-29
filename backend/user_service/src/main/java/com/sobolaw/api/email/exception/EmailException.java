@@ -1,6 +1,5 @@
-package com.sobolaw.api.mail.exception;
+package com.sobolaw.api.email.exception;
 
-import com.sobolaw.api.lawsuit.exception.LawsuitErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -10,14 +9,14 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public class MailException extends Throwable {
-    private MailErrorCode errorCode;
+public class EmailException extends Throwable {
+    private EmailErrorCode errorCode;
     private String message;
 
     /**
      * 메세지가 없는 생성자.
      */
-    public MailException(MailErrorCode errorCode) {
+    public EmailException(EmailErrorCode errorCode) {
         this.errorCode = errorCode;
         this.message = errorCode.getMessage();
     }
