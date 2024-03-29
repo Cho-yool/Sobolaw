@@ -125,7 +125,7 @@ jwt:
 cloud:
   aws:
     s3:
-      bucket: otc-image-bucket
+      bucket: sobolaw
     credentials:
       access-key: AKIA5NYAE3TGCHYHG4VY
       secret-key: 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

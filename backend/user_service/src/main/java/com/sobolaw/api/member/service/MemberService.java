@@ -37,7 +37,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
@@ -793,7 +792,7 @@ public class MemberService {
     /**
      * 요청한 유저의 권한이 있는지 확인(관리자).
      */
-    public void checkAdmin() {
+    private void checkAdmin() {
         Long currentMemberId = jwtProvider.getMemberId();
         Member currentMember = memberRepository.findById(currentMemberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NO_AUTHORITY));
