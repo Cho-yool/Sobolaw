@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store/store';
-import { List, Skeleton } from 'antd';
+import { List, Skeleton, Pagination } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import style from '../../styles/search/SearchResultList.module.css';
 import { postRecentPrecedents } from '../../api/members';
@@ -24,6 +24,7 @@ export interface SearchResult {
   publicationDate: string;
   enforcementDate: string;
   amendmentType: string;
+  total?: number;
   statuteTexts?: Article[];
 }
 
@@ -41,39 +42,47 @@ interface Article {
 interface SearchResultListProps {
   searchTerm: string;
   activeTab: string;
+  pageNumber: number;
 }
 
-const SearchResultList: React.FC<SearchResultListProps> = ({ searchTerm, activeTab }) => {
+const SearchResultList: React.FC<SearchResultListProps> = ({ searchTerm, activeTab, pageNumber }) => {
   const navigate = useNavigate();
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
+  const [pageSize, setPageSize] = useState(10); // 한 페이지에 표시할 항목 수
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [totalResults, setTotalResults] = useState(0); // 전체 검색 결과 수
 
   useEffect(() => {
-    fetchSearchResults(searchTerm, activeTab);
-  }, [searchTerm, activeTab]);
+    fetchSearchResults(searchTerm, activeTab, currentPage);
+  }, [searchTerm, activeTab, currentPage]);
 
-  const fetchSearchResults = async (searchQuery: string, activeTab: string) => {
-     // 검색 쿼리가 비어 있는지 확인
-     if (!searchQuery.trim()) {
+  const fetchSearchResults = async (searchQuery: string, activeTab: string, pageNumber: number) => {
+    // 검색 쿼리가 비어 있는지 확인
+    if (!searchQuery.trim()) {
       console.error('Search query is empty.');
-      // 여기서 사용자에게 입력을 요청하는 메시지를 표시하거나,
-      // 다른 로직을 실행할 수 있습니다.
       setLoading(false); // 로딩 상태 업데이트
       return; // 함수 실행을 여기서 중단
-  }
+    }
   
     setLoading(true);
+  
     try {
       if (activeTab === '1') {
-        const precedentResponse = await searchPrecedent(searchQuery);
-        if (precedentResponse.data && Array.isArray(precedentResponse.data)) {
+        const precedentResponse = await searchPrecedent(searchQuery, pageNumber);
+        if (precedentResponse?.data && Array.isArray(precedentResponse.data)) {
           setSearchResults(precedentResponse.data);
+          const total = precedentResponse.data[0]?.total || 0;
+          console.log('판례 검색 결과:', precedentResponse.data, total)
+          setTotalResults(total);
         }
       } else if (activeTab === '2') {
-        const statuteResponse = await searchStatute(searchQuery);
-        if (statuteResponse.data && Array.isArray(statuteResponse.data)) {
+        const statuteResponse = await searchStatute(searchQuery, pageNumber);
+        if (statuteResponse?.data && Array.isArray(statuteResponse.data)) {
           setSearchResults(statuteResponse.data);
+          const total = statuteResponse.data[0]?.total || 0;
+          setTotalResults(total);
         }
       }
     } catch (error) {
@@ -92,6 +101,11 @@ const SearchResultList: React.FC<SearchResultListProps> = ({ searchTerm, activeT
     } catch (error) {
       navigate(`/${type === 'precedent' ? 'laws' : 'statutes'}/${type === 'precedent' ? item.precedentId : item.statuteNumber}`, { state: item });
     }
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    fetchSearchResults(searchTerm, activeTab, page);
   };
 
   const cleanHtmlTags = (html: string): string => {
@@ -137,18 +151,19 @@ const SearchResultList: React.FC<SearchResultListProps> = ({ searchTerm, activeT
                         <div className={style.itemMeta}>
                           {item.courtName && <span className={style.metaItem}>{item.courtName}&nbsp;</span>}
                           {item.instance && <span className={style.metaItem}>{item.instance}</span>}
-                          {item.judgmentDate && <span className={style.metaItem}>{item.judgmentDate}</span>}
+                          {item.judgmentDate && <span className={style.metaItem}>
+                            {item.judgmentDate.slice(0,4)}.{item.judgmentDate.slice(4,6)}.{item.judgmentDate.slice(6,8)}</span>}
                         </div>
                       </>
                     ) : (
                       <>
                         <p className={style.itemContent}>
                           법률 제 {item.publicationNumber}호,
-                          공포일 {item.enforcementDate ? item.enforcementDate.slice(0, 4) : ''}.{' '}
-                          {item.enforcementDate ? item.enforcementDate.slice(4, 6) : ''}.{' '}
+                          공포일 {item.enforcementDate ? item.enforcementDate.slice(0, 4) : ''}.{''}
+                          {item.enforcementDate ? item.enforcementDate.slice(4, 6) : ''}.{''}
                           {item.enforcementDate ? item.enforcementDate.slice(6, 8) : ''},
-                          시행일 {item.publicationDate ? item.publicationDate.slice(0, 4) : ''}.{' '}
-                          {item.publicationDate ? item.publicationDate.slice(4, 6) : ''}.{' '}
+                          시행일 {item.publicationDate ? item.publicationDate.slice(0, 4) : ''}.{''}
+                          {item.publicationDate ? item.publicationDate.slice(4, 6) : ''}.{''}
                           {item.publicationDate ? item.publicationDate.slice(6, 8) : ''}
                         </p>
                         <div className={style.itemMeta}>
@@ -163,6 +178,14 @@ const SearchResultList: React.FC<SearchResultListProps> = ({ searchTerm, activeT
           )}
         />
       )}
+      <Pagination
+        current={currentPage}
+        total={totalResults}
+        pageSize={pageSize} // 한 페이지에 표시할 항목 수
+        onChange={handlePageChange}
+        onShowSizeChange={(currentPage, size) => setPageSize(size)}
+        style={{ marginTop: 50, textAlign: 'center'}}
+      />
     </>
   );
 };
