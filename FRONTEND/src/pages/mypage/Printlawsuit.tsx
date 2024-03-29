@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 import Button from "antd/lib/button";
 import { RootState } from "../../redux/store/store";
-import { getInsult } from "../../api/lawsuit";
+import { getInsult, postMail } from "../../api/lawsuit";
 import { InsultForm } from "../../types/DataTypes";
 import InsultPrint from "../../components/lawsuit/insult/InsultPrint";
 
