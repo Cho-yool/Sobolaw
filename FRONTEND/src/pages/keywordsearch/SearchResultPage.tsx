@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Pagination, Input, Tabs, Select } from "antd";
+import { Input, Tabs, Select } from "antd";
 import { SearchOutlined } from '@ant-design/icons';
 import SearchResultList from "../../components/search/SearchResultList";
 import style from "../../styles/search/SearchResultList.module.css";
@@ -79,14 +79,14 @@ const SearchResultPage = () => {
               <Option value="30년">30년</Option>
             </Select>
           </div>
-          <SearchResultList searchTerm={finalSearchTerm} activeTab={selectedTab} />
+          <SearchResultList searchTerm={finalSearchTerm} activeTab={selectedTab} pageNumber={currentPage} />
         </>
       ),
     },
     {
       label: '법령',
       key: '2',
-      children: <SearchResultList searchTerm={finalSearchTerm} activeTab={selectedTab} />,
+      children: <SearchResultList searchTerm={finalSearchTerm} activeTab={selectedTab} pageNumber={currentPage}/>,
     },
   ];
 
@@ -109,16 +109,9 @@ const SearchResultPage = () => {
             onChange={onTabChange}
           />
         </div>
-        <Pagination
-          current={currentPage}
-          pageSize={pageSize}
-          total={0}
-          onChange={(page) => setCurrentPage(page)}
-          className={style.pagination}
-        />
       </div>
     </div>
   );
-};
+}
 
 export default SearchResultPage;

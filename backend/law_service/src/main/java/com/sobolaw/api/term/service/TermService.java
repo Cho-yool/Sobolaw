@@ -31,6 +31,7 @@ public class TermService {
 
         SearchResponse<TermDocument> termResponse = elasticsearchClient.search(s -> s
             .index("term_index")
+            .size(100)
             .query(q -> q
                 .multiMatch(m -> m
                     .query(searchKeyword)
@@ -74,7 +75,8 @@ public class TermService {
     }
 
     // entity -> DTO 변환
-    private TermDTO convertToTermDTO(Term entity) { // 아래 변환방식 사용할 때 : DTO랑 순서 동일하게 작성
+    private TermDTO convertToTermDTO(Term entity) {
+        // 아래 변환방식 사용할 때 : DTO랑 순서 동일하게 작성
         return new TermDTO(
             entity.getTermId(),
             entity.getTermName(),

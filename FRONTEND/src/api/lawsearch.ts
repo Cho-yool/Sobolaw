@@ -6,22 +6,28 @@ const headers = new AxiosHeaders();
 headers.set("Content-Type", "application/json;charset=utf-8");
 
 // 법령 검색
-async function searchStatute(searchKeyword: string) {
-  const response = await http.get(`/statutes/search/${searchKeyword}`);
-  return response.data;
+async function searchStatute(searchKeyword: string, pageNumber: number) {
+    const response = await http.get(`/statutes/search/${searchKeyword}?pageNumber=${pageNumber}`);
+    return response.data;
 }
 
 // 법령 상세 조회
 async function getStatuteDetail(statuteNumber: number) {
-    const response = await http.get(`/statutes/detail/${statuteNumber}`);
-    return response.data;
+    try {
+        const response = await http.get(`/statutes/detail/${statuteNumber}`);
+        // console.log('법령 상세 조회:', response.data.data);
+        return response.data.data;
+    } catch (error) {
+        console.error('법령 상세 정보 요청 오류:', error);
+    }
 }
 
 // 판례 검색
-async function searchPrecedent(searchKeyword: string) {
-    const response = await http.get(`/precedents/search/${searchKeyword}`);
+async function searchPrecedent(searchKeyword: string, pageNumber: number) {
+    const response = await http.get(`/precedents/search/${searchKeyword}?pageNumber=${pageNumber}`);
+    // console.log('판례 검색 결과:', response.data, pageNumber);
     return response.data;
-}
+  }
 
 
 // 판례 목록 조회
@@ -32,7 +38,7 @@ async function getPrecedentList() {
 
 // 조회수별 판례 목록 조회
 async function getHitPrecedentList() {
-    const response = await http.get("/precedents/list"); 
+    const response = await http.get("/precedents/list");
     return response.data.data;
 }
 

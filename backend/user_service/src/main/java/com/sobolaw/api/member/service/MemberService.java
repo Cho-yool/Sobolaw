@@ -7,7 +7,9 @@ import com.sobolaw.api.member.dto.MemberPrecedentHighlightDTO;
 import com.sobolaw.api.member.dto.MemberRecentDTO;
 import com.sobolaw.api.member.dto.request.HighlightCreateUpdateRequestDTO;
 import com.sobolaw.api.member.dto.request.KeywordSaveRequestDTO;
+import com.sobolaw.api.member.dto.request.MemberUpdateRequestDto;
 import com.sobolaw.api.member.dto.request.PrecedentSaveRequestDTO;
+import com.sobolaw.api.member.dto.response.AdminMemberResponseDto;
 import com.sobolaw.api.member.dto.response.MemberPrecedentResponseDTO;
 import com.sobolaw.api.member.dto.response.MemberRecentResponseDTO;
 import com.sobolaw.api.member.dto.response.MemberResponseDTO;
@@ -17,6 +19,7 @@ import com.sobolaw.api.member.entity.MemberPrecedent;
 import com.sobolaw.api.member.entity.MemberPrecedentHighlight;
 import com.sobolaw.api.member.entity.MemberRecent;
 import com.sobolaw.api.member.entity.Type.KeywordType;
+import com.sobolaw.api.member.entity.Type.RoleType;
 import com.sobolaw.api.member.exception.MemberErrorCode;
 import com.sobolaw.api.member.exception.MemberException;
 import com.sobolaw.api.member.repository.MemberKeywordRepository;
@@ -232,7 +235,7 @@ public class MemberService {
 
 
     /**
-     * 멤버의 저장 판례의 메모.
+     * 멤버의 저장 판례의 메모 조회.
      *
      * @param precedentId 판례Id
      * @return 저장 판례의 하이라이트들.
@@ -242,14 +245,14 @@ public class MemberService {
         Member member = memberRepository.findById(currentMemberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
-        MemberPrecedent matchingPrecedent = memberPrecedentRepository.findByMemberAndPrecedentId(member, precedentId)
+        MemberPrecedent memberPrecedent = memberPrecedentRepository.findByMemberAndPrecedentId(member, precedentId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT));
 
-        return matchingPrecedent.getHighlights().stream().map(MemberPrecedentHighlightDTO::from).collect(Collectors.toList());
+        return memberPrecedent.getHighlights().stream().map(MemberPrecedentHighlightDTO::from).collect(Collectors.toList());
     }
 
     /**
-     * 멤버의 특정 저장 판례.
+     * 멤버의 특정 저장 판례 조회.
      *
      * @param precedentId 판례Id
      * @return 특정 저장 판례.
@@ -353,18 +356,20 @@ public class MemberService {
     }
 
     /**
-     * 멤버 전체 조회.
+     * 멤버 전체 조회(관리자).
      */
     public List<MemberDTO> getAllMembers() {
+        checkAdmin();
         List<Member> members = memberRepository.findAll();
         return members.stream().map(MemberDTO::from).collect(Collectors.toList());
     }
 
 
     /**
-     * 저장된 판례 전체 조회.
+     * 저장된 판례 전체 조회(괸리자).
      */
     public List<MemberPrecedentResponseDTO> getAllMemberPrecedents() {
+        checkAdmin();
         List<MemberPrecedent> allPrecedents = memberPrecedentRepository.findAll();
         List<MemberPrecedentResponseDTO> responseDTOs = new ArrayList<>();
 
@@ -409,9 +414,10 @@ public class MemberService {
     }
 
     /**
-     * 최근 본 판례 전체 조회.
+     * 최근 본 판례 전체 조회(관리자).
      */
     public List<MemberRecentResponseDTO> getAllMemberRecents() {
+        checkAdmin();
         List<MemberRecent> allRecents = memberRecentRepository.findAll();
 
         List<MemberRecentResponseDTO> responseDTOs = new ArrayList<>();
@@ -457,9 +463,10 @@ public class MemberService {
     }
 
     /**
-     * 관심 키워드 전체 조회.
+     * 관심 키워드 전체 조회(관리자).
      */
     public List<MemberKeywordDTO> getAllMemberKeywords() {
+        checkAdmin();
         List<MemberKeyword> allKeywords = memberKeywordRepository.findAll();
         List<MemberKeywordDTO> allMemberKeyword = allKeywords.stream().map(MemberKeywordDTO::from).toList();
         if (allMemberKeyword.isEmpty()) {
@@ -677,17 +684,12 @@ public class MemberService {
         Member member = memberRepository.findById(currentMemberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
-        MemberPrecedent precedent = memberPrecedentRepository.findByMemberAndPrecedentId(member, precedentId)
+        MemberPrecedent memberPrecedent = memberPrecedentRepository.findByMemberAndPrecedentId(member, precedentId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT));
-        MemberPrecedentHighlight highlight = memberPrecedentHighlightRepository.findByMemberPrecedent(precedent);
-        if (highlight != null) {
-            if (Objects.equals(highlight.getMain(), request.main())) {
-                highlight.softDelete();
-            }
-        }
+
         log.info("request" + request);
         MemberPrecedentHighlight newMemberPrecedentHighlight = MemberPrecedentHighlight.of(request.main(), request.startPoint(), request.endPoint(), request.highlightType(), request.content());
-        newMemberPrecedentHighlight.setMemberPrecedent(precedent);
+        newMemberPrecedentHighlight.setMemberPrecedent(memberPrecedent);
         MemberPrecedentHighlight memberPrecedentHighlight = memberPrecedentHighlightRepository.save(newMemberPrecedentHighlight);
 
         return MemberPrecedentHighlightDTO.from(memberPrecedentHighlight);
@@ -703,6 +705,28 @@ public class MemberService {
         highlight.softDelete();
 
         memberPrecedentHighlightRepository.save(highlight);
+    }
+
+    /**
+     * 하이라이트 전체 삭제.
+     */
+    @Transactional
+    public void deleteAllMemberPrecedentHighlight(Long precedentId) {
+        Long currentMemberId = jwtProvider.getMemberId();
+        Member member = memberRepository.findById(currentMemberId)
+            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
+
+        MemberPrecedent memberPrecedent = memberPrecedentRepository.findByMemberAndPrecedentId(member, precedentId)
+            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT));
+
+        // 해당 멤버와 전례에 대한 하이라이트들을 가져옴
+        List<MemberPrecedentHighlight> highlights = memberPrecedentHighlightRepository.findListByMemberPrecedent(memberPrecedent);
+
+        // 하이라이트들을 소프트 삭제하고 업데이트
+        for (MemberPrecedentHighlight highlight : highlights) {
+            highlight.softDelete(); // 소프트 딜리트 플래그를 설정하여 삭제 표시
+        }
+        memberPrecedentHighlightRepository.saveAll(highlights); // 소프트 삭제된 하이라이트들을 저장
     }
 
     /**
@@ -741,4 +765,43 @@ public class MemberService {
         member.softDelete();
         memberRepository.save(member);
     }
+
+    /**
+     * 멤버 정보 수정 메서드(관리자).
+     */
+    @Transactional
+    public AdminMemberResponseDto updateMember(Long memberId, MemberUpdateRequestDto updatedMemberDto) {
+        checkAdmin();
+
+        // 해당 memberId로 멤버 엔티티를 찾아옴
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
+
+        // 업데이트할 필드가 null이 아닌 경우에만 Setter를 사용하여 엔티티의 필드를 갱신
+        if (updatedMemberDto.name() != null) {
+            member.setName(updatedMemberDto.name());
+        }
+        if (updatedMemberDto.email() != null) {
+            member.setEmail(updatedMemberDto.email());
+        }
+        if (updatedMemberDto.role() != null) {
+            member.setRole(updatedMemberDto.role());
+        }
+        return AdminMemberResponseDto.from(member);
+    }
+
+
+    /**
+     * 요청한 유저의 권한이 있는지 확인(관리자).
+     */
+    public void checkAdmin() {
+        Long currentMemberId = jwtProvider.getMemberId();
+        Member currentMember = memberRepository.findById(currentMemberId)
+            .orElseThrow(() -> new MemberException(MemberErrorCode.NO_AUTHORITY));
+        RoleType userRole = currentMember.getRole();
+        if (userRole != RoleType.ROLE_ADMIN) {
+            throw new MemberException(MemberErrorCode.NO_AUTHORITY);
+        }
+    }
+
 }
+

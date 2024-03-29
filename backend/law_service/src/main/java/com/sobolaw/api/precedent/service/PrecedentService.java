@@ -123,7 +123,7 @@ public class PrecedentService {
             entity.getReferencedCase(),
             entity.getReferencedStatute(),
             entity.getHit(),
-            0
+            0L
         );
     }
 

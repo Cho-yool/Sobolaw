@@ -47,6 +47,7 @@ spring:
 logging:
   level:
     com.sobolaw.aop: TRACE
+    com.sobolaw.ilm: INFO
     org:
       hibernate.orm.jdbc.bind: trace
       springframework:

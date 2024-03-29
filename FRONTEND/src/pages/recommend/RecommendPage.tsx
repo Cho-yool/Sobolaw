@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Row, Tooltip } from 'antd';
+import { Layout, Row, Tooltip, Steps } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import RecommendCards from '../../components/recommend/RecommendCard';
 import RecommendSearch from '../../components/recommend/RecommendSearch';
@@ -22,15 +22,15 @@ const tooltipMessage = (
 const RecommendPage: React.FC = () => {
   const [currentWord, setCurrentWord] = useState('');
   const [wordIndex, setWordIndex] = useState(0);
-  const [letterIndex, setLetterIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [isCardsVisible, setIsCardsVisible] = useState(false);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
 
   const checkScroll = () => {
-    const cardsShowPoint = 365; // `recommendCardSection`을 표시할 스크롤 위치
-    const searchShowPoint = 1100; // `recommendSearchSection`을 표시할 스크롤 위치
+    const cardsShowPoint = 365;
+    const searchShowPoint = 1100;
     const currentScroll = window.scrollY;
-    
+
     setIsCardsVisible(currentScroll > cardsShowPoint);
     setIsSearchVisible(currentScroll > searchShowPoint);
   };
@@ -40,21 +40,44 @@ const RecommendPage: React.FC = () => {
     return () => window.removeEventListener('scroll', checkScroll);
   }, []);
 
-  // 위에서 정의한 단어 목록을 이용하여, 0.1초마다 한 글자씩 추가하고, 1초 후 다음 단어로 변경
   useEffect(() => {
-    if (letterIndex > words[wordIndex].length) {
-      setTimeout(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    let wordTimer: ReturnType<typeof setTimeout>;
+    let letterIndex = 0;
+
+    const typeWord = () => {
+      if (letterIndex <= words[wordIndex].length) {
+        setCurrentWord(words[wordIndex].slice(0, letterIndex));
+        letterIndex++;
+        timer = setTimeout(typeWord, 100);
+      } else {
+        wordTimer = setTimeout(() => {
+          setIsDeleting(true);
+          deleteWord();
+        }, 1000);
+      }
+    };
+
+    const deleteWord = () => {
+      if (letterIndex >= 0) {
+        setCurrentWord(words[wordIndex].slice(0, letterIndex));
+        letterIndex--;
+        timer = setTimeout(deleteWord, 100);
+      } else {
+        setIsDeleting(false);
         setWordIndex((prevIndex) => (prevIndex + 1) % words.length);
-        setLetterIndex(0);
-      }, 1000); // 1초 후 다음 단어로 변경
-    } else { // 0.1초마다 한 글자씩 추가
-      const timer = setTimeout(() => {
-        setLetterIndex(letterIndex + 1);
-        setCurrentWord(words[wordIndex].substring(0, letterIndex));
-      }, 100);
-      return () => clearTimeout(timer);
-    }
-  }, [letterIndex, wordIndex]);
+        letterIndex = 0;
+        wordTimer = setTimeout(typeWord, 500);
+      }
+    };
+
+    typeWord();
+
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(wordTimer);
+    };
+  }, [wordIndex]);
 
   // 버튼 클릭 시 검색 섹션으로 스크롤 이동
   const scrollToSearchSection = () => {
@@ -62,7 +85,7 @@ const RecommendPage: React.FC = () => {
     if (searchSection) {
       searchSection.scrollIntoView({ behavior: 'smooth' });
     }
-  }
+  };
 
   return (
     <div className={style.recommendContainer}>
@@ -86,21 +109,20 @@ const RecommendPage: React.FC = () => {
                     <QuestionCircleOutlined style={{ color: '#ffffff', marginLeft: 15 }} />
                   </Tooltip>
                 </h3>
-                {/* '추천 검색 시작하기' 버튼 추가 */}
                 <button className={style.startSearchButton} onClick={scrollToSearchSection}>추천 검색 시작하기</button>
               </div>
             </div>
           </Row>
         </Content>
       </Layout>
-        <div className={`${style.recommendCardSection} ${isCardsVisible ? style.visible : ''}`}>
-          <h2>소보로 추천 검색은 무엇이 다를까요?</h2>
-          <RecommendCards />
-        </div>
-        <div className={`${style.recommendSearchSection} ${isSearchVisible ? style.visible : ''}`}>
-          <h2>소보로 추천 검색 이용하기</h2>
-          <RecommendSearch />
-        </div>
+      <div className={`${style.recommendCardSection} ${isCardsVisible ? style.visible : ''}`}>
+        <h2>소보로 추천 검색은 무엇이 다를까요?</h2>
+        <RecommendCards />
+      </div>
+      <div className={`${style.recommendSearchSection} ${isSearchVisible ? style.visible : ''}`}>
+        <h2>소보로 추천 검색 이용하기</h2>
+        <RecommendSearch />
+      </div>
     </div>
   );
 };

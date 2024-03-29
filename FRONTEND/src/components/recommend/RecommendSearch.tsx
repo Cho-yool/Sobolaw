@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Select, Input, Button, Tooltip } from 'antd';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { Select, Input, Button, Tooltip, Steps } from 'antd';
+import { InfoCircleOutlined, ClusterOutlined, HomeOutlined, CarOutlined, UserOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import style from '../../styles/recommend/RecommendSearch.module.css';
 import LoadingImage from './LoadingImage';
 import { searchPrecedents } from '../../api/recommendsearch';
-import { set } from 'lodash';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -102,7 +101,7 @@ const RecommendSearch: React.FC = () => {
 
       const interval = setInterval(() => {
         setProgress((prevProgress) => {
-          if(prevProgress >= 100) {
+          if (prevProgress >= 100) {
             clearInterval(interval);
             // 로딩이 100%에 도달한 후 1.5초 기다린 다음 결과 페이지로 이동
             setTimeout(() => {
@@ -121,96 +120,127 @@ const RecommendSearch: React.FC = () => {
     }
   }
 
-  if(isLoading) {
+  if (isLoading) {
     return <LoadingImage progress={progress} />
   }
 
   return (
-    <div className={style.searchContainer}>
-      <div className={style.searchItem}>
-        <h4>1단계 : 사건분류를 선택하세요.</h4>
-        <Select
-          showSearch
-          placeholder="사건분류"
-          optionFilterProp="children"
-          onChange={handleCaseTypeChange}
-          filterOption={(input, option) =>
-            (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
-          }
-          style={{ width: '30%', height: '70%', fontSize: '15px' }}
-        >
-          <Option value="손해배상">손해배상</Option>
-          <Option value="사기">사기</Option>
-          <Option value="횡령">횡령</Option>
-          <Option value="계약위반">계약위반</Option>
-          <Option value="고용법">고용법</Option>
-          <Option value="청구이의">청구이의</Option>
-          <Option value="소유권분쟁">소유권분쟁</Option>
-          <Option value="기타">기타</Option>
-        </Select>
+    <div className={style.recommendSearchContainer}>
+      <div className={`${style.stepsContainer} ${style.fadeInUp}`}>
+        <Steps
+          direction="vertical"
+          current={currentStep-1}
+          style={{ height: '35%', fontWeight: 'bold'}}
+          size='small'
+          items={[
+            {
+              style: { height: '32%'},
+              title: '사건 분류',
+              icon: <ClusterOutlined />,
+            },
+            {
+              style: { height: '42%'},
+              title: '사건 장소',
+              icon: <HomeOutlined />,
+            },
+            {
+              style: { height: '42%'},
+              title: '사건 대상',
+              icon: <CarOutlined />,
+            },
+            {
+              title: '사건 인물',
+              icon: <UserOutlined />,
+            },
+          ]}
+        />
       </div>
-      {currentStep > 1 && (
-        <div className={`${style.searchItem} ${style.fadeInUp}`}>
-          <h4>
-            2단계 : 사건 관련 장소를 입력하세요.
-            <Tooltip title={placeTooltipContent} placement='right' overlayInnerStyle={{ backgroundColor: '#F3E7C0', color: '#000000' }}>
-              <InfoCircleOutlined 
-              style={{ marginLeft: 10, color: '#595959' }} 
-              />
-            </Tooltip>
-          </h4>
-          <TextArea
-            value={stepTwoValue}
-            placeholder="예) 회사, 건물, 주택, 농지, 아파트, 은행, 도로, 자동차 등"
-            onChange={handleStepTwoChange}
-            style={{ width: '100%', height: '100%' }}
-            autoSize={{ minRows: 3, maxRows: 6 }} // 자동 크기 조정 활성화
-          />
+      <div className={style.searchContainer}>
+        <div className={style.searchFirstItem}>
+          <h4>1단계 : 사건분류를 선택하세요.</h4>
+          <Select
+            showSearch
+            placeholder="사건분류"
+            optionFilterProp="children"
+            onChange={handleCaseTypeChange}
+            filterOption={(input, option) =>
+              (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
+            }
+            style={{ width: '15%', height: '50px', fontSize: '15px' }}
+          >
+            <Option value="손해배상">손해배상</Option>
+            <Option value="사기">사기</Option>
+            <Option value="횡령">횡령</Option>
+            <Option value="계약위반">계약위반</Option>
+            <Option value="고용법">고용법</Option>
+            <Option value="청구이의">청구이의</Option>
+            <Option value="소유권분쟁">소유권분쟁</Option>
+            <Option value="기타">기타</Option>
+          </Select>
         </div>
-      )}
-      {currentStep > 2 && (
-        <div className={`${style.searchItem} ${style.fadeInUp}`}>
-          <h4>
-            3단계 : 사건 관련 대상을 입력하세요.
-            <Tooltip title={objectTooltipContent} placement='right' overlayInnerStyle={{ backgroundColor: '#F3E7C0', color: '#000000' }}>
-              <InfoCircleOutlined
-               style={{ marginLeft: 10, color: '#595959' }}
-               />
-            </Tooltip>
-          </h4>
-          <TextArea
-            value={stepThreeValue}
-            placeholder="예)  토지, 등기, 보험, 채권, 부동산, 소유권, 항고, 자동차 등"
-            onChange={handleStepThreeChange}
-            style={{ width: '100%', height: '100%' }}
-            autoSize={{ minRows: 3, maxRows: 6 }} // 자동 크기 조정 활성화
-          />
-        </div>
-      )}
-      {currentStep > 3 && (
-        <div className={`${style.searchItem} ${style.fadeInUp}`}>
-          <h4>
-            4단계 : 사건 관련 주요 인물을 입력하세요.
-            <Tooltip title={personTooltipContent} placement='right' overlayInnerStyle={{ backgroundColor: '#F3E7C0', color: '#000000' }}>
-              <InfoCircleOutlined 
-              style={{ marginLeft: 10, color: '#595959'}}
-              />
-            </Tooltip>
-          </h4>
-          <TextArea
-            value={stepFourValue}
-            placeholder="예) 채무자, 채권자, 근로자, 참가인, 조합원, 피해자, 소유자 등"
-            onChange={handleStepFourChange}
-            style={{ width: '100%', height: '100%' }}
-            autoSize={{ minRows: 3, maxRows: 6 }} // 자동 크기 조정 활성화
-          />
-        </div>
-      )}
-      {currentStep > 4 && (
-        <div className={`${style.searchItem} ${style.fadeInUp}`}>
-          <Button type="primary" onClick={handleSubmit} style={{ width: 100, height: 40, fontSize: 18, marginLeft: '83%' }}>제출</Button>
-        </div>
-      )}
+        {currentStep > 1 && (
+          <div className={`${style.searchItem} ${style.fadeInUp}`}>
+            <h4>
+              2단계 : 사건 관련 장소를 입력하세요.
+              <Tooltip title={placeTooltipContent} placement='right' overlayInnerStyle={{ backgroundColor: '#F3E7C0', color: '#000000' }}>
+                <InfoCircleOutlined
+                  style={{ marginLeft: 10, color: '#595959' }}
+                />
+              </Tooltip>
+            </h4>
+            <TextArea
+              value={stepTwoValue}
+              placeholder="예) 회사, 건물, 주택, 농지, 아파트, 은행, 도로, 자동차 등"
+              onChange={handleStepTwoChange}
+              style={{ width: '60%', height: '100%' }}
+              autoSize={{ minRows: 5, maxRows: 5 }} // 자동 크기 조정 활성화
+            />
+          </div>
+        )}
+        {currentStep > 2 && (
+          <div className={`${style.searchItem} ${style.fadeInUp}`}>
+            <h4>
+              3단계 : 사건 관련 대상을 입력하세요.
+              <Tooltip title={objectTooltipContent} placement='right' overlayInnerStyle={{ backgroundColor: '#F3E7C0', color: '#000000' }}>
+                <InfoCircleOutlined
+                  style={{ marginLeft: 10, color: '#595959' }}
+                />
+              </Tooltip>
+            </h4>
+            <TextArea
+              value={stepThreeValue}
+              placeholder="예)  토지, 등기, 보험, 채권, 부동산, 소유권, 항고, 자동차 등"
+              onChange={handleStepThreeChange}
+              style={{ width: '60%', height: '100%' }}
+              autoSize={{ minRows: 5, maxRows: 5 }} // 자동 크기 조정 활성화
+            />
+          </div>
+        )}
+        {currentStep > 3 && (
+          <div className={`${style.searchItem} ${style.fadeInUp}`}>
+            <h4>
+              4단계 : 사건 관련 주요 인물을 입력하세요.
+              <Tooltip title={personTooltipContent} placement='right' overlayInnerStyle={{ backgroundColor: '#F3E7C0', color: '#000000' }}>
+                <InfoCircleOutlined
+                  style={{ marginLeft: 10, color: '#595959' }}
+                />
+              </Tooltip>
+            </h4>
+            <TextArea
+              value={stepFourValue}
+              placeholder="예) 채무자, 채권자, 근로자, 참가인, 조합원, 피해자, 소유자 등"
+              onChange={handleStepFourChange}
+              style={{ width: '60%', height: '100%' }}
+              autoSize={{ minRows: 5, maxRows: 5 }} // 자동 크기 조정 활성화
+            />
+          </div>
+        )}
+        {currentStep > 4 && (
+          <div className={`${style.searchItem} ${style.fadeInUp}`}>
+            <Button type="primary" onClick={handleSubmit} style={{ width: 100, height: 50, fontSize: 18, marginLeft: '49%' }}>제출</Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
