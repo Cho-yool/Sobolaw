@@ -1,8 +1,8 @@
-import { Flex, Input, Spin } from "antd";
+import { Flex, Input, Spin, Pagination } from "antd";
 import style from "../../styles/lawword/LawWordModal.module.css";
 import LawWordCard from "./LawWordCard";
 import { ReactNode, useEffect, useState } from "react";
-import { getWordList } from "../../api/lawword";
+import { getSearchList, getWordList } from "../../api/lawword";
 import { wordListProps } from "../../types/DataTypes";
 import LawWordDetail from "./LawWordDetail";
 
@@ -13,15 +13,22 @@ const LawWordDict = () => {
   const [isDetail, setIsDetail] = useState<boolean>(false);
   const [wordInfo, setWordInfo] = useState<string>("");
   const [wordTitle, setWordTitle] = useState<string>("");
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [isSearch, setIsSearch] = useState<boolean>(false);
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
+
   const searchInfo = (title: string, content: string) => {
     setWordTitle(title);
     setWordInfo(content);
   };
+
   useEffect(() => {
     try {
       const wordLists = async () => {
         const response = await getWordList();
         setWordList(response.data.data.content);
+        setTotalPages(response.data.data.totalPages);
       };
       wordLists();
     } catch (error) {
@@ -31,7 +38,6 @@ const LawWordDict = () => {
 
   useEffect(() => {
     const words = wordList.map((word, index) => {
-      console.log(word);
       return (
         <LawWordCard
           termDefinition={word.termDefinition}
@@ -47,6 +53,42 @@ const LawWordDict = () => {
     setRenderWord(words);
   }, [wordList]);
 
+  const pageChange = (page: number) => {
+    try {
+      const wordLists = async () => {
+        const response = await getWordList(page);
+        setWordList(response.data.data.content);
+        setTotalPages(response.data.data.totalPages);
+        setCurrentPage(page);
+      };
+      wordLists();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const searchHandler = (value: string) => {
+    if (value.trim()) {
+      try {
+        const searchWord = async () => {
+          const response = await getSearchList(value);
+          if (response.data.data.length > 0) {
+            setWordList(response.data.data);
+            setIsSearch(true);
+            setSearchKeyword("");
+          } else {
+            alert("검색 결과가 없습니다");
+          }
+        };
+        searchWord();
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      alert("검색어를 입력해주세요.");
+    }
+  };
+
   return (
     <Flex
       className={style["modal-body"]}
@@ -57,8 +99,12 @@ const LawWordDict = () => {
       {wordList.length > 0 ? (
         <>
           <Search
-            placeholder="검색할 단어를 입력하세요. "
+            placeholder="검색할 제목, 내용을 입력해주세요."
             style={{ width: "90%" }}
+            enterButton
+            onChange={(e) => setSearchKeyword(e.target.value)}
+            onSearch={searchHandler}
+            value={searchKeyword}
           />
           {isDetail ? (
             <LawWordDetail
@@ -68,13 +114,25 @@ const LawWordDict = () => {
               setIsDetail={setIsDetail}
             />
           ) : (
-            <Flex
-              className={style["modal-body__content"]}
-              vertical
-              align="center"
-            >
-              {renderWord}
-            </Flex>
+            <>
+              <Flex
+                className={style["modal-body__content"]}
+                vertical
+                align="center"
+              >
+                {renderWord}
+              </Flex>
+              {isSearch ? null : (
+                <Pagination
+                  simple
+                  total={totalPages}
+                  defaultPageSize={20}
+                  defaultCurrent={currentPage}
+                  showSizeChanger={false}
+                  onChange={pageChange}
+                />
+              )}
+            </>
           )}
         </>
       ) : (

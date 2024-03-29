@@ -27,7 +27,7 @@ const LawWordModal = ({ modalHandler }: LawWordModalProps) => {
         <Flex className={style["modal-header"]}>
           <img className={style["modal-header__icon"]} src={CHARACTER} alt="" />
           <p className={style["modal-header__title"]}>
-            {currentSelect ? "용어사전" : "Chat Bot"}
+            {currentSelect ? "법령 용어 사전" : "무물보~"}
           </p>
           <img
             className={style["modal-header__close"]}

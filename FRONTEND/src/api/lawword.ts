@@ -11,7 +11,7 @@ export async function getChatAnswer(message: string) {
     messages: [
       {
         role: "system",
-        content: "반말로 대답해줘",
+        content: "격식있는 말투로 대답해줘",
       },
       {
         role: "user",
@@ -25,5 +25,10 @@ export async function getChatAnswer(message: string) {
 
 export async function getWordList(page = 1) {
   const url = `terms/list?page=${page}`;
+  return await lawHttp.get(url);
+}
+
+export async function getSearchList(searchKeyword: string) {
+  const url = `terms/search/${searchKeyword}`;
   return await lawHttp.get(url);
 }
