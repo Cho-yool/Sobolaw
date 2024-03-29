@@ -1,24 +1,26 @@
 .messageBubbleContainer {
     display: flex;
     flex-direction: column;
-    max-width: 800px; /* 최대 너비 제한 */
-    gap: 8px;
-    margin: 0 auto; /* 가운데 정렬 */
+    justify-content: flex-end; /* 아래로 정렬 */
+    align-items: flex-end; /* 오른쪽 정렬 */
+    max-width: 600px; /* 최대 너비 제한 */
+    gap: 40px;
+    margin-left: auto; /* 오른쪽으로 최대한 밀기 */
   }
   
   .messageBubble {
-    max-width: 600px; /* 메시지 최대 너비 제한 */
+    max-width: 400px; /* 메시지 최대 너비 제한 */
     padding: 10px;
     border-radius: 18px;
     padding: 8px 16px;
     word-wrap: break-word; /* 긴 단어는 자동으로 줄바꿈 */
+    line-height: 1.5;
   }
   
   .sent {
     align-self: flex-end; /* 오른쪽 정렬 */
     background-color: #007aff;
     color: white;
-    margin-left: auto; /* 오른쪽으로 최대한 밀기 */
   }
   
   .received {
