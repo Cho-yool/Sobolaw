@@ -1,5 +1,6 @@
 package com.sobolaw.api.member.controller;
 
+import com.sobolaw.api.media.service.MediaService;
 import com.sobolaw.api.member.dto.MemberDTO;
 import com.sobolaw.api.member.dto.MemberKeywordDTO;
 import com.sobolaw.api.member.dto.MemberPrecedentDTO;
@@ -13,6 +14,7 @@ import com.sobolaw.api.member.dto.response.AdminMemberResponseDto;
 import com.sobolaw.api.member.dto.response.MemberPrecedentResponseDTO;
 import com.sobolaw.api.member.dto.response.MemberRecentResponseDTO;
 import com.sobolaw.api.member.dto.response.MemberResponseDTO;
+import com.sobolaw.api.member.service.CertificationService;
 import com.sobolaw.api.member.service.MemberService;
 import com.sobolaw.global.common.response.BaseResponse;
 import com.sobolaw.global.security.jwt.JwtProvider;
@@ -30,7 +32,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,6 +48,8 @@ public class MemberController {
     private final MemberService memberService;
     private final JwtProvider jwtProvider;
     private final RedisTokenService redisTokenService;
+    private final MediaService mediaService;
+    private final CertificationService certificationService;
 
     /**
      * 멤버 로그아웃.
@@ -328,6 +331,22 @@ public class MemberController {
         @PathVariable Long highlightId,
         @RequestBody HighlightCreateUpdateRequestDTO request) {
         return BaseResponse.success(HttpStatus.OK.value(), "멤버의 저장된 판례의 하이라이트를 수정하였습니다!", memberService.updateMemberPrecedentHighlgiht(highlightId, request));
+    }
+
+    /**
+     * 사용자 입장에서 Lawyer ROLE 변경 요청.
+     */
+    @Operation(summary = "변호사 등업 요청", description = "변호사로 등업을 요청합니다.", tags = { "멤버" })
+    @PostMapping("/certification/lawyer")
+    public BaseResponse<?> lawyerRoleUpdate(@RequestPart("image") MultipartFile file) {
+        log.info("??");
+        Map<String, String> result = mediaService.storeImage(file);
+        String url = result.get("url");
+        log.info("url값 : " + url);
+        String originalName = result.get("originalName");
+        log.info("originName : " + originalName);
+        certificationService.saveLawyer(originalName, url);
+        return BaseResponse.success(HttpStatus.OK.value(), "Lawyer Role 업데이트 요청 성공!", url);
     }
 
 }
