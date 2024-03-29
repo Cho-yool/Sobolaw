@@ -56,6 +56,10 @@ const theme = {
       colorPrimary: "#644419",
       algorithm: true, // Enable algorithm
     },
+    Steps: {
+      colorPrimary: "#644419",
+      algorithm: true, // Enable algorithm
+    },
   },
 };
 const queryClient = new QueryClient();
