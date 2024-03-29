@@ -1,7 +1,7 @@
 package com.sobolaw.global.common.exception;
 
 import com.sobolaw.api.lawsuit.exception.LawsuitException;
-import com.sobolaw.api.mail.exception.MailException;
+import com.sobolaw.api.email.exception.EmailException;
 import com.sobolaw.global.common.response.BaseResponse;
 import com.sobolaw.api.member.exception.MemberException;
 import com.sobolaw.global.security.jwt.exception.TokenException;
@@ -51,8 +51,8 @@ public class GlobalControllerAdvice {
     /**
      * Mail Exception Handler.
      */
-    @ExceptionHandler(MailException.class)
-    public ResponseEntity<?> applicationHandler(MailException e) {
+    @ExceptionHandler(EmailException.class)
+    public ResponseEntity<?> applicationHandler(EmailException e) {
         log.error("Mail Error occurs {}", e.toString());
         return ResponseEntity.status(e.getErrorCode().getHttpStatus())
             .body(BaseResponse.error(e.getErrorCode().getHttpStatus().value(), e.getMessage()));

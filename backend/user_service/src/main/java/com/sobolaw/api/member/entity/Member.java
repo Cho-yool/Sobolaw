@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.SQLRestriction;
 
 /**
@@ -32,14 +33,17 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
 
+    @Setter
     @Column(nullable = false)
     private String name; // 유저 이름
 
+    @Setter
     @Column
     private String email; // 이메일
-    
+
+    @Setter
     @Column
-    private RoleType role; // 관리자 여부
+    private RoleType role; // 관리자, 변호사, 일반 유저
 
     @Column
     private LocalDate birthday; // 생일

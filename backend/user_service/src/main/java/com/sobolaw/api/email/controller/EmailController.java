@@ -1,6 +1,7 @@
-package com.sobolaw.api.mail.controller;
+package com.sobolaw.api.email.controller;
 
-import com.sobolaw.api.mail.service.MailService;
+import com.sobolaw.api.email.exception.EmailException;
+import com.sobolaw.api.email.service.EmailService;
 import com.sobolaw.global.common.response.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.mail.MessagingException;
@@ -21,18 +22,18 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/mail")
 @RestController
 @AllArgsConstructor
-public class MailController {
+public class EmailController {
 
-    private MailService mailService;
+    private EmailService emailService;
 
     /**
      * 작성된 소장 메일 전송.
      */
-    @PostMapping("/send")
+    @PostMapping("/lawsuits")
     @Operation(summary = "유저에게 소장 메일 전송", description = "유저에게 소장 메일을 전송합니다.", tags = {"메일"})
-    public BaseResponse<?> sendEmail(@RequestPart("file") MultipartFile file) throws MessagingException, IOException {
+    public BaseResponse<?> sendEmail(@RequestPart("file") MultipartFile file) throws MessagingException, IOException, EmailException {
         log.info("메일 발송 시작");
-        mailService.sendEmail(file);
+        emailService.sendEmail(file);
         log.info("메일 발송 완");
         return BaseResponse.success(HttpStatus.OK.value(), "메일 전송을 완료했습니다.", null);
     }

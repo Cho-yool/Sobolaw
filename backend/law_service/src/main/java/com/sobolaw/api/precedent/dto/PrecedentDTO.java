@@ -25,6 +25,6 @@ public class PrecedentDTO {
     private String referencedCase;
     private String referencedStatute;
     private Long hit;
-    private long total;
+    private Long total;
 
 }

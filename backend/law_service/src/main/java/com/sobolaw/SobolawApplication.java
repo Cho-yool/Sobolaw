@@ -15,6 +15,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableDiscoveryClient
 @EnableFeignClients
 public class SobolawApplication {
+
 //    public class SobolawApplication implements CommandLineRunner {
 //
 //    @Autowired
@@ -25,11 +26,13 @@ public class SobolawApplication {
 //    private PrecedentDatabaseIndexer precedentDatabaseIndexer;
 //    @Autowired
 //    private TermDatabaseIndexer termDatabaseIndexer;
-
+//
+//    @Autowired
+//    private ElasticsearchILM elasticsearchILM;
+//
     public static void main(String[] args) {
         SpringApplication.run(SobolawApplication.class, args);
     }
-
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
@@ -40,13 +43,16 @@ public class SobolawApplication {
                         .description("법률 기능 당당")
                         .contact(new Contact().name("정소영").email("")));
     }
-	
+    
 //    @Override
 //    public void run(String... args) throws Exception {
-        // Elasticsearch에 데이터 색인하기
+//        // Elasticsearch에 데이터 색인하기
 //        statuteDatabaseIndexer.indexDataFromDatabase();
 //        statuteTextDatabaseIndexer.indexDataFromDatabase();
 //        precedentDatabaseIndexer.indexDataFromDatabase();
 //        termDatabaseIndexer.indexDataFromDatabase();
+//
+//        // ILM 적용하기
+//        elasticsearchILM.applyILMPolicy();
 //    }
 }
