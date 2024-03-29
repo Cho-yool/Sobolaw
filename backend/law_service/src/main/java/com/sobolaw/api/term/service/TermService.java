@@ -27,10 +27,14 @@ public class TermService {
     private final ElasticsearchClient elasticsearchClient;
 
     // elasticsearch 키워드 검색
-    public List<TermDTO> searchByKeyword (String searchKeyword) throws IOException {
+    public List<TermDTO> searchByKeyword (String searchKeyword, int pageNumber) throws IOException {
+
+        int pageSize = 10; // 기본 10개씩
 
         SearchResponse<TermDocument> termResponse = elasticsearchClient.search(s -> s
             .index("term_index")
+            .from((pageNumber - 1) * pageSize)
+            .size(pageSize)
             .query(q -> q
                 .multiMatch(m -> m
                     .query(searchKeyword)
@@ -39,6 +43,8 @@ public class TermService {
             ),
             TermDocument.class
         );
+        // 검색 결과 총 개수
+        long totalHits = termResponse.hits().total().value();
 
         List<TermDTO> terms = termResponse.hits().hits().stream()
             .map(Hit::source)
@@ -46,7 +52,8 @@ public class TermService {
                 return new TermDTO(
                     termDocument.getTermId(),
                     termDocument.getTermName(),
-                    termDocument.getTermDefinition()
+                    termDocument.getTermDefinition(),
+                    totalHits
                 );
             })
             .collect(Collectors.toList());
@@ -74,11 +81,13 @@ public class TermService {
     }
 
     // entity -> DTO 변환
-    private TermDTO convertToTermDTO(Term entity) { // 아래 변환방식 사용할 때 : DTO랑 순서 동일하게 작성
+    private TermDTO convertToTermDTO(Term entity) {
+        // 아래 변환방식 사용할 때 : DTO랑 순서 동일하게 작성
         return new TermDTO(
             entity.getTermId(),
             entity.getTermName(),
-            entity.getTermDefinition()
+            entity.getTermDefinition(),
+            0L
         );
     }
 }
