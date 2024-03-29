@@ -26,7 +26,7 @@ async function registerBoard(data: Object) {
 
 // 게시물 수정
 async function updateBoard(data: Object) {
-  const response = await http.patch(`${board}`);
+  const response = await http.patch(`${board}`, data);
   return response.data.data;
 }
 

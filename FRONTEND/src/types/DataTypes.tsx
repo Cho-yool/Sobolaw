@@ -270,19 +270,22 @@ export type BoardList = {
 };
 
 export type BoardDetail = {
-  boardId: number,
+  boardId: number | null,
   title: string,
-  content: string,
-  hit: number,
-  name: string,
-  createdTime: string,
-  public: boolean | string,
+  content: string ,
+  hit: number | null,
+  memberId: number | null,
+  name: string | null,
+  createdTime: string | null,
+  public: boolean | string | null,
 };
 
 export type Comment = {
-  commentId: number,
-  content: string,
-  name: string,
-  role: String,
-  createdTime: string,
+  boardId:  number| undefined | null,
+  commentId: number | null,
+  content: string | null,
+  memberId: number | null,
+  name: string | null,
+  role: String | null,
+  createdTime: string | null,
 };

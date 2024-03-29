@@ -52,7 +52,7 @@ function App() {
           <Route path="" element={<BoardList/>}/>
           <Route path="list" element={<BoardList/>}/>
           <Route path="detail/:boardId" element={<BoardDetail/>}/>
-          <Route path="write" element={<BoardWrite/>}/>
+          <Route path="write" element={<BoardWrite />}/>
         </Route>
       </Route>
       <Route path="/plaint/1" element={<DefamatinoPage />} />

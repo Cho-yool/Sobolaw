@@ -9,24 +9,8 @@ interface MyLawcaseTableProps {
 }
 
 export default function BoardTable({ boardList }: MyLawcaseTableProps) {
-  const [boardLists, setBoardLists] = useState<BoardList[]>([]);
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (boardList) {
-      const wideData = boardList.map((item, index) => ({
-        key: (index+1).toString(),
-        boardId: item.boardId,
-        title: item.title,
-        hit: item.hit,
-        name: item.name,
-        createdTime: item.createdTime,
-        public: item.public.toString(),
-      }));
-      setBoardLists(wideData);
-    }
-  }, [boardList]);
 
   const columnsWide = [
     {
@@ -89,7 +73,7 @@ export default function BoardTable({ boardList }: MyLawcaseTableProps) {
       <Row style={{margin:`5rem`}}>
         <Col xs={0} sm={0} md={24} lg={24}>
           <div className={style["table"]}>
-            <Table columns={columnsWide} dataSource={boardLists} onRow={(record) => ({
+            <Table columns={columnsWide} dataSource={boardList} onRow={(record) => ({
               onClick: () => {
                 navigate(`/board/detail/${record.boardId}`);
               }
@@ -97,7 +81,7 @@ export default function BoardTable({ boardList }: MyLawcaseTableProps) {
           </div>
         </Col>
         <Col xs={24} sm={24} md={0}>
-          <Table columns={columnsNarrow} dataSource={boardLists} onRow={(record) => ({
+          <Table columns={columnsNarrow} dataSource={boardList} onRow={(record) => ({
               onClick: () => {
                 navigate(`/board/detail/${record.boardId}`);
               }

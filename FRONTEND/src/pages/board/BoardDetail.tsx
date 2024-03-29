@@ -1,19 +1,22 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Divider, Row, Col } from "antd";
+import { Divider, Row, Col, Form, Button } from "antd";
 import "../../App.css";
 import style from "../../styles/mypage/MyInfo.module.css";
 import { BoardDetail, Comment } from "../../types/DataTypes";
-import { getBoard } from "../../api/board";
+import { getBoard, deleteBoard } from "../../api/board";
 import { toInteger } from "lodash";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store/store";
 import BoardCard from "../../components/board/BoardCard";
+import BoardComment from "../../components/board/BoardComment";
 
 export default function BoardDetail() {
   const { boardId } = useParams<{ boardId: string}>();
   const navigate = useNavigate();
   const [boardDetail, setBoardDetail] = useState<BoardDetail>();
   const [comment, setComment] = useState<Comment[]>();
-
+  const user = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,6 +26,7 @@ export default function BoardDetail() {
         title: response.title,
         content: response.content,
         hit: response.hit,
+        memberId: response.member.memberId,
         name: response.member.name,
         createdTime: response.createdTime, 
         comments: response.comments,
@@ -30,8 +34,10 @@ export default function BoardDetail() {
       }
       const comment = response.comments.map((item: any, index: any) => (
         {
+          boardId: response.boardId,
           commentId: item.commentId,
           content: item.content,
+          memberId: item.member.memberId,
           name: item.member.name,
           role: item.member.role,
           createdTime: item.createdTime,
@@ -44,6 +50,20 @@ export default function BoardDetail() {
     fetchData();
   }, []);
 
+  const lineText = (content: any) => content.split(/(?:\r\n|\r|\n)/g).map((line: any, index: any) => (
+    <span key={index}>
+      {line}
+      <br />
+    </span>
+  ));
+
+  const deleteBoardDetail = async () => {
+    if(window.confirm("정말 삭제하시겠습니까?") && boardDetail?.boardId){
+      await deleteBoard(boardDetail?.boardId);
+      window.alert('삭제되었습니다.')
+      navigate(`/board/list`);
+    }
+  }
 
   return (
       <div className="pages">
@@ -60,12 +80,31 @@ export default function BoardDetail() {
               <Col span={23} style={{ margin: '1rem', textAlign:'right'}}> 조회수: {boardDetail?.hit}</Col>
             </Row>
             <Row> 
-              <Col span={23} style={{ margin: '3rem', fontSize:40, height:'30vh'}}>{boardDetail?.content}</Col>
+              <Col span={23} style={{ margin: '3rem', fontSize:40, height:'30vh'}}>{boardDetail? lineText(boardDetail.content):""}</Col>
             </Row>
           </div>
+          <Form.Item  style={{display:`flex`, justifyContent:`flex-end`}}>
+            <Button type="primary" style={{'margin':'1rem'}} onClick={() => navigate('/board/list')}>
+              이전
+            </Button>
+            {
+              user.userId===boardDetail?.memberId && (
+                <>
+                  <Button type="primary" style={{'marginRight':'1rem'}} onClick={() => navigate(`/board/write`, {state: {boardDetail}})}>
+                    수정
+                  </Button>
+                  <Button type="primary" style={{'marginRight':'5rem'}} onClick={deleteBoardDetail}>
+                    삭제
+                  </Button>
+                </>
+              )
+            }
+          </Form.Item>
           <div className={style["box1"]}>
             <Divider />
             <BoardCard comment={comment}/>
+            <Divider />
+            <BoardComment boardId={boardDetail?.boardId}/>
           </div>
       
         </div>
