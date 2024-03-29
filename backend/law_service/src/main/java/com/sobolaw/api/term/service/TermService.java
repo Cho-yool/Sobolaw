@@ -27,14 +27,11 @@ public class TermService {
     private final ElasticsearchClient elasticsearchClient;
 
     // elasticsearch 키워드 검색
-    public List<TermDTO> searchByKeyword (String searchKeyword, int pageNumber) throws IOException {
-
-        int pageSize = 10; // 기본 10개씩
+    public List<TermDTO> searchByKeyword (String searchKeyword) throws IOException {
 
         SearchResponse<TermDocument> termResponse = elasticsearchClient.search(s -> s
             .index("term_index")
-            .from((pageNumber - 1) * pageSize)
-            .size(pageSize)
+            .size(100)
             .query(q -> q
                 .multiMatch(m -> m
                     .query(searchKeyword)
@@ -43,8 +40,6 @@ public class TermService {
             ),
             TermDocument.class
         );
-        // 검색 결과 총 개수
-        long totalHits = termResponse.hits().total().value();
 
         List<TermDTO> terms = termResponse.hits().hits().stream()
             .map(Hit::source)
@@ -52,8 +47,7 @@ public class TermService {
                 return new TermDTO(
                     termDocument.getTermId(),
                     termDocument.getTermName(),
-                    termDocument.getTermDefinition(),
-                    totalHits
+                    termDocument.getTermDefinition()
                 );
             })
             .collect(Collectors.toList());
@@ -86,8 +80,7 @@ public class TermService {
         return new TermDTO(
             entity.getTermId(),
             entity.getTermName(),
-            entity.getTermDefinition(),
-            0L
+            entity.getTermDefinition()
         );
     }
 }

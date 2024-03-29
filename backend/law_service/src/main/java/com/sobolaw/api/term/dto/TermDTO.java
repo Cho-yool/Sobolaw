@@ -14,6 +14,5 @@ public class TermDTO {
     private Long termId;
     private String termName;
     private String termDefinition;
-    private Long total;
 
 }
