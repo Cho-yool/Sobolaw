@@ -7,7 +7,9 @@ import com.sobolaw.api.member.dto.MemberPrecedentHighlightDTO;
 import com.sobolaw.api.member.dto.MemberRecentDTO;
 import com.sobolaw.api.member.dto.request.HighlightCreateUpdateRequestDTO;
 import com.sobolaw.api.member.dto.request.KeywordSaveRequestDTO;
+import com.sobolaw.api.member.dto.request.MemberUpdateRequestDto;
 import com.sobolaw.api.member.dto.request.PrecedentSaveRequestDTO;
+import com.sobolaw.api.member.dto.response.AdminMemberResponseDto;
 import com.sobolaw.api.member.dto.response.MemberPrecedentResponseDTO;
 import com.sobolaw.api.member.dto.response.MemberRecentResponseDTO;
 import com.sobolaw.api.member.dto.response.MemberResponseDTO;
@@ -17,6 +19,7 @@ import com.sobolaw.global.security.jwt.JwtProvider;
 import com.sobolaw.global.security.jwt.RedisTokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,7 +30,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 멤버 controller.
@@ -85,9 +91,19 @@ public class MemberController {
      * 멤버 정보 조회.
      */
     @GetMapping("/{memberId}")
-    @Operation(summary = "멤버 조회", description = "멤버 정보를 조회합니다.", tags = {"멤버"})
+    @Operation(summary = "멤버 조회", description = "멤버 정보를 조회합니다.", tags = {"멤버(괸리자)"})
     public BaseResponse<MemberResponseDTO> getMemberInfo(@PathVariable Long memberId) {
         return BaseResponse.success(HttpStatus.OK.value(), "멤버 조회에 성공하였습니다!", memberService.getMemberInfo(memberId));
+    }
+
+    /**
+     * 멤버 정보 수정 메서드(관리자).
+     */
+    @Operation(summary = "멤버 정보 수정", description = "관리자가 특정 멤버의 정보를 수정할 수 있습니다.", tags = { "멤버(관리자)" })
+    @PatchMapping("/{memberId}")
+    public BaseResponse<AdminMemberResponseDto> updateMember(@PathVariable Long memberId, @RequestBody MemberUpdateRequestDto updatedMemberDto) {
+        AdminMemberResponseDto updatedMember = memberService.updateMember(memberId, updatedMemberDto);
+        return BaseResponse.success(HttpStatus.OK.value(), "멤버 수정에 성공하였습니다.", updatedMember);
     }
 
     /**
@@ -155,7 +171,7 @@ public class MemberController {
      * 멤버 전체 조회.
      */
     @GetMapping("/list")
-    @Operation(summary = "멤버 전체 리스트 조회", description = "멤버 전체 리스트 조회합니다.", tags = {"멤버"})
+    @Operation(summary = "멤버 전체 리스트 조회", description = "멤버 전체 리스트 조회합니다.", tags = {"멤버(관리자)"})
     public BaseResponse<List<MemberDTO>> getAllMembers() {
         return BaseResponse.success(HttpStatus.OK.value(), "멤버 전체 리스트 조회에 성공하였습니다!", memberService.getAllMembers());
     }
@@ -164,8 +180,9 @@ public class MemberController {
      * 저장 판례 전체 조회.
      */
     @GetMapping("/precedents/list")
-    @Operation(summary = "전체 저장 판례 조회", description = "전체 저장 판례를 조회합니다.", tags = {"판례"})
+    @Operation(summary = "전체 저장 판례 조회", description = "전체 저장 판례를 조회합니다.", tags = {"멤버(관리자)"})
     public BaseResponse<List<MemberPrecedentResponseDTO>> getAllMemberPrecedents() {
+
         return BaseResponse.success(HttpStatus.OK.value(), "전체 저장 판례 조회에 성공하였습니다!", memberService.getAllMemberPrecedents());
     }
 
@@ -173,7 +190,7 @@ public class MemberController {
      * 최근 본 판례 전체 조회.
      */
     @GetMapping("/recents/list")
-    @Operation(summary = "전체 최근 본 판례 조회", description = "전체 최근 본 판례를 조회합니다.", tags = {"판례"})
+    @Operation(summary = "전체 최근 본 판례 조회", description = "전체 최근 본 판례를 조회합니다.", tags = {"멤버(관리자)"})
     public BaseResponse<List<MemberRecentResponseDTO>> getAllMemberRecents() {
         return BaseResponse.success(HttpStatus.OK.value(), "전체 최근 본 판례 조회에 성공하였습니다!", memberService.getAllMemberRecents());
     }
@@ -182,7 +199,7 @@ public class MemberController {
      * 관심 키워드 전체 조회.
      */
     @GetMapping("/keywords/list")
-    @Operation(summary = "전체 관심 키워드 조회", description = "전체 관심 키워드를 조회합니다.", tags = {"키워드"})
+    @Operation(summary = "전체 관심 키워드 조회", description = "전체 관심 키워드를 조회합니다.", tags = {"멤버(관리자)"})
     public BaseResponse<List<MemberKeywordDTO>> getAllMemberKeywords() {
         return BaseResponse.success(HttpStatus.OK.value(), "전체 관심 키워드 조회에 성공하였습니다!", memberService.getAllMemberKeywords());
     }
@@ -277,6 +294,19 @@ public class MemberController {
     }
 
     /**
+     * 멤버의 저장 판례의 하이라이트 전체 삭제.
+     */
+    @DeleteMapping("/precedents/{precedentId}/highlights")
+    @Operation(summary = "멤버의 저장된 판례에 하이라이트 삭제", description = "멤버의 저장된 판례에 하이라이트를 모두 삭제합니다.", tags = {"하이라이트"})
+    public BaseResponse<Void> deleteAllMemberPrecedentHighlight(
+        @PathVariable Long precedentId) {
+        memberService.deleteAllMemberPrecedentHighlight(precedentId);
+        return BaseResponse.success(HttpStatus.NO_CONTENT.value(), "멤버의 저장된 판례의 하이라이트를 삭제하였습니다!", null);
+    }
+
+
+
+    /**
      * 멤버의 저장 판례의 하이라이트 삭제.
      */
     @DeleteMapping("/precedents/{precedentId}/highlights/{highlightId}")
@@ -299,4 +329,5 @@ public class MemberController {
         @RequestBody HighlightCreateUpdateRequestDTO request) {
         return BaseResponse.success(HttpStatus.OK.value(), "멤버의 저장된 판례의 하이라이트를 수정하였습니다!", memberService.updateMemberPrecedentHighlgiht(highlightId, request));
     }
+
 }

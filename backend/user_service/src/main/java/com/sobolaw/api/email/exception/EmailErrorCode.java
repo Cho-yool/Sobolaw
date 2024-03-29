@@ -1,4 +1,4 @@
-package com.sobolaw.api.mail.exception;
+package com.sobolaw.api.email.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
  */
 @Getter
 @AllArgsConstructor
-public enum MailErrorCode {
+public enum EmailErrorCode {
     FAIL_SEND_MAIL(HttpStatus.BAD_REQUEST, "메일 전송에 실패했습니다.");
 
 

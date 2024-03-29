@@ -10,7 +10,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum RoleType {
     ROLE_USER(0),
-    ROLE_ADMIN(1);
+    ROLE_ADMIN(1),
+    ROLE_LAWYER(2);
 
     private final int value;
 }
