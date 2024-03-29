@@ -23,7 +23,7 @@ spring:
   # elasticsearch
   elasticsearch:
     host: 172.17.0.1
-    port: 9200
+    port: 19201
     indices:
       statutesIndexName: statute_index
       statutetexsIndexName: statutetext_index
@@ -52,11 +52,10 @@ logging:
       springframework:
         web: DEBUG
 
-
 eureka:
   client:
     # disable eureka discovery client
-#    enabled: false
+    #    enabled: false
     register-with-eureka: true
     fetch-registry: true
     service-url:
