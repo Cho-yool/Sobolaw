@@ -301,7 +301,7 @@ const LawCaseTabs = ({
         selectionNode.removeAllRanges();
       }
     } else {
-      const { top, left, right } = selectionPos.getBoundingClientRect();
+      const { top, left } = selectionPos.getBoundingClientRect();
       const parentTop = e.currentTarget.getBoundingClientRect().top;
       console.log(selectionNode);
       if (
