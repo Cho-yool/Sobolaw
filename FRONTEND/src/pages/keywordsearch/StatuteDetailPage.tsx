@@ -1,12 +1,71 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import style from '../../styles/search/StatuteDetail.module.css';
-import { SearchResult } from '../../components/search/SearchResultList';
+import { getStatuteDetail } from '../../api/lawsearch';
+
+interface Statute {
+  statuteNumber: number;
+  statuteName: string;
+  statuteType: string;
+  amendmentType: string;
+  department: string;
+  enforcementDate: string;
+  publicationDate: string;
+  publicationNumber: string;
+  hit: number;
+  statuteTexts: StatuteText[];
+}
+
+interface StatuteText {
+  statuteId: number;
+  articleContent: string;
+  articleContentSub: string;
+  articleEffectiveDate: string;
+  articleNumber: number;
+  articleNumberSub: number;
+  articleTitle: string;
+  articleType: string;
+}
+
+interface ArticleSection {
+  항: ArticleItem[];
+  호: ArticleItem[];
+  목?: ArticleItem[];
+}
+
+interface ArticleItem {
+  항번호?: string;
+  항내용?: string;
+  호번호?: string;
+  호내용?: string;
+  목번호?: string;
+  목내용?: string;
+}
 
 const StatuteDetailPage: React.FC = () => {
-  const location = useLocation();
-  const statute = location.state as SearchResult;
+  const { statuteNumber } = useParams<{ statuteNumber: string }>();
+  const [statute, setStatute] = useState<Statute | null>(null);
   const [visibleContentSub, setVisibleContentSub] = useState<{ [key: number]: boolean }>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchStatuteDetail = async () => {
+      try {
+        if (statuteNumber) {
+          const data = await getStatuteDetail(Number(statuteNumber));
+          setStatute(data);
+          // console.log('법령 정보:', data);
+          setLoading(false);
+        }
+      } catch (error) {
+        setError('법령 정보를 불러오는 중 오류가 발생했습니다.');
+        setLoading(false);
+      }
+    };
+
+    fetchStatuteDetail();
+  }, [statuteNumber]);
 
   // 내용 토글 함수
   const toggleContentSubVisibility = (index: number) => {
@@ -14,36 +73,20 @@ const StatuteDetailPage: React.FC = () => {
       ...prev,
       [index]: !prev[index],
     }));
-  }
-  interface ArticleSection {
-    항: ArticleItem[];
-    호: ArticleItem[];
-    목?: ArticleItem[]; // '목'이 존재할 수도 있고 아닐 수도 있음을 가정
-  }
-
-  interface ArticleItem {
-    항내용?: string;
-    호내용?: string;
-    목내용?: string; // '목내용'이 존재할 수도 있음
-  }
-
-
+  };
 
   // JSON 문자열을 파싱하고, 각 항목을 리스트로 변환하여 표시하는 함수
   const parseArticleContentSub = (articleContentSub: string): JSX.Element => {
     try {
-      // articleContentSub을 유효한 JSON 형식으로 전처리
       const validJsonString = articleContentSub
         .replace(/'/g, '"')
         .replace(/None/g, 'null')
         .replace(/t/g, '')
         .replace(/n/g, '')
-        .replace(/ntttt/g, '    ')
+        .replace(/ntttt/g, '    ');
 
-      // 전처리된 문자열을 JSON으로 파싱
       const contentSubObject: ArticleSection[] = JSON.parse(validJsonString);
 
-      // 파싱된 데이터를 바탕으로 JSX 생성
       return (
         <div>
           {contentSubObject.map((section, sectionIndex) => (
@@ -58,16 +101,27 @@ const StatuteDetailPage: React.FC = () => {
                   <p>{item.호내용}</p>
                 </div>
               ))}
-              {/* 추가적인 '목' 처리가 필요한 경우 여기에 구현 */}
+              {section.목?.map((item, idx) => (
+                <div key={`목-${idx}`}>
+                  <p>{item.목내용}</p>
+                </div>
+              ))}
             </React.Fragment>
           ))}
         </div>
       );
-    } catch (error) {
-      return <p></p>;
+    } catch (error: any) {
+      return <p>해당 법령 세부내용이 존재하지 않습니다.</p>;
     }
   };
 
+  if (loading) {
+    return <div>로딩 중...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   if (!statute) {
     return <div>법령 정보를 찾을 수 없습니다.</div>;
@@ -77,30 +131,35 @@ const StatuteDetailPage: React.FC = () => {
     <div className={style.container}>
       <h1 className={style.title}>{statute.statuteName}</h1>
       <p className={style.subtitle}>
-        [시행 {statute.enforcementDate?.slice(0, 4)}. {statute.enforcementDate?.slice(4, 6)}. {statute.enforcementDate?.slice(6, 8)}.] [법률 제{statute.statuteNumber}호, {statute.publicationDate?.slice(0, 4)}. {statute.publicationDate?.slice(4, 6)}. {statute.publicationDate?.slice(6, 8)}., 타법개정]
+        [공포일 {statute.enforcementDate ? statute.enforcementDate.slice(0, 4) : ''}.{''}
+        {statute.enforcementDate ? statute.enforcementDate.slice(4, 6) : ''}.{''}
+        {statute.enforcementDate ? statute.enforcementDate.slice(6, 8) : ''},
+        시행일 {statute.publicationDate ? statute.publicationDate.slice(0, 4) : ''}.{''}
+        {statute.publicationDate ? statute.publicationDate.slice(4, 6) : ''}.{''}
+        {statute.publicationDate ? statute.publicationDate.slice(6, 8) : ''}]
       </p>
       <div className={style.info}>
         <p>분문 : {statute.statuteType}</p>
         <p>개정 : {statute.amendmentType}</p>
       </div>
       <p className={style.articleContent}>담당부처 : {statute.department}</p>
-      {statute.statuteTexts?.map((article, index) => (
-        <div key={index}>
+      {statute.statuteTexts.map((article, index) => (
+        <div key={article.statuteId}>
           <h3
             className={style.articleTitle}
-            onClick={() => article.article_content_sub && toggleContentSubVisibility(index)}
+            onClick={() => article.articleContentSub && toggleContentSubVisibility(index)}
           >
-            {article.article_title}
-            {article.article_content_sub && (
+            {article.articleTitle}
+            {article.articleContentSub && (
               <span className={style.toggleIcon}>
                 {visibleContentSub[index] ? '▲' : '▼'}
               </span>
             )}
           </h3>
-          <p className={style.articleContent}>{article.article_content}</p>
-          {article.article_content_sub && visibleContentSub[index] && (
+          <p className={style.articleContent}>{article.articleContent}</p>
+          {article.articleContentSub && visibleContentSub[index] && (
             <div className={style.articleContentSub}>
-              {parseArticleContentSub(article.article_content_sub)}
+              {parseArticleContentSub(article.articleContentSub)}
             </div>
           )}
         </div>

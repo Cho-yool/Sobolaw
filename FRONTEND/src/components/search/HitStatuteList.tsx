@@ -18,15 +18,6 @@ export interface Statute {
     hit: number;
 };
 
-
-const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}.${month}.${day}`;
-}
-
 const HitStatuteList: React.FC = () => {
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
@@ -57,7 +48,8 @@ const HitStatuteList: React.FC = () => {
 
     const handleListClick = (statuteNumber: number) => {
         window.scrollTo(0, 0);
-        navigate(`/statute/${statuteNumber}`);
+        console.log('클릭한 법령 번호:', statuteNumber)
+        navigate(`/statutes/${statuteNumber}`);
     };
 
     const cleanHtmlTags = (html: string) => {
@@ -87,7 +79,13 @@ const HitStatuteList: React.FC = () => {
                         <div className={style.titleContent}>
                             <div className={style.title}>{item.statuteName}</div>
                             <div className={style.content}>
-                                법률 제 {item.publicationNumber}호, 공포일 {formatDate(item.enforcementDate)}, 시행일 {formatDate(item.publicationDate)}
+                                법률 제 {item.publicationNumber}호,
+                                공포일 {item.enforcementDate ? item.enforcementDate.slice(0, 4) : ''}.{''}
+                                {item.enforcementDate ? item.enforcementDate.slice(4, 6) : ''}.{''}
+                                {item.enforcementDate ? item.enforcementDate.slice(6, 8) : ''},
+                                시행일 {item.publicationDate ? item.publicationDate.slice(0, 4) : ''}.{''}
+                                {item.publicationDate ? item.publicationDate.slice(4, 6) : ''}.{''}
+                                {item.publicationDate ? item.publicationDate.slice(6, 8) : ''}
                             </div>
                         </div>
                         <div className={style.hit}>
