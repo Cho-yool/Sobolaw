@@ -1,11 +1,40 @@
+@keyframes moveright {
+  from {
+    right: 5%;
+  }
+  to {
+    right: 10%;
+  }
+}
+
 .card-body {
   width: 90%;
-  height: 70px;
-  margin: 1rem 0;
+  height: 55px;
+  margin: 0.7rem 0;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.card-body:hover {
+  transform: scale(1.1);
+  transition: all 0.5s;
+}
+
+.card-body > div {
+  width: 100%;
+  display: flex;
+}
+.card-body__content__arrow {
+  position: absolute;
+  top: 50%;
+  right: 10%;
+  transform: translateY(-50%);
+  animation: moveright 1s ease-in-out infinite alternate-reverse;
 }
 
 .card-body__content {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-weight: bold;
 }

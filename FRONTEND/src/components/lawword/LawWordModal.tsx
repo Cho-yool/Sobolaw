@@ -26,7 +26,9 @@ const LawWordModal = ({ modalHandler }: LawWordModalProps) => {
       <Flex vertical>
         <Flex className={style["modal-header"]}>
           <img className={style["modal-header__icon"]} src={CHARACTER} alt="" />
-          <p className={style["modal-header__title"]}>어학사전</p>
+          <p className={style["modal-header__title"]}>
+            {currentSelect ? "법령 용어 사전" : "무물보~"}
+          </p>
           <img
             className={style["modal-header__close"]}
             src={CLOSE}
