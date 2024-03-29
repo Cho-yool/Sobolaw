@@ -9,7 +9,7 @@ import com.sobolaw.api.statute.dto.StatuteDTO;
 import com.sobolaw.api.statute.dto.StatuteTextDTO;
 import com.sobolaw.api.statute.entity.Statute;
 import com.sobolaw.api.statute.entity.StatuteText;
-import com.sobolaw.api.statute.repository.jpa.StatuteRepository;
+import com.sobolaw.api.statute.repository.StatuteRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class StatuteSearchService {
+public class StatuteService {
 
     private final StatuteRepository statuteRepository;
     private final ElasticsearchClient elasticsearchClient;
@@ -110,8 +110,13 @@ public class StatuteSearchService {
                 StatuteTextDocument.class
             );
 
-            List<StatuteTextDocument> statuteTexts = statuteTextResponse.hits().hits().stream()
+            List<StatuteTextDocument> statuteTextDocuments = statuteTextResponse.hits().hits().stream()
                 .map(Hit::source)
+                .collect(Collectors.toList());
+
+            // StatuteTextDocument 리스트를 StatuteTextDTO 리스트로 변환
+            List<StatuteTextDTO> statuteTexts = statuteTextDocuments.stream()
+                .map(this::DocumentToStatuteTextDTO)
                 .collect(Collectors.toList());
 
             // StatuteDTO 구성
@@ -125,11 +130,27 @@ public class StatuteSearchService {
                 statuteDTO.setPublicationDate(statuteDocument.getPublicationDate());
                 statuteDTO.setPublicationNumber(statuteDocument.getPublicationNumber());
                 statuteDTO.setStatuteType(statuteDocument.getStatuteType());
-                statuteDTO.setStatuteTextDocuments(statuteTexts); // StatuteTextDocument 리스트 설정
+                statuteDTO.setHit(statuteDocument.getHit());
+                statuteDTO.setStatuteTexts(statuteTexts);
             }
             statutes.add(statuteDTO);
         }
         return statutes;
+    }
+
+    // Document -> DTO 변환
+    private StatuteTextDTO DocumentToStatuteTextDTO(StatuteTextDocument document) {
+        return new StatuteTextDTO(
+            document.getStatuteId(),
+            document.getStatuteNumber(),
+            document.getArticleContent(),
+            document.getArticleContentSub(),
+            document.getArticleEffectiveDate(),
+            document.getArticleNumber(),
+            document.getArticleNumberSub(),
+            document.getArticleTitle(),
+            document.getArticleType()
+        );
     }
 
     // statuteNumber로 법령 내용 조회
@@ -139,6 +160,16 @@ public class StatuteSearchService {
 
         return convertToStatuteDTO(statute);
     }
+
+    // 법령 조회수 높은 순으로 20개 반환
+    public List<StatuteDTO> findTop20ByOrderByHitDesc(){
+        List<Statute> statutes = statuteRepository.findTop20ByOrderByHitDesc();
+
+        return statutes.stream()
+                .map(this::convertToStatuteDTO)
+                .collect(Collectors.toList());
+    }
+
 
     // entity -> DTO 변환
     private StatuteDTO convertToStatuteDTO(Statute entity) {
@@ -151,6 +182,7 @@ public class StatuteSearchService {
         statuteDTO.setEnforcementDate(entity.getEnforcementDate());
         statuteDTO.setPublicationDate(entity.getPublicationDate());
         statuteDTO.setPublicationNumber(entity.getPublicationNumber());
+        statuteDTO.setHit(entity.getHit());
 
         // StatuteText 리스트를 StatuteDTO에 설정
         List<StatuteTextDTO> statuteTexts = entity.getStatuteTexts().stream()

@@ -23,10 +23,15 @@ public class PrecedentDatabaseIndexer {
     private final ObjectMapper objectMapper;
 
     public void indexDataFromDatabase() throws IOException {
+        // 작업 시작 로그
+        logger.info("Starting the indexing : precedent_index");
+
         String query = "SELECT p.* FROM precedent p";
 
         // 퀴리 결과 (MaridDB에서 데이터 select 한것들 )
         List<Map<String, Object>> queryResults = jdbcTemplate.queryForList(query);
+
+        int indexedCount = 0; // 성공적으로 색인된 문서의 수
 
         for (Map<String, Object> row : queryResults) {
             String precedentId = String.valueOf(row.get("precedent_id"));
@@ -40,10 +45,12 @@ public class PrecedentDatabaseIndexer {
 
                 // Elasticsearch에 요청 보내기
                 Response response = restClient.performRequest(request);
-                logger.info("Indexed document with ID: " + precedentId + ", Response: " + response.getStatusLine());
+                indexedCount++;
             } catch (IOException e) {
                 logger.error("Error indexing document with ID: " + precedentId, e);
             }
         }
+        // 작업 완료 로그
+        logger.info("Completed indexing data  : precedent_index / Total documents indexed: " + indexedCount);
     }
 }

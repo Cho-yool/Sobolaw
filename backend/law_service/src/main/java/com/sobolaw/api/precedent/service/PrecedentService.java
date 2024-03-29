@@ -43,10 +43,14 @@ public class PrecedentService {
     }
 
     // elasticsearch 판례검색
-    public List<PrecedentDTO> searchByKeyword(String searchKeyword) throws IOException {
+    public List<PrecedentDTO> searchByKeyword(String searchKeyword, int pageNumber) throws IOException {
+
+        int pageSize = 10; // 기본 10개씩
 
         SearchResponse<PrecedentDocument> precedentResponse = elasticsearchClient.search(s -> s
                 .index("precedent_index")
+                .from((pageNumber - 1) * pageSize)
+                .size(pageSize)
                 .query(q -> q
                     .multiMatch(m -> m
                         .query(searchKeyword)
@@ -58,6 +62,9 @@ public class PrecedentService {
                 ),
             PrecedentDocument.class
         );
+
+        // 검색 결과 총 개수
+        long totalHits = precedentResponse.hits().total().value();
 
         List<PrecedentDTO> precedents = precedentResponse.hits().hits().stream()
             .map(Hit::source)
@@ -77,7 +84,8 @@ public class PrecedentService {
                     precedentDocument.getVerdictSummary(),
                     precedentDocument.getReferencedCase(),
                     precedentDocument.getReferencedStatute(),
-                    precedentDocument.getHit()
+                    precedentDocument.getHit(),
+                    totalHits
                 );
             }).collect(Collectors.toList());
 
@@ -114,7 +122,8 @@ public class PrecedentService {
             entity.getVerdictSummary(),
             entity.getReferencedCase(),
             entity.getReferencedStatute(),
-            entity.getHit()
+            entity.getHit(),
+            0
         );
     }
 
