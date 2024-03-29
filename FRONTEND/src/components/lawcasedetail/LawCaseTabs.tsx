@@ -31,6 +31,8 @@ interface getDataProps {
     verdictType: string;
   };
   currentLocation: number;
+  isEditMode: boolean;
+  currentColor: string;
 }
 
 const TABMENUS: TabMenusProps[] = [
@@ -48,11 +50,18 @@ const TABMENUS: TabMenusProps[] = [
   },
 ];
 
-const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
+const LawCaseTabs = ({
+  getData,
+  currentLocation,
+  isEditMode,
+  currentColor,
+}: getDataProps) => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState<number>(0);
   const [isSaved, setIsSaved] = useState<boolean>(false);
   const [onEditing, setOnEditing] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [selectionNode, setSelectionNode] = useState<any>("");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectionPos, setSelectionPos] = useState<any>();
   const [isSummary, setIsSummary] = useState<boolean>(false);
@@ -227,6 +236,7 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
       const selection = window.getSelection();
       if (selection) {
         setSelectionPos(selection.getRangeAt(0));
+        setSelectionNode(selection);
       }
     }
   };
@@ -234,17 +244,83 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
   // 마우스 클릭이 끝났을때
   const onMouseOutHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     setOnEditing(false);
-    const { top, left } = selectionPos.getBoundingClientRect();
-    const parentTop = e.currentTarget.getBoundingClientRect().top;
-
-    setSelectionPosition({
-      x: e.clientX - left,
-      y: -parentTop + top,
-    });
-    if (selectionPos) {
-      setShowOptions(true);
+    if (isEditMode) {
+      if (
+        selectionPos.startContainer.wholeText ===
+        selectionPos.endContainer.wholeText
+      ) {
+        const span = document.createElement("span");
+        span.style.backgroundColor = currentColor;
+        let value = 0;
+        if (currentColor === "#f3e7c0") {
+          value = 1;
+        } else if (currentColor === "#feda89") {
+          value = 2;
+        } else if (currentColor === "#dba651") {
+          value = 3;
+        } else if (currentColor === "#bf8538") {
+          value = 4;
+        } else if (currentColor === "#644419") {
+          value = 5;
+        }
+        if (currentColor === "#644419") {
+          span.style.color = "white";
+        } else {
+          span.style.color = "black";
+        }
+        span.innerText = selectionPos.toString();
+        selectionPos.deleteContents();
+        selectionPos.insertNode(span);
+        if (!isSaved) {
+          try {
+            savePrecedent(getData.precedentId);
+          } catch (error) {
+            console.error(error);
+          } finally {
+            saveHighLight({
+              precedentId: getData.precedentId,
+              main: selectionPos.startContainer.textContent,
+              highlightType: value,
+              startPoint: selectionPos.startOffset,
+              endPoint: selectionPos.endOffset,
+              content: selectionPos.toString(),
+            });
+          }
+        } else {
+          saveHighLight({
+            precedentId: getData.precedentId,
+            main: selectionPos.startContainer.textContent,
+            highlightType: value,
+            startPoint: selectionPos.startOffset,
+            endPoint: selectionPos.endOffset,
+            content: selectionPos.toString(),
+          });
+        }
+      } else {
+        alert("한 문단만 선택이 가능합니다.");
+        selectionNode.removeAllRanges();
+      }
+    } else {
+      const { top, left, right } = selectionPos.getBoundingClientRect();
+      const parentTop = e.currentTarget.getBoundingClientRect().top;
+      console.log(selectionNode);
+      if (
+        selectionPos.startContainer.wholeText ===
+        selectionPos.endContainer.wholeText
+      ) {
+        setSelectionPosition({
+          x: e.clientX - left,
+          y: -parentTop + top,
+        });
+        if (selectionPos) {
+          setShowOptions(true);
+        }
+        setSelectRange([selectionPos.startOffset, selectionPos.endOffset]);
+      } else {
+        alert("한 문단만 선택이 가능합니다.");
+        // selectionNode.removeAllRanges();
+      }
     }
-    setSelectRange([selectionPos.startOffset, selectionPos.endOffset]);
   };
 
   return (
@@ -305,13 +381,18 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
       </p>
       <br />
       <br />
-
-      <div className={style["tab-menu__summary"]}>
+      <div
+        className={
+          isEditMode
+            ? `${style["tab-menu__summary"]}  ${style["edit-mode"]}`
+            : `${style["tab-menu__summary"]}`
+        }
+      >
         <div className={style["tab-menu__summary__btn"]}>
           <p>요약 보기</p>
           <Switch onChange={summareyHandler} />
         </div>
-        {showOptions
+        {showOptions && !isEditMode
           ? optionSelectDiv(selectionPosition.x, selectionPosition.y)
           : null}
         {isSummary ? (

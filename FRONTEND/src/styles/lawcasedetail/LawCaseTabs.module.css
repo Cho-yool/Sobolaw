@@ -67,12 +67,6 @@
   cursor: pointer;
 }
 
-/* .color-select::after {
-  content: "▼";
-  font-size: 1.5rem;
-  position: absolute;
-  bottom: -27%;
-  left: 50%;
-  transform: translateX(-50%);
-  color: black;
-} */
+.edit-mode {
+  cursor: url(../../assets/mouseCursor.png), pointer;
+}
