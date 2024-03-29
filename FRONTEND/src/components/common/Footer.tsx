@@ -1,4 +1,5 @@
 import { Layout, Row, Col } from "antd";
+import { useNavigate } from "react-router";
 import Logo from "/images/footer/logo.png";
 import KY from "/images/footer/keunyoung.png";
 import HJ from "/images/footer/HyeonJi.png";
@@ -9,6 +10,7 @@ import SY from "/images/footer/SoYoung.png";
 import style from "../../styles/common/Footer.module.css";
 
 export default function Footer() {
+  const navigate = useNavigate();
   return (
     <footer>
       <Layout.Footer
@@ -26,7 +28,14 @@ export default function Footer() {
                   <img src={Logo} alt="" className={style["logo-image"]} />
                 </div>
                 <div className={style["footer-inner"]}>
-                  <p>SSAFY 특화 프로젝트 육사시미 | 대표 : 김종범</p>
+                  <div
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      navigate("/admin");
+                    }}
+                  >
+                    SSAFY 특화 프로젝트 육사시미 | 대표 : 김종범
+                  </div>
                   <p
                     style={{
                       fontSize: "12px",
@@ -74,7 +83,13 @@ export default function Footer() {
             <div className={style["footer-content"]}>
               <div className={style["footer-content-left"]}>
                 <div className={style["footer-inner"]}>
-                  <p>SSAFY 특화 프로젝트 육사시미 | 대표 : 김종범</p>
+                  <p
+                    onClick={() => {
+                      navigate("/admin");
+                    }}
+                  >
+                    SSAFY 특화 프로젝트 육사시미 | 대표 : 김종범
+                  </p>
                   <p
                     style={{
                       fontSize: "12px",
@@ -120,7 +135,12 @@ export default function Footer() {
 
           <Col span={20} md={0} lg={0}>
             <div className={style["footer-inner-sm"]}>
-              <p className={style["name-title"]}>
+              <p
+                className={style["name-title"]}
+                onClick={() => {
+                  navigate("/admin");
+                }}
+              >
                 SSAFY 특화 프로젝트 육사시미 | 대표 : 김종범
               </p>
               <p

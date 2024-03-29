@@ -4,9 +4,9 @@ interface CircularProgressBarProps {
     percentage: number;
     size?: number;
     isMobile?: boolean;
-  }
-  
-  const CircularProgressBar: React.FC<CircularProgressBarProps> = ({ percentage, size = 120, isMobile = false }) => {
+}
+
+const CircularProgressBar: React.FC<CircularProgressBarProps> = ({ percentage, size = 120, isMobile = false }) => {
     const radius = size / 2;
     const stroke = size * 0.05;
     const normalizedRadius = radius - stroke * 2;

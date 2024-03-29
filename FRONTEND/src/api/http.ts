@@ -56,4 +56,21 @@ function recommendAxios() {
   });
 }
 
-export { mainAxios, userAxios, lawAxios, recommendAxios, localuserAxios };
+function notificationAxios() {
+  return axios.create({
+    // baseURL: "https://" + BASEURL,
+    baseURL: "https://" + BASEURL + "notification-service/",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+  });
+}
+
+export {
+  mainAxios,
+  userAxios,
+  lawAxios,
+  recommendAxios,
+  localuserAxios,
+  notificationAxios,
+};

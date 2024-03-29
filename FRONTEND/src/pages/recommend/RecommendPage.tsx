@@ -41,8 +41,8 @@ const RecommendPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
-    let wordTimer: NodeJS.Timeout;
+    let timer: ReturnType<typeof setTimeout>;
+    let wordTimer: ReturnType<typeof setTimeout>;
     let letterIndex = 0;
 
     const typeWord = () => {

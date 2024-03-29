@@ -4,6 +4,7 @@ export type UserState = {
   accessToken: string;
   refreshToken: string;
   precedents: number[];
+  auth: string;
 };
 
 export type MypaperWide = {
@@ -31,7 +32,9 @@ export type KeywordType = {
 export type MemberKeyword = {
   memberKeywordId: number;
   memberId: number;
+  memberPrecedentId: number | null;
   word: string;
+  keywordType: "DIRECT" | "RELATED";
 };
 
 export type MemberRecent = {
@@ -64,6 +67,7 @@ export type MemberInfo = {
   memberKeyword: MemberKeyword[];
   memberRecents: MemberRecent[];
   memberPrecedents: memberPrecedents[];
+  roll: string;
 };
 
 export type MemberPrecedent = {
@@ -92,6 +96,12 @@ export type MemberLawsuit = {
   defendantName: string | null;
 };
 
+export type wordListProps = {
+  termDefinition: string;
+  termId: number;
+  termName: string;
+};
+
 export type DefamationForm = {
   // lawsuitId: number;
   title: string;
@@ -104,12 +114,7 @@ export type DefamationForm = {
   defendantPhoneNumber: string;
   defendantIdentificationDetails: string;
   incidentDate: string;
-  incidentTime: {
-    hour: number;
-    minute: number;
-    second: number;
-    nano: number;
-  };
+  incidentTime: string;
   location: string;
   defamationContent: string;
   isFalseAccusation: boolean;
@@ -129,21 +134,11 @@ export type FraudForm = {
   defendantAddress: string;
   defendantPhoneNumber: string;
   contactDate: string;
-  contactTime: {
-    hour: number;
-    minute: number;
-    second: number;
-    nano: number;
-  };
+  contactTime: string;
   tradeSite: string;
   tradedItem: string;
   depositDate: string;
-  depositTime: {
-    hour: number;
-    minute: number;
-    second: number;
-    nano: number;
-  };
+  depositTime: string;
   depositAmount: number;
   contactMethod: string;
   isCashDeposit: boolean;
@@ -257,3 +252,24 @@ export interface FraudDetails {
   policeStation: string;
   setPoliceStation: React.Dispatch<React.SetStateAction<string>>;
 }
+
+export type MemberList = {
+  memberId: number;
+  name: string;
+  email: string;
+  role: string;
+  birthday: string;
+  memberKeyword: MemberKeyword[];
+  memberRecents: MemberRecent[];
+  memberPrecedents: memberPrecedents[];
+  lawsuitFrauds: FraudForm[];
+  lawsuitInsults: InsultForm[];
+  lawsuitDefamations: DefamationForm[];
+};
+
+export type NotificationData = {
+  memberId: number;
+  token: string;
+  title: string;
+  body: string;
+};

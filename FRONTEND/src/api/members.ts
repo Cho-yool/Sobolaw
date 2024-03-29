@@ -152,7 +152,13 @@ async function postMyKeyword(accessToken: string, words: string[]) {
 // 관리자용 API
 // 멤버 전체 리스트 조회
 async function getMemberList() {
-  const response = await http.get(url);
+  const response = await http.get(`${url}/list`);
+  return response.data.data;
+}
+
+// 전체 저장 판례 조회
+async function getPrecedentsList() {
+  const response = await http.get(`${url}/precedents/list`);
   return response.data.data;
 }
 
@@ -167,4 +173,5 @@ export {
   postLogout,
   deleteUser,
   delPrecedents,
+  getPrecedentsList,
 };
