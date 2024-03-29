@@ -56,4 +56,16 @@ function recommendAxios() {
   });
 }
 
-export { mainAxios, userAxios, lawAxios, recommendAxios, localuserAxios };
+// https://j10a604.p.ssafy.io/api/board-service/swagger-ui.html
+// 종범 파트
+function boardAxios() {
+  return axios.create({
+    // baseURL: "https://" + BASEURL,
+    baseURL: "https://" + BASEURL + "board-service/",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+  });
+}
+
+export { mainAxios, userAxios, lawAxios, recommendAxios, localuserAxios, boardAxios };

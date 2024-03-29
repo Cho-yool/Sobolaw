@@ -31,6 +31,7 @@ const items: MenuProps["items"] = [
   { key: "2", label: <Link to="/recommend">맞춤형판례</Link> },
   { key: "3", label: <Link to="/cal">비용계산</Link> },
   { key: "4", label: <Link to="/plaint">소장작성</Link> },
+  { key: "5", label: <Link to="/board">상담소</Link> },
 ];
 
 interface ResponsiveNavProps {

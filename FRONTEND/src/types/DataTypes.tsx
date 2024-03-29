@@ -257,3 +257,32 @@ export interface FraudDetails {
   policeStation: string;
   setPoliceStation: React.Dispatch<React.SetStateAction<string>>;
 }
+
+// board
+export type BoardList = {
+  key: string,
+  boardId: number,
+  title: string,
+  hit: number,
+  name: string,
+  createdTime: string, 
+  public: boolean | string,
+};
+
+export type BoardDetail = {
+  boardId: number,
+  title: string,
+  content: string,
+  hit: number,
+  name: string,
+  createdTime: string,
+  public: boolean | string,
+};
+
+export type Comment = {
+  commentId: number,
+  content: string,
+  name: string,
+  role: String,
+  createdTime: string,
+};

@@ -20,6 +20,10 @@ import PrintLawsuit from "./pages/mypage/Printlawsuit";
 import InsultEditPage from "./pages/lawsuit/insultEdit";
 import SearchHitPage from "./pages/keywordsearch/SearchHitPage";
 import StatuteDetailPage from "./pages/keywordsearch/StatuteDetailPage";
+import BoardPage from "./pages/board/BoardPage";
+import BoardList from "./pages/board/BoardList";
+import BoardDetail from "./pages/board/BoardDetail";
+import BoardWrite from "./pages/board/BoardWrite";
 
 function App() {
   return (
@@ -43,6 +47,12 @@ function App() {
           <Route path="user" element={<MyInfo />} />
           <Route path="papers" element={<Mypaper />} />
           <Route path="case" element={<MyCase />} />
+        </Route>
+        <Route path="/board/*" element={<BoardPage/>}>
+          <Route path="" element={<BoardList/>}/>
+          <Route path="list" element={<BoardList/>}/>
+          <Route path="detail/:boardId" element={<BoardDetail/>}/>
+          <Route path="write" element={<BoardWrite/>}/>
         </Route>
       </Route>
       <Route path="/plaint/1" element={<DefamatinoPage />} />
