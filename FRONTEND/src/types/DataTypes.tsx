@@ -96,6 +96,12 @@ export type MemberLawsuit = {
   defendantName: string | null;
 };
 
+export type wordListProps = {
+  termDefinition: string;
+  termId: number;
+  termName: string;
+};
+
 export type DefamationForm = {
   // lawsuitId: number;
   title: string;
