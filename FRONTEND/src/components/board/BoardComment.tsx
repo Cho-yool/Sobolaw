@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { Form, Radio, Input, Button, Col} from "antd";
+import { useNavigate } from "react-router-dom";
+import { Form, Input, Button, Col} from "antd";
 import { registerComment } from "../../api/board";
 import { Comment } from "../../types/DataTypes";
 import { useSelector } from "react-redux";
@@ -30,8 +30,6 @@ export default function BoardWrite({ boardId }: BoardCommentProps) {
       })
     }
   }, [boardId]);
-
-  
 
   const register = async() => {
     if(!user.userId){

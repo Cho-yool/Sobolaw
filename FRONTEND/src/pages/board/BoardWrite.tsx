@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Form, Radio, Input, Button, Col} from "antd";
 import { registerBoard, updateBoard } from "../../api/board";
 import { BoardDetail } from "../../types/DataTypes";
@@ -58,7 +58,7 @@ export default function BoardWrite() {
     <div className="pages">
       <div className={style["mypaper-box"]}>
         <Col style={{margin:`5rem`}}>
-          
+
           <Form.Item label="공개 범위">
             <Radio.Group name='public' value={formData.public ? "true" : "false"} onChange={handleInputChange} >
               <Radio.Button value="true">전체</Radio.Button>

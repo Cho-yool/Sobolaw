@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Divider, Row, Col, Form, Button } from "antd";
-import "../../App.css";
-import style from "../../styles/mypage/MyInfo.module.css";
 import { BoardDetail, Comment } from "../../types/DataTypes";
 import { getBoard, deleteBoard } from "../../api/board";
 import { toInteger } from "lodash";
@@ -10,13 +8,15 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
 import BoardCard from "../../components/board/BoardCard";
 import BoardComment from "../../components/board/BoardComment";
+import style from "../../styles/mypage/MyInfo.module.css";
+import "../../App.css";
 
 export default function BoardDetail() {
+  const user = useSelector((state: RootState) => state.user);
   const { boardId } = useParams<{ boardId: string}>();
-  const navigate = useNavigate();
   const [boardDetail, setBoardDetail] = useState<BoardDetail>();
   const [comment, setComment] = useState<Comment[]>();
-  const user = useSelector((state: RootState) => state.user);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,8 +44,6 @@ export default function BoardDetail() {
         }))
       setComment(comment);
       setBoardDetail(board);
-      console.log(board);
-      console.log(comment)
     };
     fetchData();
   }, []);
