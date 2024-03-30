@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { BoardList } from "../../types/DataTypes";
+import type { BoardList } from "../../types/DataTypes";
 import { getBoardList } from "../../api/board";
 import style from "../../styles/mypage/Mypaper.module.css";
 import "../../App.css";

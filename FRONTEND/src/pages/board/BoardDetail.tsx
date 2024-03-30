@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Divider, Row, Col, Form, Button } from "antd";
-import { BoardDetail, Comment } from "../../types/DataTypes";
+import type { BoardDetail, Comment } from "../../types/DataTypes";
 import { getBoard, deleteBoard } from "../../api/board";
 import { toInteger } from "lodash";
 import { useSelector } from "react-redux";
