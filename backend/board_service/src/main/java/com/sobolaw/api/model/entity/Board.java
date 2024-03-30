@@ -1,5 +1,5 @@
 package com.sobolaw.api.model.entity;
-
+import org.hibernate.annotations.Where;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,6 +11,7 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Where(clause = "is_deleted = 0")
 public class Board extends BaseEntity {
 
     @Id

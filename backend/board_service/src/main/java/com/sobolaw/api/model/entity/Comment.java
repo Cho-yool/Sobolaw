@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 @Setter
 @Entity
@@ -12,6 +13,7 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Where(clause = "is_deleted = 0")
 public class Comment extends BaseEntity {
 
     @Id
