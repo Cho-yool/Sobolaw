@@ -20,12 +20,11 @@ export default function BoardWrite() {
     content: "",
     memberId: user.userId,
     name: user.nickname,
-    public: false,
+    public: true,
   });
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(user)
     if(!user.userId){
       alert(`로그인 후 이용해 주세요`)
       navigate(`/board/list`)
@@ -46,7 +45,9 @@ export default function BoardWrite() {
   }
 
   const handleInputChange = (e: any) => {
-    const { name, value } = e.target;
+    let { name, value } = e.target;
+    if(name == `public`) 
+      value = (value == 'true')
     setFormData({
       ...formData,
       [name]: value,
@@ -57,9 +58,9 @@ export default function BoardWrite() {
     <div className="pages">
       <div className={style["mypaper-box"]}>
         <Col style={{margin:`5rem`}}>
-
+          
           <Form.Item label="공개 범위">
-            <Radio.Group name='public' value={formData.public} onChange={handleInputChange} >
+            <Radio.Group name='public' value={formData.public ? "true" : "false"} onChange={handleInputChange} >
               <Radio.Button value="true">전체</Radio.Button>
               <Radio.Button value="false">전문가</Radio.Button>
             </Radio.Group>

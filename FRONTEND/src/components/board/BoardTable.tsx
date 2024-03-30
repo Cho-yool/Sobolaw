@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Table, Row, Col} from "antd";
+import { UnlockTwoTone, LockTwoTone } from "@ant-design/icons"
+import { Table, Row, Col, Divider, Form, Button} from "antd";
 import { BoardList } from "../../types/DataTypes";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store/store";
 import style from "../../styles/mypage/Mypaper.module.css";
 
 interface MyLawcaseTableProps {
@@ -11,17 +14,24 @@ interface MyLawcaseTableProps {
 export default function BoardTable({ boardList }: MyLawcaseTableProps) {
 
   const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.user);
 
   const columnsWide = [
     {
       title: "번호",
       dataIndex: "key",
       key: "key",
+      render: (text: any, record: any) => {
+        return parseInt(text)+1;
+      },
     },
     {
       title: "공개",
       dataIndex: "public",
       key: "public",
+      render: (text: any, record: any) => {
+        return record.public ? <UnlockTwoTone /> : <LockTwoTone />;
+      },
     },
     {
       title: "제목",
@@ -42,6 +52,9 @@ export default function BoardTable({ boardList }: MyLawcaseTableProps) {
       title: "작성일자",
       dataIndex: "createdTime",
       key: "createdTime",
+      render: (text: any, record: any) => {
+        return text.split(".")[0];
+      },
     },
   ];
 
@@ -68,24 +81,24 @@ export default function BoardTable({ boardList }: MyLawcaseTableProps) {
     },
   ];
 
+  const checkPublic = (board: BoardList) => {
+    if(!board.public && user.role != `ROLE_LAWYER`){
+      alert('전문가에게만 공게된 상담 입니다')
+    }else{
+      navigate(`/board/detail/${board.boardId}`)
+    }
+  }
+
   return (
     <>
       <Row style={{margin:`5rem`}}>
         <Col xs={0} sm={0} md={24} lg={24}>
           <div className={style["table"]}>
-            <Table columns={columnsWide} dataSource={boardList} onRow={(record) => ({
-              onClick: () => {
-                navigate(`/board/detail/${record.boardId}`);
-              }
-            })}/>
+            <Table columns={columnsWide} dataSource={boardList} onRow={(record) => ({onClick: () => {checkPublic(record)}})} />
           </div>
         </Col>
         <Col xs={24} sm={24} md={0}>
-          <Table columns={columnsNarrow} dataSource={boardList} onRow={(record) => ({
-              onClick: () => {
-                navigate(`/board/detail/${record.boardId}`);
-              }
-            })}/>
+          <Table columns={columnsNarrow} dataSource={boardList} onRow={(record) => ({onClick: () => {checkPublic(record)}})}/>
         </Col>
       </Row>
     </>

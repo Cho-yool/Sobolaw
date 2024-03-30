@@ -264,6 +264,7 @@ export type BoardList = {
   boardId: number,
   title: string,
   hit: number,
+  memberId: number | null,
   name: string,
   createdTime: string, 
   public: boolean | string,
@@ -277,7 +278,7 @@ export type BoardDetail = {
   memberId: number | null,
   name: string | null,
   createdTime: string | null,
-  public: boolean | string | null,
+  public: boolean | undefined | string,
 };
 
 export type Comment = {

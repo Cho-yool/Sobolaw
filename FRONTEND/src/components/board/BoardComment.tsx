@@ -34,6 +34,11 @@ export default function BoardWrite({ boardId }: BoardCommentProps) {
   
 
   const register = async() => {
+    if(!user.userId){
+      alert(`로그인 후 이용해 주세요`)
+      navigate(`/board/list`)
+      return
+    }
     if(comment){
       await registerComment(comment);
     }

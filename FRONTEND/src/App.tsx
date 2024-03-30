@@ -49,7 +49,6 @@ function App() {
           <Route path="case" element={<MyCase />} />
         </Route>
         <Route path="/board/*" element={<BoardPage/>}>
-          <Route path="" element={<BoardList/>}/>
           <Route path="list" element={<BoardList/>}/>
           <Route path="detail/:boardId" element={<BoardDetail/>}/>
           <Route path="write" element={<BoardWrite />}/>

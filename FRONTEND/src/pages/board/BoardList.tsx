@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Divider } from "antd";
 import { BoardList } from "../../types/DataTypes";
 import { getBoardList } from "../../api/board";
 import style from "../../styles/mypage/Mypaper.module.css";
@@ -20,6 +19,7 @@ export default function BoardList() {
         boardId: item.boardId,
         title: item.title,
         hit: item.hit,
+        memberId: item.member.memberId,
         name: item.member.name,
         createdTime: item.createdTime,
         public: item.public,
