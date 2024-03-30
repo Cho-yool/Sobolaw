@@ -69,7 +69,11 @@ public class BoardService {
     // ---------------------------------Comment-------------------------------------
 
     public CommentResponseDto registerComment(Comment comment) {
-        return changeComment(commentRepository.save(comment));
+        Board board = boardRepository.findByBoardId(comment.getBoardId(), Board.class).orElse(null);
+        if(board == null)
+            return null;
+        else
+            return changeComment(commentRepository.save(comment));
     }
 
     @Transactional
