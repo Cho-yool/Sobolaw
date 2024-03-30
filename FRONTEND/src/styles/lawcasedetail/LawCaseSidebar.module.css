@@ -149,3 +149,9 @@
   color: #644419;
   cursor: pointer;
 }
+
+.selected {
+  background-color: rgba(128, 128, 128, 0.267);
+  padding: 0.7rem;
+  border-radius: 100%;
+}
