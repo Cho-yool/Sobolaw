@@ -22,6 +22,10 @@ import InsultEditPage from "./pages/lawsuit/insultEdit";
 import SearchHitPage from "./pages/keywordsearch/SearchHitPage";
 import StatuteDetailPage from "./pages/keywordsearch/StatuteDetailPage";
 import AdminPage from "./pages/AdminPage";
+import BoardPage from "./pages/board/BoardPage";
+import BoardList from "./pages/board/BoardList";
+import BoardDetail from "./pages/board/BoardDetail";
+import BoardWrite from "./pages/board/BoardWrite";
 
 function App() {
   return (
@@ -47,6 +51,11 @@ function App() {
           <Route path="case" element={<MyCase />} />
         </Route>
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/board/*" element={<BoardPage/>}>
+          <Route path="list" element={<BoardList/>}/>
+          <Route path="detail/:boardId" element={<BoardDetail/>}/>
+          <Route path="write" element={<BoardWrite />}/>
+        </Route>
       </Route>
       <Route path="/plaint/1" element={<DefamatinoPage />} />
       <Route path="/plaint/2" element={<FraudPage />} />
