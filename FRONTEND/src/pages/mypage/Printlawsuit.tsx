@@ -33,6 +33,7 @@ const PrintLawsuit = () => {
       try {
         const response = await getInsult(insultId, accessToken);
         setInsultData(response);
+        setFileName(response.title);
       } catch (error) {
         console.error("Error fetching insult data:", error);
       } finally {
@@ -50,9 +51,6 @@ const PrintLawsuit = () => {
     } else if (type === "Fraud") {
       setLawsuitType("사기");
     }
-    if (insultData) {
-      setFileName(insultData.title);
-    }
   }, [type]);
 
   const handlePrint = useReactToPrint({
@@ -61,15 +59,16 @@ const PrintLawsuit = () => {
     onAfterPrint: () => alert("파일 다운로드가 완료되었습니다"),
   });
 
-  const converToPdf = async (element: HTMLElement) => {
+  const convertToPdf = async (element: HTMLElement) => {
+    // canvas를 이용해 html을 이미지로 변환
     const canvas = await html2canvas(element);
     const imageFile = canvas.toDataURL("image/png");
+    // jsPDF를 통해 이미지를 pdf로 변환
     const doc = new jsPDF("p", "mm", "a4");
-
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
-
     doc.addImage(imageFile, "JPEG", 0, 0, pageWidth, pageHeight);
+    // 저장 및 미리보기
     // doc.save("test.pdf")
     // window.open(doc.output("bloburl"));
     console.log(doc.output("bloburl"));
@@ -80,28 +79,30 @@ const PrintLawsuit = () => {
         type: "application/pdf",
       }
     );
-    console.log(pdf);
+    console.log(typeof pdf);
     const formData = new FormData();
     formData.append("file", pdf);
-    formData.append("type", "pdf");
-    formData.append("name", "test");
-    console.log(formData);
+    // formData.append("type", "pdf");
+    // formData.append("name", "test");
+    console.log(typeof formData);
     return formData;
   };
 
-  // const handleSendEmail = () => {
-  //   if (componentRef.current) {
-  //     const formData = converToPdf(componentRef.current);
-  //     console.log(formData);
-  //     postMail(formData, accessToken)
-  //       .then(() => {
-  //         console.log("됨!!!!!!!!!!");
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }
-  // };
+  const handleSendEmail = async () => {
+    if (componentRef.current) {
+      try {
+        const formData = await convertToPdf(componentRef.current);
+        console.log(formData);
+        for (const key of formData.keys()) {
+          console.log(key, ":", formData.get(key));
+        }
+        await postMail(formData, accessToken);
+        console.log("전송 완료!");
+      } catch (error) {
+        console.error("이메일 전송 실패:", error);
+      }
+    }
+  };
 
   return (
     <div>
@@ -115,7 +116,7 @@ const PrintLawsuit = () => {
           </Button>
           <Button
             className={style["container-button"]}
-            // onClick={handleSendEmail}
+            onClick={handleSendEmail}
           >
             <MailOutlined /> 이메일로 보내기
           </Button>

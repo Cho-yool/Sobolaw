@@ -85,10 +85,10 @@ async function postDefamation(memberId: number, data: DefamationForm) {
 }
 
 // 유저에게 소장 메일 전송
-async function postMail(data: FormData, accessToken: string) {
+async function postMail(file: FormData, accessToken: string) {
   const response = await http.post(
-    `mail/send`,
-    { data },
+    `mail/lawsuits`,
+    { file },
     {
       headers: {
         "Content-Type": "multipart/form-data",
