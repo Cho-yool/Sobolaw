@@ -289,11 +289,44 @@ const LawCaseTabs = ({
       }
     }
   };
+  const onTouchStartHandler = () => {
+    setOnEditing(true);
+  };
 
+  const onTouchMoveHandler = () => {
+    if (onEditing) {
+      const selection = window.getSelection();
+      if (selection && selection.rangeCount > 0) {
+        setSelectionPos(selection.getRangeAt(0));
+        setSelectionNode(selection);
+      }
+    }
+  };
+
+  const onTouchEndHandler = (e: React.TouchEvent<HTMLDivElement>) => {
+    setOnEditing(false);
+    if (isEditMode) {
+      // Edit mode logic
+      // ...
+    } else {
+      const touch = e.touches[0];
+      if (touch) {
+        const { top, left } = selectionPos.getBoundingClientRect();
+        const parentTop = e.currentTarget.getBoundingClientRect().top;
+        const clientX = touch.clientX;
+        setSelectionPosition({
+          x: clientX - left,
+          y: -parentTop + top,
+        });
+        if (selectionPos) {
+          setShowOptions(true);
+        }
+        setSelectRange([selectionPos.startOffset, selectionPos.endOffset]);
+      }
+    }
+  };
   // 마우스 클릭이 끝났을때
-  const onMouseOutHandler = (
-    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
-  ) => {
+  const onMouseOutHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     setOnEditing(false);
     if (isEditMode) {
       const span = document.createElement("span");
@@ -346,14 +379,9 @@ const LawCaseTabs = ({
     } else {
       const { top, left } = selectionPos.getBoundingClientRect();
       const parentTop = e.currentTarget.getBoundingClientRect().top;
-      let clientX = 0;
-      if ("touches" in e) {
-        clientX = e.touches[0].clientX;
-      } else {
-        clientX = e.clientX;
-      }
+
       setSelectionPosition({
-        x: clientX - left,
+        x: e.clientX - left,
         y: -parentTop + top,
       });
       if (selectionPos) {
@@ -466,9 +494,9 @@ const LawCaseTabs = ({
             onMouseDown={onMouseClickHandler}
             onMouseMove={onMouseMoveHandler}
             onMouseUp={onMouseOutHandler}
-            onTouchStart={onMouseClickHandler}
-            onTouchMove={onMouseMoveHandler}
-            onTouchEnd={onMouseOutHandler}>
+            onTouchStart={onTouchStartHandler}
+            onTouchMove={onTouchMoveHandler}
+            onTouchEnd={onTouchEndHandler}>
             {" "}
             {newRenderText ? <>{newRenderText}</> : null}
           </div>
