@@ -2,10 +2,13 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import style from "../../styles/lawcasedetail/LawCaseTabs.module.css";
 import { Switch, Spin } from "antd";
 import {
+  getHighLight,
   getLawDetailSummary,
   saveHighLight,
   saveLawDetail,
 } from "../../api/lawdetail";
+import { store } from "../../redux/store/store";
+import { useLocation } from "react-router-dom";
 
 interface TabMenusProps {
   id: number;
@@ -29,6 +32,8 @@ interface getDataProps {
     verdictType: string;
   };
   currentLocation: number;
+  isEditMode: boolean;
+  currentColor: string;
 }
 
 const TABMENUS: TabMenusProps[] = [
@@ -46,10 +51,28 @@ const TABMENUS: TabMenusProps[] = [
   },
 ];
 
-const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
+interface highLightProps {
+  content: string;
+  endPoint: number;
+  highlightType: string;
+  main: string;
+  memberPrecedentHighlightId: number;
+  memberPrecedentId: number;
+  startPoint: number;
+}
+
+const LawCaseTabs = ({
+  getData,
+  currentLocation,
+  isEditMode,
+  currentColor,
+}: getDataProps) => {
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState<number>(0);
   const [isSaved, setIsSaved] = useState<boolean>(false);
   const [onEditing, setOnEditing] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [selectionNode, setSelectionNode] = useState<any>("");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectionPos, setSelectionPos] = useState<any>();
   const [isSummary, setIsSummary] = useState<boolean>(false);
@@ -61,7 +84,7 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
   const [showOptions, setShowOptions] = useState<boolean>(false);
   const [selectRange, setSelectRange] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
+  const [highLightLists, setHighLightLists] = useState<highLightProps[]>([]);
   const [selectionPosition, setSelectionPosition] = useState<{
     x: number;
     y: number;
@@ -104,24 +127,64 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
       </div>
     );
   };
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    const precedents = store.getState().user.precedents;
+    const currentPrecedent =
+      location.pathname.split("/")[location.pathname.split("/").length - 1];
+    if (
+      precedents.find((prece: number) => prece === Number(currentPrecedent))
+    ) {
+      setIsSaved(!isSaved);
+      const highLightData = async () => {
+        const response = await getHighLight(Number(currentPrecedent));
+        setHighLightLists(response.data.data);
+      };
+      highLightData();
+    }
+  }, []);
+
   useEffect(() => {
     if (getData && Object.keys(getData).length !== 0) {
       const renderText = getData.caseContent.split("<br/>");
       const newText = renderText.map((text, index) => {
+        let modifiedText = text;
+        highLightLists.forEach((targetText) => {
+          const color = targetText.highlightType.slice(
+            2,
+            targetText.highlightType.length
+          );
+          if (modifiedText.includes(targetText.content)) {
+            // 대상 텍스트를 찾아서 span 태그로 감싸고 스타일을 적용
+            {
+              color === "644419"
+                ? (modifiedText = modifiedText.replace(
+                    new RegExp(targetText.content, "g"),
+                    `<span style="background-color: #${color}; color: white;">${targetText.content}</span>`
+                  ))
+                : (modifiedText = modifiedText.replace(
+                    new RegExp(targetText.content, "g"),
+                    `<span style="background-color: #${color};">${targetText.content}</span>`
+                  ));
+            }
+          }
+        });
+        // 수정된 텍스트 반환
         return (
           <Fragment key={index}>
-            <span>{text.replace(/\n|\r/g, "").trim()}</span>
+            <span
+              dangerouslySetInnerHTML={{
+                __html: modifiedText.replace(/\n|\r/g, "").trim(),
+              }}
+            ></span>
             <div></div>
           </Fragment>
         );
       });
       setNewRenderText(newText);
     }
-  }, [getData]);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
+  }, [getData, highLightLists]);
 
   const savePrecedent = async (precedentId: number) => {
     try {
@@ -132,7 +195,7 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
     }
   };
 
-  const summareyHandler = async () => {
+  const summaryHandler = async () => {
     try {
       setIsSummary(!isSummary);
       if (!summaryData) {
@@ -150,6 +213,11 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
     setShowOptions(false);
     const span = document.createElement("span");
     span.style.backgroundColor = color;
+    if (value === 5) {
+      span.style.color = "white";
+    } else {
+      span.style.color = "black";
+    }
     span.innerText = selectionPos.toString();
     selectionPos.deleteContents();
     selectionPos.insertNode(span);
@@ -165,7 +233,7 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
           highlightType: value,
           startPoint: selectRange[0],
           endPoint: selectRange[1],
-          content: selectionPos.toString(),
+          content: selectionPos.toString().trim(),
         });
       }
     } else {
@@ -175,7 +243,7 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
         highlightType: value,
         startPoint: selectRange[0],
         endPoint: selectRange[1],
-        content: selectionPos.toString(),
+        content: selectionPos.toString().trim(),
       });
     }
   };
@@ -212,6 +280,7 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
       const selection = window.getSelection();
       if (selection) {
         setSelectionPos(selection.getRangeAt(0));
+        setSelectionNode(selection);
       }
     }
   };
@@ -219,17 +288,67 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
   // 마우스 클릭이 끝났을때
   const onMouseOutHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     setOnEditing(false);
-    const { top, left } = selectionPos.getBoundingClientRect();
-    const parentTop = e.currentTarget.getBoundingClientRect().top;
+    if (isEditMode) {
+      const span = document.createElement("span");
+      span.style.backgroundColor = currentColor;
+      let value = 0;
+      if (currentColor === "#f3e7c0") {
+        value = 1;
+      } else if (currentColor === "#feda89") {
+        value = 2;
+      } else if (currentColor === "#dba651") {
+        value = 3;
+      } else if (currentColor === "#bf8538") {
+        value = 4;
+      } else if (currentColor === "#644419") {
+        value = 5;
+      }
+      if (currentColor === "#644419") {
+        span.style.color = "white";
+      } else {
+        span.style.color = "black";
+      }
+      span.innerText = selectionPos.toString();
+      selectionPos.deleteContents();
+      selectionPos.insertNode(span);
+      if (!isSaved) {
+        try {
+          savePrecedent(getData.precedentId);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          saveHighLight({
+            precedentId: getData.precedentId,
+            main: selectionPos.startContainer.textContent,
+            highlightType: value,
+            startPoint: selectionPos.startOffset,
+            endPoint: selectionPos.endOffset,
+            content: selectionPos.toString(),
+          });
+        }
+      } else {
+        saveHighLight({
+          precedentId: getData.precedentId,
+          main: selectionPos.startContainer.textContent,
+          highlightType: value,
+          startPoint: selectionPos.startOffset,
+          endPoint: selectionPos.endOffset,
+          content: selectionPos.toString(),
+        });
+      }
+    } else {
+      const { top, left } = selectionPos.getBoundingClientRect();
+      const parentTop = e.currentTarget.getBoundingClientRect().top;
 
-    setSelectionPosition({
-      x: e.clientX - left,
-      y: -parentTop + top,
-    });
-    if (selectionPos) {
-      setShowOptions(true);
+      setSelectionPosition({
+        x: e.clientX - left,
+        y: -parentTop + top,
+      });
+      if (selectionPos) {
+        setShowOptions(true);
+      }
+      setSelectRange([selectionPos.startOffset, selectionPos.endOffset]);
     }
-    setSelectRange([selectionPos.startOffset, selectionPos.endOffset]);
   };
 
   return (
@@ -290,13 +409,18 @@ const LawCaseTabs = ({ getData, currentLocation }: getDataProps) => {
       </p>
       <br />
       <br />
-
-      <div className={style["tab-menu__summary"]}>
+      <div
+        className={
+          isEditMode
+            ? `${style["tab-menu__summary"]}  ${style["edit-mode"]}`
+            : `${style["tab-menu__summary"]}`
+        }
+      >
         <div className={style["tab-menu__summary__btn"]}>
           <p>요약 보기</p>
-          <Switch onChange={summareyHandler} />
+          <Switch onChange={summaryHandler} />
         </div>
-        {showOptions
+        {showOptions && !isEditMode
           ? optionSelectDiv(selectionPosition.x, selectionPosition.y)
           : null}
         {isSummary ? (
