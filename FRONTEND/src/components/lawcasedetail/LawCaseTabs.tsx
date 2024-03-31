@@ -85,6 +85,7 @@ const LawCaseTabs = ({
   const [selectRange, setSelectRange] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [highLightLists, setHighLightLists] = useState<highLightProps[]>([]);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [selectionPosition, setSelectionPosition] = useState<{
     x: number;
     y: number;
@@ -97,7 +98,8 @@ const LawCaseTabs = ({
         style={{
           left: x + "px",
           top: y + "px",
-        }}>
+        }}
+      >
         <div
           className={style["color-option"]}
           style={{ backgroundColor: "#f3e7c0" }}
@@ -153,8 +155,11 @@ const LawCaseTabs = ({
           if (modifiedText.includes(targetText.content)) {
             // 대상 텍스트를 찾아서 span 태그로 감싸고 스타일을 적용
             modifiedText = modifiedText.replace(
-              new RegExp(targetText.content, "g"),
-              `<span style="background-color: #${targetText.highlightType.slice(1, targetText.highlightType.length - 1)};">${targetText.content}</span>`
+              new RegExp(
+                targetText.content.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+                "g"
+              ),
+              `<span style="background-color: #${targetText.highlightType.slice(2, targetText.highlightType.length)};">${targetText.content}</span>`
             );
           }
         });
@@ -164,8 +169,9 @@ const LawCaseTabs = ({
             <span
               dangerouslySetInnerHTML={{
                 __html: modifiedText.replace(/\n|\r/g, "").trim(),
-              }}></span>
-            <div></div>
+              }}
+            ></span>
+            <div className={style["block"]}></div>
           </Fragment>
         );
       });
@@ -337,6 +343,13 @@ const LawCaseTabs = ({
       setSelectRange([selectionPos.startOffset, selectionPos.endOffset]);
     }
   };
+  useEffect(() => {
+    const updateScreenWidth = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", updateScreenWidth);
+  }, [screenWidth]);
 
   return (
     <div className={style["tab-container"]}>
@@ -349,20 +362,23 @@ const LawCaseTabs = ({
                 ? `${style["tab"]} ${style["active"]}`
                 : style["tab"]
             }
-            onClick={() => handleTabClick(tab.id)}>
+            onClick={() => handleTabClick(tab.id)}
+          >
             <p className={style["tab-title"]}>{tab.title}</p>
           </div>
         ))}
       </div>
-      <p>사건번호 : {getData.caseNumber}</p>
+      <p className={style["tab-menu__info"]}>사건번호 : {getData.caseNumber}</p>
       <br />
-      <p>선고일자: {getData.judgmentDate}</p>
+      <p className={style["tab-menu__info"]}>
+        선고일자: {getData.judgmentDate}
+      </p>
       <br />
-      <p>법원명 : {getData.courtName}</p>
+      <p className={style["tab-menu__info"]}>법원명 : {getData.courtName}</p>
       <br />
-      <p>사건종류명 : {getData.caseType}</p>
+      <p className={style["tab-menu__info"]}>사건종류명 : {getData.caseType}</p>
       <br />
-      <p>{getData.verdictType}</p>
+      <p className={style["tab-menu__info"]}>{getData.verdictType}</p>
       <br />
       <br />
       <p className={style["tab-menu__title"]} ref={judgmentRef}>
@@ -373,7 +389,8 @@ const LawCaseTabs = ({
         className={style["content-box__contents"]}
         dangerouslySetInnerHTML={{
           __html: getData.judicialNotice,
-        }}></p>
+        }}
+      ></p>
       <br />
       <br />
       <p className={style["tab-menu__title"]} ref={rulingRef}>
@@ -385,7 +402,8 @@ const LawCaseTabs = ({
         className={style["content-box__contents"]}
         dangerouslySetInnerHTML={{
           __html: getData.verdictSummary,
-        }}></p>
+        }}
+      ></p>
       <br />
       <br />
       <p className={style["tab-menu__title"]} ref={precedentRef}>
@@ -398,10 +416,14 @@ const LawCaseTabs = ({
           isEditMode
             ? `${style["tab-menu__summary"]}  ${style["edit-mode"]}`
             : `${style["tab-menu__summary"]}`
-        }>
+        }
+      >
         <div className={style["tab-menu__summary__btn"]}>
           <p>요약 보기</p>
-          <Switch onChange={summaryHandler} />
+          <Switch
+            onChange={summaryHandler}
+            size={screenWidth <= 700 ? "small" : "default"}
+          />
         </div>
         {showOptions && !isEditMode
           ? optionSelectDiv(selectionPosition.x, selectionPosition.y)
@@ -413,7 +435,8 @@ const LawCaseTabs = ({
                 width: "100%",
                 display: "flex",
                 justifyContent: "center",
-              }}>
+              }}
+            >
               <Spin size="large" />
             </div>
           ) : (
@@ -421,14 +444,16 @@ const LawCaseTabs = ({
               className={style["content-box__contents"]}
               dangerouslySetInnerHTML={{
                 __html: summaryData,
-              }}></p>
+              }}
+            ></p>
           )
         ) : (
           <div
             className={style["content-box__contents"]}
             onMouseDown={onMouseClickHandler}
             onMouseMove={onMouseMoveHandler}
-            onMouseUp={onMouseOutHandler}>
+            onMouseUp={onMouseOutHandler}
+          >
             {" "}
             {newRenderText ? <>{newRenderText}</> : null}
           </div>

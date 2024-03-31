@@ -23,7 +23,7 @@ const theme = {
       inkBarColor: "#E0B88A",
       titleFontSize: "20px",
       horizontalMargin: "10px 0 30px 0",
-      
+
       algorithm: true,
     },
   },
@@ -36,9 +36,9 @@ const theme = {
     Switch: {
       colorPrimary: "#BF8438",
       algorithm: true,
-      handleSize: 25,
-      trackHeight: 29,
-      trackMinWidth: 60,
+      // handleSize: 25,
+      // trackHeight: 29,
+      // trackMinWidth: 60,
     },
     Button: {
       colorPrimary: "#BF8438",
