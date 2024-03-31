@@ -6,13 +6,12 @@ import com.sobolaw.api.statute.dto.StatuteDTO;
 import com.sobolaw.api.statute.service.StatuteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/statutes")
@@ -27,8 +26,10 @@ public class StatuteController {
         summary = "법령 검색",
         description = "키워드를 사용하여 법령명, 조문내용, 조문서브내용 컬럼을 검색합니다."
     )
-    public BaseResponse<List<StatuteDTO>> searchStatutes(@PathVariable String searchKeyword) throws Exception {
-        List<StatuteDTO> searchResults = statuteService.searchByKeyword(searchKeyword);
+    public BaseResponse<List<StatuteDTO>> searchStatutes(
+            @PathVariable String searchKeyword,
+            @RequestParam(defaultValue = "1") int pageNumber) throws Exception {
+        List<StatuteDTO> searchResults = statuteService.searchByKeyword(searchKeyword, pageNumber);
         if (searchResults.isEmpty()) {
             return BaseResponse.success(HttpStatus.OK.value(), "법령 검색 결과가 없습니다.", searchResults);
         }
