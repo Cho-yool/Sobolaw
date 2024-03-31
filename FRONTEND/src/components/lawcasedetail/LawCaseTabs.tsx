@@ -152,15 +152,29 @@ const LawCaseTabs = ({
       const newText = renderText.map((text, index) => {
         let modifiedText = text;
         highLightLists.forEach((targetText) => {
+          const color = targetText.highlightType.slice(
+            2,
+            targetText.highlightType.length
+          );
           if (modifiedText.includes(targetText.content)) {
             // 대상 텍스트를 찾아서 span 태그로 감싸고 스타일을 적용
-            modifiedText = modifiedText.replace(
-              new RegExp(
-                targetText.content.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
-                "g"
-              ),
-              `<span style="background-color: #${targetText.highlightType.slice(2, targetText.highlightType.length)};">${targetText.content}</span>`
-            );
+            {
+              color === "644419"
+                ? (modifiedText = modifiedText.replace(
+                    new RegExp(
+                      targetText.content.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+                      "g"
+                    ),
+                    `<span style="background-color: #${targetText.highlightType.slice(2, targetText.highlightType.length)};">${targetText.content}</span>`
+                  ))
+                : (modifiedText = modifiedText.replace(
+                    new RegExp(
+                      targetText.content.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+                      "g"
+                    ),
+                    `<span style="background-color: #${targetText.highlightType.slice(2, targetText.highlightType.length)}; color=${color}">${targetText.content}</span>`
+                  ));
+            }
           }
         });
         // 수정된 텍스트 반환
