@@ -98,8 +98,7 @@ const LawCaseTabs = ({
         style={{
           left: x + "px",
           top: y + "px",
-        }}
-      >
+        }}>
         <div
           className={style["color-option"]}
           style={{ backgroundColor: "#f3e7c0" }}
@@ -183,8 +182,7 @@ const LawCaseTabs = ({
             <span
               dangerouslySetInnerHTML={{
                 __html: modifiedText.replace(/\n|\r/g, "").trim(),
-              }}
-            ></span>
+              }}></span>
             <div className={style["block"]}></div>
           </Fragment>
         );
@@ -293,7 +291,9 @@ const LawCaseTabs = ({
   };
 
   // 마우스 클릭이 끝났을때
-  const onMouseOutHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+  const onMouseOutHandler = (
+    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
+  ) => {
     setOnEditing(false);
     if (isEditMode) {
       const span = document.createElement("span");
@@ -346,9 +346,14 @@ const LawCaseTabs = ({
     } else {
       const { top, left } = selectionPos.getBoundingClientRect();
       const parentTop = e.currentTarget.getBoundingClientRect().top;
-
+      let clientX = 0;
+      if ("touches" in e) {
+        clientX = e.touches[0].clientX;
+      } else {
+        clientX = e.clientX;
+      }
       setSelectionPosition({
-        x: e.clientX - left,
+        x: clientX - left,
         y: -parentTop + top,
       });
       if (selectionPos) {
@@ -376,8 +381,7 @@ const LawCaseTabs = ({
                 ? `${style["tab"]} ${style["active"]}`
                 : style["tab"]
             }
-            onClick={() => handleTabClick(tab.id)}
-          >
+            onClick={() => handleTabClick(tab.id)}>
             <p className={style["tab-title"]}>{tab.title}</p>
           </div>
         ))}
@@ -403,8 +407,7 @@ const LawCaseTabs = ({
         className={style["content-box__contents"]}
         dangerouslySetInnerHTML={{
           __html: getData.judicialNotice,
-        }}
-      ></p>
+        }}></p>
       <br />
       <br />
       <p className={style["tab-menu__title"]} ref={rulingRef}>
@@ -416,8 +419,7 @@ const LawCaseTabs = ({
         className={style["content-box__contents"]}
         dangerouslySetInnerHTML={{
           __html: getData.verdictSummary,
-        }}
-      ></p>
+        }}></p>
       <br />
       <br />
       <p className={style["tab-menu__title"]} ref={precedentRef}>
@@ -430,8 +432,7 @@ const LawCaseTabs = ({
           isEditMode
             ? `${style["tab-menu__summary"]}  ${style["edit-mode"]}`
             : `${style["tab-menu__summary"]}`
-        }
-      >
+        }>
         <div className={style["tab-menu__summary__btn"]}>
           <p>요약 보기</p>
           <Switch
@@ -449,8 +450,7 @@ const LawCaseTabs = ({
                 width: "100%",
                 display: "flex",
                 justifyContent: "center",
-              }}
-            >
+              }}>
               <Spin size="large" />
             </div>
           ) : (
@@ -458,8 +458,7 @@ const LawCaseTabs = ({
               className={style["content-box__contents"]}
               dangerouslySetInnerHTML={{
                 __html: summaryData,
-              }}
-            ></p>
+              }}></p>
           )
         ) : (
           <div
@@ -467,7 +466,9 @@ const LawCaseTabs = ({
             onMouseDown={onMouseClickHandler}
             onMouseMove={onMouseMoveHandler}
             onMouseUp={onMouseOutHandler}
-          >
+            onTouchStart={onMouseClickHandler}
+            onTouchMove={onMouseMoveHandler}
+            onTouchEnd={onMouseOutHandler}>
             {" "}
             {newRenderText ? <>{newRenderText}</> : null}
           </div>
