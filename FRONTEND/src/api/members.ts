@@ -150,27 +150,30 @@ async function postMyKeyword(accessToken: string, words: string[]) {
 }
 
 // 파일 업로드 및 원본파일 이름 저장(한 장)
-async function postImage(accessToken: string, data: FormData) {
-  await http.post(`media/image`, data, {
+async function postImage(accessToken: string, image: FormData) {
+  const response = await http.post(`media/image`, image, {
     headers: {
       "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${accessToken}`,
     },
   });
+  return response.data.data;
 }
 
 // 변호사 전환(등업) 요청
 async function postApplyLawyer(accessToken: string, image: string) {
-  await http.post(
+  const response = await http.post(
     `${url}/certification/lawyer`,
     { image },
     {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
     }
   );
+  console.log(response);
+  return response.data;
 }
 
 // 관리자용 API

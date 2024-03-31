@@ -1,6 +1,8 @@
 .container {
-  text-align: center;
-  align-items: center;
+  display: flex; /* flex container로 설정 */
+  flex-direction: column; /* 아이템들을 수직으로 정렬하기 위해 column으로 설정 */
+  justify-content: center; /* 수직 가운데 정렬 */
+  align-items: center; /* 수평 가운데 정렬 */
   padding: 1rem;
 }
 
@@ -12,15 +14,19 @@
 
 .input-photo {
   border: 1px solid #bcbcbc;
+  display: flex;
+  justify-content: center;
   text-align: center;
-  align-items: center;
-  width: 400px;
-  height: 300px;
+  width: 300px;
+  height: 250px;
   border-radius: 20px;
+  margin: 0 auto; /* 수평 가운데 정렬 */
 }
 
 .image-box {
   width: 256px;
+  margin: 0 auto;
+  justify-content: center;
 }
 
 .image-ratio {
@@ -29,4 +35,5 @@
   overflow: hidden;
   position: relative;
   border-radius: 10px;
+  margin: auto;
 }

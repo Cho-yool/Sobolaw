@@ -49,16 +49,19 @@ export default function ApplyLawyer({ onUpdate }: { onUpdate: () => void }) {
   const formData = new FormData();
   const onSubmit = async () => {
     if (fileName !== undefined) {
-      formData.append("file", fileName.file);
-      const response = await postImage(accessToken, formData);
-      console.log(response);
-      // postApplyLawyer(accessToken, response)
-      //   .then(() => {
-      //     onUpdate();
-      //   })
-      //   .catch(() => {
-      //     alert("사진을 다시 확인해주세요");
-      //   });
+      formData.append("image", fileName.file);
+      for (const key of formData.keys()) {
+        console.log(key, ":", formData.get(key));
+      }
+      try {
+        const res = await postImage(accessToken, formData);
+        console.log(res);
+        const imgUrl = res;
+        await postApplyLawyer(accessToken, imgUrl);
+        onUpdate();
+      } catch (error) {
+        alert("사진을 다시 확인해주세요");
+      }
     } else {
       alert("사진을 등록해주세요ㅠㅠ");
     }
@@ -122,7 +125,7 @@ export default function ApplyLawyer({ onUpdate }: { onUpdate: () => void }) {
         </>
       )}
 
-      <Button type="primary" onClick={onSubmit}>
+      <Button type="primary" onClick={onSubmit} style={{ marginTop: "2rem" }}>
         제출하기
       </Button>
     </div>
