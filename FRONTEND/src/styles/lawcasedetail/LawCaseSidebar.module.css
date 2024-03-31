@@ -168,4 +168,8 @@
     display: flex;
     justify-content: center;
   }
+
+  .sidebar__content__box {
+    width: 33%;
+  }
 }

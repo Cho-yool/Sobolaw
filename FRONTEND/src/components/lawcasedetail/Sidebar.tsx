@@ -50,8 +50,7 @@ const Sidebar = ({
           <Fragment key={index}>
             <li
               key={index}
-              className={style[`sidebar__content__box__content__text`]}
-            >
+              className={style[`sidebar__content__box__content__text`]}>
               {text.replace(/\n|\r/g, "").trim()}
             </li>
           </Fragment>
@@ -79,14 +78,13 @@ const Sidebar = ({
     <>
       {screenWidth <= 576 ? (
         <article className={style["sidebar"]}>
-          <Flex className={style["sidebar__content"]} gap={30}>
+          <Flex className={style["sidebar__content"]} gap={10}>
             <Flex
               className={style["sidebar__content__box"]}
               vertical
-              align="center"
-            >
+              align="center">
               <p className={style["sidebar__content__box__title"]}>참조 조문</p>
-              <div className={style["sidebar__content__box__content"]}>
+              {/* <div className={style["sidebar__content__box__content"]}>
                 {referencedStatute ? (
                   renderRefStatute
                 ) : (
@@ -94,15 +92,14 @@ const Sidebar = ({
                     참조 조문이 없습니다.
                   </p>
                 )}
-              </div>
+              </div> */}
             </Flex>
             <Flex
               className={style["sidebar__content__box"]}
               vertical
-              align="center"
-            >
+              align="center">
               <p className={style["sidebar__content__box__title"]}>참조 판례</p>
-              <div className={style["sidebar__content__box__content"]}>
+              {/* <div className={style["sidebar__content__box__content"]}>
                 {referencedCase ? (
                   renderRefCase
                 ) : (
@@ -110,17 +107,16 @@ const Sidebar = ({
                     참조 판례가 없습니다
                   </p>
                 )}
-              </div>
+              </div> */}
             </Flex>
             <Flex
               className={style["sidebar__content__box"]}
               vertical
-              align="center"
-            >
+              align="center">
               <p className={style["sidebar__content__box__title"]}>
                 하이라이트
               </p>
-              <div className={style["sidebar__content__box__content"]}>
+              {/* <div className={style["sidebar__content__box__content"]}>
                 <Flex justify="space-between">
                   <HighlightOutlined
                     className={
@@ -163,7 +159,7 @@ const Sidebar = ({
                     onClick={() => modeChange("#644419")}
                   />
                 </Flex>
-              </div>
+              </div> */}
             </Flex>
           </Flex>
         </article>
@@ -173,12 +169,10 @@ const Sidebar = ({
             isSelected
               ? style["sidebar"]
               : `${style["sidebar"]} ${style["hide"]}`
-          }
-        >
+          }>
           <div
             className={isSelected ? style["hide-btn"] : style["side-btn"]}
-            onClick={() => setIsselected(!isSelected)}
-          >
+            onClick={() => setIsselected(!isSelected)}>
             <img
               className={isSelected ? style["rotate"] : style["side-btn-img"]}
               src={ARROW}
@@ -189,8 +183,7 @@ const Sidebar = ({
             <Flex
               className={style["sidebar__content__box"]}
               vertical
-              align="center"
-            >
+              align="center">
               <p className={style["sidebar__content__box__title"]}>참조 조문</p>
               <div className={style["sidebar__content__box__content"]}>
                 {referencedStatute ? (
@@ -205,8 +198,7 @@ const Sidebar = ({
             <Flex
               className={style["sidebar__content__box"]}
               vertical
-              align="center"
-            >
+              align="center">
               <p className={style["sidebar__content__box__title"]}>참조 판례</p>
               <div className={style["sidebar__content__box__content"]}>
                 {referencedCase ? (
@@ -221,8 +213,7 @@ const Sidebar = ({
             <Flex
               className={style["sidebar__content__box"]}
               vertical
-              align="center"
-            >
+              align="center">
               <p className={style["sidebar__content__box__title"]}>
                 하이라이트
               </p>
