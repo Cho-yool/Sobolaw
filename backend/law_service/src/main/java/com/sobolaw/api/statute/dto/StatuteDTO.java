@@ -23,6 +23,7 @@ public class StatuteDTO {
     private String publicationDate;
     private String publicationNumber;
     private Long hit;
+    private Long total;
     private List<StatuteTextDTO> statuteTexts;
 
 }
