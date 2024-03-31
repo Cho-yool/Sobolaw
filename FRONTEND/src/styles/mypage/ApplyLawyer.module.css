@@ -1,0 +1,39 @@
+.container {
+  text-align: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bolder;
+  color: #c08600;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 2rem;
+}
+
+.semi-title {
+  font-size: 1.5rem;
+  padding-bottom: 2rem;
+  color: #bcbcbc;
+}
+
+.input-photo {
+  border: 1px solid #bcbcbc;
+  width: 500px;
+  height: 300px;
+  border-radius: 20px;
+}
+
+.image-box {
+  width: 256px;
+}
+
+.image-ratio {
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  overflow: hidden;
+  position: relative;
+  border-radius: 10px;
+}
