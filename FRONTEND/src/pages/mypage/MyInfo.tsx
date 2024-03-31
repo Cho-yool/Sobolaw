@@ -17,6 +17,7 @@ import { MemberInfo, MemberKeyword } from "../../types/DataTypes";
 import { getUserInfo, deleteUser } from "../../api/members";
 import MyKeyword from "../../components/mypage/MyKeyword";
 import MyRecentCase from "../../components/mypage/MyRecentCase";
+import ApplyLawyer from "../../components/mypage/ApplyLawyer";
 
 export default function MyInfo() {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ export default function MyInfo() {
   );
   const [userInfo, setUserInfo] = useState<MemberInfo>();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [directKeyword, setDirectKeyword] = useState<MemberKeyword[]>();
   const [relatedKeyword, setRelatedKeyword] = useState<MemberKeyword[]>();
   const tagColors = [
@@ -73,6 +75,18 @@ export default function MyInfo() {
 
   const handleOk = () => {
     setIsModalOpen(false);
+  };
+
+  const showApplyModal = () => {
+    setIsApplyModalOpen(true);
+  };
+
+  const handleApplyOk = () => {
+    setIsApplyModalOpen(false);
+  };
+
+  const handleApplyOkUpdate = () => {
+    setIsApplyModalOpen(false);
   };
 
   const handleDetAccount = () => {
@@ -123,11 +137,24 @@ export default function MyInfo() {
                 shape="round"
                 type="primary"
                 className={style["mypaper-button"]}
-                // onClick={handleCheck}
+                onClick={showApplyModal}
                 // disabled={isDisabled}
               >
                 변호사 전환 신청하기
               </Button>
+              <Modal
+                title="변호사 전환 신청하기"
+                open={isApplyModalOpen}
+                onOk={handleApplyOk}
+                footer={[
+                  <Button key="submit" onClick={handleApplyOk}>
+                    취소
+                  </Button>,
+                ]}
+              >
+                <Divider />
+                <ApplyLawyer onUpdate={handleApplyOkUpdate} />
+              </Modal>
             </div>
           </div>
 

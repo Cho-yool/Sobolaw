@@ -2,7 +2,7 @@ import style from "../../styles/lawcasedetail/LawCaseSidebar.module.css";
 import ARROW from "../../assets/arrow.png"; /* <a href="https://www.flaticon.com/kr/free-icons/" title="화살 아이콘">화살 아이콘  제작자: Catalin Fertu - Flaticon</a> */
 import { Fragment, useEffect, useState } from "react";
 import { Flex } from "antd";
-import { HighlightOutlined } from "@ant-design/icons";
+import { CloseOutlined, HighlightOutlined } from "@ant-design/icons";
 
 interface SidebarProps {
   referencedStatute: string;
@@ -19,17 +19,33 @@ const Sidebar = ({
   setCurrentColor,
 }: SidebarProps) => {
   const [isSelected, setIsselected] = useState<boolean>(false);
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
   const [renderRefCase, setRenderRefCase] = useState<React.ReactNode[]>([]);
   const [renderRefStatute, setRenderRefStatute] = useState<React.ReactNode[]>(
     []
   );
   const [currentSelect, setCurrentSelect] = useState<string>("");
+  const [selectedNumber, setSelectedNumber] = useState<string>("");
 
   const modeChange = (value: string) => {
     setIsEditMode(true);
     setCurrentSelect(value);
     setCurrentColor(value);
   };
+
+  const modeClose = () => {
+    setIsEditMode(false);
+    setCurrentSelect("");
+    setCurrentColor("");
+  };
+
+  useEffect(() => {
+    const updateScreenWidth = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", updateScreenWidth);
+  }, [screenWidth]);
 
   useEffect(() => {
     const renderCase = referencedCase;
@@ -41,8 +57,7 @@ const Sidebar = ({
           <Fragment key={index}>
             <li
               key={index}
-              className={style[`sidebar__content__box__content__text`]}
-            >
+              className={style[`sidebar__content__box__content__text`]}>
               {text.replace(/\n|\r/g, "").trim()}
             </li>
           </Fragment>
@@ -65,109 +80,234 @@ const Sidebar = ({
       setRenderRefStatute(newStatute);
     }
   }, [referencedStatute, referencedCase]);
-
+  const numberSelect = (currentNumber: string) => {
+    if (selectedNumber === currentNumber) {
+      setSelectedNumber("");
+    } else {
+      setSelectedNumber(currentNumber);
+    }
+  };
   return (
-    <article
-      className={
-        isSelected ? style["sidebar"] : `${style["sidebar"]} ${style["hide"]}`
-      }
-    >
-      <div
-        className={isSelected ? style["hide-btn"] : style["side-btn"]}
-        onClick={() => setIsselected(!isSelected)}
-      >
-        <img
-          className={isSelected ? style["rotate"] : style["side-btn-img"]}
-          src={ARROW}
-          alt="side-open"
-        />
-      </div>
-      <Flex className={style["sidebar__content"]} vertical gap={30}>
-        <Flex
-          className={style["sidebar__content__box"]}
-          vertical
-          align="center"
-        >
-          <p className={style["sidebar__content__box__title"]}>참조 조문</p>
-          <div className={style["sidebar__content__box__content"]}>
-            {referencedStatute ? (
-              renderRefStatute
-            ) : (
-              <p className={style[`sidebar__content__box__content__text`]}>
-                참조 조문이 없습니다.
-              </p>
-            )}
-          </div>
-        </Flex>
-        <Flex
-          className={style["sidebar__content__box"]}
-          vertical
-          align="center"
-        >
-          <p className={style["sidebar__content__box__title"]}>참조 판례</p>
-          <div className={style["sidebar__content__box__content"]}>
-            {referencedCase ? (
-              renderRefCase
-            ) : (
-              <p className={style[`sidebar__content__box__content__text`]}>
-                참조 판례가 없습니다
-              </p>
-            )}
-          </div>
-        </Flex>
-        <Flex
-          className={style["sidebar__content__box"]}
-          vertical
-          align="center"
-        >
-          <p className={style["sidebar__content__box__title"]}>하이라이트</p>
-          <div className={style["sidebar__content__box__content"]}>
-            <Flex justify="space-between">
-              <HighlightOutlined
+    <>
+      {screenWidth <= 576 ? (
+        <>
+          <article className={style["sidebar"]}>
+            <Flex className={style["sidebar__content"]}>
+              <Flex
                 className={
-                  currentSelect === "#f3e7c0"
-                    ? `${style["select_color_1"]} ${style["selected"]}`
-                    : style["select_color_1"]
+                  selectedNumber === "1"
+                    ? `${style["sidebar__content__active"]} ${style["sidebar__content__box"]}`
+                    : style["sidebar__content__box"]
                 }
-                onClick={() => modeChange("#f3e7c0")}
-              />
-              <HighlightOutlined
+                onClick={() => numberSelect("1")}>
+                <p className={style["sidebar__content__box__title"]}>
+                  참조 조문
+                </p>
+              </Flex>
+              <Flex
                 className={
-                  currentSelect === "#feda89"
-                    ? `${style["select_color_2"]} ${style["selected"]}`
-                    : style["select_color_2"]
+                  selectedNumber === "2"
+                    ? `${style["sidebar__content__active"]} ${style["sidebar__content__box"]}`
+                    : style["sidebar__content__box"]
                 }
-                onClick={() => modeChange("#feda89")}
-              />
-              <HighlightOutlined
+                onClick={() => numberSelect("2")}>
+                <p className={style["sidebar__content__box__title"]}>
+                  참조 판례
+                </p>
+              </Flex>
+              <Flex
                 className={
-                  currentSelect === "#dba651"
-                    ? `${style["select_color_3"]} ${style["selected"]}`
-                    : style["select_color_3"]
+                  selectedNumber === "3"
+                    ? `${style["sidebar__content__active"]} ${style["sidebar__content__box"]}`
+                    : style["sidebar__content__box"]
                 }
-                onClick={() => modeChange("#dba651")}
-              />
-              <HighlightOutlined
-                className={
-                  currentSelect === "#bf8538"
-                    ? `${style["select_color_4"]} ${style["selected"]}`
-                    : style["select_color_4"]
-                }
-                onClick={() => modeChange("#bf8538")}
-              />
-              <HighlightOutlined
-                className={
-                  currentSelect === "#644419"
-                    ? `${style["select_color_5"]} ${style["selected"]}`
-                    : style["select_color_5"]
-                }
-                onClick={() => modeChange("#644419")}
-              />
+                onClick={() => numberSelect("3")}>
+                <p className={style["sidebar__content__box__title"]}>
+                  하이라이트
+                </p>
+              </Flex>
             </Flex>
+          </article>
+          {selectedNumber === "" ? null : selectedNumber === "1" ? (
+            <div className={style["sidebar__content__box__content"]}>
+              {referencedStatute ? (
+                renderRefStatute
+              ) : (
+                <p className={style[`sidebar__content__box__content__text`]}>
+                  참조 조문이 없습니다.
+                </p>
+              )}
+            </div>
+          ) : selectedNumber === "2" ? (
+            <div className={style["sidebar__content__box__content"]}>
+              {referencedCase ? (
+                renderRefCase
+              ) : (
+                <p className={style[`sidebar__content__box__content__text`]}>
+                  참조 판례가 없습니다
+                </p>
+              )}
+            </div>
+          ) : (
+            <div className={style["sidebar__content__box__content"]}>
+              <Flex justify="space-around">
+                <CloseOutlined
+                  style={{
+                    position: "absolute",
+                    top: "5px",
+                    right: "5px",
+                    cursor: "pointer",
+                    fontSize: ".9rem",
+                  }}
+                  onClick={() => modeClose()}
+                />
+                <HighlightOutlined
+                  className={
+                    currentSelect === "#f3e7c0"
+                      ? `${style["select_color_1"]} ${style["selected"]}`
+                      : style["select_color_1"]
+                  }
+                  onClick={() => modeChange("#f3e7c0")}
+                />
+                <HighlightOutlined
+                  className={
+                    currentSelect === "#feda89"
+                      ? `${style["select_color_2"]} ${style["selected"]}`
+                      : style["select_color_2"]
+                  }
+                  onClick={() => modeChange("#feda89")}
+                />
+                <HighlightOutlined
+                  className={
+                    currentSelect === "#dba651"
+                      ? `${style["select_color_3"]} ${style["selected"]}`
+                      : style["select_color_3"]
+                  }
+                  onClick={() => modeChange("#dba651")}
+                />
+                <HighlightOutlined
+                  className={
+                    currentSelect === "#bf8538"
+                      ? `${style["select_color_4"]} ${style["selected"]}`
+                      : style["select_color_4"]
+                  }
+                  onClick={() => modeChange("#bf8538")}
+                />
+                <HighlightOutlined
+                  className={
+                    currentSelect === "#644419"
+                      ? `${style["select_color_5"]} ${style["selected"]}`
+                      : style["select_color_5"]
+                  }
+                  onClick={() => modeChange("#644419")}
+                />
+              </Flex>
+            </div>
+          )}
+        </>
+      ) : (
+        <article
+          className={
+            isSelected
+              ? style["sidebar"]
+              : `${style["sidebar"]} ${style["hide"]}`
+          }>
+          <div
+            className={isSelected ? style["hide-btn"] : style["side-btn"]}
+            onClick={() => setIsselected(!isSelected)}>
+            <img
+              className={isSelected ? style["rotate"] : style["side-btn-img"]}
+              src={ARROW}
+              alt="side-open"
+            />
           </div>
-        </Flex>
-      </Flex>
-    </article>
+          <Flex className={style["sidebar__content"]} vertical gap={30}>
+            <Flex
+              className={style["sidebar__content__box"]}
+              vertical
+              align="center">
+              <p className={style["sidebar__content__box__title"]}>참조 조문</p>
+              <div className={style["sidebar__content__box__content"]}>
+                {referencedStatute ? (
+                  renderRefStatute
+                ) : (
+                  <p className={style[`sidebar__content__box__content__text`]}>
+                    참조 조문이 없습니다.
+                  </p>
+                )}
+              </div>
+            </Flex>
+            <Flex
+              className={style["sidebar__content__box"]}
+              vertical
+              align="center">
+              <p className={style["sidebar__content__box__title"]}>참조 판례</p>
+              <div className={style["sidebar__content__box__content"]}>
+                {referencedCase ? (
+                  renderRefCase
+                ) : (
+                  <p className={style[`sidebar__content__box__content__text`]}>
+                    참조 판례가 없습니다
+                  </p>
+                )}
+              </div>
+            </Flex>
+            <Flex
+              className={style["sidebar__content__box"]}
+              vertical
+              align="center">
+              <p className={style["sidebar__content__box__title"]}>
+                하이라이트
+              </p>
+              <div className={style["sidebar__content__box__content"]}>
+                <Flex justify="space-between">
+                  <HighlightOutlined
+                    className={
+                      currentSelect === "#f3e7c0"
+                        ? `${style["select_color_1"]} ${style["selected"]}`
+                        : style["select_color_1"]
+                    }
+                    onClick={() => modeChange("#f3e7c0")}
+                  />
+                  <HighlightOutlined
+                    className={
+                      currentSelect === "#feda89"
+                        ? `${style["select_color_2"]} ${style["selected"]}`
+                        : style["select_color_2"]
+                    }
+                    onClick={() => modeChange("#feda89")}
+                  />
+                  <HighlightOutlined
+                    className={
+                      currentSelect === "#dba651"
+                        ? `${style["select_color_3"]} ${style["selected"]}`
+                        : style["select_color_3"]
+                    }
+                    onClick={() => modeChange("#dba651")}
+                  />
+                  <HighlightOutlined
+                    className={
+                      currentSelect === "#bf8538"
+                        ? `${style["select_color_4"]} ${style["selected"]}`
+                        : style["select_color_4"]
+                    }
+                    onClick={() => modeChange("#bf8538")}
+                  />
+                  <HighlightOutlined
+                    className={
+                      currentSelect === "#644419"
+                        ? `${style["select_color_5"]} ${style["selected"]}`
+                        : style["select_color_5"]
+                    }
+                    onClick={() => modeChange("#644419")}
+                  />
+                </Flex>
+              </div>
+            </Flex>
+          </Flex>
+        </article>
+      )}
+    </>
   );
 };
 

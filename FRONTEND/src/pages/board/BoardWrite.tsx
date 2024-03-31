@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Form, Radio, Input, Button, Col} from "antd";
+import { Form, Radio, Input, Button, Col, Modal} from "antd";
 import { registerBoard, updateBoard } from "../../api/board";
 import { BoardDetail } from "../../types/DataTypes";
 import { useSelector } from "react-redux";
@@ -12,6 +12,7 @@ import "../../App.css";
 export default function BoardWrite() {
   const { boardDetail } = useLocation().state || {};
   const user = useSelector((state: RootState) => state.user);
+  const [modal, setModal] = useState({title: "", isModalOpen: false});
   const [formData, setFormData] = useState<BoardDetail>(boardDetail? boardDetail:{
     boardId: null,
     hit: null,
@@ -26,22 +27,22 @@ export default function BoardWrite() {
 
   useEffect(() => {
     if(!user.userId){
-      alert(`로그인 후 이용해 주세요`)
-      navigate(`/board/list`)
+      setModal({title: "로그인 후 이용해 주세요", isModalOpen: true})
     }
   }, [])
 
   const register = async() => {
-    console.log(formData)
-    console.log(boardDetail)
+    if(!formData.title || !formData.content){
+      setModal({title: "제목과 내용을 입력해 주세요", isModalOpen: true})
+      return
+    }
     if(boardDetail){
       await updateBoard(formData);
-      window.alert('수정 되었습니다.')
+      setModal({title: "수정되었습니다", isModalOpen: true})
     }else{
       await registerBoard(formData);
-      window.alert('작성 되었습니다.')
+      setModal({title: "작성되었습니다", isModalOpen: true})
     }
-    navigate('/board/list')
   }
 
   const handleInputChange = (e: any) => {
@@ -57,7 +58,7 @@ export default function BoardWrite() {
   return (
     <div className="pages">
       <div className={style["mypaper-box"]}>
-        <Col style={{margin:`5rem`}}>
+        <Col style={{margin:`5rem`, padding:`2rem`, borderRadius:`1rem`, backgroundColor:'#F9F5DB', border:'2px solid #AFAC52'}} >
 
           <Form.Item label="공개 범위">
             <Radio.Group name='public' value={formData.public ? "true" : "false"} onChange={handleInputChange} >
@@ -86,7 +87,16 @@ export default function BoardWrite() {
 
         </Col>
       </div>
+      <Modal
+        title={modal.title}
+        open={modal.isModalOpen}
+        onCancel={() => setModal({title:"", isModalOpen: false})}
+        afterClose={() => navigate('/board/list')}
+        footer={[
+          <Button key="submit" type="primary" onClick={() => setModal({title:"", isModalOpen: false})}>
+            확인  
+          </Button>,
+        ]}/>
     </div>
-
   );
 }

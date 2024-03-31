@@ -26,6 +26,7 @@ import BoardPage from "./pages/board/BoardPage";
 import BoardList from "./pages/board/BoardList";
 import BoardDetail from "./pages/board/BoardDetail";
 import BoardWrite from "./pages/board/BoardWrite";
+import NotFound from "./pages/NotFound.tsx";
 
 function App() {
   return (
@@ -34,7 +35,10 @@ function App() {
       <Route element={<LayoutPage />}>
         <Route path="" element={<MainPage />} />
         <Route path="/laws/:id" element={<LawCaseDetail />} />
-        <Route path="/statutes/:statuteNumber" element={<StatuteDetailPage />} />
+        <Route
+          path="/statutes/:statuteNumber"
+          element={<StatuteDetailPage />}
+        />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/search-results" element={<SearchResultPage />} />
@@ -51,10 +55,10 @@ function App() {
           <Route path="case" element={<MyCase />} />
         </Route>
         <Route path="/admin" element={<AdminPage />} />
-        <Route path="/board/*" element={<BoardPage/>}>
-          <Route path="list" element={<BoardList/>}/>
-          <Route path="detail/:boardId" element={<BoardDetail/>}/>
-          <Route path="write" element={<BoardWrite />}/>
+        <Route path="/board/*" element={<BoardPage />}>
+          <Route path="list" element={<BoardList />} />
+          <Route path="detail/:boardId" element={<BoardDetail />} />
+          <Route path="write" element={<BoardWrite />} />
         </Route>
       </Route>
       <Route path="/plaint/1" element={<DefamatinoPage />} />
@@ -62,6 +66,7 @@ function App() {
       <Route path="/plaint/3" element={<InsultPage />} />
       <Route path="/plaint/edit/:id" element={<InsultEditPage />} />
       <Route path="mylawsuit/:type/:id" element={<PrintLawsuit />} />
+      <Route path="/*" element={<NotFound />} />
       {/* 다른 Route도 추가가능~ */}
     </Routes>
   );

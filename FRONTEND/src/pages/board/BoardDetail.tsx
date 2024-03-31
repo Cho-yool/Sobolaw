@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Divider, Row, Col, Form, Button } from "antd";
+import { Divider, Row, Col, Form, Button, Modal } from "antd";
 import type { BoardDetail, Comment } from "../../types/DataTypes";
 import { getBoard, deleteBoard } from "../../api/board";
 import { toInteger } from "lodash";
@@ -15,6 +15,7 @@ export default function BoardDetail() {
   const user = useSelector((state: RootState) => state.user);
   const { boardId } = useParams<{ boardId: string}>();
   const [boardDetail, setBoardDetail] = useState<BoardDetail>();
+  const [modal, setModal] = useState(0);
   const [comment, setComment] = useState<Comment[]>();
   const navigate = useNavigate();
 
@@ -56,10 +57,9 @@ export default function BoardDetail() {
   ));
 
   const deleteBoardDetail = async () => {
-    if(window.confirm("정말 삭제하시겠습니까?") && boardDetail?.boardId){
+    if(boardDetail?.boardId){
       await deleteBoard(boardDetail?.boardId);
-      window.alert('삭제되었습니다.')
-      navigate(`/board/list`);
+      setModal(2)
     }
   }
 
@@ -67,16 +67,17 @@ export default function BoardDetail() {
       <div className="pages">
         <div className={style["myinfo-box"]}>
           <div className={style["box1"]} style={{margin:`5rem`}}>
-            <div className={style["box-title"]} style={{textAlign:'center', fontSize:50}}>{boardDetail?.title}</div>
+            <div className={style["box-title"]} style={{textAlign:'center', fontSize:50, borderRadius:`2rem`}}>{boardDetail?.title}</div>
             <Row>
-              <Col span={23} style={{ margin: '1rem', textAlign:'right'}}> 작성자: {boardDetail?.name}</Col>
+              <Col span={23} style={{ margin: '1rem', textAlign:'right'}}>{boardDetail?.createdTime}</Col>
             </Row>
             <Row>
-              <Col span={23} style={{ margin: '1rem', textAlign:'right'}}> 작성 시간: {boardDetail?.createdTime}</Col>
+              <Col span={23} style={{ margin: '1rem', textAlign:'right', fontSize:'130%'}}> 조회수: {boardDetail?.hit}</Col>
             </Row>
             <Row> 
-              <Col span={23} style={{ margin: '1rem', textAlign:'right'}}> 조회수: {boardDetail?.hit}</Col>
+              <Col span={23} style={{ margin: '1rem', textAlign:'right', fontSize:'150%'}}> 작성자: {boardDetail?.name}</Col>
             </Row>
+            <Divider />
             <Row> 
               <Col span={23} style={{ margin: '3rem', fontSize:40, height:'30vh'}}>{boardDetail? lineText(boardDetail.content):""}</Col>
             </Row>
@@ -91,7 +92,7 @@ export default function BoardDetail() {
                   <Button type="primary" style={{'marginRight':'1rem'}} onClick={() => navigate(`/board/write`, {state: {boardDetail}})}>
                     수정
                   </Button>
-                  <Button type="primary" style={{'marginRight':'5rem'}} onClick={deleteBoardDetail}>
+                  <Button type="primary" style={{'marginRight':'5rem'}} onClick={() => setModal(1)}>
                     삭제
                   </Button>
                 </>
@@ -100,12 +101,36 @@ export default function BoardDetail() {
           </Form.Item>
           <div className={style["box1"]}>
             <Divider />
-            <BoardCard comment={comment}/>
+            <BoardCard comment={comment} />
             <Divider />
             <BoardComment boardId={boardDetail?.boardId}/>
           </div>
       
         </div>
+
+        <Modal
+          title="정말 삭제하시겠습니까?"
+          open={modal == 1}
+          onCancel={() => setModal(0)}
+          footer={[
+            <Button key="delete" type="primary" onClick={deleteBoardDetail}>
+              삭제  
+            </Button>,
+            <Button key="cancel" onClick={() => setModal(0)}>
+            취소
+          </Button>,
+          ]}/>
+
+          <Modal
+            title="삭제되었습니다"
+            open={modal == 2}
+            onCancel={() => setModal(0)}
+            afterClose={() => navigate('/board/list')}
+            footer={[
+              <Button key="submit" type="primary" onClick={() => setModal(0)}>
+                확인  
+              </Button>,
+            ]}/>
       </div>
   );
 }

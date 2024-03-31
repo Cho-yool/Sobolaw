@@ -149,17 +149,120 @@ async function postMyKeyword(accessToken: string, words: string[]) {
   );
 }
 
+// 파일 업로드 및 원본파일 이름 저장(한 장)
+async function postImage(accessToken: string, data: FormData) {
+  await http.post(`media/image`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+}
+
+// 변호사 전환(등업) 요청
+async function postApplyLawyer(accessToken: string, image: string) {
+  await http.post(
+    `${url}/certification/lawyer`,
+    { image },
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+}
+
 // 관리자용 API
 // 멤버 전체 리스트 조회
-async function getMemberList() {
-  const response = await http.get(`${url}/list`);
+async function getMemberList(accessToken: string) {
+  const response = await http.get(`${url}/list`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.data.data;
+}
+
+// 멤버 상세 조회
+async function getMemberDetail(accessToken: string, memberId: number) {
+  const response = await http.get(`${url}/${memberId}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.data.data;
+}
+
+// 멤버 정보 수정
+async function patchMemberDetail(
+  accessToken: string,
+  data: { name: string; email: string; role: string },
+  memberId: number
+) {
+  const response = await http.patch(`${url}/${memberId}`, data, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   return response.data.data;
 }
 
 // 전체 저장 판례 조회
-async function getPrecedentsList() {
-  const response = await http.get(`${url}/precedents/list`);
+async function getPrecedentsList(accessToken: string) {
+  const response = await http.get(`${url}/precedents/list`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   return response.data.data;
+}
+
+// 전체 관심 키워드 조회
+async function getKeywordList(accessToken: string) {
+  const response = await http.get(`${url}/keywords/list`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.data.data;
+}
+
+// 변호사 신청 리스트 조회
+async function getLawyerList(accessToken: string) {
+  const response = await http.get(`${url}/certification/lawyer`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.data.data;
+}
+
+// 변호사 신청글 상세 조회
+async function getLawyerDetail(accessToken: string, articleId: string) {
+  const response = await http.get(`${url}/certification/lawyer/${articleId}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.data.data;
+}
+
+// 변호사 등업 승인(??인데 멤버 정보 수정patch 써도 ㄱㅊ을 거 같아요)
+async function postApproveLawyer(accessToken: string, articleId: string) {
+  await http.post(`${url}/certification/lawyer/${articleId}/approve`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 }
 
 export {
@@ -174,4 +277,12 @@ export {
   deleteUser,
   delPrecedents,
   getPrecedentsList,
+  postImage,
+  getMemberDetail,
+  patchMemberDetail,
+  getKeywordList,
+  postApplyLawyer,
+  getLawyerList,
+  getLawyerDetail,
+  postApproveLawyer,
 };

@@ -1,10 +1,19 @@
-import React, { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 import Button from "antd/lib/button";
+import {
+  FormOutlined,
+  SaveOutlined,
+  CloseOutlined,
+  MailOutlined,
+} from "@ant-design/icons";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import style from "../../styles/papers/Tab.module.css";
 import { RootState } from "../../redux/store/store";
-import { getInsult } from "../../api/lawsuit";
+import { getInsult, postMail } from "../../api/lawsuit";
 import { InsultForm } from "../../types/DataTypes";
 import InsultPrint from "../../components/lawsuit/insult/InsultPrint";
 
@@ -41,13 +50,10 @@ const PrintLawsuit = () => {
     } else if (type === "Fraud") {
       setLawsuitType("사기");
     }
-  }, [type]);
-
-  useEffect(() => {
     if (insultData) {
       setFileName(insultData.title);
     }
-  }, [insultData]);
+  }, [type]);
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -55,26 +61,86 @@ const PrintLawsuit = () => {
     onAfterPrint: () => alert("파일 다운로드가 완료되었습니다"),
   });
 
+  const converToPdf = async (element: HTMLElement) => {
+    const canvas = await html2canvas(element);
+    const imageFile = canvas.toDataURL("image/png");
+    const doc = new jsPDF("p", "mm", "a4");
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+
+    doc.addImage(imageFile, "JPEG", 0, 0, pageWidth, pageHeight);
+    // doc.save("test.pdf")
+    // window.open(doc.output("bloburl"));
+    console.log(doc.output("bloburl"));
+    const pdf = new File(
+      [doc.output("blob")],
+      `${lawsuitType}죄 고소장_${fileName}`,
+      {
+        type: "application/pdf",
+      }
+    );
+    console.log(pdf);
+    const formData = new FormData();
+    formData.append("file", pdf);
+    formData.append("type", "pdf");
+    formData.append("name", "test");
+    console.log(formData);
+    return formData;
+  };
+
+  // const handleSendEmail = () => {
+  //   if (componentRef.current) {
+  //     const formData = converToPdf(componentRef.current);
+  //     console.log(formData);
+  //     postMail(formData, accessToken)
+  //       .then(() => {
+  //         console.log("됨!!!!!!!!!!");
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   }
+  // };
+
   return (
-    <>
-      <div>
-        <Button type="primary" onClick={handlePrint}>
-          프린트하기
-        </Button>
-        <Button
-          onClick={() => {
-            navigate("/mypage/papers");
-          }}
-        >
-          나가기
-        </Button>
-      </div>
-      {!loading && insultData && (
-        <div ref={componentRef}>
-          <InsultPrint insultData={insultData} />
+    <div>
+      <div className={style["container"]}>
+        <div className={style["container-mini"]}>
+          <div className={style["container-title"]}>
+            <FormOutlined /> {lawsuitType}죄 고소장:{fileName}
+          </div>
+          <Button className={style["container-button"]} onClick={handlePrint}>
+            <SaveOutlined /> 프린트하기
+          </Button>
+          <Button
+            className={style["container-button"]}
+            // onClick={handleSendEmail}
+          >
+            <MailOutlined /> 이메일로 보내기
+          </Button>
         </div>
-      )}
-    </>
+        <div className={style["container-mini"]}>
+          <Button
+            onClick={() => {
+              navigate("/mypage/papers");
+            }}
+          >
+            <CloseOutlined /> 나가기
+          </Button>
+        </div>
+      </div>
+
+      <div className={style["print-background"]}>
+        <div className={style["print-a4"]}>
+          {!loading && insultData && (
+            <div ref={componentRef}>
+              <InsultPrint insultData={insultData} />
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 
