@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UnlockTwoTone, LockTwoTone } from "@ant-design/icons"
-import { Table, Row, Col, Divider, Form, Button} from "antd";
+import { Table, Row, Col, Modal, Button } from "antd";
 import { BoardList } from "../../types/DataTypes";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
@@ -11,6 +12,7 @@ interface MyLawcaseTableProps {
 }
 
 export default function BoardTable({ boardList }: MyLawcaseTableProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const user = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
 
@@ -58,14 +60,12 @@ export default function BoardTable({ boardList }: MyLawcaseTableProps) {
 
   const columnsNarrow = [
     {
-      title: "번호",
-      dataIndex: "key",
-      key: "key",
-    },
-    {
       title: "공개",
       dataIndex: "public",
       key: "public",
+      render: (text: any, record: any) => {
+        return record.public ? <UnlockTwoTone /> : <LockTwoTone />;
+      },
     },
     {
       title: "제목",
@@ -80,15 +80,16 @@ export default function BoardTable({ boardList }: MyLawcaseTableProps) {
   ];
 
   const checkPublic = (board: BoardList) => {
-    if(!board.public && user.role != `ROLE_LAWYER`){
-      alert('전문가에게만 공개된 상담 입니다')
+    if(board.memberId != user.userId && (!board.public && user.role != `ROLE_LAWYER`)){
+      setIsModalOpen(true);
     }else{
       navigate(`/board/detail/${board.boardId}`)
     }
   }
 
   return (
-      <Row style={{margin:`5rem`}}>
+    <>
+      <Row style={{margin:`5rem`, marginTop:`0rem`}}>
         <Col xs={0} sm={0} md={24} lg={24}>
           <div className={style["table"]}>
             <Table columns={columnsWide} dataSource={boardList} onRow={(record) => ({onClick: () => {checkPublic(record)}})} />
@@ -98,5 +99,15 @@ export default function BoardTable({ boardList }: MyLawcaseTableProps) {
           <Table columns={columnsNarrow} dataSource={boardList} onRow={(record) => ({onClick: () => {checkPublic(record)}})}/>
         </Col>
       </Row>
+      <Modal
+        title="전문가에게만 공개된 상담 입니다"
+        open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
+        footer={[
+          <Button key="submit" type="primary" onClick={() => setIsModalOpen(false)}>
+            확인  
+          </Button>,
+        ]}/>
+      </>
   );
 }

@@ -22,6 +22,10 @@
   background-color: #bf8438;
 }
 
+.tab-menu__info {
+  font-size: 1rem;
+}
+
 .tab-menu__summary {
   position: relative;
 }
@@ -45,6 +49,7 @@
 
 .tab-menu__title {
   font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .color-select {
@@ -69,4 +74,76 @@
 
 .edit-mode {
   cursor: url(../../assets/mouseCursor.png), pointer;
+}
+
+@media (max-width: 850px) {
+  .block {
+    display: none;
+  }
+
+  .tab-menu__title {
+    font-size: 1.2rem;
+  }
+
+  .content-box__contents {
+    font-size: 0.8rem;
+    line-height: 1.8rem;
+  }
+
+  .tab-menu__info {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .content-box__contents {
+    font-size: 0.6rem;
+    line-height: 1.6rem;
+    margin: 0 0.5rem;
+  }
+
+  .content-box__contents > span {
+    height: fit-content;
+    line-height: 1rem;
+  }
+  .tab-menu__summary__btn {
+    top: -4rem;
+  }
+
+  .tab-menu__summary__btn > p {
+    font-size: 0.9rem;
+  }
+
+  .tab {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .content-box__contents {
+    font-size: 0.5rem;
+    line-height: 1.4rem;
+  }
+
+  .content-box__contents > span {
+    height: fit-content;
+    line-height: 1rem;
+  }
+
+  .tab {
+    border-radius: 0;
+    padding: 1rem 0.5rem;
+  }
+
+  .tab-menu__title {
+    font-size: 1rem;
+  }
+
+  .tab-menu__info {
+    font-size: 0.7rem;
+  }
+
+  .tab-menu__summary__btn > p {
+    font-size: 0.7rem;
+  }
 }
