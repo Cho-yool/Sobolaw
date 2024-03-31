@@ -49,7 +49,7 @@ async function getHitStatuteList() {
 }
 
 // 뉴스 목록 조회
-async function getNewsList() {
+async function getNewsList(searchKeyword: string) {
     const response = await http.get(`/news/search/${searchKeyword}`);
     return response.data;
 }
