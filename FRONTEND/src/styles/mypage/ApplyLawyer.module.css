@@ -30,10 +30,11 @@
 }
 
 .image-ratio {
-  aspect-ratio: 1/1;
+  aspect-ratio: auto;
   object-fit: cover;
   overflow: hidden;
   position: relative;
   border-radius: 10px;
   margin: auto;
+  max-width: 100%;
 }

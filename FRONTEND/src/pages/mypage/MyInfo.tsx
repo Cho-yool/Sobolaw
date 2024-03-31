@@ -147,7 +147,8 @@ export default function MyInfo() {
               <div>
                 <SafetyCertificateTwoTone twoToneColor="#de9159" /> 전문가 여부:{" "}
               </div>
-              <div>{userInfo?.role}</div>
+              {/* 아래는 개발용코드(수정해야할 때 사용) */}
+              {/* <div>{userInfo?.role}</div>
               <Button
                 shape="round"
                 type="primary"
@@ -156,7 +157,7 @@ export default function MyInfo() {
                 onClick={showApplyModal}
               >
                 변호사 전환 신청하기
-              </Button>
+              </Button> */}
               <div>
                 {" "}
                 {userInfo?.role === "ROLE_USER" ? (

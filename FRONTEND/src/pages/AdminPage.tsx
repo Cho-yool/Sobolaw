@@ -68,7 +68,7 @@ export default function AdminPage() {
         >
           <div
             style={{
-              border: "2px solid purple",
+              border: "2px solid #bcbcbc",
               borderRadius: "10px",
               overflow: "hidden",
               padding: "1rem",
@@ -107,7 +107,7 @@ export default function AdminPage() {
           <div
             style={{
               width: "75%",
-              border: "2px solid purple",
+              border: "2px solid #bcbcbc",
               backgroundColor: "white",
               borderRadius: "10px",
               marginLeft: "1rem",

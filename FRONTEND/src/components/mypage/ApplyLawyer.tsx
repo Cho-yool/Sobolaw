@@ -50,15 +50,15 @@ export default function ApplyLawyer({ onUpdate }: { onUpdate: () => void }) {
   const onSubmit = async () => {
     if (fileName !== undefined) {
       formData.append("image", fileName.file);
-      for (const key of formData.keys()) {
-        console.log(key, ":", formData.get(key));
-      }
+      // for (const key of formData.keys()) {
+      //   console.log(key, ":", formData.get(key));
+      // }
       try {
         const res = await postImage(accessToken, formData);
-        console.log(res);
         const imgUrl = res;
-        await postApplyLawyer(accessToken, imgUrl);
-        onUpdate();
+        formData.append("belongDocumentPath", imgUrl);
+        await postApplyLawyer(accessToken, formData);
+        onUpdate;
       } catch (error) {
         alert("사진을 다시 확인해주세요");
       }
@@ -114,10 +114,13 @@ export default function ApplyLawyer({ onUpdate }: { onUpdate: () => void }) {
                 id="file"
                 onChange={fileInputHandler}
                 disabled={fileName ? true : false}
-                style={{ display: "none" }}
+                style={{ display: "none", cursor: "pointer" }}
               />
-
-              <label htmlFor="file" className="AttachmentButton">
+              <label
+                htmlFor="file"
+                className="AttachmentButton"
+                style={{ cursor: "pointer", margin: "auto" }}
+              >
                 🔗 사진 업로드하기
               </label>
             </div>
