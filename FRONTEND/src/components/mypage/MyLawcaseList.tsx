@@ -30,7 +30,6 @@ export default function MyLawcaseTable({
     setSelectedItemId(id);
     setIsModalOpen(true);
   };
-  console.log(lawsuitList);
 
   const handleOk = async () => {
     if (selectedItemId !== null && lawsuitList) {
