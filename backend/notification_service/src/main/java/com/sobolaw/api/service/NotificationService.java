@@ -36,7 +36,7 @@ public class NotificationService {
                     .setBody(message.getBody())
                     .build();
             com.google.firebase.messaging.Message msg = com.google.firebase.messaging.Message.builder()
-                    .setToken(message.getToken())
+                    .setToken(fcmToken.getToken())
                     .setNotification(notification)
                     .build();
 
