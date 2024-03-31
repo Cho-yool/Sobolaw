@@ -1,8 +1,8 @@
 package com.sobolaw.api.statute.service;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
-import co.elastic.clients.elasticsearch.core.search.Hit;
 import com.sobolaw.api.statute.document.StatuteDocument;
 import com.sobolaw.api.statute.document.StatuteTextDocument;
 import com.sobolaw.api.statute.dto.StatuteDTO;
@@ -11,7 +11,6 @@ import com.sobolaw.api.statute.entity.Statute;
 import com.sobolaw.api.statute.entity.StatuteText;
 import com.sobolaw.api.statute.repository.StatuteRepository;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,12 +27,12 @@ public class StatuteService {
     private final StatuteRepository statuteRepository;
     private final ElasticsearchClient elasticsearchClient;
 
-    public List<StatuteDTO> searchByKeyword(String searchKeyword) throws Exception {
+    public List<StatuteDTO> searchByKeyword(String searchKeyword, int pageNumber) throws Exception {
         // 첫 번째 단계: 검색 키워드로 statuteNumbers 검색
         Set<Long> statuteNumbers = searchAndGetStatuteNumbers(searchKeyword);
 
         // 두 번째 단계: 얻은 statuteNumbers로 Statute와 StatuteText 정보 조회
-        return fetchStatutesWithTexts(statuteNumbers);
+        return fetchStatutesWithTexts(statuteNumbers, pageNumber);
     }
 
     public Set<Long> searchAndGetStatuteNumbers(String searchKeyword) throws Exception {
@@ -80,61 +79,56 @@ public class StatuteService {
     }
 
 
-    public List<StatuteDTO> fetchStatutesWithTexts(Set<Long> statuteNumbers) throws IOException {
-        List<StatuteDTO> statutes = new ArrayList<>();
+    public List<StatuteDTO> fetchStatutesWithTexts(Set<Long> statuteNumbers, int pageNumber) throws IOException {
 
-        for (Long statuteNumber : statuteNumbers) {
-            // statute 정보 가져오기
-            SearchResponse<StatuteDocument> statuteResponse = elasticsearchClient.search(s -> s
-                    .index("statute_index")
-                    .query(q -> q
-                        .term(t -> t
-                            .field("statute_number")
-                            .value(statuteNumber.toString())
+        int pageSize = 10; // 기본 10개씩
+
+        List<Query> shouldQueries = statuteNumbers.stream()
+                .map(statuteNumber ->
+                        Query.of(q -> q
+                                .term(t -> t
+                                        .field("statute_number")
+                                        .value(statuteNumber.toString())
+                                )
                         )
-                    ),
-                StatuteDocument.class
-            );
+                ).collect(Collectors.toList());
 
-            StatuteDocument statuteDocument = statuteResponse.hits().hits().get(0).source();
-
-            // 관련 statute_text 문서들 가져오기
-            SearchResponse<StatuteTextDocument> statuteTextResponse = elasticsearchClient.search(s -> s
-                    .index("statutetext_index")
-                    .query(q -> q
-                        .term(t -> t
-                            .field("statute_number")
-                            .value(statuteNumber.toString())
+        // statute 정보 가져오기
+        SearchResponse<StatuteDocument> statuteResponse = elasticsearchClient.search(s -> s
+                .index("statute_index")
+                .from((pageNumber-1) * pageSize)
+                .size(pageSize)
+                .query(q -> q
+                        .bool(b -> b
+                                .should(shouldQueries)
                         )
-                    ),
-                StatuteTextDocument.class
-            );
+                ),
+            StatuteDocument.class
+        );
 
-            List<StatuteTextDocument> statuteTextDocuments = statuteTextResponse.hits().hits().stream()
-                .map(Hit::source)
+        // 검색 결과 총 개수
+        long totalHits = statuteResponse.hits().total().value();
+
+        List<StatuteDTO> statutes = statuteResponse.hits().hits().stream()
+                .map(hit -> {
+                    StatuteDocument statuteDocument = hit.source();
+                    StatuteDTO statuteDTO = new StatuteDTO();
+                    if (statuteDocument != null) {
+                        statuteDTO.setStatuteNumber(statuteDocument.getStatuteNumber());
+                        statuteDTO.setStatuteName(statuteDocument.getStatuteName());
+                        statuteDTO.setAmendmentType(statuteDocument.getAmendmentType());
+                        statuteDTO.setDepartment(statuteDocument.getDepartment());
+                        statuteDTO.setEnforcementDate(statuteDocument.getEnforcementDate());
+                        statuteDTO.setPublicationDate(statuteDocument.getPublicationDate());
+                        statuteDTO.setPublicationNumber(statuteDocument.getPublicationNumber());
+                        statuteDTO.setStatuteType(statuteDocument.getStatuteType());
+                        statuteDTO.setHit(statuteDocument.getHit());
+                        statuteDTO.setTotal(totalHits);
+                    }
+                    return statuteDTO;
+                })
                 .collect(Collectors.toList());
 
-            // StatuteTextDocument 리스트를 StatuteTextDTO 리스트로 변환
-            List<StatuteTextDTO> statuteTexts = statuteTextDocuments.stream()
-                .map(this::DocumentToStatuteTextDTO)
-                .collect(Collectors.toList());
-
-            // StatuteDTO 구성
-            StatuteDTO statuteDTO = new StatuteDTO();
-            if (statuteDocument != null) {
-                statuteDTO.setStatuteNumber(statuteDocument.getStatuteNumber());
-                statuteDTO.setStatuteName(statuteDocument.getStatuteName());
-                statuteDTO.setAmendmentType(statuteDocument.getAmendmentType());
-                statuteDTO.setDepartment(statuteDocument.getDepartment());
-                statuteDTO.setEnforcementDate(statuteDocument.getEnforcementDate());
-                statuteDTO.setPublicationDate(statuteDocument.getPublicationDate());
-                statuteDTO.setPublicationNumber(statuteDocument.getPublicationNumber());
-                statuteDTO.setStatuteType(statuteDocument.getStatuteType());
-                statuteDTO.setHit(statuteDocument.getHit());
-                statuteDTO.setStatuteTexts(statuteTexts);
-            }
-            statutes.add(statuteDTO);
-        }
         return statutes;
     }
 
