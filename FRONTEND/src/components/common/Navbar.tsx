@@ -10,6 +10,7 @@ import {
   Row,
   Col,
   ConfigProvider,
+  Flex,
 } from "antd";
 import type { MenuProps } from "antd";
 import {
@@ -89,8 +90,7 @@ const ResponsiveNav = ({
             headerBg: "#ffffff",
           },
         },
-      }}
-    >
+      }}>
       {/* 웹사이즈 네브바 위치 수정해야함 */}
       {/* <Layout> */}
       <Header style={{ padding: 0, height: "auto" }}>
@@ -103,8 +103,7 @@ const ResponsiveNav = ({
               marginLeft: "2rem",
               display: "flex",
               alignItems: "center",
-            }}
-          >
+            }}>
             <img
               src={logo}
               alt="로고"
@@ -141,8 +140,7 @@ const ResponsiveNav = ({
                   style={{ marginRight: "10px" }}
                   onClick={() => {
                     navigate("/login");
-                  }}
-                >
+                  }}>
                   로그인
                 </Button>
               ) : (
@@ -150,8 +148,7 @@ const ResponsiveNav = ({
                   type="primary"
                   shape="round"
                   style={{ marginRight: "10px" }}
-                  onClick={handlelogout}
-                >
+                  onClick={handlelogout}>
                   로그아웃
                 </Button>
               )}
@@ -167,8 +164,7 @@ const ResponsiveNav = ({
             xs={2}
             sm={2}
             md={0}
-            style={{ paddingRight: "30px", marginRight: "15px" }}
-          >
+            style={{ paddingRight: "30px", marginRight: "15px" }}>
             <Button type="primary" onClick={showDrawer}>
               <MenuOutlined />
             </Button>
@@ -180,8 +176,7 @@ const ResponsiveNav = ({
           placement="right"
           onClick={onClose}
           onClose={onClose}
-          open={visible}
-        >
+          open={visible}>
           <div
             style={{
               display: "flex",
@@ -191,35 +186,31 @@ const ResponsiveNav = ({
               height: "8rem",
               backgroundColor: "#fffbf0",
               color: "644419",
-            }}
-          >
+            }}>
             {user.accessToken === "" ? (
-              <div>
+              <Flex vertical gap={15}>
                 로그인이 필요합니다
                 <Button
                   type="primary"
                   shape="round"
-                  style={{ marginRight: "10px", marginTop: "1rem" }}
+                  style={{ marginRight: "10px" }}
                   onClick={() => {
                     navigate("/login");
-                  }}
-                >
+                  }}>
                   로그인
                 </Button>
-              </div>
+              </Flex>
             ) : (
-              <div>
+              <Flex vertical gap={15}>
                 {user.nickname}님! 안녕하세요
                 <Button
                   type="primary"
                   shape="round"
                   style={{ marginRight: "10px" }}
-                  onClick={handlelogout}
-                >
+                  onClick={handlelogout}>
                   로그아웃
                 </Button>
-                <Button onClick={handletoken}>리이슈토큰</Button>
-              </div>
+              </Flex>
             )}
           </div>
 
@@ -229,8 +220,7 @@ const ResponsiveNav = ({
                 display: "flex",
                 justifyContent: "space-around",
                 margin: "1.5rem",
-              }}
-            >
+              }}>
               <div
                 style={{
                   display: "flex",
@@ -241,8 +231,7 @@ const ResponsiveNav = ({
                 }}
                 onClick={() => {
                   navigate("/mypage/user");
-                }}
-              >
+                }}>
                 <SmileTwoTone
                   style={{ fontSize: "3rem" }}
                   twoToneColor="#BF8438"
@@ -259,8 +248,7 @@ const ResponsiveNav = ({
                 }}
                 onClick={() => {
                   navigate("/mypage/papers");
-                }}
-              >
+                }}>
                 <EditTwoTone
                   style={{ fontSize: "3rem" }}
                   twoToneColor="#BF8438"
@@ -277,8 +265,7 @@ const ResponsiveNav = ({
                 }}
                 onClick={() => {
                   navigate("/mypage/case");
-                }}
-              >
+                }}>
                 <CopyTwoTone
                   style={{ fontSize: "3rem" }}
                   twoToneColor="#BF8438"
@@ -291,8 +278,7 @@ const ResponsiveNav = ({
           <Menu
             mode="vertical"
             items={items}
-            defaultSelectedKeys={["1"]}
-          ></Menu>
+            defaultSelectedKeys={["1"]}></Menu>
         </Drawer>
       </Header>
       {/* </Layout> */}
