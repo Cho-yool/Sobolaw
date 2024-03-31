@@ -80,7 +80,7 @@ export default function BoardTable({ boardList }: MyLawcaseTableProps) {
   ];
 
   const checkPublic = (board: BoardList) => {
-    if(!board.public && user.role != `ROLE_LAWYER`){
+    if(board.memberId != user.userId && (!board.public && user.role != `ROLE_LAWYER`)){
       alert('전문가에게만 공개된 상담 입니다')
     }else{
       navigate(`/board/detail/${board.boardId}`)
