@@ -1,0 +1,78 @@
+.select-box {
+  width: 300px;
+  height: auto;
+  border-radius: 20px;
+  background-color: rgb(255, 209, 140, 0.5);
+  padding: 15px;
+  margin-top: 5rem;
+  text-align: center;
+  align-items: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.box3-cards {
+  display: flex;
+  flex-direction: row;
+}
+
+.box3-cards-content {
+  display: flex;
+  justify-content: space-between;
+  margin: auto;
+  gap: 5px;
+}
+
+.image-card {
+  flex: 1 0 auto; /* 자식 요소들이 부모 요소의 너비에 맞게 가로로 정렬되도록 설정 */
+  border-radius: 20px;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  position: relative;
+  display: block;
+  width: 20%;
+}
+
+.image-card:hover {
+  cursor: pointer;
+}
+
+.image-detail {
+  object-fit: cover;
+  position: relative;
+  border-radius: 20px;
+  transition: all 0.2s ease-out;
+  opacity: 1;
+  width: 100%;
+}
+
+.image-detail:hover {
+  transform: scale(1.1);
+}
+
+.image-card-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex; /* 텍스트를 수직 및 수평 가운데로 정렬하기 위해 사용 */
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  background-color: rgba(34, 34, 34, 0.5); /* 배경 색상과 투명도 조절 */
+  z-index: 5;
+  padding: 20px;
+  opacity: 1;
+  transition: opacity 0.2s ease; /* 투명도 전환 효과 추가 */
+}
+
+/* .image-card에 hover될 때 .image-card-text의 투명도를 1로 설정하여 텍스트 표시 */
+.image-card:hover .image-detail {
+  transform: scale(1.1);
+}
+
+#image-card-title {
+  font-size: 24px;
+  color: white;
+}

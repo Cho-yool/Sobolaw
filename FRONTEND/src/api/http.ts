@@ -62,6 +62,9 @@ function notificationAxios() {
   return axios.create({
     // baseURL: "https://" + BASEURL,
     baseURL: "https://" + BASEURL + "notification-service/",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
   })
 };
 

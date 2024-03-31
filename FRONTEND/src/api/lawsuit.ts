@@ -84,6 +84,21 @@ async function postDefamation(memberId: number, data: DefamationForm) {
   await http.post(`${url}/defamations`, data);
 }
 
+// 유저에게 소장 메일 전송
+async function postMail(data: FormData, accessToken: string) {
+  const response = await http.post(
+    `mail/send`,
+    { data },
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+  return response;
+}
+
 // 관리자용
 // 작성된 소장 전체 조회
 async function getLawsuitAll() {
@@ -100,4 +115,5 @@ export {
   patchInsult,
   deleteInsult,
   getLawsuitAll,
+  postMail,
 };

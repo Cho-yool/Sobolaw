@@ -43,7 +43,7 @@ function LoginPage() {
           // requestPermission 함수가 Promise를 반환하므로, then 함수를 사용하여 결과를 받아와야 합니다.
           requestPermission()
             .then((fcmToken) => {
-              console.log(fcmToken);
+              // console.log(fcmToken);
               // 토큰을 저장하는 함수 호출
               postTokens(res.memberId, fcmToken)
                 .then(() => {

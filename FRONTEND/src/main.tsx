@@ -23,7 +23,6 @@ const theme = {
       inkBarColor: "#E0B88A",
       titleFontSize: "20px",
       horizontalMargin: "10px 0 30px 0",
-
       algorithm: true,
     },
   },
