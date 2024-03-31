@@ -1,7 +1,7 @@
 # 빌드 스테이지
 FROM node:20.10.0-alpine as build
 WORKDIR /app
-COPY package*.json ./
+COPY package*.json yarn.lock ./
 RUN yarn install
 COPY . .
 ENV NODE_OPTIONS="--max-old-space-size=1024"
