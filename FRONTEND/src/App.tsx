@@ -22,8 +22,7 @@ import InsultEditPage from "./pages/lawsuit/insultEdit";
 import SearchHitPage from "./pages/keywordsearch/SearchHitPage";
 import StatuteDetailPage from "./pages/keywordsearch/StatuteDetailPage";
 import AdminPage from "./pages/AdminPage";
-
-import ApplyLawyer from "./components/mypage/ApplyLawyer.tsx";
+import NotFound from "./pages/NotFound.tsx";
 
 function App() {
   return (
@@ -55,7 +54,7 @@ function App() {
       <Route path="/plaint/3" element={<InsultPage />} />
       <Route path="/plaint/edit/:id" element={<InsultEditPage />} />
       <Route path="mylawsuit/:type/:id" element={<PrintLawsuit />} />
-      <Route path="test" element={<ApplyLawyer />} />
+      <Route path="/*" element={<NotFound />} />
       {/* 다른 Route도 추가가능~ */}
     </Routes>
   );

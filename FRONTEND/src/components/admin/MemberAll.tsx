@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { getMemberList } from "../../api/members";
-// import { RootState } from "../../redux/store/store";
+import { RootState } from "../../redux/store/store";
 import { MemberList } from "../../types/DataTypes";
 
 export default function MemberAll() {
-  // const user = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.user);
   const [memberList, setMemberList] = useState<MemberList[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getMemberList();
+      const response = await getMemberList(user.accessToken);
       setMemberList(response);
     };
     fetchData();

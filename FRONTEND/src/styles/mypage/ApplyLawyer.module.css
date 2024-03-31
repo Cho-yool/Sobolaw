@@ -4,15 +4,6 @@
   padding: 1rem;
 }
 
-.title {
-  font-size: 2rem;
-  font-weight: bolder;
-  color: #c08600;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-bottom: 2rem;
-}
-
 .semi-title {
   font-size: 1.5rem;
   padding-bottom: 2rem;
@@ -21,7 +12,9 @@
 
 .input-photo {
   border: 1px solid #bcbcbc;
-  width: 500px;
+  text-align: center;
+  align-items: center;
+  width: 400px;
   height: 300px;
   border-radius: 20px;
 }

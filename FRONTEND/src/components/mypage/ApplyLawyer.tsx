@@ -1,9 +1,22 @@
+// 순서:
+// 1. 사진 업로드시 백에 요청보내서 DB에 저장하는 동시에 그 저장된 url 받기
+// 2. url로 다시 저장 날려주기
+
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Button } from "antd";
 import { EditOutlined, CloseOutlined } from "@ant-design/icons";
+import { RootState } from "../../redux/store/store";
 import style from "../../styles/mypage/ApplyLawyer.module.css";
+import { postImage, postApplyLawyer } from "../../api/members";
 
-export default function ApplyLawyer() {
+type UploadImage = {
+  file: File;
+  type: string;
+};
+
+export default function ApplyLawyer({ onUpdate }: { onUpdate: () => void }) {
+  const accessToken = useSelector((state: RootState) => state.user.accessToken);
   const [fileName, setFileName] = useState<UploadImage | undefined>();
   const [previewURL, setPreviewUrl] = useState<string | null>("dd");
 
@@ -11,7 +24,6 @@ export default function ApplyLawyer() {
     if (fileName?.file) {
       const fileURL = URL.createObjectURL(fileName.file);
       setPreviewUrl(fileURL);
-
       return () => {
         URL.revokeObjectURL(fileURL);
       };
@@ -34,9 +46,26 @@ export default function ApplyLawyer() {
     setFileName(undefined);
   };
 
+  const formData = new FormData();
+  const onSubmit = async () => {
+    if (fileName !== undefined) {
+      formData.append("file", fileName.file);
+      const response = await postImage(accessToken, formData);
+      console.log(response);
+      // postApplyLawyer(accessToken, response)
+      //   .then(() => {
+      //     onUpdate();
+      //   })
+      //   .catch(() => {
+      //     alert("사진을 다시 확인해주세요");
+      //   });
+    } else {
+      alert("사진을 등록해주세요ㅠㅠ");
+    }
+  };
+
   return (
     <div className={style["container"]}>
-      <div className={style["title"]}>변호사 신청하기</div>
       <div className={style["semi-title"]}>자격증 사진 등록</div>
       {fileName ? (
         <div className={style["input-photo"]}>
@@ -93,7 +122,9 @@ export default function ApplyLawyer() {
         </>
       )}
 
-      <Button type="primary">제출하기</Button>
+      <Button type="primary" onClick={onSubmit}>
+        제출하기
+      </Button>
     </div>
   );
 }

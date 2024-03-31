@@ -70,30 +70,38 @@ const PrintLawsuit = () => {
     const pageHeight = doc.internal.pageSize.getHeight();
 
     doc.addImage(imageFile, "JPEG", 0, 0, pageWidth, pageHeight);
-
     // doc.save("test.pdf")
-
-    window.open(doc.output("bloburl"));
-
-    const pdf = new File([doc.output("blob")], "test.pdf", {
-      type: "application/pdf",
-    });
-
+    // window.open(doc.output("bloburl"));
+    console.log(doc.output("bloburl"));
+    const pdf = new File(
+      [doc.output("blob")],
+      `${lawsuitType}죄 고소장_${fileName}`,
+      {
+        type: "application/pdf",
+      }
+    );
+    console.log(pdf);
     const formData = new FormData();
     formData.append("file", pdf);
     formData.append("type", "pdf");
     formData.append("name", "test");
-
+    console.log(formData);
     return formData;
   };
 
-  const handleSendEmail = () => {
-    if (componentRef.current) {
-      const formData = converToPdf(componentRef.current);
-      console.log(formData);
-      postMail(formData, accessToken);
-    }
-  };
+  // const handleSendEmail = () => {
+  //   if (componentRef.current) {
+  //     const formData = converToPdf(componentRef.current);
+  //     console.log(formData);
+  //     postMail(formData, accessToken)
+  //       .then(() => {
+  //         console.log("됨!!!!!!!!!!");
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   }
+  // };
 
   return (
     <div>
@@ -107,7 +115,7 @@ const PrintLawsuit = () => {
           </Button>
           <Button
             className={style["container-button"]}
-            onClick={handleSendEmail}
+            // onClick={handleSendEmail}
           >
             <MailOutlined /> 이메일로 보내기
           </Button>

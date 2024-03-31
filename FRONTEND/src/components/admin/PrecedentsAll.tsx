@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { getPrecedentsList } from "../../api/members";
-// import { RootState } from "../../redux/store/store";
+import { RootState } from "../../redux/store/store";
 import { MemberList } from "../../types/DataTypes";
 
 export default function PrecedentsAll() {
-  // const user = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.user);
   const [precedentsList, setPrecedentsList] = useState<MemberList[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getPrecedentsList();
+      const response = await getPrecedentsList(user.accessToken);
       setPrecedentsList(response);
     };
     fetchData();
