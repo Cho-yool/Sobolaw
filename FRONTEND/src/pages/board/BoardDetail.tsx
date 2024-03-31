@@ -67,16 +67,17 @@ export default function BoardDetail() {
       <div className="pages">
         <div className={style["myinfo-box"]}>
           <div className={style["box1"]} style={{margin:`5rem`}}>
-            <div className={style["box-title"]} style={{textAlign:'center', fontSize:50}}>{boardDetail?.title}</div>
+            <div className={style["box-title"]} style={{textAlign:'center', fontSize:50, borderRadius:`2rem`}}>{boardDetail?.title}</div>
             <Row>
-              <Col span={23} style={{ margin: '1rem', textAlign:'right'}}> 작성자: {boardDetail?.name}</Col>
+              <Col span={23} style={{ margin: '1rem', textAlign:'right'}}>{boardDetail?.createdTime}</Col>
             </Row>
             <Row>
-              <Col span={23} style={{ margin: '1rem', textAlign:'right'}}> 작성 시간: {boardDetail?.createdTime}</Col>
+              <Col span={23} style={{ margin: '1rem', textAlign:'right', fontSize:'130%'}}> 조회수: {boardDetail?.hit}</Col>
             </Row>
             <Row> 
-              <Col span={23} style={{ margin: '1rem', textAlign:'right'}}> 조회수: {boardDetail?.hit}</Col>
+              <Col span={23} style={{ margin: '1rem', textAlign:'right', fontSize:'150%'}}> 작성자: {boardDetail?.name}</Col>
             </Row>
+            <Divider />
             <Row> 
               <Col span={23} style={{ margin: '3rem', fontSize:40, height:'30vh'}}>{boardDetail? lineText(boardDetail.content):""}</Col>
             </Row>
@@ -100,7 +101,7 @@ export default function BoardDetail() {
           </Form.Item>
           <div className={style["box1"]}>
             <Divider />
-            <BoardCard comment={comment}/>
+            <BoardCard comment={comment} />
             <Divider />
             <BoardComment boardId={boardDetail?.boardId}/>
           </div>

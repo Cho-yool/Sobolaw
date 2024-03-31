@@ -57,7 +57,7 @@ export default function BoardWrite() {
   return (
     <div className="pages">
       <div className={style["mypaper-box"]}>
-        <Col style={{margin:`5rem`}}>
+        <Col style={{margin:`5rem`, padding:`2rem`, borderRadius:`1rem`, backgroundColor:'#F9F5DB', border:'2px solid #AFAC52'}} >
 
           <Form.Item label="공개 범위">
             <Radio.Group name='public' value={formData.public ? "true" : "false"} onChange={handleInputChange} >

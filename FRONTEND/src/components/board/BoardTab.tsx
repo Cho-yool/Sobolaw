@@ -32,7 +32,7 @@ export default function BoardTab() {
             level={2}
             style={{ color: "#644419", textAlign: "center"}}
           >
-            다른 사용자들에게 조언을 받아 법률 고민을 해결해 보세요!
+            전문가의 조언을 받아 법률 고민을 해결해 보세요!
           </Title>
           <div style={{ textAlign: "center" }}>변호사만 답변 가능하도록 공개범위를 설정할 수 있습니다</div>  
         </div>

@@ -58,14 +58,12 @@ export default function BoardTable({ boardList }: MyLawcaseTableProps) {
 
   const columnsNarrow = [
     {
-      title: "번호",
-      dataIndex: "key",
-      key: "key",
-    },
-    {
       title: "공개",
       dataIndex: "public",
       key: "public",
+      render: (text: any, record: any) => {
+        return record.public ? <UnlockTwoTone /> : <LockTwoTone />;
+      },
     },
     {
       title: "제목",
@@ -88,7 +86,7 @@ export default function BoardTable({ boardList }: MyLawcaseTableProps) {
   }
 
   return (
-      <Row style={{margin:`5rem`}}>
+      <Row style={{margin:`5rem`, marginTop:`0rem`}}>
         <Col xs={0} sm={0} md={24} lg={24}>
           <div className={style["table"]}>
             <Table columns={columnsWide} dataSource={boardList} onRow={(record) => ({onClick: () => {checkPublic(record)}})} />
