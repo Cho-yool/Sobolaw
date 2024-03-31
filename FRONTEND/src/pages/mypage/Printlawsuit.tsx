@@ -83,7 +83,7 @@ const PrintLawsuit = () => {
     console.log(pdf);
     const formData = new FormData();
     formData.append("file", pdf);
-    formData.append("type", "pdf");
+    // formData.append("type", "pdf");
     // formData.append("name", "test");
     console.log(typeof formData);
     return formData;
