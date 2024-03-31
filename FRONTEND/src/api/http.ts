@@ -56,21 +56,25 @@ function recommendAxios() {
   });
 }
 
+// https://j10a604.p.ssafy.io/api/notification-service/swagger-ui.html
+// 종범 파트
 function notificationAxios() {
   return axios.create({
     // baseURL: "https://" + BASEURL,
     baseURL: "https://" + BASEURL + "notification-service/",
+  })
+};
+
+// https://j10a604.p.ssafy.io/api/board-service/swagger-ui.html
+// 종범 파트
+function boardAxios() {
+  return axios.create({
+    // baseURL: "https://" + BASEURL,
+    baseURL: "https://" + BASEURL + "board-service/",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
     },
   });
 }
 
-export {
-  mainAxios,
-  userAxios,
-  lawAxios,
-  recommendAxios,
-  localuserAxios,
-  notificationAxios,
-};
+export { mainAxios, userAxios, lawAxios, recommendAxios, localuserAxios, notificationAxios, boardAxios };

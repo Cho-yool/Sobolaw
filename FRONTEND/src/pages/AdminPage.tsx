@@ -56,7 +56,7 @@ export default function AdminPage() {
     <div
       style={{ minHeight: "100vh", marginBottom: "10px", paddingBlock: "6rem" }}
     >
-      {user.auth === "ADMIN" ? (
+      {user.auth === "ROLE_ADMIN" ? (
         <div
           style={{
             display: "flex",

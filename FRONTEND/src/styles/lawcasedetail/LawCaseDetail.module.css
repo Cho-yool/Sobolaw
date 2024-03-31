@@ -25,3 +25,17 @@
   right: 0;
   top: 0;
 }
+
+.edit-control {
+  position: fixed;
+  right: 5%;
+  top: 10%;
+  z-index: 10;
+  cursor: pointer;
+  width: 5rem;
+  height: 2rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #eaa854;
+  color: white;
+}
