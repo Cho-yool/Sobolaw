@@ -17,11 +17,7 @@ const SoboroNewsListPage: React.FC = () => {
       const response = await getNewsList(keyword);
       setNewsList(response.data);
     } catch (error) {
-<<<<<<< HEAD
-      console.error('뉴스 목록 조회 오류: ', error);
-=======
       console.error('뉴스 목록 조회 오류:', error);
->>>>>>> 40734387e00cc5dbdb0999227160f9ec3f201c29
     }
   };
 
