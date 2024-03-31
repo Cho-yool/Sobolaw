@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Form, Input, Button, Col} from "antd";
+import { Form, Input, Button, Col, Modal} from "antd";
 import { registerComment } from "../../api/board";
 import { Comment } from "../../types/DataTypes";
 import { useSelector } from "react-redux";
@@ -14,6 +14,7 @@ interface BoardCommentProps {
 
 export default function BoardWrite({ boardId }: BoardCommentProps) {
   const [comment, setComment] = useState<Comment>();
+  const [modal, setModal] = useState(false);
   const user = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
 
@@ -37,11 +38,10 @@ export default function BoardWrite({ boardId }: BoardCommentProps) {
       navigate(`/board/list`)
       return
     }
-    if(comment){
+    if(comment && comment.content){
       await registerComment(comment);
+      setModal(true);
     }
-    alert(`작성되었습니다`);
-    window.location.reload();
   }
 
   const handleInputChange = (e: any) => {
@@ -74,6 +74,16 @@ export default function BoardWrite({ boardId }: BoardCommentProps) {
 
         </Col>
       </div>
+      <Modal
+        title='작성되었습니다'
+        open={modal}
+        onCancel={() => setModal(false)}
+        afterClose={() => location.reload()}
+        footer={[
+          <Button key="submit" type="primary" onClick={() => setModal(false)}>
+            확인  
+          </Button>,
+        ]}/>
     </div>
 
   );

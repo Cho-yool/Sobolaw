@@ -24,3 +24,16 @@
   color: rgb(75, 16, 8);
   margin-left: 1rem;
 }
+
+.print-background {
+  box-sizing: border-box;
+  height: 94vh;
+  border-top: 0.5px solid rgb(211, 211, 211);
+  background-color: rgb(199, 199, 199);
+}
+
+.print-a4 {
+  width: 23.5cm;
+  border: 1px solid black;
+  background-color: white;
+}
