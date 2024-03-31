@@ -97,7 +97,8 @@ const LawCaseTabs = ({
         style={{
           left: x + "px",
           top: y + "px",
-        }}>
+        }}
+      >
         <div
           className={style["color-option"]}
           style={{ backgroundColor: "#f3e7c0" }}
@@ -150,12 +151,23 @@ const LawCaseTabs = ({
       const newText = renderText.map((text, index) => {
         let modifiedText = text;
         highLightLists.forEach((targetText) => {
+          const color = targetText.highlightType.slice(
+            2,
+            targetText.highlightType.length
+          );
           if (modifiedText.includes(targetText.content)) {
             // 대상 텍스트를 찾아서 span 태그로 감싸고 스타일을 적용
-            modifiedText = modifiedText.replace(
-              new RegExp(targetText.content, "g"),
-              `<span style="background-color: #${targetText.highlightType.slice(1, targetText.highlightType.length - 1)};">${targetText.content}</span>`
-            );
+            {
+              color === "644419"
+                ? (modifiedText = modifiedText.replace(
+                    new RegExp(targetText.content, "g"),
+                    `<span style="background-color: #${color}; color: white;">${targetText.content}</span>`
+                  ))
+                : (modifiedText = modifiedText.replace(
+                    new RegExp(targetText.content, "g"),
+                    `<span style="background-color: #${color};">${targetText.content}</span>`
+                  ));
+            }
           }
         });
         // 수정된 텍스트 반환
@@ -164,7 +176,8 @@ const LawCaseTabs = ({
             <span
               dangerouslySetInnerHTML={{
                 __html: modifiedText.replace(/\n|\r/g, "").trim(),
-              }}></span>
+              }}
+            ></span>
             <div></div>
           </Fragment>
         );
@@ -349,7 +362,8 @@ const LawCaseTabs = ({
                 ? `${style["tab"]} ${style["active"]}`
                 : style["tab"]
             }
-            onClick={() => handleTabClick(tab.id)}>
+            onClick={() => handleTabClick(tab.id)}
+          >
             <p className={style["tab-title"]}>{tab.title}</p>
           </div>
         ))}
@@ -373,7 +387,8 @@ const LawCaseTabs = ({
         className={style["content-box__contents"]}
         dangerouslySetInnerHTML={{
           __html: getData.judicialNotice,
-        }}></p>
+        }}
+      ></p>
       <br />
       <br />
       <p className={style["tab-menu__title"]} ref={rulingRef}>
@@ -385,7 +400,8 @@ const LawCaseTabs = ({
         className={style["content-box__contents"]}
         dangerouslySetInnerHTML={{
           __html: getData.verdictSummary,
-        }}></p>
+        }}
+      ></p>
       <br />
       <br />
       <p className={style["tab-menu__title"]} ref={precedentRef}>
@@ -398,7 +414,8 @@ const LawCaseTabs = ({
           isEditMode
             ? `${style["tab-menu__summary"]}  ${style["edit-mode"]}`
             : `${style["tab-menu__summary"]}`
-        }>
+        }
+      >
         <div className={style["tab-menu__summary__btn"]}>
           <p>요약 보기</p>
           <Switch onChange={summaryHandler} />
@@ -413,7 +430,8 @@ const LawCaseTabs = ({
                 width: "100%",
                 display: "flex",
                 justifyContent: "center",
-              }}>
+              }}
+            >
               <Spin size="large" />
             </div>
           ) : (
@@ -421,14 +439,16 @@ const LawCaseTabs = ({
               className={style["content-box__contents"]}
               dangerouslySetInnerHTML={{
                 __html: summaryData,
-              }}></p>
+              }}
+            ></p>
           )
         ) : (
           <div
             className={style["content-box__contents"]}
             onMouseDown={onMouseClickHandler}
             onMouseMove={onMouseMoveHandler}
-            onMouseUp={onMouseOutHandler}>
+            onMouseUp={onMouseOutHandler}
+          >
             {" "}
             {newRenderText ? <>{newRenderText}</> : null}
           </div>
