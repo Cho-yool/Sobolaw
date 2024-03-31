@@ -1,60 +1,101 @@
 .recommendSearchContainer {
   display: flex;
   margin: 0 auto;
-  width: 90%;
+  width: 100%;
   height: 100%;
-  gap: 20px;
+  gap: 10px;
 }
 
 .stepsContainer {
   width: 10%;
-  height: 120%;
-  margin-top: 2%;
-  margin-left: 5%;
+  height: 100%;
+  margin-top: 1.5%;
+  margin-left: 10%;
+  position: sticky;
 }
 
 .searchContainer {
   background-color: #f5f5f5;
   flex-direction: column;
-  display: flex; /* Ensure the container uses flexbox */
-  width: 70%;
+  display: flex;
+  width: 80%;
   height: 100%;
   margin: 0px;
-
-  gap: 20px; /* This adds equal spacing between the child elements */
+  gap: 40px;
+  position: relative;
 }
 
 .searchItem {
-  width: 100%;
+  width: 50%;
   height: 150px;
   margin-left: 5%;
   margin-bottom: 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .searchItem h4 {
   font-size: 20px;
   font-weight: 600;
-  margin: 4% 0;
+}
+
+.searchItemContent {
+  width: 200%;
+  display: flex;
+  align-items: center;
+}
+
+.recommendTextMessageWrapper {
+  width: 35%;
+  margin-right: 10%;
+  margin-left: 10%;
+  position: relative;
+  top: -20px;
 }
 
 .searchFirstItem {
-    width: 100%;
-    height: 100px;
-    margin-left: 5%;
-    margin-bottom: 7%;
+  width: 100%;
+  height: 100px;
+  margin-left: 5%;
+  margin-bottom: 12%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .searchFirstItem h4 {
-    font-size: 20px;
-    font-weight: 600;
-    margin: 3% 0;
-
+  font-size: 20px;
+  font-weight: 600;
+  margin: 3% 0;
 }
 
 .fadeInUp {
   opacity: 0;
   transform: translateY(20px);
   animation: fadeInUp 0.5s forwards;
+}
+
+.soboroIcon {
+  width: 80px;
+  height: 80px;
+}
+
+.textAreaWrapper {
+  position: relative;
+  width: 40%;
+}
+
+.inputCount {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 14px;
+  color: #888;
+}
+
+.redBorder {
+  border-color: #ff4d4f !important;
 }
 
 @keyframes fadeInUp {
@@ -74,6 +115,8 @@
   .stepsContainer {
     width: 100%;
     padding-top: 20px;
+    position: static;
+    margin-left: 0;
   }
 
   .searchContainer {
@@ -82,11 +125,19 @@
 
   .searchItem {
     width: 80%;
-    margin: 20px auto; /* Adjusted for consistent spacing */
+    margin: 20px auto;
   }
 
   .searchItem h4 {
     font-size: 14px;
     margin-bottom: 5%;
+  }
+
+  .recommendTextMessageWrapper {
+    position: static;
+    width: 100%;
+    padding-right: 0;
+    justify-content: center;
+    margin-top: 20px;
   }
 }

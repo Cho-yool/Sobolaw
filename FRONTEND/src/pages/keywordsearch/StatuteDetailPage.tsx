@@ -114,11 +114,7 @@ const StatuteDetailPage: React.FC = () => {
       return <p>해당 법령 세부내용이 존재하지 않습니다.</p>;
     }
   };
-
-  if (loading) {
-    return <div>로딩 중...</div>;
-  }
-
+  
   if (error) {
     return <div>{error}</div>;
   }

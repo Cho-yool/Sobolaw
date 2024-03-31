@@ -48,5 +48,10 @@ async function getHitStatuteList() {
     return response.data.data;
 }
 
+// 뉴스 목록 조회
+async function getNewsList() {
+    const response = await http.get(`/news/search/${searchKeyword}`);
+    return response.data;
+}
 
-export { searchStatute, getStatuteDetail, getPrecedentList, getHitPrecedentList, getHitStatuteList, searchPrecedent };
+export { searchStatute, getStatuteDetail, getPrecedentList, getHitPrecedentList, getHitStatuteList, searchPrecedent, getNewsList };
