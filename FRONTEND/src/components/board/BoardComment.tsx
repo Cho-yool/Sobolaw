@@ -38,7 +38,7 @@ export default function BoardWrite({ boardId }: BoardCommentProps) {
       navigate(`/board/list`)
       return
     }
-    if(comment){
+    if(comment && comment.content){
       await registerComment(comment);
       setModal(true);
     }
