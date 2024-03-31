@@ -1,35 +1,38 @@
 .messageBubbleContainer {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end; /* 아래로 정렬 */
-  align-items: flex-end; /* 오른쪽 정렬 */
-  max-width: 600px; /* 최대 너비 제한 */
-  gap: 40px;
-  margin-left: auto; /* 오른쪽으로 최대한 밀기 */
-  position: absolute; /* 절대 위치 설정 */
-  right: 0; /* 오른쪽에 붙이기 */
-  top: 0; /* 상단에 붙이기 */
-  bottom: 0; /* 하단까지 늘리기 */
-  padding-right: 20px; /* 오른쪽 여백 추가 */
- }
- 
- .messageBubble {
-  max-width: 400px; /* 메시지 최대 너비 제한 */
+  justify-content: flex-start;
+  align-items: flex-end;
+  max-width: 800px;
+  gap: 10px;
+  margin-left: auto;
+  position: relative;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.messageBubble {
+  max-width: 500px;
   padding: 10px;
   border-radius: 18px;
-  padding: 8px 16px;
-  word-wrap: break-word; /* 긴 단어는 자동으로 줄바꿈 */
+  padding: 12px 30px;
+  word-wrap: break-word;
   line-height: 1.5;
- }
- 
- .sent {
-  align-self: flex-end; /* 오른쪽 정렬 */
-  background-color: #007aff;
-  color: white;
- }
- 
- .received {
-  align-self: flex-start; /* 왼쪽 정렬 */
+  opacity: 0;
+  animation: fadeInUp 0.5s forwards;
+  margin-bottom: 10px; /* 메시지 간 간격 조정 */
+}
+
+.received {
+  align-self: flex-start;
   background-color: #e5e5ea;
   color: black;
- }
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -67,7 +67,6 @@ const RecommendSearch: React.FC = () => {
 
   // Message 내용을 별도의 함수로 정의합니다.
   const placeMessages: Message[] = [
-    { text: "사건장소는 어떻게 입력해야 하나요?", type: "sent" },
     {
       text: (
         <>
@@ -75,10 +74,9 @@ const RecommendSearch: React.FC = () => {
           <br />
           예: 회사, 건물, 주택, 농지, <br />
           아파트, 은행, 도로, 자동차 등<br />
-          실제 지명 보다 장소의 특성 또는 <br />
-          장소의 카테고리를 입력하는 게 좋습니다.
           <br />
-          예를 들어, OO기업(X) ⭢ 회사(O)
+          예를 들어,
+          <br /> OO기업(X) ⭢ 회사(O)
           <br />
           OO아파트(X) ⭢ 아파트(O)
         </>
@@ -88,19 +86,16 @@ const RecommendSearch: React.FC = () => {
   ];
 
   const objectMessages: Message[] = [
-    { text: "사건대상은 어떻게 입력해야 하나요?", type: "sent" },
     {
       text: (
         <>
           6자 이상 입력해주세요.
           <br />
-          예: 토지, 등기, 보험, 채권, 부동산, 소유권, 항고, 자동차 등<br />
-          실제 대상명 보다 대상의 특성 또는 대상의 카테고리를 입력하는 것이
-          좋습니다.
+          예: 토지, 등기, 보험, 채권,
+          <br /> 부동산, 소유권, 항고, 자동차 등<br />
           <br />
-          이를 통해 추천 검색 결과의 정확도를 높일 수 있습니다.
-          <br />
-          예를 들어, OO로 OO(X) ⭢ 토지(O)
+          예를 들어,
+          <br /> OO로 OO(X) ⭢ 토지(O)
           <br />
           OO차,OO원(X) ⭢ 자동차, 자산(O)
         </>
@@ -110,18 +105,17 @@ const RecommendSearch: React.FC = () => {
   ];
 
   const personMessages: Message[] = [
-    { text: "사건인물은 어떻게 입력해야 하나요?", type: "sent" },
     {
       text: (
         <>
           6자 이상 입력해주세요.
           <br />
-          예: 채무자, 채권자, 근로자, 참가인, 조합원, 피해자, 소유자 등 인물의
-          실명보다 인물의 역할, 관계를 입력하는 것이 좋습니다.
+          예: 채무자, 채권자, 근로자,
+          <br /> 참가인, 조합원, 피해자, 소유자 등
           <br />
-          이를 통해 추천 검색 결과의 정확도를 높일 수 있습니다.
           <br />
-          예를 들어, 김OO(X) ⭢ 채무자(O)
+          예를 들어,
+          <br /> 김OO(X) ⭢ 채무자(O)
           <br />
           황OO씨(X) ⭢ 피해자(O)
         </>
@@ -177,21 +171,21 @@ const RecommendSearch: React.FC = () => {
         <Steps
           direction="vertical"
           current={currentStep - 1}
-          style={{ height: "35%", fontWeight: "bold" }}
+          style={{ height: "50%", fontWeight: "bold" }}
           size="small"
           items={[
             {
-              style: { height: "32%" },
+              style: { height: "35%" },
               title: "사건 분류",
               icon: <ClusterOutlined />,
             },
             {
-              style: { height: "42%" },
+              style: { height: "45%" },
               title: "사건 장소",
               icon: <HomeOutlined />,
             },
             {
-              style: { height: "42%" },
+              style: { height: "45%" },
               title: "사건 대상",
               icon: <CarOutlined />,
             },
@@ -226,23 +220,24 @@ const RecommendSearch: React.FC = () => {
             <Option value="소유권분쟁">소유권분쟁</Option>
             <Option value="기타">기타</Option>
           </Select>
-          <div className={style.recommendTextMessageWrapper}>
-            <RecommendTextMessage messages={placeMessages} />
-          </div>
         </div>
         {currentStep > 1 && (
           <div className={`${style.searchItem} ${style.fadeInUp}`}>
             <h4>2단계 : 사건 관련 장소를 입력하세요.</h4>
             <div className={style.searchItemContent}>
-              <TextArea
-                value={stepTwoValue}
-                placeholder="예) 회사, 건물, 주택, 농지, 아파트, 은행, 도로, 자동차 등"
-                onChange={handleStepTwoChange}
-                style={{ width: "50%", height: "100%" }}
-                autoSize={{ minRows: 5, maxRows: 5 }}
-              />
+              <div className={style.textAreaWrapper}>
+                <TextArea
+                  value={stepTwoValue}
+                  placeholder="예) 회사, 건물, 주택, 농지, 아파트, 은행, 도로, 자동차 등"
+                  onChange={handleStepTwoChange}
+                  style={{ width: "100%", height: "100%" }}
+                  autoSize={{ minRows: 5, maxRows: 5 }}
+                  className={stepTwoValue.length < 6 ? style.redBorder : ""}
+                />
+                <div className={style.inputCount}>{stepTwoValue.length}/6자 이상</div>
+              </div>
               <div className={style.recommendTextMessageWrapper}>
-                <RecommendTextMessage messages={objectMessages} />
+                <RecommendTextMessage messages={placeMessages} />
               </div>
             </div>
           </div>
@@ -251,15 +246,21 @@ const RecommendSearch: React.FC = () => {
           <div className={`${style.searchItem} ${style.fadeInUp}`}>
             <h4>3단계 : 사건 관련 대상을 입력하세요.</h4>
             <div className={style.searchItemContent}>
-              <TextArea
-                value={stepThreeValue}
-                placeholder="예)  토지, 등기, 보험, 채권, 부동산, 소유권, 항고, 자동차 등"
-                onChange={handleStepThreeChange}
-                style={{ width: "50%", height: "100%" }}
-                autoSize={{ minRows: 5, maxRows: 5 }}
-              />
+              <div className={style.textAreaWrapper}>
+                <TextArea
+                  value={stepThreeValue}
+                  placeholder="예)  토지, 등기, 보험, 채권, 부동산, 소유권, 항고, 자동차 등"
+                  onChange={handleStepThreeChange}
+                  style={{ width: "100%", height: "100%" }}
+                  autoSize={{ minRows: 5, maxRows: 5 }}
+                  className={stepThreeValue.length < 6 ? style.redBorder : ""}
+                />
+                <div className={style.inputCount}>
+                  {stepThreeValue.length}/6자 이상
+                </div>
+              </div>
               <div className={style.recommendTextMessageWrapper}>
-                <RecommendTextMessage messages={personMessages} />
+                <RecommendTextMessage messages={objectMessages} />
               </div>
             </div>
           </div>
@@ -268,13 +269,20 @@ const RecommendSearch: React.FC = () => {
           <div className={`${style.searchItem} ${style.fadeInUp}`}>
             <h4>4단계 : 사건 관련 주요 인물을 입력하세요.</h4>
             <div className={style.searchItemContent}>
-              <TextArea
-                value={stepFourValue}
-                placeholder="예) 채무자, 채권자, 근로자, 참가인, 조합원, 피해자, 소유자 등"
-                onChange={handleStepFourChange}
-                style={{ width: "50%", height: "100%" }}
-                autoSize={{ minRows: 5, maxRows: 5 }}
-              />
+              <div className={style.textAreaWrapper}>
+                <TextArea
+                  value={stepFourValue}
+                  placeholder="예) 채무자, 채권자, 근로자, 참가인, 조합원, 피해자, 소유자 등"
+                  onChange={handleStepFourChange}
+                  style={{ width: "100%", height: "100%" }}
+                  autoSize={{ minRows: 5, maxRows: 5 }}
+                  className={stepFourValue.length < 6 ? style.redBorder : ""}
+                />
+                <div className={style.inputCount}>{stepFourValue.length}/6글자 이상</div>
+              </div>
+              <div className={style.recommendTextMessageWrapper}>
+                <RecommendTextMessage messages={personMessages} />
+              </div>
             </div>
           </div>
         )}
@@ -287,7 +295,8 @@ const RecommendSearch: React.FC = () => {
                 width: 100,
                 height: 50,
                 fontSize: 18,
-                marginLeft: "39%",
+                marginLeft: "65%",
+                marginTop: -200,
               }}
             >
               제출
