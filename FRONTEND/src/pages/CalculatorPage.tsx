@@ -180,9 +180,9 @@ export default function CalculatorPage() {
             >
               소가/인지/송달료
             </Button>
-            <Button style={{ backgroundColor: "#dbe4f0", color: "#0047ba" }}>
+            {/* <Button style={{ backgroundColor: "#dbe4f0", color: "#0047ba" }}>
               인지규칙
-            </Button>
+            </Button> */}
           </div>
           <Button style={{ backgroundColor: "#dbe4f0", color: "#0047ba" }}>
             도움말
@@ -201,6 +201,7 @@ export default function CalculatorPage() {
             <Radio.Group
               onChange={(e) => setLitigationType(e.target.value)}
               value={litigationType}
+              size="small"
             >
               <Radio value="전자소송">전자소송</Radio>
               <Radio value="종이소송">종이소송</Radio>
@@ -285,7 +286,7 @@ export default function CalculatorPage() {
         </Form>
       </div>
       <div className={style["detail-info"]}>
-        <p style={{ fontSize: "1rem", marginBottom: "16px" }}>
+        <p className={style["detail-info__text"]}>
           ※ 변호사 부담금의 변동이 있을 경우, 실제 소송비용은 결과와 상이할 수
           있습니다.
         </p>
@@ -315,16 +316,7 @@ export default function CalculatorPage() {
           </Title>
 
           <div className={style["result-box"]}>
-            <div style={{ padding: "24px" }}>
-              <p
-                style={{
-                  marginBottom: "16px",
-                  fontSize: "1.5rem",
-                  fontWeight: "bold",
-                }}
-              >
-                계산결과
-              </p>
+            <div>
               <p>
                 인지액:
                 {reRenderRecognition ? (
@@ -396,7 +388,7 @@ export default function CalculatorPage() {
                       </div>
                     </div>
                   </div>
-                  <p className="text-sm mt-2">
+                  <p className={style["notice-header-content"]}>
                     예시: 소송물가액이 3,000만원일 경우, (3,000만원 x 0.45% +
                     5,000원) x 0.9 = 126,000원 입니다.
                   </p>
@@ -441,7 +433,7 @@ export default function CalculatorPage() {
                     </div>
                   </div>
                 </div>
-                <p className="text-sm">
+                <p className={style["notice-header-content"]}>
                   *민사소송 등 인지법 제5조 각 호에 따라 인지액(변경 후, 변경 전
                   모두 종이소송 기준)을 먼저 계산한 후 최종적으로 0.9를 곱한
                   금액이 청구변경신청서의 인지액이 됩니다
@@ -525,7 +517,7 @@ export default function CalculatorPage() {
                     </div>
                   </div>
                 </div>
-                <p className="text-sm mt-2">
+                <p className={style["notice-header-content"]}>
                   예시 : 민사 제1심 소액 사건 피고가 2명인 경우, 5,200원 x 2명 x
                   10회분 = 104,000원입니다. 민사 조정사건의 신청인이 2명,
                   피신청인이 1명인 경우, 5,200원 x 3명 x 5회분 = 78,000원입니다.

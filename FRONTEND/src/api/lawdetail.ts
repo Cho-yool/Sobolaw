@@ -46,6 +46,17 @@ interface HighLightProps {
   content: string;
 }
 
+export async function getHighLight(precedentId: number) {
+  const url = `/user-service/members/precedents/${precedentId}/highlights`;
+
+  return await http.get(url, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLqt7zsmIEiLCJyb2xlIjoiUk9MRV9VU0VSIiwibWVtYmVySWQiOjE4LCJpYXQiOjE3MTE0NjEwMDUsImV4cCI6MTcxMjMyNTAwNX0.6HWhADwXr4nZelG8QpKP37Mwe-WVj1_pULlad_nuGsNELyWU73nMbMLnhOYk2a5Zs00wXTonh5LQ4J8Lo7JhXg`,
+    },
+  });
+}
+
 export async function saveHighLight({
   precedentId,
   main,

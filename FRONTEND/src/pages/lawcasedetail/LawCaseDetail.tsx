@@ -4,7 +4,7 @@ import LawCaseTabs from "../../components/lawcasedetail/LawCaseTabs";
 import Sidebar from "../../components/lawcasedetail/Sidebar";
 import { getLawDetail } from "../../api/lawdetail";
 import { useQuery } from "react-query";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 interface getDataProps {
@@ -26,6 +26,8 @@ interface getDataProps {
 const LawCaseDetail = () => {
   const { Title } = Typography;
   const [getData, setGetData] = useState<getDataProps>(Object());
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const [currentColor, setCurrentColor] = useState<string>("");
   const location = useLocation();
   const currentLocation = Number(location.pathname.split("/")[2]);
 
@@ -37,25 +39,43 @@ const LawCaseDetail = () => {
       console.log(error);
     },
   });
-
+  const editHandler = () => {
+    setIsEditMode(false);
+    setCurrentColor("");
+  };
   return (
-    <Flex className={style["detail-page"]} justify="center">
-      <Sidebar
-        referencedStatute={getData.referencedStatute}
-        referencedCase={getData.referencedCase}
-      ></Sidebar>
-      <Flex className={style["container"]} vertical>
-        <Title className={style["container__title"]}>
-          {getData ? getData.caseName : null}
-        </Title>
-        <br />
-        <Flex className={style["content-box"]}>
-          {getData ? (
-            <LawCaseTabs getData={getData} currentLocation={currentLocation} />
-          ) : null}
+    <Fragment>
+      {isEditMode ? (
+        <button className={style["edit-control"]} onClick={editHandler}>
+          종료
+        </button>
+      ) : null}
+      <Flex className={style["detail-page"]} justify="center">
+        <Sidebar
+          referencedStatute={getData.referencedStatute}
+          referencedCase={getData.referencedCase}
+          isEditMode={isEditMode}
+          setIsEditMode={setIsEditMode}
+          setCurrentColor={setCurrentColor}
+        ></Sidebar>
+        <Flex className={style["container"]} vertical>
+          <Title className={style["container__title"]}>
+            {getData ? getData.caseName : null}
+          </Title>
+          <br />
+          <Flex className={style["content-box"]}>
+            {getData ? (
+              <LawCaseTabs
+                getData={getData}
+                currentLocation={currentLocation}
+                isEditMode={isEditMode}
+                currentColor={currentColor}
+              />
+            ) : null}
+          </Flex>
         </Flex>
       </Flex>
-    </Flex>
+    </Fragment>
   );
 };
 
