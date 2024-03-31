@@ -85,6 +85,7 @@ const LawCaseTabs = ({
   const [selectRange, setSelectRange] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [highLightLists, setHighLightLists] = useState<highLightProps[]>([]);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [selectionPosition, setSelectionPosition] = useState<{
     x: number;
     y: number;
@@ -160,12 +161,18 @@ const LawCaseTabs = ({
             {
               color === "644419"
                 ? (modifiedText = modifiedText.replace(
-                    new RegExp(targetText.content, "g"),
-                    `<span style="background-color: #${color}; color: white;">${targetText.content}</span>`
+                    new RegExp(
+                      targetText.content.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+                      "g"
+                    ),
+                    `<span style="background-color: #${targetText.highlightType.slice(2, targetText.highlightType.length)};">${targetText.content}</span>`
                   ))
                 : (modifiedText = modifiedText.replace(
-                    new RegExp(targetText.content, "g"),
-                    `<span style="background-color: #${color};">${targetText.content}</span>`
+                    new RegExp(
+                      targetText.content.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+                      "g"
+                    ),
+                    `<span style="background-color: #${targetText.highlightType.slice(2, targetText.highlightType.length)}; color=${color}">${targetText.content}</span>`
                   ));
             }
           }
@@ -178,7 +185,7 @@ const LawCaseTabs = ({
                 __html: modifiedText.replace(/\n|\r/g, "").trim(),
               }}
             ></span>
-            <div></div>
+            <div className={style["block"]}></div>
           </Fragment>
         );
       });
@@ -350,6 +357,13 @@ const LawCaseTabs = ({
       setSelectRange([selectionPos.startOffset, selectionPos.endOffset]);
     }
   };
+  useEffect(() => {
+    const updateScreenWidth = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", updateScreenWidth);
+  }, [screenWidth]);
 
   return (
     <div className={style["tab-container"]}>
@@ -368,15 +382,17 @@ const LawCaseTabs = ({
           </div>
         ))}
       </div>
-      <p>사건번호 : {getData.caseNumber}</p>
+      <p className={style["tab-menu__info"]}>사건번호 : {getData.caseNumber}</p>
       <br />
-      <p>선고일자: {getData.judgmentDate}</p>
+      <p className={style["tab-menu__info"]}>
+        선고일자: {getData.judgmentDate}
+      </p>
       <br />
-      <p>법원명 : {getData.courtName}</p>
+      <p className={style["tab-menu__info"]}>법원명 : {getData.courtName}</p>
       <br />
-      <p>사건종류명 : {getData.caseType}</p>
+      <p className={style["tab-menu__info"]}>사건종류명 : {getData.caseType}</p>
       <br />
-      <p>{getData.verdictType}</p>
+      <p className={style["tab-menu__info"]}>{getData.verdictType}</p>
       <br />
       <br />
       <p className={style["tab-menu__title"]} ref={judgmentRef}>
@@ -418,7 +434,10 @@ const LawCaseTabs = ({
       >
         <div className={style["tab-menu__summary__btn"]}>
           <p>요약 보기</p>
-          <Switch onChange={summaryHandler} />
+          <Switch
+            onChange={summaryHandler}
+            size={screenWidth <= 700 ? "small" : "default"}
+          />
         </div>
         {showOptions && !isEditMode
           ? optionSelectDiv(selectionPosition.x, selectionPosition.y)
