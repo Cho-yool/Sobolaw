@@ -11,6 +11,9 @@ import {
   Col,
   ConfigProvider,
   Flex,
+  Modal,
+  Divider,
+  Input,
 } from "antd";
 import type { MenuProps } from "antd";
 import {
@@ -18,8 +21,10 @@ import {
   SmileTwoTone,
   EditTwoTone,
   CopyTwoTone,
+  DownOutlined,
 } from "@ant-design/icons";
-import { postLogout, reissueToken } from "../../api/members";
+import { postLogout } from "../../api/members";
+import { postNotifications } from "../../api/notification";
 import { RootState, AppDispatch } from "../../redux/store/store";
 import { resetAuth } from "../../redux/reducers/user/userSlice";
 import logo from "/NavLogo.png";
@@ -52,6 +57,11 @@ const ResponsiveNav = ({
   const dispatch: AppDispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
   const [visible, setVisible] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [memberId, setMemberId] = useState("");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [memberIdCheck, setMemberIdCheck] = useState(false);
   const showDrawer = () => {
     setVisible(true);
   };
@@ -72,9 +82,65 @@ const ResponsiveNav = ({
       });
   };
 
-  const handletoken = () => {
-    reissueToken(user.accessToken, user.refreshToken);
+  const showModal = () => {
+    setIsModalOpen(true);
   };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  function handleMemberId(e: React.ChangeEvent<HTMLInputElement>) {
+    const inputValue = e.target.value;
+    setMemberId(inputValue); // 상태를 업데이트합니다.
+    const numCheck = /^[0-9]*$/;
+    if (numCheck.test(inputValue)) {
+      // 입력값이 숫자인 경우
+      setMemberIdCheck(true);
+    } else {
+      setMemberId(inputValue);
+      setMemberIdCheck(false);
+    }
+  }
+
+  function handleTitle(e: React.ChangeEvent<HTMLInputElement>) {
+    const inputValue = e.target.value;
+    const limitedValue = inputValue.substring(0, 10);
+    if (inputValue.length > 10) {
+      return;
+    }
+    setTitle(limitedValue);
+  }
+
+  function handleContent(e: React.ChangeEvent<HTMLInputElement>) {
+    const inputValue = e.target.value;
+    const limitedValue = inputValue.substring(0, 20);
+    if (inputValue.length > 20) {
+      return;
+    }
+    setContent(limitedValue);
+  }
+
+  async function onSubmit(event: React.SyntheticEvent): Promise<void> {
+    event.preventDefault();
+    // TODO: 회원가입 비동기 통신
+    // 모든 조건이 True일 때 회원가입 제출
+    if (memberId === "") {
+      alert("누구한테 보낼거얌!");
+    } else if (title === "") {
+      alert("제목!!");
+    } else if (content === "") {
+      alert("내용!");
+    } else {
+      const Data = {
+        memberId: parseInt(memberId),
+        title: title,
+        body: content,
+      };
+      const response = await postNotifications(Data);
+      console.log(response);
+    }
+  }
 
   return (
     // 컬러 지정
@@ -90,7 +156,8 @@ const ResponsiveNav = ({
             headerBg: "#ffffff",
           },
         },
-      }}>
+      }}
+    >
       {/* 웹사이즈 네브바 위치 수정해야함 */}
       {/* <Layout> */}
       <Header style={{ padding: 0, height: "auto" }}>
@@ -103,7 +170,8 @@ const ResponsiveNav = ({
               marginLeft: "2rem",
               display: "flex",
               alignItems: "center",
-            }}>
+            }}
+          >
             <img
               src={logo}
               alt="로고"
@@ -140,7 +208,8 @@ const ResponsiveNav = ({
                   style={{ marginRight: "10px" }}
                   onClick={() => {
                     navigate("/login");
-                  }}>
+                  }}
+                >
                   로그인
                 </Button>
               ) : (
@@ -148,7 +217,8 @@ const ResponsiveNav = ({
                   type="primary"
                   shape="round"
                   style={{ marginRight: "10px" }}
-                  onClick={handlelogout}>
+                  onClick={handlelogout}
+                >
                   로그아웃
                 </Button>
               )}
@@ -164,7 +234,8 @@ const ResponsiveNav = ({
             xs={2}
             sm={2}
             md={0}
-            style={{ paddingRight: "30px", marginRight: "15px" }}>
+            style={{ paddingRight: "30px", marginRight: "15px" }}
+          >
             <Button type="primary" onClick={showDrawer}>
               <MenuOutlined />
             </Button>
@@ -176,7 +247,8 @@ const ResponsiveNav = ({
           placement="right"
           onClick={onClose}
           onClose={onClose}
-          open={visible}>
+          open={visible}
+        >
           <div
             style={{
               display: "flex",
@@ -186,7 +258,8 @@ const ResponsiveNav = ({
               height: "8rem",
               backgroundColor: "#fffbf0",
               color: "644419",
-            }}>
+            }}
+          >
             {user.accessToken === "" ? (
               <Flex vertical gap={15}>
                 로그인이 필요합니다
@@ -196,18 +269,59 @@ const ResponsiveNav = ({
                   style={{ marginRight: "10px" }}
                   onClick={() => {
                     navigate("/login");
-                  }}>
+                  }}
+                >
                   로그인
                 </Button>
               </Flex>
             ) : (
-              <Flex vertical gap={15}>
+              <Flex vertical gap={5}>
                 {user.nickname}님! 안녕하세요
+                <Button
+                  shape="round"
+                  style={{ marginRight: "10px" }}
+                  onClick={showModal}
+                >
+                  메시지보내기
+                </Button>
+                <Modal
+                  title="메시지 보내깅깅깅구이궁깅"
+                  open={isModalOpen}
+                  onOk={handleOk}
+                  footer={[
+                    <Button key="submit" onClick={handleOk}>
+                      취소
+                    </Button>,
+                  ]}
+                >
+                  <Divider />
+                  <Input
+                    prefix="받을 사람"
+                    value={memberId}
+                    id="memberId"
+                    onChange={handleMemberId}
+                    suffix={memberIdCheck ? <DownOutlined /> : null}
+                  />
+                  <Input
+                    prefix="제목"
+                    value={title}
+                    id="title"
+                    onChange={handleTitle}
+                  />
+                  <Input
+                    prefix="내용"
+                    value={content}
+                    id="content"
+                    onChange={handleContent}
+                  />
+                  <Button onClick={onSubmit}>알람보내깅</Button>
+                </Modal>
                 <Button
                   type="primary"
                   shape="round"
                   style={{ marginRight: "10px" }}
-                  onClick={handlelogout}>
+                  onClick={handlelogout}
+                >
                   로그아웃
                 </Button>
               </Flex>
@@ -220,7 +334,8 @@ const ResponsiveNav = ({
                 display: "flex",
                 justifyContent: "space-around",
                 margin: "1.5rem",
-              }}>
+              }}
+            >
               <div
                 style={{
                   display: "flex",
@@ -231,7 +346,8 @@ const ResponsiveNav = ({
                 }}
                 onClick={() => {
                   navigate("/mypage/user");
-                }}>
+                }}
+              >
                 <SmileTwoTone
                   style={{ fontSize: "3rem" }}
                   twoToneColor="#BF8438"
@@ -248,7 +364,8 @@ const ResponsiveNav = ({
                 }}
                 onClick={() => {
                   navigate("/mypage/papers");
-                }}>
+                }}
+              >
                 <EditTwoTone
                   style={{ fontSize: "3rem" }}
                   twoToneColor="#BF8438"
@@ -265,7 +382,8 @@ const ResponsiveNav = ({
                 }}
                 onClick={() => {
                   navigate("/mypage/case");
-                }}>
+                }}
+              >
                 <CopyTwoTone
                   style={{ fontSize: "3rem" }}
                   twoToneColor="#BF8438"
@@ -278,7 +396,8 @@ const ResponsiveNav = ({
           <Menu
             mode="vertical"
             items={items}
-            defaultSelectedKeys={["1"]}></Menu>
+            defaultSelectedKeys={["1"]}
+          ></Menu>
         </Drawer>
       </Header>
       {/* </Layout> */}
