@@ -77,6 +77,9 @@ export default function BoardTable({ boardList }: MyLawcaseTableProps) {
       title: "제목",
       dataIndex: "title",
       key: "title",
+      render: (text: any, record: any) => {
+        return <span style={{fontSize: '16px'}}>{(text.length < 8)? text:`${text.substring(0, 8)}···`}</span>
+      },
     },
     {
       title: "작성자",
