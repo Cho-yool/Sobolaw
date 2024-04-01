@@ -55,7 +55,7 @@
 }
 
 .searchFirstItem {
-  width: 100%;
+  width: 50%;
   height: 100px;
   margin-left: 5%;
   margin-bottom: 12%;
@@ -113,31 +113,47 @@
   }
 
   .stepsContainer {
-    width: 100%;
-    padding-top: 20px;
-    position: static;
-    margin-left: 0;
+    display: none;
   }
 
   .searchContainer {
     width: 100%;
   }
 
-  .searchItem {
-    width: 80%;
-    margin: 20px auto;
+  .searchFirstItem {
+    width: 100%;
+    margin: 20px 10%;
   }
 
-  .searchItem h4 {
-    font-size: 14px;
+  .searchFirstItem h4 {
+    font-size: 16px;
     margin-bottom: 5%;
   }
 
-  .recommendTextMessageWrapper {
-    position: static;
+  .searchItem {
+    width: 40%;
+    margin: 20px 10%;
+  }
+
+  .searchItem h4 {
+    width: 200%;
+    font-size: 14px;
+    margin-bottom: 10%;
+  }
+
+  .searchItemContent {
+    flex-direction: column;
+  }
+
+  .textAreaWrapper {
     width: 100%;
-    padding-right: 0;
-    justify-content: center;
-    margin-top: 20px;
+  }
+
+  .inputCount {
+    margin-top: 0.5rem;
+  }
+
+  .recommendTextMessageWrapper {
+    display: none;
   }
 }

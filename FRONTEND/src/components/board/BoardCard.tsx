@@ -45,10 +45,17 @@ export default function BoardCard({ comment }: MyLawcaseCardProps) {
     <React.Fragment key={index}>
 
         <Col md={1} />
-        <Col md={22} style={{ padding: '1rem'}}>
+        <Col xs={0} sm={0} md={22} style={{ paddingTop: '4%'}}>
             <Card title={`${item.name}${item.role==="ROLE_LAWYER"? "[변호사]":""}`} style={{border: '1px solid #F4B13D'}}>
-                <div style={{display: 'flex', justifyContent:'flex-end', marginBottom: '1rem'}}>{item.createdTime?.split(".")[0]}</div>
+                <div style={{display: 'flex', justifyContent:'flex-end', marginBottom: '2%'}}>{item.createdTime?.split(".")[0]}</div>
                 <div style={{fontSize: '1rem'}}>{item? lineText(item.content):""}</div>
+                <div style={{display: 'flex', justifyContent:'flex-end'}}>{deleteButton(item)}</div>
+            </Card>
+        </Col>
+        <Col sm={22} md={0} style={{ paddingTop: '4%'}}>
+            <Card title={`${item.name}${item.role==="ROLE_LAWYER"? "[변호사]":""}`} style={{border: '1px solid #F4B13D'}}>
+                <div style={{display: 'flex', justifyContent:'flex-end', marginBottom: '2%'}}>{item.createdTime?.split(".")[0]}</div>
+                <div style={{fontSize: '0.7rem'}}>{item? lineText(item.content):""}</div>
                 <div style={{display: 'flex', justifyContent:'flex-end'}}>{deleteButton(item)}</div>
             </Card>
         </Col>

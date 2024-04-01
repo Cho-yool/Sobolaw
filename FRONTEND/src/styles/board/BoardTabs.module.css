@@ -7,8 +7,9 @@
 }
 
 .tab-title {
-  padding-top: 3rem;
-  height: 7rem;
+  padding: 1rem;
+  padding-top: 2rem;
+  min-height: 7rem;
   background-color: #f3e7c0;
   color: rgba(41, 9, 9, 0.829);
   font-weight: bold;

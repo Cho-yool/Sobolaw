@@ -58,7 +58,7 @@ export default function BoardWrite({ boardId }: BoardCommentProps) {
     <>
       <div className={style["mypaper-box"]}>
         <Col style={{margin:`1rem`, padding: `1rem`}}>
-          <Form.Item label="작성자" style={{width:'20rem'}}>
+          <Form.Item label="작성자" style={{width:'80%'}}>
             <Input value={comment?.name? comment.name:""}/>
           </Form.Item>
 

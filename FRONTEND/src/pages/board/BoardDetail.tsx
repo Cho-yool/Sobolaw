@@ -68,7 +68,7 @@ export default function BoardDetail() {
         <div className={style["myinfo-box"]}>
           <div style={{ borderRadius:'0rem' , margin: '10%', padding: '5%', paddingBottom:'0%', backgroundColor: '#FCFCFC', lineHeight: '1.3'}}>
             <div className={style["box1"]} style={{margin:`0rem`}}>
-              <div className={style["box-title"]} style={{textAlign:'center', fontSize:40, borderRadius:`2rem`}}>{boardDetail?.title}</div>
+              <div className={style["box-title"]} style={{textAlign:'center', fontSize:'220%', borderRadius:`2rem`}}>{boardDetail?.title}</div>
               <Row>
                 <Col span={23} style={{ margin: '0.3rem', textAlign:'right'}}>{boardDetail?.createdTime?.split(".")[0]}</Col>
               </Row>
@@ -80,7 +80,8 @@ export default function BoardDetail() {
               </Row>
               <Divider />
               <Row> 
-                <Col span={23} style={{ margin: '3rem', fontSize:20, minHeight:'30vh'}}>{boardDetail? lineText(boardDetail.content):""}</Col>
+                <Col sm={22} md={0} lg={0} style={{ margin: '2%', fontSize:12, minHeight:'30vh'}}>{boardDetail? lineText(boardDetail.content):""}</Col>
+                <Col xs={0} sm={0} md={22} style={{ margin: '5%', fontSize:20, minHeight:'30vh'}} >{boardDetail? lineText(boardDetail.content):""}</Col>
               </Row>
             </div>
             <Form.Item  style={{display:`flex`, justifyContent:`flex-end`}}>
