@@ -22,10 +22,24 @@ public class ElasticsearchILM {
         String ilmPolicyJson = new String(Files.readAllBytes(Paths.get(new ClassPathResource("elastic/ilm-policy.json").getURI())), StandardCharsets.UTF_8);
 
         // ILM 정책 설정을 위한 REST API 요청 생성 및 실행
-        Request request = new Request("PUT", "/_ilm/policy/my_policy_01");
-        request.setJsonEntity(ilmPolicyJson);
-        restClient.performRequest(request);
+        Request ilmPolicyRequest = new Request("PUT", "/_ilm/policy/my_policy_01");
+        ilmPolicyRequest.setJsonEntity(ilmPolicyJson);
+        restClient.performRequest(ilmPolicyRequest);
 
-        log.info("ILM Policy applied");
+        // 인덱스에 ILM 정책 적용
+        applyPolicyToIndex("statute_index");
+        applyPolicyToIndex("statutetext_index");
+        applyPolicyToIndex("precedent_index");
+        applyPolicyToIndex("term_index");
+
+        log.info("ILM Policy applied to all specified indexes.");
+    }
+
+    private void applyPolicyToIndex(String indexName) throws Exception {
+        String jsonString = "{\"index.lifecycle.name\": \"my_policy_01\"}";
+        Request request = new Request("PUT", "/" + indexName + "/_settings");
+        request.setJsonEntity(jsonString);
+        restClient.performRequest(request);
+        log.info("ILM Policy applied to " + indexName);
     }
 }
