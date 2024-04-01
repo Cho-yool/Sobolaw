@@ -209,7 +209,7 @@ const RecommendSearch: React.FC = () => {
                 .toLowerCase()
                 .includes(input.toLowerCase())
             }
-            style={{ width: "15%", height: "50px", fontSize: "15px" }}
+            style={{ width: "35%", height: "50px", fontSize: "15px" }}
           >
             <Option value="손해배상">손해배상</Option>
             <Option value="사기">사기</Option>
@@ -292,11 +292,12 @@ const RecommendSearch: React.FC = () => {
               type="primary"
               onClick={handleSubmit}
               style={{
-                width: 100,
+                width: 200,
                 height: 50,
                 fontSize: 18,
-                marginLeft: "65%",
-                marginTop: -200,
+                margin: "0 auto",
+                marginTop: "-30%",
+                borderRadius: 30,
               }}
             >
               제출

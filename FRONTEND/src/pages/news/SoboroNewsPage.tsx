@@ -82,8 +82,15 @@ const SoboroNewsPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    AOS.init();
+    AOS.init({
+      duration: 450,
+      once: false,
+    });
   }, []);
+
+  useEffect(() => {
+    AOS.refresh();
+  }, [newsData[currentCategory]]);
 
   const handleSlideChange = (swiper: any) => {
     if (debounceTimeoutRef.current) {
@@ -102,8 +109,8 @@ const SoboroNewsPage: React.FC = () => {
     <main className={styles.main}>
       <div className={styles.content}>
         <div className={styles.description}>
-          <h1 className={styles.title}>오늘의 소보로 뉴스</h1>
-          <p>
+          <h1 className={styles.title} data-aos="fade-down">오늘의 소보로 뉴스</h1>
+          <p data-aos="fade-down">
             추천 판례나 법령과 관련된<br/>  최신 날짜의뉴스를 빠르게 확인해보세요!<br/> 
             이미지에 마우스를 올려놓고 스크롤을 하면<br/>  주제에 맞는 뉴스를 볼 수 있습니다!
           </p>
@@ -122,8 +129,8 @@ const SoboroNewsPage: React.FC = () => {
             coverflowEffect={{
               rotate: 50,
               stretch: 0,
-              depth: 100,
-              modifier: 1,
+              depth: 300,
+              modifier: 0.5,
               slideShadows: true,
             }}
             pagination={{
@@ -163,7 +170,7 @@ const SoboroNewsPage: React.FC = () => {
               {removeTags(news.description).split(' ').slice(0, 20).join(' ')}...
             </p>
             <a href={news.link} target="_blank" rel="noopener noreferrer" className={styles.newsLink}>
-              자세히 보기
+              뉴스 원문 보러가기
             </a>
           </div>
         ))}
