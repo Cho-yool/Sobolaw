@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { UnlockTwoTone, LockTwoTone } from "@ant-design/icons"
+import { UnlockTwoTone, LockTwoTone } from "@ant-design/icons";
 import { Table, Row, Col, Modal, Button } from "antd";
-import { ColumnType } from 'antd/es/table'
+import { ColumnType } from "antd/es/table";
 import { BoardList } from "../../types/DataTypes";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
@@ -22,9 +22,9 @@ export default function BoardTable({ boardList }: MyLawcaseTableProps) {
       title: "번호",
       dataIndex: "key",
       key: "key",
-      align: 'center',
+      align: "center",
       render: (text: any, record: any) => {
-        return parseInt(text)+1;
+        return parseInt(text) + 1;
       },
     },
     {
@@ -40,14 +40,18 @@ export default function BoardTable({ boardList }: MyLawcaseTableProps) {
       dataIndex: "title",
       key: "title",
       render: (text: any, record: any) => {
-        return <span style={{fontSize: '16px'}}>{(text.length < 20)? text:`${text.substring(0, 20)}···`}</span>
+        return (
+          <span style={{ fontSize: "16px" }}>
+            {text.length < 20 ? text : `${text.substring(0, 20)}···`}
+          </span>
+        );
       },
     },
     {
       title: "조회수",
       dataIndex: "hit",
       key: "hit",
-      align: 'center',
+      align: "center",
     },
     {
       title: "작성자",
@@ -92,23 +96,44 @@ export default function BoardTable({ boardList }: MyLawcaseTableProps) {
   ];
 
   const checkPublic = (board: BoardList) => {
-    if(board.memberId != user.userId && (!board.public && user.role != `ROLE_LAWYER`)){
+    if (
+      board.memberId != user.userId &&
+      !board.public &&
+      user.role != `ROLE_LAWYER`
+    ) {
       setIsModalOpen(true);
-    }else{
-      navigate(`/board/detail/${board.boardId}`)
+    } else {
+      navigate(`/board/detail/${board.boardId}`);
     }
-  }
+  };
 
   return (
     <>
       <Row>
         <Col xs={0} sm={0} md={24} lg={24}>
           <div className={style["table"]}>
-            <Table columns={columnsWide} dataSource={boardList} onRow={(record) => ({onClick: () => {checkPublic(record)}})} />
+            <Table
+              columns={columnsWide}
+              style={{ cursor: "pointer" }}
+              dataSource={boardList}
+              onRow={(record) => ({
+                onClick: () => {
+                  checkPublic(record);
+                },
+              })}
+            />
           </div>
         </Col>
         <Col xs={24} sm={24} md={0}>
-          <Table columns={columnsNarrow} dataSource={boardList} onRow={(record) => ({onClick: () => {checkPublic(record)}})}/>
+          <Table
+            columns={columnsNarrow}
+            dataSource={boardList}
+            onRow={(record) => ({
+              onClick: () => {
+                checkPublic(record);
+              },
+            })}
+          />
         </Col>
       </Row>
       <Modal
@@ -116,10 +141,15 @@ export default function BoardTable({ boardList }: MyLawcaseTableProps) {
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
         footer={[
-          <Button key="submit" type="primary" onClick={() => setIsModalOpen(false)}>
-            확인  
+          <Button
+            key="submit"
+            type="primary"
+            onClick={() => setIsModalOpen(false)}
+          >
+            확인
           </Button>,
-        ]}/>
-      </>
+        ]}
+      />
+    </>
   );
 }

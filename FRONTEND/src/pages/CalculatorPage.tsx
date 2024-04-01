@@ -184,9 +184,6 @@ export default function CalculatorPage() {
               인지규칙
             </Button> */}
           </div>
-          <Button style={{ backgroundColor: "#dbe4f0", color: "#0047ba" }}>
-            도움말
-          </Button>
         </div>
       </div>
 
@@ -294,15 +291,12 @@ export default function CalculatorPage() {
           style={{ display: "flex", justifyContent: "flex-end", gap: "8px" }}
         >
           <Button
-            style={{ border: "1px solid #0047ba", color: "#0047ba" }}
+            style={{ border: "1px solid #bf8438", color: "#bf8438" }}
             onClick={onReset}
           >
             초기화
           </Button>
-          <Button
-            style={{ backgroundColor: "#0047ba", color: "white" }}
-            onClick={onSubmit}
-          >
+          <Button onClick={onSubmit} type="primary">
             제출하기
           </Button>
         </div>
