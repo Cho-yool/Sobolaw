@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
 import {
   getToken,
+  deleteToken,
   getMessaging,
   MessagePayload,
   onMessage,
@@ -18,17 +19,18 @@ navigator.serviceWorker
   });
 
 export const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FCM_API_KEY,
-  authDomain: import.meta.env.VITE_FCM_AUTH_DOMAIN,
-  databaseURL: import.meta.env.VITE_FCM_DATABASE_URL,
-  projectId: import.meta.env.VITE_FCM_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FCM_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FCM_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FCM_APP_ID,
-  measurementId: import.meta.env.VITE_FCM_MEASUREMENT_ID,
+  apiKey: "AIzaSyB3CisHLdztQymU4FUl3meEz7_GI_GF4OY",
+  authDomain: "sobolaw-b1e95.firebaseapp.com",
+  databaseURL: "sobolaw-b1e95.firebaseio.com",
+  projectId: "sobolaw-b1e95",
+  storageBucket: "sobolaw-b1e95.appspot.com",
+  messagingSenderId: "909268063265",
+  appId: "1:909268063265:web:89d9d47ae882d2c7d37f60",
+  measurementId: "G-Y1XC8ZL32F",
 };
 
-export const vapidKey = import.meta.env.VITE_APP_FCM_VAPID_KEY;
+export const vapidKey =
+  "BGAtZFQc1lIkAulhINVAOXPqqi28e8_pxzuTvV21nxPXXiiXjkkZUnsXTalnlxxImuV90KcXInxrHNjcq2VcFuU";
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
@@ -67,26 +69,22 @@ export function requestPermission() {
   });
 }
 
-// function deleteTokenFromFirebase() {
-//   // Delete registration token.
-//   getToken(messaging)
-//     .then((currentToken) => {
-//       deleteToken(messaging)
-//         .then(() => {
-//           console.log("Token deleted.", currentToken);
-//           setTokenSentToServer(false);
-//           // Once token is deleted update UI.
-//           resetUI();
-//         })
-//         .catch((err) => {
-//           console.log("Unable to delete token. ", err);
-//         });
-//     })
-//     .catch((err) => {
-//       console.log("Error retrieving registration token. ", err);
-//       showToken("Error retrieving registration token.");
-//     });
-// }
+export function deleteTokenFromFirebase() {
+  // Delete registration token.
+  getToken(messaging)
+    .then((currentToken) => {
+      deleteToken(messaging)
+        .then(() => {
+          console.log("Token deleted.", currentToken);
+        })
+        .catch((err) => {
+          console.log("Unable to delete token. ", err);
+        });
+    })
+    .catch((err) => {
+      console.log("Error retrieving registration token. ", err);
+    });
+}
 
 // // const response = null;
 // onMessage(messaging, (payload) => {
