@@ -67,7 +67,7 @@ export type MemberInfo = {
   memberKeyword: MemberKeyword[];
   memberRecents: MemberRecent[];
   memberPrecedents: memberPrecedents[];
-  roll: string;
+  role: string;
 };
 
 export type MemberPrecedent = {
@@ -269,39 +269,38 @@ export type MemberList = {
 
 export type NotificationData = {
   memberId: number;
-  token: string;
   title: string;
   body: string;
 };
 // board
 export type BoardList = {
-  key: string,
-  boardId: number,
-  title: string,
-  hit: number,
-  memberId: number | null,
-  name: string,
-  createdTime: string, 
-  public: boolean | string,
+  key: string;
+  boardId: number;
+  title: string;
+  hit: number;
+  memberId: number | null;
+  name: string;
+  createdTime: string;
+  public: boolean | string;
 };
 
 export type BoardDetail = {
-  boardId: number | null,
-  title: string,
-  content: string ,
-  hit: number | null,
-  memberId: number | null,
-  name: string | null,
-  createdTime: string | null,
-  public: boolean | undefined | string,
+  boardId: number | null;
+  title: string;
+  content: string;
+  hit: number | null;
+  memberId: number | null;
+  name: string | null;
+  createdTime: string | null;
+  public: boolean | undefined | string;
 };
 
 export type Comment = {
-  boardId:  number| undefined | null,
-  commentId: number | null,
-  content: string | null,
-  memberId: number | null,
-  name: string | null,
-  role: String | null,
-  createdTime: string | null,
+  boardId: number | undefined | null;
+  commentId: number | null;
+  content: string | null;
+  memberId: number | null;
+  name: string | null;
+  role: String | null;
+  createdTime: string | null;
 };

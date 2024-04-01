@@ -3,12 +3,13 @@
 // 2. url로 다시 저장 날려주기
 
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Button } from "antd";
 import { EditOutlined, CloseOutlined } from "@ant-design/icons";
-import { RootState } from "../../redux/store/store";
+import { RootState, AppDispatch } from "../../redux/store/store";
 import style from "../../styles/mypage/ApplyLawyer.module.css";
-import { postImage, postApplyLawyer } from "../../api/members";
+import { postApplyLawyer } from "../../api/members";
+import { updateAuth } from "../../redux/reducers/user/userSlice";
 
 type UploadImage = {
   file: File;
@@ -17,6 +18,7 @@ type UploadImage = {
 
 export default function ApplyLawyer({ onUpdate }: { onUpdate: () => void }) {
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
+  const dispatch: AppDispatch = useDispatch();
   const [fileName, setFileName] = useState<UploadImage | undefined>();
   const [previewURL, setPreviewUrl] = useState<string | null>("dd");
 
@@ -48,17 +50,20 @@ export default function ApplyLawyer({ onUpdate }: { onUpdate: () => void }) {
 
   const formData = new FormData();
   const onSubmit = async () => {
-    if (fileName !== undefined) {
-      formData.append("file", fileName.file);
-      const response = await postImage(accessToken, formData);
-      console.log(response);
-      // postApplyLawyer(accessToken, response)
-      //   .then(() => {
-      //     onUpdate();
-      //   })
-      //   .catch(() => {
-      //     alert("사진을 다시 확인해주세요");
-      //   });
+    if (fileName !== undefined && previewURL) {
+      formData.append("image", fileName.file);
+      // for (const key of formData.keys()) {
+      //   console.log(key, ":", formData.get(key));
+      // }
+      try {
+        const fileURL = previewURL.replace("blob:", "");
+        formData.append("belongDocumentPath", fileURL);
+        await postApplyLawyer(accessToken, formData);
+        dispatch(updateAuth("ROLE_WAITING"));
+        onUpdate();
+      } catch (error) {
+        alert("사진을 다시 확인해주세요");
+      }
     } else {
       alert("사진을 등록해주세요ㅠㅠ");
     }
@@ -111,10 +116,13 @@ export default function ApplyLawyer({ onUpdate }: { onUpdate: () => void }) {
                 id="file"
                 onChange={fileInputHandler}
                 disabled={fileName ? true : false}
-                style={{ display: "none" }}
+                style={{ display: "none", cursor: "pointer" }}
               />
-
-              <label htmlFor="file" className="AttachmentButton">
+              <label
+                htmlFor="file"
+                className="AttachmentButton"
+                style={{ cursor: "pointer", margin: "auto" }}
+              >
                 🔗 사진 업로드하기
               </label>
             </div>
@@ -122,7 +130,7 @@ export default function ApplyLawyer({ onUpdate }: { onUpdate: () => void }) {
         </>
       )}
 
-      <Button type="primary" onClick={onSubmit}>
+      <Button type="primary" onClick={onSubmit} style={{ marginTop: "2rem" }}>
         제출하기
       </Button>
     </div>

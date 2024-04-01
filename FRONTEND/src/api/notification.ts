@@ -20,7 +20,8 @@ async function getTokens(memberId: number) {
 
 // 알림 전송
 async function postNotifications(data: NotificationData) {
-  await http.post("notifications", data);
+  const response = await http.post("notifications", data);
+  return response.data;
 }
 
 export { postTokens, getTokens, postNotifications };
