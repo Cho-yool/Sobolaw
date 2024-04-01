@@ -67,7 +67,7 @@ public class CertificationService {
      */
     @Transactional(readOnly = true)
     public List<MemberRoleUpdateRequest> findLawyerAll() {
-        if (isAuthorizedForRoleChange()) {
+        if (!isAuthorizedForRoleChange()) {
             log.info("권한 여부 : " + isAuthorizedForRoleChange());
             throw new CertificationException(CertificationErrorCode.NO_AUTHORITY);
         }
@@ -80,7 +80,7 @@ public class CertificationService {
      */
     @Transactional(readOnly = true)
     public MemberRoleUpdateDetailResponseDTO findLawyerUpdateRequestDto(Long articleId) {
-        if (isAuthorizedForRoleChange()) {
+        if (!isAuthorizedForRoleChange()) {
             throw new CertificationException(CertificationErrorCode.NO_AUTHORITY);
         }
         MemberRoleUpdateRequest request = memberRoleUpdateRepository.findById(articleId).orElseThrow(
@@ -106,6 +106,9 @@ public class CertificationService {
      */
     @Transactional
     public void deleteLawyerArticleByArticleId(Long articleId) {
+        if (!isAuthorizedForRoleChange()) {
+            throw new CertificationException(CertificationErrorCode.NO_AUTHORITY);
+        }
         MemberRoleUpdateRequest memberRoleUpdateRequest = memberRoleUpdateRepository.findById(articleId)
             .orElseThrow(() -> new CertificationException(CertificationErrorCode.NO_ARTICLE));
         memberRoleUpdateRequest.softDelete();
@@ -121,7 +124,7 @@ public class CertificationService {
             .orElseThrow(() -> new CertificationException(CertificationErrorCode.NOT_FOUND_MEMBER));
         RoleType userRole = currentMember.getRole();
 
-        return userRole != RoleType.ROLE_ADMIN;
+        return userRole == RoleType.ROLE_ADMIN;
     }
 
 }
