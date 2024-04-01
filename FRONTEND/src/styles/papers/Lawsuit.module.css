@@ -34,6 +34,14 @@
   }
   .right-menu {
     width: 100%;
+    height: calc(100vh - 41vh);
+    overflow: auto;
+  }
+}
+
+@media (max-width: 1000px) {
+  .right-menu {
+    width: 100%;
     height: calc(100vh - 49vh);
     overflow: auto;
   }
