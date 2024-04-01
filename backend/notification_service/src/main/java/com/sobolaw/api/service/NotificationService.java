@@ -6,10 +6,12 @@ import com.sobolaw.api.model.dto.FCMToken;
 import com.sobolaw.api.model.dto.Message;
 import com.sobolaw.api.repository.FCMTokenRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class NotificationService {
 
     private final FCMTokenRepository fcmTokenRepository;
@@ -40,7 +42,8 @@ public class NotificationService {
                 .build();
 
         try {
-            firebaseMessaging.send(msg);
+            String logg = firebaseMessaging.send(msg);
+            log.info("**FCM Log**: {}", logg);
             return message;
         } catch (Exception e) {
             return null;
