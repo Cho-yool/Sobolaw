@@ -339,7 +339,7 @@ public class MemberController {
     @Operation(summary = "변호사 등업 요청", description = "변호사로 등업을 요청합니다.", tags = { "멤버" })
     @PostMapping("/certification/lawyer")
     public BaseResponse<?> lawyerRoleUpdate(@RequestPart("image") MultipartFile file) {
-        log.info("??");
+        log.info("변호사 등업 신청");
         Map<String, String> result = mediaService.storeImage(file);
         String url = result.get("url");
         log.info("url값 : " + url);

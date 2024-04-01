@@ -86,7 +86,11 @@ spring:
       mail.smtp.ssl.trust: smtp.naver.com
       mail.debug: true
 
-
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 100MB
 
 #logging
 logging:

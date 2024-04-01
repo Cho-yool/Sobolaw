@@ -1,5 +1,6 @@
 package com.sobolaw.api.member.repository;
 
+import com.sobolaw.api.member.entity.Member;
 import com.sobolaw.api.member.entity.MemberRoleUpdateRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -8,4 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface MemberRoleUpdateRepository extends JpaRepository<MemberRoleUpdateRequest, Long> {
 
+    MemberRoleUpdateRequest findByMember(Member member);
 }
