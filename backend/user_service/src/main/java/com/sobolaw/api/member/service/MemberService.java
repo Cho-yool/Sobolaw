@@ -18,6 +18,7 @@ import com.sobolaw.api.member.entity.MemberKeyword;
 import com.sobolaw.api.member.entity.MemberPrecedent;
 import com.sobolaw.api.member.entity.MemberPrecedentHighlight;
 import com.sobolaw.api.member.entity.MemberRecent;
+import com.sobolaw.api.member.entity.MemberRoleUpdateRequest;
 import com.sobolaw.api.member.entity.Type.KeywordType;
 import com.sobolaw.api.member.entity.Type.RoleType;
 import com.sobolaw.api.member.exception.MemberErrorCode;
@@ -27,6 +28,7 @@ import com.sobolaw.api.member.repository.MemberPrecedentHighlightRepository;
 import com.sobolaw.api.member.repository.MemberPrecedentRepository;
 import com.sobolaw.api.member.repository.MemberRecentRepository;
 import com.sobolaw.api.member.repository.MemberRepository;
+import com.sobolaw.api.member.repository.MemberRoleUpdateRepository;
 import com.sobolaw.feign.dto.response.PrecedentKeywordResponseDTO;
 import com.sobolaw.feign.dto.response.PrecedentResponseDTO;
 import com.sobolaw.feign.service.LawServiceClient;
@@ -52,6 +54,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @AllArgsConstructor
 public class MemberService {
+
+    private final MemberRoleUpdateRepository memberRoleUpdateRepository;
 
     private final MemberRepository memberRepository;
     private final MemberPrecedentRepository memberPrecedentRepository;
@@ -139,20 +143,6 @@ public class MemberService {
         }
 
         return responseDTOs;
-
-//        List<Long> recentIds = member.getMemberRecents().stream().map(MemberRecent::getPrecedentId).toList();
-//
-//        Map<String, List<Long>> requestBody = Collections.singletonMap("precedentId", recentIds);
-//        log.info("requestBody = " + requestBody);
-//        log.info("넘겨질 판례 Id값 여부 " + requestBody.get("precedentId").isEmpty());
-//        if (requestBody.get("precedentId").isEmpty()) {
-//            throw new MemberException(MemberErrorCode.NOT_FOUND_RECENT);
-//        }
-//        BaseResponse<List<PrecedentListResponseDTO>> baseResponse = lawServiceClient.getPrecedentList(requestBody);
-//        if (baseResponse.getData() == null) {
-//            throw new MemberException(MemberErrorCode.NOT_FOUND_RECENT);
-//        }
-//        return baseResponse.getData();
 
     }
 
@@ -760,7 +750,13 @@ public class MemberService {
         Long currentMemberId = jwtProvider.getMemberId();
         Member member = memberRepository.findById(currentMemberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
-
+        log.info("멤버를 삭제하겠습니다. " + member);
+        MemberRoleUpdateRequest memberRoleUpdateRequest = memberRoleUpdateRepository.findByMember(member);
+        log.info("멤버가 혹시 등업요청을 만들었나? : " + memberRoleUpdateRequest);
+        if (memberRoleUpdateRequest != null) {
+            memberRoleUpdateRequest.softDelete();
+            memberRoleUpdateRepository.save(memberRoleUpdateRequest);
+        }
         member.softDelete();
         memberRepository.save(member);
     }

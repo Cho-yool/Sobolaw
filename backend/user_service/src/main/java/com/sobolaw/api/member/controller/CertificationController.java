@@ -29,7 +29,7 @@ public class CertificationController {
     /**
      * 변호사 등업 리스트 조회.
      */
-    @Operation(summary = "변호사 등업 리스트 조회", description = "변호사 등업 리스트를 조회합니다.", tags = { "등업" })
+    @Operation(summary = "변호사 등업 리스트 조회", description = "변호사 등업 리스트를 조회합니다.", tags = {"등업"})
     @GetMapping("/lawyer")
     public BaseResponse<List<RoleUpdateListResponseDTO>> getLawyerUpdateRequestList() {
         List<RoleUpdateListResponseDTO> listResult =
@@ -44,7 +44,7 @@ public class CertificationController {
     /**
      * 변호사 등업 상세 조회.
      */
-    @Operation(summary = "변호사 등업글 상세 조회", description = "변호사 등업요청을 상세조회합니다.", tags = { "등업" })
+    @Operation(summary = "변호사 등업글 상세 조회", description = "변호사 등업요청을 상세조회합니다.", tags = {"등업"})
     @GetMapping("/lawyer/{articleId}")
     public BaseResponse<MemberRoleUpdateDetailResponseDTO> getLawyerUpdateRequestDetail(@PathVariable(name = "articleId") Long articleId) {
         MemberRoleUpdateDetailResponseDTO dto = certificationService.findLawyerUpdateRequestDto(articleId);
@@ -54,11 +54,10 @@ public class CertificationController {
     /**
      * 변호사 등업 승인.
      */
-    @Operation(summary = "변호사 등업 승인", description = "변호사 등업요청을 승인합니다.", tags = { "등업" })
+    @Operation(summary = "변호사 등업 승인", description = "변호사 등업요청을 승인합니다.", tags = {"등업"})
     @PostMapping("/lawyer/{articleId}/approve")
     public BaseResponse<RoleUpdateResponseDTO> approveMentorRoleUpdate(@PathVariable(name = "articleId") Long articleId) {
         Long mentorId = certificationService.findLawyerIdByArticleId(articleId);
-
         RoleUpdateResponseDTO result = certificationService.updateRole(mentorId, RoleType.ROLE_LAWYER);
         certificationService.deleteLawyerArticleByArticleId(articleId);
         return BaseResponse.success(HttpStatus.OK.value(), "멘토 등업 성공", result);
@@ -68,7 +67,7 @@ public class CertificationController {
     /**
      * 변호사 등업 거절.
      */
-    @Operation(summary = "멘토 등업 거절", description = "멘토 등업요청을 거절합니다.", tags = { "등업" })
+    @Operation(summary = "멘토 등업 거절", description = "멘토 등업요청을 거절합니다.", tags = {"등업"})
     @PostMapping("/lawyer/{articleId}/deny")
     public BaseResponse<Long> denyMentorRoleUpdate(@PathVariable(name = "articleId") Long articleId) {
         certificationService.deleteLawyerArticleByArticleId(articleId);
