@@ -37,3 +37,35 @@
   border: 1px solid black;
   background-color: white;
 }
+
+.contents-center {
+  width: 50%;
+  display: flex;
+  gap: 20px;
+}
+
+@media (max-width: 1000px) {
+  .container {
+    flex-direction: column;
+    height: fit-content;
+  }
+
+  .container-box {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 0;
+  }
+
+  .contents-center {
+    width: 100%;
+    margin: 1rem 0;
+  }
+}
+
+@media (max-width: 500px) {
+  .container {
+    padding: 0 0.5rem;
+    font-size: 0.8rem;
+  }
+}

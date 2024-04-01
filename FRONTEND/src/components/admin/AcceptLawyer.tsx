@@ -110,14 +110,24 @@ function AcceptLawyer() {
 
   return (
     <div style={{ flexDirection: "column", width: "90%", height: "100%" }}>
-      <Collapse
-        bordered={false}
-        expandIcon={({ isActive }) => (
-          <CaretRightOutlined rotate={isActive ? 90 : 0} />
-        )}
-        style={{ background: token.colorBgContainer }}
-        items={getItems(panelStyle, memberList)}
-      />
+      {memberList.length > 0 ? (
+        <Collapse
+          bordered={false}
+          expandIcon={({ isActive }) => (
+            <CaretRightOutlined rotate={isActive ? 90 : 0} />
+          )}
+          style={{ background: token.colorBgContainer }}
+          items={getItems(panelStyle, memberList)}
+        />
+      ) : (
+        <div
+          style={{
+            color: "#bcbcbc",
+          }}
+        >
+          변호사 승인 요청이 없습니다
+        </div>
+      )}
     </div>
   );
 }
