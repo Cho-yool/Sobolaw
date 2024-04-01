@@ -1,0 +1,60 @@
+{
+  "settings": {
+    "analysis": {
+      "tokenizer": {
+        "nori_tokenizer_mixed": {
+          "type": "nori_tokenizer",
+          "decompound_mode": "mixed"
+        }
+      },
+      "filter": {
+        "ngram_filter": {
+          "type": "ngram",
+          "min_gram": 2,
+          "max_gram": 3
+        }
+      },
+      "analyzer": {
+        "nori_ngram_analyzer": {
+          "type": "custom",
+          "tokenizer": "nori_tokenizer_mixed",
+          "filter": ["ngram_filter"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "statute_number": {
+        "type": "long"
+      },
+      "statute_id": {
+        "type": "long"
+      },
+      "article_content": {
+        "type": "text",
+        "analyzer": "nori_ngram_analyzer"
+      },
+      "article_content_sub": {
+        "type": "text",
+        "analyzer": "nori_ngram_analyzer"
+      },
+      "article_effectiveDate": {
+        "type": "keyword"
+      },
+      "article_number": {
+        "type": "keyword"
+      },
+      "article_number_sub": {
+        "type": "keyword"
+      },
+      "article_title": {
+        "type": "text",
+        "analyzer": "nori_ngram_analyzer"
+      },
+      "article_type": {
+        "type": "keyword"
+      }
+    }
+  }
+}

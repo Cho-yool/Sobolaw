@@ -1,48 +1,48 @@
 {
   "properties": {
-    "precedentId": {
+    "precedent_id": {
       "type": "long"
     },
-    "caseContent": {
+    "case_content": {
       "type": "text",
-      "analyzer": "ksb_custom_korean_analyzer"
+      "analyzer": "nori_ngram_analyzer"
     },
-    "caseName": {
+    "case_name": {
       "type": "text",
-      "analyzer": "ksb_custom_korean_analyzer"
+      "analyzer": "nori_ngram_analyzer"
     },
-    "caseNumber": {
+    "case_number": {
       "type": "keyword"
     },
-    "caseType": {
+    "case_type": {
       "type": "keyword"
     },
-    "courtName": {
+    "court_name": {
       "type": "keyword"
     },
     "judgment": {
       "type": "keyword"
     },
-    "judgmentDate": {
+    "judgment_date": {
       "type": "keyword"
     },
-    "judicialNotice": {
+    "judicial_notice": {
       "type": "text",
-      "analyzer": "ksb_custom_korean_analyzer"
+      "analyzer": "nori_ngram_analyzer"
     },
-    "referencedCase": {
+    "referenced_case": {
       "type": "text",
-      "analyzer": "ksb_custom_korean_analyzer"
+      "analyzer": "nori_ngram_analyzer"
     },
-    "referencedStatute": {
+    "referenced_statute": {
       "type": "text",
-      "analyzer": "ksb_custom_korean_analyzer"
+      "analyzer": "nori_ngram_analyzer"
     },
-    "verdictSummary": {
+    "verdict_summary": {
       "type": "text",
-      "analyzer": "ksb_custom_korean_analyzer"
+      "analyzer": "nori_ngram_analyzer"
     },
-    "verdictType": {
+    "verdict_type": {
       "type": "keyword"
     },
     "hit": {

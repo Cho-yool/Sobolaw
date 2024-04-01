@@ -2,14 +2,18 @@ package com.sobolaw.api.precedent.index;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import org.elasticsearch.client.Request;
 import org.elasticsearch.client.Response;
+import org.elasticsearch.client.ResponseException;
 import org.elasticsearch.client.RestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +26,31 @@ public class PrecedentDatabaseIndexer {
     private final RestClient restClient;
     private final ObjectMapper objectMapper;
 
+    public void ensureIndexWithSettingsAndMappings() throws IOException {
+        Resource resource = new ClassPathResource("elastic/precedent-setting-mapping.json");
+        String settingsAndMappingsJson = new String(Files.readAllBytes(resource.getFile().toPath()));
+
+        try {
+            // 인덱스 생성 요청
+            Request request = new Request("PUT", "/precedent_index");
+            request.setJsonEntity(settingsAndMappingsJson);
+            restClient.performRequest(request);
+            logger.info("Index precedent_index created with custom settings and mappings.");
+        } catch (ResponseException e) {
+            if (e.getResponse().getStatusLine().getStatusCode() == 400) {
+                // 인덱스가 이미 존재하는 경우의 처리
+                logger.info("Index precedent_index already exists.");
+            } else {
+                throw e;
+            }
+        }
+    }
+
     public void indexDataFromDatabase() throws IOException {
+
+        // index 존재 확인 및 설정 추가
+        ensureIndexWithSettingsAndMappings();
+
         // 작업 시작 로그
         logger.info("Starting the indexing : precedent_index");
 

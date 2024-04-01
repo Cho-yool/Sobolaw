@@ -1,15 +1,15 @@
 {
   "properties": {
-    "termId": {
+    "term_id": {
       "type": "long"
     },
-    "termDefinition": {
+    "term_definition": {
       "type": "text",
-      "analyzer": "ksb_custom_korean_analyzer"
+      "analyzer": "nori_ngram_analyzer"
     },
-    "termName": {
+    "term_name": {
       "type": "text",
-      "analyzer": "ksb_custom_korean_analyzer"
+      "analyzer": "nori_ngram_analyzer"
     }
   }
 }
