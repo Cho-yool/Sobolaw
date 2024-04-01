@@ -2,7 +2,6 @@ package com.sobolaw.api.member.entity.Type;
 
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 /**
  * 멤버 하이라이트 시 타입 정의 ENUM.
@@ -10,7 +9,6 @@ import lombok.Getter;
  * H = Highlight
  * C = Color
  */
-@Getter
 @AllArgsConstructor
 public enum HighlightType {
     MEMO(0),

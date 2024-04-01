@@ -123,6 +123,7 @@ public class JwtProvider {
     public Authentication getAuthentication(String token) {
         Claims claims = parseClaims(token);
         List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
+        log.info("유저 ROLE : " + authorities);
         Long memberId = getMemberIdByToken(token);
 
         Member member = memberRepository.findById(memberId)
@@ -214,7 +215,7 @@ public class JwtProvider {
         log.info("auth = " + authentication);
         log.info("isAuth = " + authentication.isAuthenticated());
         log.info("principle = " + authentication.getPrincipal());
-        if (authentication != null && authentication.isAuthenticated() && authentication.getPrincipal() != "anonymousUser") {
+        if (authentication.isAuthenticated() && authentication.getPrincipal() != "anonymousUser") {
             Object principal = authentication.getPrincipal();
             if (principal instanceof CustomUserDetails) {
                 return ((CustomUserDetails) principal).getMemberId();

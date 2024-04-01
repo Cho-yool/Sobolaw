@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import org.hibernate.annotations.SQLRestriction;
 
 /**
  * Mentor ROLE 업데이트 요청 엔티티.
@@ -15,6 +16,7 @@ import lombok.Getter;
 @Getter
 @Table(name = "mentor_role_update_request")
 @Entity
+@SQLRestriction("is_deleted = false")
 public class MemberRoleUpdateRequest extends BaseEntity {
 
     @Id
