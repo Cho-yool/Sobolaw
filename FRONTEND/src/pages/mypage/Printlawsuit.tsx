@@ -67,10 +67,23 @@ const PrintLawsuit = () => {
     const doc = new jsPDF("p", "mm", "a4");
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
-    doc.addImage(imageFile, "JPEG", 0, 0, pageWidth, pageHeight);
+    // const pageWidth = 210;
+    // const pageHeight = 290;
+    const imgHeight = canvas.height + pageWidth / canvas.width;
+    let heightLeft = imgHeight;
+    let position = 0;
+    // canvas 이미지 URI, 이미지 형식, 상단모퉁이x좌표, 너비, 높이
+    doc.addImage(imageFile, "JPEG", 0, position, pageWidth, imgHeight);
+    heightLeft -= pageHeight;
+    while (heightLeft >= 0) {
+      position = heightLeft - imgHeight;
+      doc.addPage();
+      doc.addImage(imageFile, "JPEG", 0, position, pageWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
     // 저장 및 미리보기
     // doc.save("test.pdf")
-    // window.open(doc.output("bloburl"));
+    window.open(doc.output("bloburl"));
     console.log(doc.output("bloburl"));
     const pdf = new File(
       [doc.output("blob")],

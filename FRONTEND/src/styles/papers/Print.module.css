@@ -50,13 +50,11 @@ strong {
 
 .pages {
   width: 21cm;
-  height: 25cm;
+  /* height: 25cm; */
   padding: 6rem 3rem 3rem 3rem;
-
   font-family: "NotoSerifKR", serif;
   letter-spacing: 1px;
   line-height: 30px;
-
   margin-bottom: 0.5rem;
 }
 
