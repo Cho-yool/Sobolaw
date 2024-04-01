@@ -1,7 +1,7 @@
 import httpx
 
 law_service_url = "http://172.17.0.1:8003/api/law-service/precedents"
-# law_service_url = "http://localhost:8003/api/law-service/precedents"
+# law_service_url = "http://j10a604.p.ssafy.io:8003/api/law-service/precedents"
 
 
 async def get_precedent(precedent_id: int):
