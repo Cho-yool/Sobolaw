@@ -1,28 +1,28 @@
 {
   "properties": {
-    "statuteNumber": {
+    "statute_number": {
       "type": "long"
     },
-    "statuteName": {
+    "statute_name": {
       "type": "text",
-      "analyzer": "ksb_custom_korean_analyzer"
+      "analyzer": "nori_ngram_analyzer"
     },
-    "statuteType": {
+    "statute_type": {
       "type": "keyword"
     },
     "department": {
       "type": "keyword"
     },
-    "amendmentType": {
+    "amendment_type": {
       "type": "keyword"
     },
-    "publicationNumber": {
+    "publication_number": {
       "type": "keyword"
     },
-    "publicationDate": {
+    "publication_date": {
       "type": "keyword"
     },
-    "enforcementDate": {
+    "enforcement_date": {
       "type": "keyword"
     },
     "hit": {
