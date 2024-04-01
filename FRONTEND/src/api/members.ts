@@ -255,7 +255,7 @@ async function getLawyerDetail(accessToken: string, articleId: number) {
 
 // 변호사 등업 승인(??인데 멤버 정보 수정patch 써도 ㄱㅊ을 거 같아요)
 async function postApproveLawyer(accessToken: string, articleId: number) {
-  await http.post(`${url}/certification/lawyer/${articleId}/approve`, {
+  await http.post(`${url}/certification/lawyer/${articleId}/approve`, null, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,

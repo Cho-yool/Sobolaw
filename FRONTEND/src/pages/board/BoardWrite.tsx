@@ -58,7 +58,7 @@ export default function BoardWrite() {
   return (
     <div className="pages">
       <div className={style["mypaper-box"]}>
-        <Col style={{margin:`5rem`, padding:`2rem`, borderRadius:`0rem`, backgroundColor:'#FCFCFC'}} >
+        <Col style={{margin:`8%`, padding:`3%`, backgroundColor:'#FCFCFC'}} >
 
           <Form.Item label="공개 범위">
             <Radio.Group name='public' value={formData.public ? "true" : "false"} onChange={handleInputChange} >
@@ -67,8 +67,8 @@ export default function BoardWrite() {
             </Radio.Group>
           </Form.Item>
 
-          <Form.Item label="작성자" style={{width:'20rem'}}>
-            <Input value={formData.name? formData.name:""}/>
+          <Form.Item label="작성자">
+            <Input value={formData.name? formData.name:""} style={{width:'50%'}}/>
           </Form.Item>
 
           <Form.Item label="제목">
