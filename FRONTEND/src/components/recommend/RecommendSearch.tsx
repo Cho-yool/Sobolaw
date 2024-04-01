@@ -70,7 +70,7 @@ const RecommendSearch: React.FC = () => {
     {
       text: (
         <>
-          6자 이상 입력해주세요.
+          <strong>6자 이상 입력해주세요.</strong>
           <br />
           예: 회사, 건물, 주택, 농지, <br />
           아파트, 은행, 도로, 자동차 등<br />

@@ -3,12 +3,13 @@
 // 2. url로 다시 저장 날려주기
 
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Button } from "antd";
 import { EditOutlined, CloseOutlined } from "@ant-design/icons";
-import { RootState } from "../../redux/store/store";
+import { RootState, AppDispatch } from "../../redux/store/store";
 import style from "../../styles/mypage/ApplyLawyer.module.css";
-import { postImage, postApplyLawyer } from "../../api/members";
+import { postApplyLawyer } from "../../api/members";
+import { updateAuth } from "../../redux/reducers/user/userSlice";
 
 type UploadImage = {
   file: File;
@@ -17,6 +18,7 @@ type UploadImage = {
 
 export default function ApplyLawyer({ onUpdate }: { onUpdate: () => void }) {
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
+  const dispatch: AppDispatch = useDispatch();
   const [fileName, setFileName] = useState<UploadImage | undefined>();
   const [previewURL, setPreviewUrl] = useState<string | null>("dd");
 
@@ -48,17 +50,17 @@ export default function ApplyLawyer({ onUpdate }: { onUpdate: () => void }) {
 
   const formData = new FormData();
   const onSubmit = async () => {
-    if (fileName !== undefined) {
+    if (fileName !== undefined && previewURL) {
       formData.append("image", fileName.file);
       // for (const key of formData.keys()) {
       //   console.log(key, ":", formData.get(key));
       // }
       try {
-        const res = await postImage(accessToken, formData);
-        const imgUrl = res;
-        formData.append("belongDocumentPath", imgUrl);
+        const fileURL = previewURL.replace("blob:", "");
+        formData.append("belongDocumentPath", fileURL);
         await postApplyLawyer(accessToken, formData);
-        onUpdate;
+        dispatch(updateAuth("ROLE_WAITING"));
+        onUpdate();
       } catch (error) {
         alert("사진을 다시 확인해주세요");
       }

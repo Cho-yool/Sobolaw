@@ -22,6 +22,7 @@ import ApplyLawyer from "../../components/mypage/ApplyLawyer";
 export default function MyInfo() {
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user);
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
   const refreshToken = useSelector(
     (state: RootState) => state.user.refreshToken
@@ -47,7 +48,7 @@ export default function MyInfo() {
   ];
 
   let buttonText;
-  switch (userInfo?.role) {
+  switch (user.auth) {
     case "ROLE_USER":
       buttonText = "X";
       break;
@@ -56,6 +57,9 @@ export default function MyInfo() {
       break;
     case "ROLE_ADMIN":
       buttonText = "관리자";
+      break;
+    case "ROLE_WAITING":
+      buttonText = "요청 승인을 기다리는 중입니다";
       break;
     default:
       buttonText = ""; // 특별한 역할이 없을 경우에 대비하여 기본값을 설정합니다.
@@ -159,17 +163,19 @@ export default function MyInfo() {
                 변호사 전환 신청하기
               </Button> */}
               <div>
-                {" "}
-                {userInfo?.role === "ROLE_USER" ? (
-                  <Button
-                    shape="round"
-                    type="primary"
-                    size="small"
-                    className={style["mypaper-button"]}
-                    onClick={showApplyModal}
-                  >
-                    {buttonText} 전환 신청하기
-                  </Button>
+                {user.auth === "ROLE_USER" ? (
+                  <>
+                    {buttonText}{" "}
+                    <Button
+                      shape="round"
+                      type="primary"
+                      size="small"
+                      className={style["mypaper-button"]}
+                      onClick={showApplyModal}
+                    >
+                      전환 신청하기
+                    </Button>
+                  </>
                 ) : (
                   <div>{buttonText}</div>
                 )}
