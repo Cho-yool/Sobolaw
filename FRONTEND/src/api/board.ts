@@ -63,5 +63,5 @@ export {
   deleteBoard,
   registerComment,
   updateComment,
-  deleteComment
+  deleteComment,
 };
