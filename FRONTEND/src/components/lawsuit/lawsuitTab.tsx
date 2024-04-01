@@ -6,7 +6,7 @@ import {
   CloseOutlined,
   ExclamationCircleOutlined,
 } from "@ant-design/icons";
-import { Button, Modal, Divider } from "antd";
+import { Button, Modal, Divider, Input } from "antd";
 import { RootState } from "../../redux/store/store";
 import style from "../../styles/papers/Tab.module.css";
 
@@ -42,7 +42,17 @@ export default function LawsuitTab({ cates }: LawsuitTabProps) {
       navigate("/plaint");
     }
   };
+  const [title, setTitle] = useState("");
 
+  // 저장 제출 함수
+  async function onSubmit(event: React.SyntheticEvent): Promise<void> {
+    event.preventDefault();
+    // TODO: 소장작성 비동기 통신
+    // 모든 조건이 True일 때 제출 가능 (필수입력 공백확인)
+    if (accessToken === "") {
+      alert("로그인 시 이용 가능합니다! ");
+    }
+  }
   return (
     <div className={style["container"]}>
       <div className={style["container-mini"]}>
@@ -195,6 +205,20 @@ export default function LawsuitTab({ cates }: LawsuitTabProps) {
             <Divider />
           </Modal>
         )}
+      </div>
+      <div className={style["contents-center"]}>
+        {/* 상단 저장 버튼 */}
+
+        <Input
+          className={style["button"]}
+          placeholder="고소장 저장 제목"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          style={{ width: "100%" }}
+        />
+        <Button className={style["button"]} type="primary" onClick={onSubmit}>
+          저장하기
+        </Button>
       </div>
       <div className={style["container-mini"]}>
         {/* <Button className={style["container-button"]}>
