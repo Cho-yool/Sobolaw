@@ -62,14 +62,14 @@ const PrintLawsuit = () => {
   const convertToPdf = async (element: HTMLElement) => {
     // canvas를 이용해 html을 이미지로 변환
     const canvas = await html2canvas(element);
-    const imageFile = canvas.toDataURL("image/png");
+    const imageFile = canvas.toDataURL("image/jpeg");
     // jsPDF를 통해 이미지를 pdf로 변환
     const doc = new jsPDF("p", "mm", "a4");
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     // const pageWidth = 210;
     // const pageHeight = 290;
-    const imgHeight = canvas.height + pageWidth / canvas.width;
+    const imgHeight = 870 + pageWidth / canvas.width;
     let heightLeft = imgHeight;
     let position = 0;
     // canvas 이미지 URI, 이미지 형식, 상단모퉁이x좌표, 너비, 높이
@@ -83,22 +83,22 @@ const PrintLawsuit = () => {
     }
     // 저장 및 미리보기
     // doc.save("test.pdf")
-    window.open(doc.output("bloburl"));
-    console.log(doc.output("bloburl"));
+    // window.open(doc.output("bloburl"));
+    // console.log(doc.output("bloburl"));
     const pdf = new File(
       [doc.output("blob")],
-      `${lawsuitType}죄 고소장_${fileName}`,
+      `${lawsuitType}죄 고소장_${fileName}.pdf`,
       {
         type: "application/pdf",
       }
     );
-    console.log(typeof pdf);
-    console.log(pdf);
+    // console.log(typeof pdf);
+    // console.log(pdf);
     const formData = new FormData();
     formData.append("file", pdf);
-    // formData.append("type", "pdf");
+    formData.append("type", "pdf");
     // formData.append("name", "test");
-    console.log(typeof formData);
+    // console.log(typeof formData);
     return formData;
   };
 
@@ -106,12 +106,13 @@ const PrintLawsuit = () => {
     if (componentRef.current) {
       try {
         const formData = await convertToPdf(componentRef.current);
-        console.log(formData);
-        for (const key of formData.keys()) {
-          console.log(key, ":", formData.get(key));
-        }
+        // console.log(formData);
+        // for (const key of formData.keys()) {
+        //   console.log(key, ":", formData.get(key));
+        // }
         await postMail(formData, accessToken);
-        console.log("전송 완료!");
+        alert("전송이 완료되었습니다");
+        // console.log("전송 완료!");
       } catch (error) {
         console.error("이메일 전송 실패:", error);
       }
