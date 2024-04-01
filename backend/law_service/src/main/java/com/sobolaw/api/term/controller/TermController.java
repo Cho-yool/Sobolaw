@@ -50,4 +50,11 @@ public class TermController {
         TermDTO term = termService.findTermByTermId(termId);
         return BaseResponse.success(HttpStatus.OK.value(), "법령용어 조회 성공!", term);
     }
+
+    @GetMapping("/words")
+    @Operation(summary = "법령용어명 목록", description = "자동완성을 위한 법령용어 목록")
+    public BaseResponse<List<String>> getTermName () {
+        List<String> termNames = termService.findDistinctTermNames();
+        return BaseResponse.success(HttpStatus.OK.value(), "법령용어명 목록 조회 성공!", termNames);
+    }
 }

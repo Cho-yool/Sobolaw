@@ -28,7 +28,7 @@ public class NewsService {
             throw new RuntimeException("검색어 인코딩 실패", e);
         }
 
-        String apiURL = "https://openapi.naver.com/v1/search/news?query=" + text;
+        String apiURL = "https://openapi.naver.com/v1/search/news?query=" + text + "&display=30&sort=date";
         try {
             URL url = new URL(apiURL);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();

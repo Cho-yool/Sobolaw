@@ -27,7 +27,7 @@ async def recommend_precedent(situation: Situation):
         for item in list:
             id = item['_id']
             data = await http.get_precedent(id)
-            data['similarity'] = item['total']*70
+            data['similarity'] = item['total']*100
             precedents.append(data)
     finally:
         mongoDB.disconnect()

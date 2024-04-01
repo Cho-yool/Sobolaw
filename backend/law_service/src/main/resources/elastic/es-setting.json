@@ -1,35 +1,26 @@
 {
-  "analysis": {
-    "analyzer": {
-      "ksb_custom_korean_analyzer": {
-        "type": "custom",
-        "tokenizer": "ksb_custom_korean_tokenizer",
-        "filter": [
-          "ksb_custom_ngram_filter",
-          "ksb_custom_korean_stop_filter"
-        ]
-      }
-    },
-    "tokenizer": {
-      "ksb_custom_korean_tokenizer": {
-        "type": "nori_tokenizer",
-        "decompound_mode": "mixed"
-      }
-    },
-    "filter": {
-      "ksb_custom_ngram_filter": {
-        "type": "ngram",
-        "min_gram": 2,
-        "max_gram": 5
+  "settings": {
+    "analysis": {
+      "tokenizer": {
+        "nori_tokenizer_mixed": {
+          "type": "nori_tokenizer",
+          "decompound_mode": "mixed"
+        }
       },
-      "ksb_custom_korean_stop_filter": {
-        "type": "nori_part_of_speech",
-        "stoptags": [
-          "E",
-          "IC"
-        ]
+      "filter": {
+        "ngram_filter": {
+          "type": "ngram",
+          "min_gram": 2,
+          "max_gram": 3
+        }
+      },
+      "analyzer": {
+        "nori_ngram_analyzer": {
+          "type": "custom",
+          "tokenizer": "nori_tokenizer_mixed",
+          "filter": ["ngram_filter"]
+        }
       }
     }
-  },
-  "max_ngram_diff": "10"
+  }
 }
