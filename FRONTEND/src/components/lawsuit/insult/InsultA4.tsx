@@ -631,10 +631,10 @@ export default function LawsuitInsult() {
             <p>모욕이 지속된 시간</p>
             <Cascader
               options={[
-                // {
-                //   value: "수 분 동안 수 차례 모욕행위가 지속됨",
-                //   label: "수 분 동안 수 차례 모욕행위가 지속됨",
-                // },
+                {
+                  value: "수 분 동안 수 차례 모욕행위가 지속됨",
+                  label: "수 분 동안 수 차례 모욕행위가 지속됨",
+                },
                 {
                   value: "어느 정도 모욕 행위가 지속됨",
                   label: "어느 정도 모욕 행위가 지속됨",
