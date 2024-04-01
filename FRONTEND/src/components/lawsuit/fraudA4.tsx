@@ -18,24 +18,28 @@ const FraudA4 = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
           <div>
             <div>
               {fraudDetails.plaintiffName ? (
-                <p>원고(고소인) 성명 : {fraudDetails.plaintiffName} </p>
+                <p className={style["info"]}>
+                  원고(고소인) 성명 : {fraudDetails.plaintiffName}{" "}
+                </p>
               ) : null}
               {fraudDetails.plaintiffResidentRegistrationNumber ? (
-                <p>
+                <p className={style["info"]}>
                   주민등록번호:{" "}
                   {fraudDetails.plaintiffResidentRegistrationNumber}{" "}
                 </p>
               ) : null}
               {fraudDetails.plaintiffMainAddress ||
               fraudDetails.plaintiffSubAddress ? (
-                <p>
+                <p className={style["info"]}>
                   주소 :{" "}
                   {fraudDetails.plaintiffMainAddress +
                     fraudDetails.plaintiffSubAddress}
                 </p>
               ) : null}
               {fraudDetails.plaintiffPhoneNumber ? (
-                <p>전화번호 : {fraudDetails.plaintiffPhoneNumber}</p>
+                <p className={style["info"]}>
+                  전화번호 : {fraudDetails.plaintiffPhoneNumber}
+                </p>
               ) : null}
             </div>
           </div>
@@ -43,19 +47,23 @@ const FraudA4 = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
           <div>
             <div>
               {fraudDetails.defendantName ? (
-                <p>피고(피고소인) 이름 : {fraudDetails.defendantName}</p>
+                <p className={style["info"]}>
+                  피고(피고소인) 이름 : {fraudDetails.defendantName}
+                </p>
               ) : null}
 
               {fraudDetails.defendantMainAddress ||
               fraudDetails.defendantSubAddress ? (
-                <p>
+                <p className={style["info"]}>
                   주소 :{" "}
                   {fraudDetails.defendantMainAddress +
                     fraudDetails.defendantSubAddress}
                 </p>
               ) : null}
               {fraudDetails.defendantPhoneNumber ? (
-                <p>전화번호 : {fraudDetails.defendantPhoneNumber}</p>
+                <p className={style["info"]}>
+                  전화번호 : {fraudDetails.defendantPhoneNumber}
+                </p>
               ) : null}
             </div>
           </div>
@@ -63,7 +71,7 @@ const FraudA4 = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
             <>
               <div className={style["title"]}>고소취지</div>
               <div>
-                <p>
+                <p className={style["content"]}>
                   위 사건에 관하여 본 고소인은 아래와 같은 이유로 피고소인을
                   형법 제347조 제1항의 사기죄로 고소하오니, 수사하여 엄히
                   처벌하여 주시기 바랍니다.
@@ -77,7 +85,7 @@ const FraudA4 = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
             <>
               <div className={style["title"]}>범죄사실</div>
               <div>
-                <p>
+                <p className={style["content"]}>
                   1. 고소인과 피고소인은 {fraudDetails.paperIDate}{" "}
                   {fraudDetails.paperITime} 중고거래 사이트인{" "}
                   {fraudDetails.tradeSite !== "직접입력" ? (
@@ -93,13 +101,13 @@ const FraudA4 = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
                   연락해온 고소인에게 정상적인 본 중고거래 대상물을 판매하겠다고
                   아래와 같이 거짓말을 하였습니다.
                 </p>
-                <p>
+                <p className={style["content"]}>
                   2. 사실 피고소인은 정상적으로 작동되는 물건이 없거나 아예
                   물건이 없어서 돈을 받더라도 정상적인 본 중고거래 대상물을
                   교부할 의사나 능력이 없었습니다.
                 </p>
                 {fraudDetails.damageMoney ? (
-                  <p>
+                  <p className={style["content"]}>
                     3. 그럼에도 불구하고 피고소인은 위와 같이 고소인을 기망하여{" "}
                     {fraudDetails.moneyDate} {fraudDetails.moneyTime} 고소인
                     {fraudDetails.disposalMethod === 2 ? (
@@ -120,27 +128,35 @@ const FraudA4 = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
               </div>
             </>
           ) : null}
-          <div className={style["title"]}>고소이유</div>
-          <div>
-            <p>
-              상기 내용에 따라 고소인은 피고소인을 다음과 같은 이유로
-              고소합니다:
-            </p>
-            <p>
-              1. 상기 내용에 따라 고소인과 피고소인은 중고거래 사이트에서
-              거래하였으며, 피고소인은 거래 내용을 위조하여 고소인을 기망하고
-              돈을 받았습니다.
-            </p>
-            {/* 나머지 고소이유 내용 */}
-          </div>
-          <div className={style["title"]}>결론</div>
-          <div>
-            <p>
-              위와 같은 피고소인의 행위는 형법 제347조 제1항에 정한 사기죄에
-              해당하고, 이로 인한 고소인의 재산적/정신적 피해가 극심하므로,
-              피고소인을 수사하여 엄벌에 처해주시기 바랍니다.
-            </p>
-          </div>
+          {(fraudDetails.tradedItem &&
+            fraudDetails.damageMoney &&
+            fraudDetails.plaintiffName) ||
+          fraudDetails.defendantName ? (
+            <>
+              <div className={style["title"]}>고소이유</div>
+              <div>
+                <p className={style["content"]}>
+                  상기 내용에 따라 고소인은 피고소인을 다음과 같은 이유로
+                  고소합니다:
+                </p>
+                <p className={style["content"]}>
+                  1. 상기 내용에 따라 고소인과 피고소인은 중고거래 사이트에서
+                  거래하였으며, 피고소인은 거래 내용을 위조하여 고소인을
+                  기망하고 돈을 받았습니다.
+                </p>
+                {/* 나머지 고소이유 내용 */}
+              </div>
+              <div className={style["title"]}>결론</div>
+              <div>
+                <p className={style["content"]}>
+                  위와 같은 피고소인의 행위는 형법 제347조 제1항에 정한 사기죄에
+                  해당하고, 이로 인한 고소인의 재산적/정신적 피해가 극심하므로,
+                  피고소인을 수사하여 엄벌에 처해주시기 바랍니다.
+                </p>
+              </div>
+            </>
+          ) : null}
+
           {fraudDetails.evidenceList.length > 0 ? (
             <>
               <div className={style["title"]}>[별첨] - 증거자료</div>
@@ -150,9 +166,11 @@ const FraudA4 = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
                     list !==
                     "기타(피고소인을 특정할 수 있는 증거나 사항) 및 직접입력"
                   ) {
-                    return <li>{list}</li>;
+                    return <li className={style["content"]}>{list}</li>;
                   } else {
-                    return <li>{directEvidence}</li>;
+                    return (
+                      <li className={style["content"]}>{directEvidence}</li>
+                    );
                   }
                 })}
               </ul>

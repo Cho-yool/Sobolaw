@@ -5,7 +5,6 @@ import { Flex, Input, DatePicker, Tooltip, Radio } from "antd";
 import type { DatePickerProps } from "antd";
 import style from "../../styles/papers/FraudMenu.module.css";
 import CheckBox from "../common/CheckBox";
-import { useEffect } from "react";
 import { FraudDetails } from "../../types/DataTypes";
 
 const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
@@ -149,9 +148,6 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
       fraudDetails.setMoneyDate(modifiedDatePart);
     }
   };
-  useEffect(() => {
-    console.log(fraudDetails);
-  }, [fraudDetails]);
   return (
     <Flex vertical align="center">
       {/* 당사자 */}
@@ -431,7 +427,11 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
         <Flex className={style["fraud-menu-checkbox"]} gap={15} vertical>
           <CheckBox boxList={addEvidenve} onChange={evidenceEtcHandler} />
           {fraudDetails.evidenceEtc ? (
-            <Input size="middle" placeholder="피고소인의 사과문 or 녹음파일" />
+            <Input
+              size="middle"
+              placeholder="피고소인의 사과문 or 녹음파일"
+              onChange={(e) => fraudDetails.setEvidence(e.target.value)}
+            />
           ) : null}
         </Flex>
       </Flex>
