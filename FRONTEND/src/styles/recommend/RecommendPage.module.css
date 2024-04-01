@@ -135,7 +135,7 @@
   }
 
   .recommendCardSection {
-    height: 750px; /* 카드 섹션 높이 조정 */
+    height: 700px; /* 카드 섹션 높이 조정 */
   }
 
   .recommendCardSection h2 {
@@ -147,7 +147,7 @@
   }
 
   .recommendSearchSection h2 {
-    font-size: 20px; /* 글꼴 크기 */
+    font-size: 24px; /* 글꼴 크기 */
     font-weight: 600; /* 글꼴 두껍게 */
     margin-top: 5%;
     margin-bottom: 7%;
