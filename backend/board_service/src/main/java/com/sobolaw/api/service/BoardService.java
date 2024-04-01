@@ -95,12 +95,22 @@ public class BoardService {
     // ------------------------------Util-----------------------------------------
 
     public BoardResponseDto changeBoard(Board board) {
-        Member member = userServiceClient.getMember(board.getMemberId()).getData();
-        return new BoardResponseDto(board.getBoardId(), member, board.getTitle(), board.getContent(), board.getHit(), board.getCreatedTime(), board.isPublic(), null);
+        Member member = null;
+        try{
+            member = userServiceClient.getMember(board.getMemberId()).getData();
+        }catch (Exception e){
+            member = new Member(-1, "***", "ROLE_USER");
+        }
+            return new BoardResponseDto(board.getBoardId(), member, board.getTitle(), board.getContent(), board.getHit(), board.getCreatedTime(), board.isPublic(), null);
     }
 
     public CommentResponseDto changeComment(Comment comment) {
-        Member member = userServiceClient.getMember(comment.getMemberId()).getData();
+        Member member = null;
+        try {
+            member = userServiceClient.getMember(comment.getMemberId()).getData();
+        }catch (Exception e){
+            member = new Member(-1, "***", "ROLE_USER");
+        }
         return new CommentResponseDto(comment.getCommentId(), comment.getBoardId(), member, comment.getContent(), comment.getCreatedTime());
     }
 
