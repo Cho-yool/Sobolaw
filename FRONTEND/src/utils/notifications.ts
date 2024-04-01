@@ -54,7 +54,8 @@ export function requestPermission() {
     Notification.requestPermission().then((permission) => {
       if (permission === "granted") {
         getToken(messaging, {
-          vapidKey: import.meta.env.VITE_APP_FCM_VAPID_KEY,
+          vapidKey:
+            "BGAtZFQc1lIkAulhINVAOXPqqi28e8_pxzuTvV21nxPXXiiXjkkZUnsXTalnlxxImuV90KcXInxrHNjcq2VcFuU",
         })
           .then((token: string) => {
             console.log(`푸시 토큰 발급 완료 : ${token}`);
