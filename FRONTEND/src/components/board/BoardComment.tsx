@@ -55,15 +55,15 @@ export default function BoardWrite({ boardId }: BoardCommentProps) {
   };
 
   return (
-    <div className="pages">
+    <>
       <div className={style["mypaper-box"]}>
-        <Col style={{margin:`1rem`}}>
+        <Col style={{margin:`1rem`, padding: `1rem`}}>
           <Form.Item label="작성자" style={{width:'20rem'}}>
             <Input value={comment?.name? comment.name:""}/>
           </Form.Item>
 
           <Form.Item label="내용">
-            <Input.TextArea style={{height:`10vh`}} name='content' value={comment?.content? comment.content:""} onChange={handleInputChange} />
+            <Input.TextArea style={{height:`20vh`}} name='content' value={comment?.content? comment.content:""} onChange={handleInputChange} />
           </Form.Item>
 
           <Form.Item  style={{display:`flex`, justifyContent:`flex-end`}}>
@@ -84,7 +84,6 @@ export default function BoardWrite({ boardId }: BoardCommentProps) {
             확인  
           </Button>,
         ]}/>
-    </div>
-
+     </>
   );
 }

@@ -41,27 +41,29 @@ export default function BoardList() {
   };
   return (
     <div className="pages">
-      <div className={style["mypaper-box"]}>
-        <Row style={{ justifyContent: 'flex-end', margin:`5rem`, marginBottom:`0.5rem`}}>
-          <Col>
-            <SearchOutlined style={{fontSize:`1.1rem`}}/> &nbsp;
-            <Select defaultValue="name" style={{ width: 90, marginRight: 8 }} onChange={setSearchField}>
-              <Select.Option value="name">작성자</Select.Option>
-              <Select.Option value="title">제목</Select.Option>
-            </Select>
-          </Col>
-          <Col>
-            <Input
-              placeholder="검색어"
-              value={searchText}
-              onChange={(e) => handleSearch(e.target.value)}
-              style={{ marginBottom: 20 }}
-          />
-          </Col>
-        </Row>
-          <Col>
-            <BoardTable boardList={searchedData} />
-          </Col>
+      <div className={style["mypaper-box"]} >
+        <div style={{ borderRadius:'0rem' , margin: '10%', padding: '5%', paddingBottom:'0%', backgroundColor: '#FCFCFC'}}>
+          <Row style={{ justifyContent: 'flex-end', margin:`0rem`}}>
+            <Col>
+              <SearchOutlined style={{fontSize:`1.1rem`}}/> &nbsp;
+              <Select defaultValue="name" style={{ width: 90, marginRight: 8 }} onChange={setSearchField}>
+                <Select.Option value="name">작성자</Select.Option>
+                <Select.Option value="title">제목</Select.Option>
+              </Select>
+            </Col>
+            <Col>
+              <Input
+                placeholder="검색어"
+                value={searchText}
+                onChange={(e) => handleSearch(e.target.value)}
+                style={{ marginBottom: 20 }}
+            />
+            </Col>
+          </Row>
+            <Col>
+              <BoardTable boardList={searchedData} />
+            </Col>
+        </div>
       </div>
     </div>
   );
