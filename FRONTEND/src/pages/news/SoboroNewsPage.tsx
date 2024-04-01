@@ -83,7 +83,7 @@ const SoboroNewsPage: React.FC = () => {
 
   useEffect(() => {
     AOS.init({
-      duration: 500,
+      duration: 450,
       once: false,
     });
   }, []);
