@@ -1,11 +1,11 @@
 .main {
   position: relative;
-  width: calc(min(90rem, 90%));
+  width: calc(min(100rem, 100%));
   margin: 0 auto;
   min-height: 100vh;
   column-gap: 3rem;
   padding-block: min(20vh, 3rem);
-  background-color: #ffffff;
+  background-color: #F3E7C0;
 }
 
 .content {
@@ -14,6 +14,7 @@
   align-items: center;
   margin-bottom: 40px;
   margin-left: 5%;
+  color: rgb(100, 68, 25);
 }
 
 .description {
@@ -21,24 +22,28 @@
   padding-right: 20px;
   line-height: 2;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 20px;
+  margin-left: 5%;
 }
 
 .title {
-  font-size: 36px;
+  font-size: 40px;
   font-weight: bold;
-  margin-bottom: 5%;
+  margin-bottom: 10%;
 }
 
 .swiperWrapper {
   position: relative;
-  width: 60%;
-  margin-right: 7%;
+  width: 55%;
+  margin-right: 10%;
+  
 }
 
 .swiperContainer {
   width: 100%;
-  height: 400px;
+  height: 300px;
+  margin-top: 5%;
+  border-radius: 20px;
 }
 
 .swiperSlide {
@@ -48,6 +53,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 20px;
+  
 }
 
 .swiperSlide img {
@@ -55,45 +62,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.swiperNavButton {
-  color: #644419 !important;
-}
-
-.swiperPagination {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.swiperPaginationBullet {
-  width: 12px;
-  height: 12px;
-  background: transparent;
-  border: 1px solid pink;
-  opacity: 1;
-}
-
-.swiperPaginationBulletActive {
-  width: 40px;
-  transition: width .5s;
-  border-radius: 5px;
-  background: #644419;
-  border: 1px solid transparent;
-}
-
-.swiperNavButton {
-  color: #644419;
-}
-
-.swiperNavButton::after {
-  font-size: 24px;
-}
-
-.swiperPagination :global(.swiper-pagination-bullet) {
-  background-color: #644419;
+  border-radius: 20px;
 }
 
 .slideContent {
@@ -102,10 +71,11 @@
   left: 0;
   width: 100%;
   padding: 20px;
-  background-color: rgba(0, 0, 0, 0.7);
-  color: #fff;
+  background-color: rgba(100, 68, 25, 0.9);
+  color: #F3E7C0;
   text-align: center;
   box-sizing: border-box;
+  border-radius: 20px;
 }
 
 
@@ -135,6 +105,8 @@
 
 .newsCards {
   display: grid;
+  width: 90%;
+  margin: 5% auto;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
   height: 100%;
@@ -146,14 +118,15 @@
   margin-bottom: 3%;
   padding: 30px;
   border-radius: 10px;
-  border: 1px solid #838383;
+  border: 1px solid #644419;
   background-color: #fff;
   border-radius: 20px;
-  transition: transform 0.3s ease;
+  box-shadow: 1px 4px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease-in-out;
 }
 
 .newsItem:hover {
-  transform: scale(1.05);
+  transform: scale(1.5);
 }
 
 .newsTitle {
@@ -180,10 +153,46 @@
   margin-top: 10%;
   font-weight: bold;
   display: inline-block;
-  justify-content: center;
   align-items: center;
 }
 
 .newsLink:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .main {
+    width: 100%;
+    padding-block: 1rem;
+  }
+
+  .content {
+    flex-direction: column;
+    margin-left: 0;
+    margin-bottom: 2rem;
+  }
+
+  .description {
+    padding-right: 0;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 16px;
+  }
+
+  .title {
+    font-size: 30px;
+  }
+
+  .swiperWrapper {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .swiperContainer {
+    height: 200px;
+  }
+
+  .newsCards {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
