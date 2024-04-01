@@ -17,14 +17,21 @@
 }
 
 .pages {
-  width: 21cm;
-  height: 29.7cm;
+  width: 45rem;
+  height: 85%;
   padding: 2rem;
   border: 0.5px solid darkgray;
   font-family: "NotoSerifKR", serif;
   letter-spacing: 1px;
   line-height: 30px;
   background-color: white;
+  margin: auto 0;
+  overflow-y: scroll;
+  transition: all 0.2s;
+}
+
+.pages::-webkit-scrollbar {
+  display: none;
 }
 
 .contents-center {
@@ -60,36 +67,83 @@
 .footer {
   font-size: 2rem;
   text-align: center;
-  margin: 1rem 0;
+  margin: 2rem 0;
 }
 
 @media (max-width: 1400px) {
-  .container {
-    background-color: aliceblue;
-    width: 100%;
-    height: 94vh;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column; /* 열 방향 정렬 추가 */
-    position: relative;
-    align-items: center;
+  .info {
+    font-size: 0.9rem;
   }
 
-  .menu {
-    height: auto; /* 높이 자동 조정 */
-    overflow: auto;
-    padding: 1rem;
-    background-color: #fffbe2;
-    line-height: 40px;
-    flex: 1; /* 컨테이너에 맞춰 자동으로 높이 조정 */
-    width: 100%; /* 가로 너비 100%로 설정 */
+  .title {
+    font-size: 1.2rem;
   }
 
-  .contents {
-    height: auto; /* 높이 자동 조정 */
-    justify-content: center;
-    overflow: auto;
-    flex: 1; /* 컨테이너에 맞춰 자동으로 높이 조정 */
-    width: 100%; /* 가로 너비 100%로 설정 */
+  .pages {
+    width: 35rem;
+    transition: all 0.2s;
+  }
+
+  .content {
+    font-size: 0.9rem;
+  }
+
+  .footer {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .info {
+    font-size: 0.6rem;
+  }
+
+  .title {
+    font-size: 1rem;
+    margin: 1rem 0;
+  }
+
+  .title ~ div {
+    line-height: 1.2rem;
+  }
+  .pages {
+    width: 25rem;
+    transition: all 0.2s;
+  }
+
+  .content {
+    font-size: 0.6rem;
+  }
+
+  .footer {
+    font-size: 1.3rem;
+    margin: 1rem 0;
+  }
+}
+
+@media (max-width: 576px) {
+  .info {
+    font-size: 0.4rem;
+  }
+
+  .title {
+    font-size: 0.8rem;
+    margin: 0.5rem 0;
+  }
+  .title ~ div {
+    line-height: 1rem;
+  }
+  .pages {
+    width: 15rem;
+    transition: all 0.2s;
+  }
+
+  .content {
+    font-size: 0.4rem;
+  }
+
+  .footer {
+    font-size: 1rem;
+    margin: 0.5rem 0;
   }
 }
