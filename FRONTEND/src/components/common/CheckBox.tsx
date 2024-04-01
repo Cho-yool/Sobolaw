@@ -39,7 +39,6 @@ const CheckBox = ({ boxList, onChange }: CheckBoxProps) => {
           className={style["check-btn"]}
         />
         <label htmlFor={list} style={{ width: "100%" }}>
-          <span></span>
           <strong>{list}</strong>
         </label>
       </Flex>

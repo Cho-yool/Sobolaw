@@ -9,21 +9,20 @@
 .check-btn + label::before {
   content: "";
   display: inline-block;
-  width: 16px;
-  height: 16px;
-  border: 1px solid #f47c7c;
+  width: 14px;
+  height: 14px;
+  border: 1px solid gray;
   margin-right: 0.5rem;
   border-radius: 4px;
   cursor: pointer;
-  display: block;
 }
 
 .check-btn:checked + label:before {
   content: "✔";
-  font-size: 17px;
+  font-size: 13px;
   color: white;
-  background-color: #f47c7c;
-  border-color: #f47c7c;
-  width: 16px;
-  height: 16px;
+  background-color: #bf8438;
+  border-color: #bf8438;
+  width: 14px;
+  height: 14px;
 }
