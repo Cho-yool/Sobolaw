@@ -66,46 +66,48 @@ export default function BoardDetail() {
   return (
       <div className="pages">
         <div className={style["myinfo-box"]}>
-          <div className={style["box1"]} style={{margin:`5rem`}}>
-            <div className={style["box-title"]} style={{textAlign:'center', fontSize:50, borderRadius:`2rem`}}>{boardDetail?.title}</div>
-            <Row>
-              <Col span={23} style={{ margin: '1rem', textAlign:'right'}}>{boardDetail?.createdTime}</Col>
-            </Row>
-            <Row>
-              <Col span={23} style={{ margin: '1rem', textAlign:'right', fontSize:'130%'}}> 조회수: {boardDetail?.hit}</Col>
-            </Row>
-            <Row> 
-              <Col span={23} style={{ margin: '1rem', textAlign:'right', fontSize:'150%'}}> 작성자: {boardDetail?.name}</Col>
-            </Row>
-            <Divider />
-            <Row> 
-              <Col span={23} style={{ margin: '3rem', fontSize:40, height:'30vh'}}>{boardDetail? lineText(boardDetail.content):""}</Col>
-            </Row>
+          <div style={{ borderRadius:'0rem' , margin: '10%', padding: '5%', paddingBottom:'0%', backgroundColor: '#FCFCFC', lineHeight: '1.3'}}>
+            <div className={style["box1"]} style={{margin:`0rem`}}>
+              <div className={style["box-title"]} style={{textAlign:'center', fontSize:40, borderRadius:`2rem`}}>{boardDetail?.title}</div>
+              <Row>
+                <Col span={23} style={{ margin: '0.3rem', textAlign:'right'}}>{boardDetail?.createdTime?.split(".")[0]}</Col>
+              </Row>
+              <Row>
+                <Col span={23} style={{ margin: '0.3rem', textAlign:'right', fontSize:'130%'}}> 조회수: {boardDetail?.hit}</Col>
+              </Row>
+              <Row> 
+                <Col span={23} style={{ margin: '0.3rem', textAlign:'right', fontSize:'150%'}}> 작성자: {boardDetail?.name}</Col>
+              </Row>
+              <Divider />
+              <Row> 
+                <Col span={23} style={{ margin: '3rem', fontSize:20, minHeight:'30vh'}}>{boardDetail? lineText(boardDetail.content):""}</Col>
+              </Row>
+            </div>
+            <Form.Item  style={{display:`flex`, justifyContent:`flex-end`}}>
+              <Button type="primary" style={{'margin':'1rem'}} onClick={() => navigate('/board/list')}>
+                이전
+              </Button>
+              {
+                user.userId===boardDetail?.memberId && (
+                  <>
+                    <Button type="primary" style={{'marginRight':'1rem'}} onClick={() => navigate(`/board/write`, {state: {boardDetail}})}>
+                      수정
+                    </Button>
+                    <Button type="primary" style={{'marginRight':'1rem'}} onClick={() => setModal(1)}>
+                      삭제
+                    </Button>
+                  </>
+                )
+              }
+            </Form.Item>
+            <div className={style["box1"]}>
+              <Divider />
+              <BoardCard comment={comment} />
+              <Divider />
+              <BoardComment boardId={boardDetail?.boardId}/>
+            </div>
+        
           </div>
-          <Form.Item  style={{display:`flex`, justifyContent:`flex-end`}}>
-            <Button type="primary" style={{'margin':'1rem'}} onClick={() => navigate('/board/list')}>
-              이전
-            </Button>
-            {
-              user.userId===boardDetail?.memberId && (
-                <>
-                  <Button type="primary" style={{'marginRight':'1rem'}} onClick={() => navigate(`/board/write`, {state: {boardDetail}})}>
-                    수정
-                  </Button>
-                  <Button type="primary" style={{'marginRight':'5rem'}} onClick={() => setModal(1)}>
-                    삭제
-                  </Button>
-                </>
-              )
-            }
-          </Form.Item>
-          <div className={style["box1"]}>
-            <Divider />
-            <BoardCard comment={comment} />
-            <Divider />
-            <BoardComment boardId={boardDetail?.boardId}/>
-          </div>
-      
         </div>
 
         <Modal

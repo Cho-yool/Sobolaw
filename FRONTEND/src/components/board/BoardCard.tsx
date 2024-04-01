@@ -44,15 +44,15 @@ export default function BoardCard({ comment }: MyLawcaseCardProps) {
   const setCards = comments.map((item, index) => (
     <React.Fragment key={index}>
 
-        <Col xs={2} sm={2} md={1} lg={1} />
-        <Col xs={20} sm={20} md={10} lg={10} style={{ padding: '1rem'}}>
+        <Col md={1} />
+        <Col md={22} style={{ padding: '1rem'}}>
             <Card title={`${item.name}${item.role==="ROLE_LAWYER"? "[변호사]":""}`} style={{border: '1px solid #F4B13D'}}>
-                <div style={{display: 'flex', justifyContent:'flex-end'}}>{item.createdTime?.split(".")[0]}</div>
-                <div style={{fontSize: '1.1rem'}}>{item? lineText(item.content):""}</div>
+                <div style={{display: 'flex', justifyContent:'flex-end', marginBottom: '1rem'}}>{item.createdTime?.split(".")[0]}</div>
+                <div style={{fontSize: '1rem'}}>{item? lineText(item.content):""}</div>
                 <div style={{display: 'flex', justifyContent:'flex-end'}}>{deleteButton(item)}</div>
             </Card>
         </Col>
-        <Col xs={2} sm={2} md={1} lg={1} />
+        <Col md={1}/>
 
     </React.Fragment>
   ))

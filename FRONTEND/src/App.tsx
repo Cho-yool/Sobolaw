@@ -27,6 +27,7 @@ import BoardList from "./pages/board/BoardList";
 import BoardDetail from "./pages/board/BoardDetail";
 import BoardWrite from "./pages/board/BoardWrite";
 import NotFound from "./pages/NotFound.tsx";
+import SoboroNewsPage from "./pages/news/SoboroNewsPage.tsx";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
         <Route path="/hit/statute" element={<SearchHitPage />} />
         <Route path="/recommend" element={<RecommendPage />} />
         <Route path="/recommend-results" element={<RecommendResultPage />} />
+        <Route path="/news" element={<SoboroNewsPage />} />
         <Route path="/plaint" element={<FormPage />} />
         <Route path="/cal" element={<CalculatorPage />} />
         <Route path="/mypage/*" element={<MyPage />}>

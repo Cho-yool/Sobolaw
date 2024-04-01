@@ -10,6 +10,9 @@ export default defineConfig({
         main: "./index.html",
         sw: "./sw.js",
       },
+      output: {
+        entryFileNames: "[name].js",
+      },
     },
   },
 });
