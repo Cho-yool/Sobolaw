@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 public class Message {
 
     private long memberId;
-    private String token;
     private String title;
     private String body;
 

@@ -1,9 +1,6 @@
 package com.sobolaw.api.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Where;
 
@@ -24,6 +21,7 @@ public class Comment extends BaseEntity {
 
     private long memberId;
 
+    @Column(length = 21845)
     private String content;
 
 }

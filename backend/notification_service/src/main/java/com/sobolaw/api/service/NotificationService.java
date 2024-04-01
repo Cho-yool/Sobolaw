@@ -30,25 +30,19 @@ public class NotificationService {
         if (fcmToken == null)
             return null;
 
-        if (message.getToken() != null) {
-            Notification notification = Notification.builder()
-                    .setTitle(message.getTitle())
-                    .setBody(message.getBody())
-                    .build();
-            com.google.firebase.messaging.Message msg = com.google.firebase.messaging.Message.builder()
-                    .setToken(fcmToken.getToken())
-                    .setNotification(notification)
-                    .build();
+        Notification notification = Notification.builder()
+                .setTitle(message.getTitle())
+                .setBody(message.getBody())
+                .build();
+        com.google.firebase.messaging.Message msg = com.google.firebase.messaging.Message.builder()
+                .setToken(fcmToken.getToken())
+                .setNotification(notification)
+                .build();
 
-            try {
-                firebaseMessaging.send(msg);
-                return message;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-
-        } else {
+        try {
+            firebaseMessaging.send(msg);
+            return message;
+        } catch (Exception e) {
             return null;
         }
 
