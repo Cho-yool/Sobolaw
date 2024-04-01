@@ -81,6 +81,7 @@
 
   .pages {
     width: 35rem;
+    height: 100%;
     transition: all 0.2s;
   }
 
