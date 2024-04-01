@@ -1,12 +1,12 @@
-import { useEffect } from "react";
-import "dayjs/locale/ko";
 import dayjs from "dayjs";
+import "dayjs/locale/ko";
 import locale from "antd/es/date-picker/locale/ko_KR";
 import { Flex, Input, DatePicker, Tooltip, Radio } from "antd";
 import type { DatePickerProps } from "antd";
-import CheckBox from "../common/CheckBox";
-import { FraudDetails } from "../../types/DataTypes";
 import style from "../../styles/papers/FraudMenu.module.css";
+import CheckBox from "../common/CheckBox";
+import { useEffect } from "react";
+import { FraudDetails } from "../../types/DataTypes";
 
 const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
   const defaultValue = dayjs("2024-01-01");
@@ -153,7 +153,7 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
     console.log(fraudDetails);
   }, [fraudDetails]);
   return (
-    <Flex className={style["fraud-menu"]} vertical align="center">
+    <Flex vertical align="center">
       {/* 당사자 */}
       <Flex className={style["fraud-menu__first"]} vertical align="center">
         <p className={style["fraud-menu__title"]}>당사자</p>
@@ -162,7 +162,7 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
             <p className={style["fraud-menu-input__title"]}>고소인(본인)</p>
             <Input
               placeholder="성명"
-              size="large"
+              size="middle"
               type="text"
               value={fraudDetails.plaintiffName}
               onChange={plaintiffHandler}
@@ -173,7 +173,7 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
               <p className={style["fraud-menu-input__title"]}>성명</p>
               <Input
                 placeholder="성명"
-                size="large"
+                size="middle"
                 type="text"
                 value={fraudDetails.plaintiffName}
                 onChange={plaintiffHandler}
@@ -183,7 +183,7 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
               <p className={style["fraud-menu-input__title"]}>주민등록번호</p>
               <Input
                 placeholder="960617-1"
-                size="large"
+                size="middle"
                 type="text"
                 value={fraudDetails.plaintiffResidentRegistrationNumber}
                 onChange={identityNumberHandler}
@@ -194,7 +194,7 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
             <p className={style["fraud-menu-input__title"]}>주소</p>
             <Input
               placeholder="클릭하여 주소를 검색하세요."
-              size="large"
+              size="middle"
               type="text"
               value={fraudDetails.plaintiffMainAddress}
               onChange={(e) =>
@@ -203,7 +203,7 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
             />
             <Input
               placeholder="나머지 주소를 입력하세요."
-              size="large"
+              size="middle"
               type="text"
               value={fraudDetails.plaintiffSubAddress}
               onChange={(e) =>
@@ -215,7 +215,7 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
             <p className={style["fraud-menu-input__title"]}>전화번호</p>
             <Input
               placeholder="01011112222"
-              size="large"
+              size="middle"
               type="text"
               value={fraudDetails.plaintiffPhoneNumber}
               onChange={(e) =>
@@ -233,7 +233,7 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
             <p className={style["fraud-menu-input__title"]}>피고소인(상대방)</p>
             <Input
               placeholder="성명"
-              size="large"
+              size="middle"
               type="text"
               onChange={(e) => fraudDetails.setDefendantName(e.target.value)}
             />
@@ -246,7 +246,7 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
               <p className={style["fraud-menu-input__title"]}>주소</p>
               <Input
                 placeholder="클릭하여 주소를 검색하세요."
-                size="large"
+                size="middle"
                 type="text"
                 value={fraudDetails.defendantMainAddress}
                 onChange={(e) =>
@@ -255,7 +255,7 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
               />
               <Input
                 placeholder="나머지 주소를 입력하세요."
-                size="large"
+                size="middle"
                 type="text"
                 value={fraudDetails.defendantSubAddress}
                 onChange={(e) =>
@@ -273,7 +273,7 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
                 onChange={(e) =>
                   fraudDetails.setDefendantPhoneNumber(e.target.value)
                 }
-                size="large"
+                size="middle"
                 type="text"
               />
             </Flex>
@@ -281,19 +281,14 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
         </Flex>
       </Flex>
       {/* 기망행위 */}
-      <Flex
-        className={style["fraud-menu__second"]}
-        vertical
-        align="center"
-        gap={15}
-      >
+      <Flex className={style["fraud-menu__second"]} vertical align="center">
         <p className={style["fraud-menu__title"]}>기망행위</p>
         <Flex className={style["fraud-menu-box"]} vertical>
           <Flex className={style["fraud-menu-input"]} vertical>
             <p className={style["fraud-menu-input__title"]}>거래한 물건</p>
             <Input
               placeholder="물건명"
-              size="large"
+              size="middle"
               type="text"
               value={fraudDetails.tradedItem}
               onChange={(e) => fraudDetails.setTradedItem(e.target.value)}
@@ -314,7 +309,7 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
               <DatePicker
                 defaultValue={defaultValue}
                 locale={locale}
-                size="large"
+                size="middle"
                 showTime
                 onChange={onChangeDate}
                 style={{ width: "100%" }}
@@ -339,7 +334,7 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
             <Radio value="직접입력">직접입력</Radio>
             {fraudDetails.tradeSite === "직접입력" ? (
               <Input
-                size="large"
+                size="middle"
                 placeholder="OO마켓"
                 value={fraudDetails.directSite}
                 onChange={(e) => fraudDetails.setDirectSite(e.target.value)}
@@ -353,12 +348,7 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
         </Flex>
       </Flex>
       {/* 처분행위 */}
-      <Flex
-        className={style["fraud-menu__second"]}
-        vertical
-        align="center"
-        gap={15}
-      >
+      <Flex className={style["fraud-menu__second"]} vertical align="center">
         <p className={style["fraud-menu__title"]}>처분행위</p>
         <Flex className={style["fraud-menu-checkbox"]} vertical>
           <p className={style["fraud-menu-input__title"]}>처분 방법</p>
@@ -367,7 +357,7 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
               display: "flex",
               gap: "10px",
             }}
-            size="large"
+            size="middle"
             onChange={(e) => fraudDetails.setDisposalMethod(e.target.value)}
           >
             <Radio value={1}>현금 직거래</Radio>
@@ -380,14 +370,14 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
             <Flex vertical gap={10}>
               <Input
                 placeholder="은행명"
-                size="large"
+                size="middle"
                 type="text"
                 value={fraudDetails.bankName}
                 onChange={(e) => fraudDetails.setBankName(e.target.value)}
               />
               <Input
                 placeholder="계좌번호"
-                size="large"
+                size="middle"
                 type="text"
                 value={fraudDetails.accountNumber}
                 onChange={(e) => fraudDetails.setAccountNumber(e.target.value)}
@@ -403,7 +393,7 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
             <Flex className={style["fraud-menu-input__money"]} align="center">
               <Input
                 placeholder="100,000"
-                size="large"
+                size="middle"
                 type="text"
                 value={fraudDetails.damageMoney}
                 onChange={(e) => fraudDetails.setDamageMoney(e.target.value)}
@@ -426,7 +416,7 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
               <DatePicker
                 defaultValue={defaultValue}
                 locale={locale}
-                size="large"
+                size="middle"
                 showTime
                 onChange={onChangeMoneyDate}
                 style={{ width: "100%" }}
@@ -436,30 +426,20 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
         </Flex>
       </Flex>
       {/* 첨부할 증거 */}
-      <Flex
-        className={style["fraud-menu__second"]}
-        vertical
-        align="center"
-        gap={15}
-      >
+      <Flex className={style["fraud-menu__second"]} vertical align="center">
         <p className={style["fraud-menu__title"]}>첨부할 증거</p>
         <Flex className={style["fraud-menu-checkbox"]} gap={15} vertical>
           <CheckBox boxList={addEvidenve} onChange={evidenceEtcHandler} />
           {fraudDetails.evidenceEtc ? (
-            <Input size="large" placeholder="피고소인의 사과문 or 녹음파일" />
+            <Input size="middle" placeholder="피고소인의 사과문 or 녹음파일" />
           ) : null}
         </Flex>
       </Flex>
-      <Flex
-        className={style["fraud-menu__second"]}
-        vertical
-        align="center"
-        gap={15}
-      >
+      <Flex className={style["fraud-menu__second"]} vertical align="center">
         <p className={style["fraud-menu__title"]}>관할 경찰서</p>
         <Flex className={style["fraud-menu-checkbox"]} gap={15} vertical>
           <Input
-            size="large"
+            size="middle"
             placeholder="동래구경찰서 형사팀"
             value={fraudDetails.policeStation}
             onChange={(e) => fraudDetails.setPoliceStation(e.target.value)}

@@ -1,0 +1,29 @@
+.check-btn {
+  display: none;
+}
+
+.check-btn:hover {
+  border: 1px solid #bf8438;
+}
+
+.check-btn + label::before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #f47c7c;
+  margin-right: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: block;
+}
+
+.check-btn:checked + label:before {
+  content: "✔";
+  font-size: 17px;
+  color: white;
+  background-color: #f47c7c;
+  border-color: #f47c7c;
+  width: 16px;
+  height: 16px;
+}

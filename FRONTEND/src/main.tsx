@@ -35,9 +35,6 @@ const theme = {
     Switch: {
       colorPrimary: "#BF8438",
       algorithm: true,
-      // handleSize: 25,
-      // trackHeight: 29,
-      // trackMinWidth: 60,
     },
     Button: {
       colorPrimary: "#BF8438",
