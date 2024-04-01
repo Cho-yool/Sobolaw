@@ -27,15 +27,18 @@
 
 .print-background {
   box-sizing: border-box;
-  height: 94vh;
+  height: calc(100vh - 6vh);
   border-top: 0.5px solid rgb(211, 211, 211);
   background-color: rgb(199, 199, 199);
+  overflow-y: auto; /* 내용이 넘칠 때 수직 스크롤 생성 */
 }
 
 .print-a4 {
+  box-sizing: border-box;
   width: 23.5cm;
   border: 1px solid black;
   background-color: white;
+  margin: auto;
 }
 
 .contents-center {

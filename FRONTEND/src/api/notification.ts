@@ -24,4 +24,27 @@ async function postNotifications(data: NotificationData) {
   return response.data;
 }
 
-export { postTokens, getTokens, postNotifications };
+// 알림목록반환
+async function getNotifications(memberId: number) {
+  const response = await http.get(`notifications/${memberId}`);
+  return response.data.data;
+}
+
+// 알림 읽음 처리
+async function patchNotification(notificationId: number) {
+  await http.patch(`notifications/${notificationId}`);
+}
+
+// 알림 삭제 처리
+async function delNotification(notificationId: number) {
+  await http.delete(`notifications/${notificationId}`);
+}
+
+export {
+  postTokens,
+  getTokens,
+  postNotifications,
+  getNotifications,
+  patchNotification,
+  delNotification,
+};
