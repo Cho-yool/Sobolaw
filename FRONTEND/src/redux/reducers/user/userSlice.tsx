@@ -43,9 +43,18 @@ const userSlice = createSlice({
     updatePrecedents(state, action) {
       state.precedents = action.payload;
     },
+    updateAuth(state, action) {
+      state.auth = action.payload;
+    },
   },
 });
 
-export const { loadInfo, resetAuth, saveToken, updateToken, updatePrecedents } =
-  userSlice.actions;
+export const {
+  loadInfo,
+  resetAuth,
+  saveToken,
+  updateToken,
+  updatePrecedents,
+  updateAuth,
+} = userSlice.actions;
 export default userSlice.reducer;

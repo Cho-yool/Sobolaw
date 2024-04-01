@@ -105,7 +105,7 @@ export default function MainPage() {
                 >
                   <p>고소장 작성을 어디서 어떻게 해야될지</p>
                   <p>
-                    내 상황과 유사한 판례가 있는지 궁금하시x다면{" "}
+                    내 상황과 유사한 판례가 있는지 궁금하시다면{" "}
                     <strong>소.보.로</strong>
                   </p>
                 </div>

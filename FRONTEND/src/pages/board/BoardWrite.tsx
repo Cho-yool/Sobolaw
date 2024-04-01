@@ -58,7 +58,7 @@ export default function BoardWrite() {
   return (
     <div className="pages">
       <div className={style["mypaper-box"]}>
-        <Col style={{margin:`5rem`, padding:`2rem`, borderRadius:`1rem`, backgroundColor:'#F9F5DB', border:'2px solid #AFAC52'}} >
+        <Col style={{margin:`5rem`, padding:`2rem`, borderRadius:`0rem`, backgroundColor:'#FCFCFC'}} >
 
           <Form.Item label="공개 범위">
             <Radio.Group name='public' value={formData.public ? "true" : "false"} onChange={handleInputChange} >
@@ -76,7 +76,7 @@ export default function BoardWrite() {
           </Form.Item>
 
           <Form.Item label="내용">
-            <Input.TextArea style={{height:`30vh`}} name='content' value={formData.content} onChange={handleInputChange} />
+            <Input.TextArea style={{height:`40vh`}} name='content' value={formData.content} onChange={handleInputChange} />
           </Form.Item>
 
           <Form.Item  style={{display:`flex`, justifyContent:`flex-end`}}>

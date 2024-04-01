@@ -1,6 +1,12 @@
 import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
-import { getMessaging, getToken } from "firebase/messaging";
+import {
+  getToken,
+  deleteToken,
+  getMessaging,
+  MessagePayload,
+  onMessage,
+} from "firebase/messaging";
 
 navigator.serviceWorker
   .register("firebase-messaging-sw.js")
@@ -13,40 +19,28 @@ navigator.serviceWorker
   });
 
 export const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FCM_API_KEY,
-  authDomain: import.meta.env.VITE_FCM_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FCM_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FCM_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FCM_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FCM_APP_ID,
-  measurementId: import.meta.env.VITE_FCM_MEASUREMENT_ID,
+  apiKey: "AIzaSyB3CisHLdztQymU4FUl3meEz7_GI_GF4OY",
+  authDomain: "sobolaw-b1e95.firebaseapp.com",
+  databaseURL: "sobolaw-b1e95.firebaseio.com",
+  projectId: "sobolaw-b1e95",
+  storageBucket: "sobolaw-b1e95.appspot.com",
+  messagingSenderId: "909268063265",
+  appId: "1:909268063265:web:89d9d47ae882d2c7d37f60",
+  measurementId: "G-Y1XC8ZL32F",
 };
+
+export const vapidKey =
+  "BGAtZFQc1lIkAulhINVAOXPqqi28e8_pxzuTvV21nxPXXiiXjkkZUnsXTalnlxxImuV90KcXInxrHNjcq2VcFuU";
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const messaging = getMessaging(app);
-// const analytics = getAnalytics(app);
 
-// const response = null;
-// onMessage(messaging, (payload) => {
-//   console.log("Message received. ", payload);
-//   response.value = payload.notification;
-//   if (Notification.permission === "granted") {
-//     navigator.serviceWorker.ready
-//       .then((registration) => {
-//         registration
-//           .showNotification(payload.notification.title, {
-//             body: payload.notification.body,
-//             icon: "../img/maru.jpeg",
-//             vibrate: [200, 100, 200, 100, 200, 100, 200],
-//           })
-//           .finally((arg) => console.log(arg));
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   }
-// });
+onMessage(messaging, (payload) => {
+  console.log("Message received. ", payload);
+  // ...
+  appendMessage(payload);
+});
 
 // 허가 요청
 export function requestPermission() {
@@ -54,8 +48,7 @@ export function requestPermission() {
     Notification.requestPermission().then((permission) => {
       if (permission === "granted") {
         getToken(messaging, {
-          vapidKey:
-            "BGAtZFQc1lIkAulhINVAOXPqqi28e8_pxzuTvV21nxPXXiiXjkkZUnsXTalnlxxImuV90KcXInxrHNjcq2VcFuU",
+          vapidKey: vapidKey,
         })
           .then((token: string) => {
             console.log(`푸시 토큰 발급 완료 : ${token}`);
@@ -74,4 +67,54 @@ export function requestPermission() {
       }
     });
   });
+}
+
+export function deleteTokenFromFirebase() {
+  // Delete registration token.
+  getToken(messaging)
+    .then((currentToken) => {
+      deleteToken(messaging)
+        .then(() => {
+          console.log("Token deleted.", currentToken);
+        })
+        .catch((err) => {
+          console.log("Unable to delete token. ", err);
+        });
+    })
+    .catch((err) => {
+      console.log("Error retrieving registration token. ", err);
+    });
+}
+
+// // const response = null;
+// onMessage(messaging, (payload) => {
+//   console.log("Message received. ", payload);
+//   const response = payload.notification;
+//   if (Notification.permission === "granted") {
+//     navigator.serviceWorker.ready
+//       .then((registration) => {
+//         registration
+//           .showNotification(payload.notification.title, {
+//             body: payload.notification.body,
+//             icon: "/images/soboro_color.png",
+//             vibrate: [200, 100, 200, 100, 200, 100, 200],
+//           })
+//           .finally((arg) => console.log(arg));
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
+//   }
+// });
+
+// Add a message to the messages element.
+function appendMessage(payload: MessagePayload) {
+  const messagesElement = document.querySelector("#messages")!;
+  const dataHeaderElement = document.createElement("h5");
+  const dataElement = document.createElement("pre");
+  dataElement.style.overflowX = "hidden;";
+  dataHeaderElement.textContent = "Received message:";
+  dataElement.textContent = JSON.stringify(payload, null, 2);
+  messagesElement.appendChild(dataHeaderElement);
+  messagesElement.appendChild(dataElement);
 }
