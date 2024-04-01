@@ -51,7 +51,8 @@ async function getHitStatuteList() {
 // 뉴스 목록 조회
 async function getNewsList(searchKeyword: string) {
     const response = await http.get(`/news/search/${searchKeyword}`);
-    return response.data;
+    console.log('뉴스 목록 조회:', response.data);
+    return response.data.items;
 }
 
 export { searchStatute, getStatuteDetail, getPrecedentList, getHitPrecedentList, getHitStatuteList, searchPrecedent, getNewsList };
