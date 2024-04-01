@@ -51,8 +51,15 @@ async function getHitStatuteList() {
 // 뉴스 목록 조회
 async function getNewsList(searchKeyword: string) {
     const response = await http.get(`/news/search/${searchKeyword}`);
-    console.log('뉴스 목록 조회:', response.data);
+    // console.log('뉴스 목록 조회:', response.data);
     return response.data.items;
 }
 
-export { searchStatute, getStatuteDetail, getPrecedentList, getHitPrecedentList, getHitStatuteList, searchPrecedent, getNewsList };
+// 법령 용어명 목록 조회
+async function getAllWords() {
+    const response = await http.get("/terms/words");
+    console.log('법령 용어명 목록 조회:', response.data);
+    return response.data;
+}
+
+export { searchStatute, getStatuteDetail, getPrecedentList, getHitPrecedentList, getHitStatuteList, searchPrecedent, getNewsList, getAllWords };
