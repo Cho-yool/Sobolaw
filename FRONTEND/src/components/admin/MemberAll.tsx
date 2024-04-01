@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
+import type { CSSProperties } from "react";
 import { useSelector } from "react-redux";
+import { CaretRightOutlined } from "@ant-design/icons";
+import type { CollapseProps } from "antd";
+import { Collapse, theme } from "antd";
 import { getMemberList } from "../../api/members";
 import { RootState } from "../../redux/store/store";
 import { MemberList } from "../../types/DataTypes";
@@ -7,6 +11,14 @@ import { MemberList } from "../../types/DataTypes";
 export default function MemberAll() {
   const user = useSelector((state: RootState) => state.user);
   const [memberList, setMemberList] = useState<MemberList[]>([]);
+  const { token } = theme.useToken();
+
+  const panelStyle: React.CSSProperties = {
+    marginBottom: 24,
+    background: token.colorFillAlter,
+    borderRadius: token.borderRadiusLG,
+    border: "none",
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,69 +28,35 @@ export default function MemberAll() {
     fetchData();
   }, []);
 
+  const getItems: (
+    panelStyle: CSSProperties,
+    memberList: MemberList[]
+  ) => CollapseProps["items"] = (panelStyle, memberList) => {
+    return memberList.map((item) => ({
+      key: item.memberId.toString(),
+      label: item.name,
+      children: (
+        <div>
+          <p>멤버ID: {item.memberId}</p>
+          <p>이메일: {item.email}</p>
+          <p>생일: {item.birthday}</p>
+          <p>회원자격: {item.role}</p>
+        </div>
+      ),
+      style: panelStyle,
+    }));
+  };
   return (
     <div style={{ flexDirection: "column", width: "90%", height: "100%" }}>
-      {memberList.map((item) => (
-        <div>{item.name}</div>
-      ))}
+      <Collapse
+        bordered={false}
+        defaultActiveKey={["1"]}
+        expandIcon={({ isActive }) => (
+          <CaretRightOutlined rotate={isActive ? 90 : 0} />
+        )}
+        style={{ background: token.colorBgContainer }}
+        items={getItems(panelStyle, memberList)}
+      />
     </div>
   );
 }
-
-// function UserList({ allUserData }: { allUserData: AcceptSeller[] }) {
-//   const user = useSelector((state: RootState) => state.user);
-
-//   const approvefunction = (sellerid: number, at: string) => {
-//     try {
-//       approveSellerApplicationAPI(sellerid, at).then((res) => {
-//         console.log(res);
-//       });
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };
-
-//   return (
-//     <>
-//       <Accordion accordion>
-//         {allUserData.map((item, index) => (
-//           <Accordion.Panel
-//             key={index}
-//             header={
-//               <div style={{ display: "flex", justifyContent: "space-between" }}>
-//                 <span
-//                   style={{
-//                     color: "gray",
-//                     fontWeight: "bold",
-//                     textTransform: "uppercase",
-//                   }}
-//                 >
-//                   {item.approvalStatus ? (
-//                     <Badge status="success">승인완료</Badge>
-//                   ) : (
-//                     <Badge status="error">새요청</Badge>
-//                   )}
-//                   {item.userId} : {item.loginId} / {item.nickname}
-//                 </span>
-//                 <CaretDownOutlined />
-//               </div>
-//             }
-//           >
-//             <List>
-//               <List.Item>
-//                 {item.sellerInfoId}
-//                 <Button
-//                   onClick={() => {
-//                     approvefunction(item.sellerInfoId, user.accessToken);
-//                   }}
-//                 >
-//                   승인
-//                 </Button>
-//               </List.Item>
-//             </List>
-//           </Accordion.Panel>
-//         ))}
-//       </Accordion>
-//     </>
-//   );
-// }

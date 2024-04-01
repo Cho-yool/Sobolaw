@@ -46,6 +46,21 @@ export default function MyInfo() {
     "purple",
   ];
 
+  let buttonText;
+  switch (userInfo?.role) {
+    case "ROLE_USER":
+      buttonText = "X";
+      break;
+    case "ROLE_LAWYER":
+      buttonText = "변호사";
+      break;
+    case "ROLE_ADMIN":
+      buttonText = "관리자";
+      break;
+    default:
+      buttonText = ""; // 특별한 역할이 없을 경우에 대비하여 기본값을 설정합니다.
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await getUserInfo(accessToken);
@@ -130,18 +145,35 @@ export default function MyInfo() {
             <Divider />
             <div className={style["box-content"]}>
               <div>
-                <SafetyCertificateTwoTone twoToneColor="#de9159" /> 전문가 여부:
+                <SafetyCertificateTwoTone twoToneColor="#de9159" /> 전문가 여부:{" "}
               </div>
-              <div>{userInfo?.roll}</div>
+              {/* 아래는 개발용코드(수정해야할 때 사용) */}
+              {/* <div>{userInfo?.role}</div>
               <Button
                 shape="round"
                 type="primary"
+                size="small"
                 className={style["mypaper-button"]}
                 onClick={showApplyModal}
-                // disabled={isDisabled}
               >
                 변호사 전환 신청하기
-              </Button>
+              </Button> */}
+              <div>
+                {" "}
+                {userInfo?.role === "ROLE_USER" ? (
+                  <Button
+                    shape="round"
+                    type="primary"
+                    size="small"
+                    className={style["mypaper-button"]}
+                    onClick={showApplyModal}
+                  >
+                    {buttonText} 전환 신청하기
+                  </Button>
+                ) : (
+                  <div>{buttonText}</div>
+                )}
+              </div>
               <Modal
                 title="변호사 전환 신청하기"
                 open={isApplyModalOpen}

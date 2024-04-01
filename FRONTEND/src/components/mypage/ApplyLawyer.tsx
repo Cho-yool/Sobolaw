@@ -49,16 +49,19 @@ export default function ApplyLawyer({ onUpdate }: { onUpdate: () => void }) {
   const formData = new FormData();
   const onSubmit = async () => {
     if (fileName !== undefined) {
-      formData.append("file", fileName.file);
-      const response = await postImage(accessToken, formData);
-      console.log(response);
-      // postApplyLawyer(accessToken, response)
-      //   .then(() => {
-      //     onUpdate();
-      //   })
-      //   .catch(() => {
-      //     alert("사진을 다시 확인해주세요");
-      //   });
+      formData.append("image", fileName.file);
+      // for (const key of formData.keys()) {
+      //   console.log(key, ":", formData.get(key));
+      // }
+      try {
+        const res = await postImage(accessToken, formData);
+        const imgUrl = res;
+        formData.append("belongDocumentPath", imgUrl);
+        await postApplyLawyer(accessToken, formData);
+        onUpdate;
+      } catch (error) {
+        alert("사진을 다시 확인해주세요");
+      }
     } else {
       alert("사진을 등록해주세요ㅠㅠ");
     }
@@ -111,10 +114,13 @@ export default function ApplyLawyer({ onUpdate }: { onUpdate: () => void }) {
                 id="file"
                 onChange={fileInputHandler}
                 disabled={fileName ? true : false}
-                style={{ display: "none" }}
+                style={{ display: "none", cursor: "pointer" }}
               />
-
-              <label htmlFor="file" className="AttachmentButton">
+              <label
+                htmlFor="file"
+                className="AttachmentButton"
+                style={{ cursor: "pointer", margin: "auto" }}
+              >
                 🔗 사진 업로드하기
               </label>
             </div>
@@ -122,7 +128,7 @@ export default function ApplyLawyer({ onUpdate }: { onUpdate: () => void }) {
         </>
       )}
 
-      <Button type="primary" onClick={onSubmit}>
+      <Button type="primary" onClick={onSubmit} style={{ marginTop: "2rem" }}>
         제출하기
       </Button>
     </div>
