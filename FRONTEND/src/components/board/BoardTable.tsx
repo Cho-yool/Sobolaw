@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UnlockTwoTone, LockTwoTone } from "@ant-design/icons"
 import { Table, Row, Col, Modal, Button } from "antd";
+import { ColumnType } from 'antd/es/table'
 import { BoardList } from "../../types/DataTypes";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
@@ -16,11 +17,12 @@ export default function BoardTable({ boardList }: MyLawcaseTableProps) {
   const user = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
 
-  const columnsWide = [
+  const columnsWide: ColumnType<BoardList>[] = [
     {
       title: "번호",
       dataIndex: "key",
       key: "key",
+      align: 'center',
       render: (text: any, record: any) => {
         return parseInt(text)+1;
       },
@@ -37,11 +39,15 @@ export default function BoardTable({ boardList }: MyLawcaseTableProps) {
       title: "제목",
       dataIndex: "title",
       key: "title",
+      render: (text: any, record: any) => {
+        return <span style={{fontSize: '16px'}}>{(text.length < 20)? text:`${text.substring(0, 20)}···`}</span>
+      },
     },
     {
       title: "조회수",
       dataIndex: "hit",
       key: "hit",
+      align: 'center',
     },
     {
       title: "작성자",
@@ -53,7 +59,7 @@ export default function BoardTable({ boardList }: MyLawcaseTableProps) {
       dataIndex: "createdTime",
       key: "createdTime",
       render: (text: any, record: any) => {
-        return text.split(".")[0];
+        return text.split(" ")[0];
       },
     },
   ];
@@ -89,7 +95,7 @@ export default function BoardTable({ boardList }: MyLawcaseTableProps) {
 
   return (
     <>
-      <Row style={{margin:`5rem`, marginTop:`0rem`}}>
+      <Row>
         <Col xs={0} sm={0} md={24} lg={24}>
           <div className={style["table"]}>
             <Table columns={columnsWide} dataSource={boardList} onRow={(record) => ({onClick: () => {checkPublic(record)}})} />
