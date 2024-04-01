@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { List } from "antd";
 import { RootState } from "../redux/store/store";
+import avatar from "/images/soboro_color.png";
 import AcceptLawyer from "../components/admin/AcceptLawyer";
 import LawsuitAll from "../components/admin/LawsuitAll";
 import MemberAll from "../components/admin/MemberAll";
@@ -62,15 +63,17 @@ export default function AdminPage() {
             display: "flex",
             justifyContent: "center",
             marginTop: "2rem",
+            padding: "1rem",
           }}
         >
           <div
             style={{
-              border: "2px solid purple",
+              border: "2px solid #bcbcbc",
               borderRadius: "10px",
               overflow: "hidden",
-              width: "85vw",
+              padding: "1rem",
               maxHeight: boxHeight,
+              maxWidth: "25%",
             }}
           >
             <div
@@ -82,9 +85,8 @@ export default function AdminPage() {
                 paddingTop: "2rem",
               }}
             >
-              <div
-                style={{ width: "100%", marginTop: "2rem", paddingTop: "2rem" }}
-              >
+              <img src={avatar} alt="" width="20%" />
+              <div style={{ width: "100%", paddingTop: "2rem" }}>
                 <List
                   dataSource={categoryTabs}
                   renderItem={(category) => (
@@ -105,6 +107,7 @@ export default function AdminPage() {
           <div
             style={{
               width: "75%",
+              border: "2px solid #bcbcbc",
               backgroundColor: "white",
               borderRadius: "10px",
               marginLeft: "1rem",

@@ -150,27 +150,25 @@ async function postMyKeyword(accessToken: string, words: string[]) {
 }
 
 // 파일 업로드 및 원본파일 이름 저장(한 장)
-async function postImage(accessToken: string, data: FormData) {
-  await http.post(`media/image`, data, {
+async function postImage(accessToken: string, image: FormData) {
+  const response = await http.post(`media/image`, image, {
     headers: {
       "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${accessToken}`,
     },
   });
+  return response.data.data;
 }
 
 // 변호사 전환(등업) 요청
-async function postApplyLawyer(accessToken: string, image: string) {
-  await http.post(
-    `${url}/certification/lawyer`,
-    { image },
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
+async function postApplyLawyer(accessToken: string, image: FormData) {
+  const response = await http.post(`${url}/certification/lawyer`, image, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.data;
 }
 
 // 관리자용 API
@@ -245,7 +243,7 @@ async function getLawyerList(accessToken: string) {
 }
 
 // 변호사 신청글 상세 조회
-async function getLawyerDetail(accessToken: string, articleId: string) {
+async function getLawyerDetail(accessToken: string, articleId: number) {
   const response = await http.get(`${url}/certification/lawyer/${articleId}`, {
     headers: {
       "Content-Type": "application/json",
@@ -256,8 +254,18 @@ async function getLawyerDetail(accessToken: string, articleId: string) {
 }
 
 // 변호사 등업 승인(??인데 멤버 정보 수정patch 써도 ㄱㅊ을 거 같아요)
-async function postApproveLawyer(accessToken: string, articleId: string) {
+async function postApproveLawyer(accessToken: string, articleId: number) {
   await http.post(`${url}/certification/lawyer/${articleId}/approve`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+}
+
+// 승인 거부
+async function postDenyLawyer(accessToken: string, articleId: number) {
+  await http.post(`${url}/certification/lawyer/${articleId}/deny`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
@@ -285,4 +293,5 @@ export {
   getLawyerList,
   getLawyerDetail,
   postApproveLawyer,
+  postDenyLawyer,
 };

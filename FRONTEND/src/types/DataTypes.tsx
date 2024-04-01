@@ -67,7 +67,7 @@ export type MemberInfo = {
   memberKeyword: MemberKeyword[];
   memberRecents: MemberRecent[];
   memberPrecedents: memberPrecedents[];
-  roll: string;
+  role: string;
 };
 
 export type MemberPrecedent = {
