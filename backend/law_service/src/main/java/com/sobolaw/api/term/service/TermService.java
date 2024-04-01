@@ -83,4 +83,8 @@ public class TermService {
             entity.getTermDefinition()
         );
     }
+
+    public List<String> findDistinctTermNames() {
+        return termRepository.findAllDistinctTermNames();
+    }
 }
