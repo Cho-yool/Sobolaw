@@ -135,8 +135,8 @@ const ResponsiveNav = ({
       const Data = {
         memberId: parseInt(memberId),
         // 28번 아이디 토큰
-        token:
-          "cNsYgdXPWmrUgkwy-Yz-V-:APA91bEsgSL6A31bRHFS83424j4TJK7lm34ux8ZC7hsgooowGMcYjNDpIBK41sD2ADzzQJfCHdBg3vwZFQWCXNB1-I7bdX89KqC6RVh7HLqx4ORSMdzbgWV_TdYG5VBA_FHq3OTVR6Wz",
+        // token:
+        //   "cNsYgdXPWmrUgkwy-Yz-V-:APA91bEsgSL6A31bRHFS83424j4TJK7lm34ux8ZC7hsgooowGMcYjNDpIBK41sD2ADzzQJfCHdBg3vwZFQWCXNB1-I7bdX89KqC6RVh7HLqx4ORSMdzbgWV_TdYG5VBA_FHq3OTVR6Wz",
         title: title,
         body: content,
       };
