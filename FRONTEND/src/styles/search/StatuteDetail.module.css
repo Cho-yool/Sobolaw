@@ -49,3 +49,23 @@
     color: #999;
     cursor: pointer;
   }
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+    .title {
+      font-size: 25px;
+      margin-bottom: 10%;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      margin-bottom: 10%;
+    }
+
+    .articleTitle {
+      font-size: 18px;
+      margin-top: 5%;
+      margin-bottom: 5%;
+      line-height: 1.5;
+    }
+  }

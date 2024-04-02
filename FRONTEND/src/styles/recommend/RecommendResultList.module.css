@@ -155,18 +155,43 @@
 
 /* 기존 CSS 스타일 위에 추가 */
 @media (max-width: 768px) {
+  .headerContainer {
+    flex-direction: column;
+    margin: 4% auto;
+    margin-bottom: 3%;
+  }
+
   .sortButtons {
-    margin: 4% 6%;
     margin-bottom: 10%;
     justify-content: center;
   }
 
   .sortButtons button {
     padding: 6px 12px;
-    margin-left: 2%;
-    font-size: 14px;
+    font-size: 12px;
   }
 
+  .resultSummary {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 5%;
+  }
+
+  .summaryItem {
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+
+  .summaryValue {
+    font-size: 20px;
+  }
+
+  .summaryLabel {
+    font-size: 10px;
+    margin-top: 10px;
+  }
+
+  /* 기존 모바일 스타일 유지 */
   .resultListContainer {
     margin-top: 10px;
   }
@@ -219,7 +244,7 @@
 
   .title {
     margin: 20px auto;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     text-align: center;
   }
@@ -237,4 +262,3 @@
     height: 10px;
   }
 }
-

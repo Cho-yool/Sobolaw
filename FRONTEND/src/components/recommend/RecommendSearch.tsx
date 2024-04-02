@@ -76,9 +76,9 @@ const RecommendSearch: React.FC = () => {
           아파트, 은행, 도로, 자동차 등<br />
           <br />
           예를 들어,
-          <br /> OO기업(X) ⭢ 회사(O)
+          <br /> OO기업(X) ⭢ <strong>회사(O)</strong>
           <br />
-          OO아파트(X) ⭢ 아파트(O)
+          OO아파트(X) ⭢ <strong>아파트(O)</strong>
         </>
       ),
       type: "received",
@@ -89,15 +89,15 @@ const RecommendSearch: React.FC = () => {
     {
       text: (
         <>
-          6자 이상 입력해주세요.
+          <strong>6자 이상 입력해주세요.</strong>
           <br />
           예: 토지, 등기, 보험, 채권,
           <br /> 부동산, 소유권, 항고, 자동차 등<br />
           <br />
           예를 들어,
-          <br /> OO로 OO(X) ⭢ 토지(O)
+          <br /> OO로 OO(X) ⭢ <strong>토지(O)</strong>
           <br />
-          OO차,OO원(X) ⭢ 자동차, 자산(O)
+          OO차,OO원(X) ⭢ <strong>자동차, 자산(O)</strong>
         </>
       ),
       type: "received",
@@ -108,16 +108,16 @@ const RecommendSearch: React.FC = () => {
     {
       text: (
         <>
-          6자 이상 입력해주세요.
+          <strong>6자 이상 입력해주세요.</strong>
           <br />
           예: 채무자, 채권자, 근로자,
           <br /> 참가인, 조합원, 피해자, 소유자 등
           <br />
           <br />
           예를 들어,
-          <br /> 김OO(X) ⭢ 채무자(O)
+          <br /> 김OO(X) ⭢ <strong>채무자(O)</strong>
           <br />
-          황OO씨(X) ⭢ 피해자(O)
+          황OO씨(X) ⭢ <strong>피해자(O)</strong>
         </>
       ),
       type: "received",
@@ -288,20 +288,15 @@ const RecommendSearch: React.FC = () => {
         )}
         {currentStep > 4 && (
           <div className={`${style.searchItem} ${style.fadeInUp}`}>
-            <Button
-              type="primary"
-              onClick={handleSubmit}
-              style={{
-                width: 200,
-                height: 50,
-                fontSize: 18,
-                margin: "0 auto",
-                marginTop: "-30%",
-                borderRadius: 30,
-              }}
-            >
-              제출
-            </Button>
+            <div className={style.submitButtonWrapper}>
+              <a
+                className={style.submitButton}
+                data-text="Ready?"
+                data-hover-text="Confirm!"
+                onClick={handleSubmit}
+              >
+              </a>
+            </div>
           </div>
         )}
       </div>
