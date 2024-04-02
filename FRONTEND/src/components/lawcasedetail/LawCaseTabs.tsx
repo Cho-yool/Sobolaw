@@ -91,7 +91,6 @@ const LawCaseTabs = ({
   const [highLightLists, setHighLightLists] = useState<highLightProps[]>([]);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [currnetPage, setCurrentPage] = useState<string>("");
-  const [replaceText, setReplaceText] = useState<string>("");
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -111,52 +110,33 @@ const LawCaseTabs = ({
     }
   }, []);
 
-  //   color === "644419"
-  //     ? (modifiedText = modifiedText.replace(
-  //         new RegExp(
-  //           targetText.content.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
-  //           "g"
-  //         ),
-  //         `<span style="background-color: #${targetText.highlightType.slice(2, targetText.highlightType.length)};">${targetText.content}</span>`
-  //       ))
-  //     : (modifiedText = modifiedText.replace(
-  //         new RegExp(
-  //           targetText.content.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
-  //           "g"
-  //         ),
-  //         `<span style="background-color: #${targetText.highlightType.slice(2, targetText.highlightType.length)}; color=#${color}">${targetText.content}</span>`
-  //       ));
-  // }
   useEffect(() => {
     if (getData && Object.keys(getData).length !== 0) {
       const renderText = getData.caseContent.split("<br/>");
       const newText = renderText.map((text, index) => {
-        let modifiedText = text;
+        const modifiedText = text;
+        let renderingText = "";
         highLightLists.forEach((targetText) => {
           if (modifiedText.includes(targetText.content)) {
-            setReplaceText(targetText.main);
+            renderingText = targetText.main;
           }
         });
 
         // 수정된 텍스트 반환
         return (
           <Fragment key={index}>
-            {replaceText ? (
+            {renderingText ? (
               <>
                 <p
                   dangerouslySetInnerHTML={{
-                    __html: replaceText,
+                    __html: renderingText,
                   }}
                 ></p>
                 <div className={style["block"]}></div>
               </>
             ) : (
               <>
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html: getData.caseContent,
-                  }}
-                ></p>
+                <p>{modifiedText}</p>
                 <div className={style["block"]}></div>
               </>
             )}
@@ -258,11 +238,12 @@ const LawCaseTabs = ({
       if (!isSaved) {
         try {
           const fetchData = async () => {
-            await savePrecedent(getData.precedentId).then((res) => {
+            await savePrecedent(getData.precedentId).then(() => {
               dispatch(
                 updatePrecedents([...user.precedents, getData.precedentId])
               );
             });
+            setIsSaved(true);
           };
           fetchData();
         } catch (error) {
@@ -295,39 +276,21 @@ const LawCaseTabs = ({
     }
   };
 
-  const onTouchStartHandler = () => {
-    setOnEditing(true);
-  };
-
-  const onTouchMoveHandler = () => {
-    if (onEditing) {
-      const selection = window.getSelection();
-      if (selection && selection.rangeCount > 0) {
-        setSelectionPos(selection.getRangeAt(0));
-        setSelectionNode(selection);
-      }
-    }
-  };
-
-  const onTouchEndHandler = () => {
-    setOnEditing(false);
-    if (isEditMode) {
-      // Edit mode logic
-      // ...
-    }
-  };
   const deletePrecedentHandler = () => {
     deletePrecedent(Number(currnetPage)).then(() => {
       const filterPrecedents = user.precedents.filter(
         (precedent: number) => precedent !== Number(currnetPage)
       );
       dispatch(updatePrecedents(filterPrecedents));
+      setIsSaved(false);
+      setHighLightLists([]);
     });
   };
 
   const savePrecedentHandler = () => {
     savePrecedent(Number(currnetPage)).then(() => {
       dispatch(updatePrecedents([...user.precedents, getData.precedentId]));
+      setIsSaved(true);
     });
   };
 
@@ -449,9 +412,6 @@ const LawCaseTabs = ({
             onMouseDown={onMouseClickHandler}
             onMouseMove={onMouseMoveHandler}
             onMouseUp={onMouseOutHandler}
-            onTouchStart={onTouchStartHandler}
-            onTouchMove={onTouchMoveHandler}
-            onTouchEnd={onTouchEndHandler}
           >
             {" "}
             {newRenderText ? <>{newRenderText}</> : null}

@@ -42,14 +42,15 @@ export async function deletePrecedent(precedentId: number) {
       Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLqt7zsmIEiLCJyb2xlIjoiUk9MRV9BRE1JTiIsIm1lbWJlcklkIjoxOCwiaWF0IjoxNzEyMDQyMjQ3LCJleHAiOjE3MTIwNDI4NDd9.XOuwy2aOuBSiztvRp3SFKwOgF9exJbCQGqjachH9RSteKZ-FvTgvZQGBZ7my2L8PB4vI2wJLgEb26BMMMQL3yw`,
     },
   });
-  console.log(response);
 
-  // await http.delete(url, {
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLqt7zsmIEiLCJyb2xlIjoiUk9MRV9BRE1JTiIsIm1lbWJlcklkIjoxOCwiaWF0IjoxNzEyMDQyMjQ3LCJleHAiOjE3MTIwNDI4NDd9.XOuwy2aOuBSiztvRp3SFKwOgF9exJbCQGqjachH9RSteKZ-FvTgvZQGBZ7my2L8PB4vI2wJLgEb26BMMMQL3yw`,
-  //   },
-  // });
+  const deleteUrl = `/user-service/members/precedents/${response.data.memberPrecedentId}`;
+
+  return await http.delete(deleteUrl, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLqt7zsmIEiLCJyb2xlIjoiUk9MRV9BRE1JTiIsIm1lbWJlcklkIjoxOCwiaWF0IjoxNzEyMDQyMjQ3LCJleHAiOjE3MTIwNDI4NDd9.XOuwy2aOuBSiztvRp3SFKwOgF9exJbCQGqjachH9RSteKZ-FvTgvZQGBZ7my2L8PB4vI2wJLgEb26BMMMQL3yw`,
+    },
+  });
 }
 
 // export async function findHighLight(precedentId: number) {
