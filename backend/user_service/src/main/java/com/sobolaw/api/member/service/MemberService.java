@@ -247,7 +247,11 @@ public class MemberService {
      * @return 특정 저장 판례.
      */
     public MemberPrecedentContentResponseDTO getMemberPrecedentDetail(Long precedentId) {
-        MemberPrecedent memberPrecedent = memberPrecedentRepository.findById(precedentId)
+        Long currentMemberId = jwtProvider.getMemberId();
+        Member member = memberRepository.findById(currentMemberId)
+            .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
+
+        MemberPrecedent memberPrecedent = memberPrecedentRepository.findByMemberAndPrecedentId(member, precedentId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT));
 
         BaseResponse<PrecedentResponseDTO> baseResponse = lawServiceClient.getPrecedentDetail(memberPrecedent.getPrecedentId());
