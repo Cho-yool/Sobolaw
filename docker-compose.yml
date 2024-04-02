@@ -5,6 +5,8 @@ services:
     container_name: redis
     image: redis:latest
     restart : unless-stopped
+    environment:
+      - TZ=Asia/Seoul
     ports:
       - "6379:6379"
 
@@ -13,6 +15,8 @@ services:
     image: frontend
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
+    environment:
+      - TZ=Asia/Seoul
     ports:
       - "80:80"
       - "443:443"
@@ -21,12 +25,16 @@ services:
   eureka_server:
     container_name: eureka_server
     image: eureka_server
+    environment:
+      - TZ=Asia/Seoul
     ports:
       - "8761:8761"
 
   api_gateway:
     container_name: api_gateway
     image: api_gateway
+    environment:
+      - TZ=Asia/Seoul
     depends_on:
       - eureka_server
     ports:
@@ -35,6 +43,8 @@ services:
   user_service:
     container_name: user_service
     image: user_service
+    environment:
+      - TZ=Asia/Seoul
     depends_on:
       - api_gateway
       - redis
@@ -44,6 +54,8 @@ services:
   ai_service:
     container_name: ai_service
     image: ai_service
+    environment:
+      - TZ=Asia/Seoul
     depends_on:
       - api_gateway
     ports:
@@ -52,6 +64,8 @@ services:
   law_service:
     container_name: law_service
     image: law_service
+    environment:
+      - TZ=Asia/Seoul
     depends_on:
       - api_gateway
     ports:
@@ -60,6 +74,8 @@ services:
   recommend_service:
     container_name: recommend_service
     image: recommend_service
+    environment:
+      - TZ=Asia/Seoul
     depends_on:
       - api_gateway
     ports:
@@ -68,6 +84,8 @@ services:
   notification_service:
     container_name: notification_service
     image: notification_service
+    environment:
+      - TZ=Asia/Seoul
     depends_on:
       - api_gateway
       - redis
@@ -77,6 +95,8 @@ services:
   board_service:
     container_name: board_service
     image: board_service
+    environment:
+      - TZ=Asia/Seoul
     depends_on:
       - api_gateway
     ports:
