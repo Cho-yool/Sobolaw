@@ -11,7 +11,6 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 /**
  * RedisTemplate 을 추가하기 위한 Config.
  */
-
 @Configuration
 public class RedisConfig {
 

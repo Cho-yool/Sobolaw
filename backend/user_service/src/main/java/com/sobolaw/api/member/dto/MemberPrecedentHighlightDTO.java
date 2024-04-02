@@ -3,7 +3,6 @@ package com.sobolaw.api.member.dto;
 import com.sobolaw.api.member.entity.MemberPrecedentHighlight;
 import com.sobolaw.api.member.entity.Type.HighlightType;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * DTO for {@link MemberPrecedentHighlight}.
