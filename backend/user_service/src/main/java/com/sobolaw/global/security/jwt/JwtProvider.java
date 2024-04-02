@@ -218,8 +218,10 @@ public class JwtProvider {
         if (authentication.isAuthenticated() && authentication.getPrincipal() != "anonymousUser") {
             Object principal = authentication.getPrincipal();
             if (principal instanceof CustomUserDetails) {
+                log.info("customUserDetail 로");
                 return ((CustomUserDetails) principal).getMemberId();
             } else if (principal instanceof UserDetails) {
+                log.info("principal 로 : " + principal);
                 String name = ((UserDetails) principal).getUsername();
                 Member member = memberRepository.findByName(name);
                 return member.getMemberId();

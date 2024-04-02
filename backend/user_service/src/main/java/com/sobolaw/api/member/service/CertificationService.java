@@ -29,7 +29,7 @@ public class CertificationService {
     private final JwtProvider jwtProvider;
 
     /**
-     * 유효성 검사 후 MentorRoleUpdateRequest 저장.
+     * 유효성 검사 후 MemberRoleUpdateRequest 저장.
      */
     @Transactional
     public void saveLawyer(String originalFile, String savedFile) {
@@ -63,7 +63,7 @@ public class CertificationService {
     }
 
     /**
-     * 멘토 등업 리스트 전체 조회.
+     * 변호사 등업 리스트 전체 조회.
      */
     @Transactional(readOnly = true)
     public List<MemberRoleUpdateRequest> findLawyerAll() {
@@ -76,7 +76,7 @@ public class CertificationService {
 
 
     /**
-     * 멘토 등업 요청 상세 조회.
+     * 변호사 등업 요청 상세 조회.
      */
     @Transactional(readOnly = true)
     public MemberRoleUpdateDetailResponseDTO findLawyerUpdateRequestDto(Long articleId) {
@@ -91,7 +91,7 @@ public class CertificationService {
 
 
     /**
-     * 멘토 등업 글로부터 유저 아이디를 가져온다.
+     * 변호사 등업 글로부터 유저 아이디를 가져온다.
      */
     @Transactional(readOnly = true)
     public Long findLawyerIdByArticleId(Long articleId) {
@@ -102,7 +102,7 @@ public class CertificationService {
     }
 
     /**
-     * 멘토 요청이 완료되거나 거절시 삭제.
+     * 변호사 요청이 완료되거나 거절시 삭제.
      */
     @Transactional
     public void deleteLawyerArticleByArticleId(Long articleId) {

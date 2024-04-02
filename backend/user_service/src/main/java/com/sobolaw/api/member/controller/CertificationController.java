@@ -56,23 +56,23 @@ public class CertificationController {
      */
     @Operation(summary = "변호사 등업 승인", description = "변호사 등업요청을 승인합니다.", tags = {"등업"})
     @PostMapping("/lawyer/{articleId}/approve")
-    public BaseResponse<RoleUpdateResponseDTO> approveMentorRoleUpdate(@PathVariable(name = "articleId") Long articleId) {
+    public BaseResponse<RoleUpdateResponseDTO> approveMemberRoleUpdate(@PathVariable(name = "articleId") Long articleId) {
         Long lawyerId = certificationService.findLawyerIdByArticleId(articleId);
         RoleUpdateResponseDTO result = certificationService.updateRole(lawyerId, RoleType.ROLE_LAWYER);
         certificationService.deleteLawyerArticleByArticleId(articleId);
-        return BaseResponse.success(HttpStatus.OK.value(), "멘토 등업 성공", result);
+        return BaseResponse.success(HttpStatus.OK.value(), "변호사 등업 성공", result);
     }
 
 
     /**
      * 변호사 등업 거절.
      */
-    @Operation(summary = "멘토 등업 거절", description = "멘토 등업요청을 거절합니다.", tags = {"등업"})
+    @Operation(summary = "변호사 등업 거절", description = "변호사 등업요청을 거절합니다.", tags = {"등업"})
     @PostMapping("/lawyer/{articleId}/deny")
-    public BaseResponse<RoleUpdateResponseDTO> denyMentorRoleUpdate(@PathVariable(name = "articleId") Long articleId) {
+    public BaseResponse<RoleUpdateResponseDTO> denyMemberRoleUpdate(@PathVariable(name = "articleId") Long articleId) {
         Long lawyerId = certificationService.findLawyerIdByArticleId(articleId);
         RoleUpdateResponseDTO result = certificationService.updateRole(lawyerId, RoleType.ROLE_USER);
         certificationService.deleteLawyerArticleByArticleId(articleId);
-        return BaseResponse.success(HttpStatus.OK.value(), "멘토 등업 거절. 요청 삭제.", result);
+        return BaseResponse.success(HttpStatus.OK.value(), "변호사 등업 거절. 요청 삭제.", result);
     }
 }

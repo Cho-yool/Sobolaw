@@ -27,8 +27,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     private final MemberRepository memberRepository;
 
     private final JwtProvider tokenProvider;
-//    private static final String URI = "https://j10a604.p.ssafy.io/login";
-    private static final String URI = "http://localhost:5173/login";
+    private static final String URI = "https://j10a604.p.ssafy.io/login";
 
     @Override
     public void onAuthenticationSuccess(
