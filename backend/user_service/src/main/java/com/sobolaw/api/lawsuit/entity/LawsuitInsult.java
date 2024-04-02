@@ -1,5 +1,7 @@
 package com.sobolaw.api.lawsuit.entity;
 
+import static jakarta.persistence.FetchType.LAZY;
+
 import com.sobolaw.api.member.entity.Member;
 import com.sobolaw.global.common.entity.BaseEntity;
 import jakarta.persistence.Column;
@@ -30,7 +32,7 @@ public class LawsuitInsult extends BaseEntity {
     private Long lawsuitInsultId;
 
     @Setter
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 

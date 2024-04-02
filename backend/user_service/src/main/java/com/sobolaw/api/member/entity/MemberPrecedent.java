@@ -1,5 +1,7 @@
 package com.sobolaw.api.member.entity;
 
+import static jakarta.persistence.FetchType.LAZY;
+
 import com.sobolaw.global.common.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -30,14 +32,14 @@ public class MemberPrecedent extends BaseEntity {
     private Long memberPrecedentId;
 
     @Setter
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @Column(nullable = false)
     private Long precedentId;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "memberPrecedent")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "memberPrecedent", fetch = LAZY)
     private List<MemberPrecedentHighlight> highlights;
 
     protected MemberPrecedent() {

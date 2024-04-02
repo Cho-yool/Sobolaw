@@ -1,5 +1,7 @@
 package com.sobolaw.api.member.entity;
 
+import static jakarta.persistence.FetchType.LAZY;
+
 import com.sobolaw.api.member.entity.Type.KeywordType;
 import com.sobolaw.global.common.entity.BaseEntity;
 import jakarta.persistence.Column;
@@ -30,12 +32,12 @@ public class MemberKeyword extends BaseEntity {
     private Long memberKeywordId;
 
     @Setter
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @Setter
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_precedent_id", nullable = true)
     private MemberPrecedent memberPrecedent;
 

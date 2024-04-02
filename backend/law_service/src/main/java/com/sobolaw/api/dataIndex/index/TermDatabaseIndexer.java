@@ -1,4 +1,4 @@
-package com.sobolaw.api.term.index;
+package com.sobolaw.api.dataIndex.index;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;

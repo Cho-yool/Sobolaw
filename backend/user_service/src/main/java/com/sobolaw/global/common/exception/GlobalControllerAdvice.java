@@ -1,10 +1,10 @@
 package com.sobolaw.global.common.exception;
 
-import com.sobolaw.api.lawsuit.exception.LawsuitException;
 import com.sobolaw.api.email.exception.EmailException;
+import com.sobolaw.api.lawsuit.exception.LawsuitException;
 import com.sobolaw.api.member.exception.CertificationException;
-import com.sobolaw.global.common.response.BaseResponse;
 import com.sobolaw.api.member.exception.MemberException;
+import com.sobolaw.global.common.response.BaseResponse;
 import com.sobolaw.global.security.jwt.exception.TokenException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

@@ -16,20 +16,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableFeignClients
 public class SobolawApplication {
 
-//    public class SobolawApplication implements CommandLineRunner {
-//
-//    @Autowired
-//    private StatuteDatabaseIndexer statuteDatabaseIndexer;
-//    @Autowired
-//    private StatuteTextDatabaseIndexer statuteTextDatabaseIndexer;
-//    @Autowired
-//    private PrecedentDatabaseIndexer precedentDatabaseIndexer;
-//    @Autowired
-//    private TermDatabaseIndexer termDatabaseIndexer;
-//
-//    @Autowired
-//    private ElasticsearchILM elasticsearchILM;
-//
     public static void main(String[] args) {
         SpringApplication.run(SobolawApplication.class, args);
     }

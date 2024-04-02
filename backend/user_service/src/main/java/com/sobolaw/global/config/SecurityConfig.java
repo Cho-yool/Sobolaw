@@ -64,22 +64,18 @@ public class SecurityConfig {
             )
             .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(request -> request
-                    .requestMatchers("/", "/api", "/api/user-service/oauth2/**").permitAll()
-                    .requestMatchers("/api/user-service/swagger-ui/**").permitAll()
-                    .requestMatchers("/api/user-service/swagger-ui/index.html").permitAll()
-                    .requestMatchers("/api/user-service/lawsuit/**").permitAll()
-                    .requestMatchers("/api/user-service/members/**").permitAll()
-//                    .requestMatchers("/api/user-service/**").hasRole("ROLE_USER")
-//                    .requestMatchers("/api/user-service/members/**").hasRole("ROLE_ADMIN")
-                    // test를 위해 허용 처리
-                    .anyRequest().permitAll()
+                .requestMatchers("/api/user-service/oauth2/**", "/api/user-service/login").permitAll()
+                .requestMatchers("/api/user-service/swagger-ui/**").permitAll()
+                .requestMatchers("/api/user-service/swagger-ui/index.html").permitAll()
+                .requestMatchers("/api/user-service/lawsuit/**").permitAll()
+                .requestMatchers("/api/user-service/").permitAll()
+                .anyRequest().permitAll()
             )
 
             // 인증 예외 처리
             .exceptionHandling(exceptionHandling -> exceptionHandling
-//                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-                    .authenticationEntryPoint(new FailedAuthenticationEntryPoint())
-                    .accessDeniedHandler(new CustomAccessDeniedHandler())
+                .authenticationEntryPoint(new FailedAuthenticationEntryPoint())
+                .accessDeniedHandler(new CustomAccessDeniedHandler())
             );
 
         return httpSecurity.build();
