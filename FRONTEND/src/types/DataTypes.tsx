@@ -301,6 +301,15 @@ export type Comment = {
   content: string | null;
   memberId: number | null;
   name: string | null;
-  role: String | null;
+  role: string | null;
   createdTime: string | null;
+};
+
+export type NoticationAlert = {
+  memberId: number;
+  notificationId: number;
+  title: string;
+  body: string;
+  state: number;
+  createdTime: string;
 };

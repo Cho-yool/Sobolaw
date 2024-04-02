@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import "./utils/notifications.ts";
+import Notification from "./components/common/Noticiation.tsx";
 import LayoutPage from "./components/common/Layout";
 import LawCaseDetail from "./pages/lawcasedetail/LawCaseDetail";
 import LoginPage from "./pages/LoginPage";
@@ -28,49 +29,54 @@ import BoardDetail from "./pages/board/BoardDetail";
 import BoardWrite from "./pages/board/BoardWrite";
 import NotFound from "./pages/NotFound.tsx";
 import SoboroNewsPage from "./pages/news/SoboroNewsPage.tsx";
+import Notifications from "./pages/Notification.tsx";
 
 function App() {
   return (
-    <Routes>
-      {/* 레이아웃을 미리 짜놓고, 그 사이에 새로 만든 페이지들이 들어가게 함 */}
-      <Route element={<LayoutPage />}>
-        <Route path="" element={<MainPage />} />
-        <Route path="/laws/:id" element={<LawCaseDetail />} />
-        <Route
-          path="/statutes/:statuteNumber"
-          element={<StatuteDetailPage />}
-        />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/search" element={<SearchPage />} />
-        <Route path="/search-results" element={<SearchResultPage />} />
-        <Route path="/hit/precedent" element={<SearchHitPage />} />
-        <Route path="/hit/statute" element={<SearchHitPage />} />
-        <Route path="/recommend" element={<RecommendPage />} />
-        <Route path="/recommend-results" element={<RecommendResultPage />} />
-        <Route path="/news" element={<SoboroNewsPage />} />
-        <Route path="/plaint" element={<FormPage />} />
-        <Route path="/cal" element={<CalculatorPage />} />
-        <Route path="/mypage/*" element={<MyPage />}>
-          <Route path="" element={<MyInfo />} />
-          <Route path="user" element={<MyInfo />} />
-          <Route path="papers" element={<Mypaper />} />
-          <Route path="case" element={<MyCase />} />
+    <>
+      <Routes>
+        {/* 레이아웃을 미리 짜놓고, 그 사이에 새로 만든 페이지들이 들어가게 함 */}
+        <Route element={<LayoutPage />}>
+          <Route path="" element={<MainPage />} />
+          <Route path="/laws/:id" element={<LawCaseDetail />} />
+          <Route
+            path="/statutes/:statuteNumber"
+            element={<StatuteDetailPage />}
+          />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/search-results" element={<SearchResultPage />} />
+          <Route path="/hit/precedent" element={<SearchHitPage />} />
+          <Route path="/hit/statute" element={<SearchHitPage />} />
+          <Route path="/recommend" element={<RecommendPage />} />
+          <Route path="/recommend-results" element={<RecommendResultPage />} />
+          <Route path="/news" element={<SoboroNewsPage />} />
+          <Route path="/plaint" element={<FormPage />} />
+          <Route path="/cal" element={<CalculatorPage />} />
+          <Route path="/mypage/*" element={<MyPage />}>
+            <Route path="" element={<MyInfo />} />
+            <Route path="user" element={<MyInfo />} />
+            <Route path="papers" element={<Mypaper />} />
+            <Route path="case" element={<MyCase />} />
+          </Route>
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/board/*" element={<BoardPage />}>
+            <Route path="list" element={<BoardList />} />
+            <Route path="detail/:boardId" element={<BoardDetail />} />
+            <Route path="write" element={<BoardWrite />} />
+          </Route>
+          <Route path="/notifications" element={<Notifications />} />
         </Route>
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/board/*" element={<BoardPage />}>
-          <Route path="list" element={<BoardList />} />
-          <Route path="detail/:boardId" element={<BoardDetail />} />
-          <Route path="write" element={<BoardWrite />} />
-        </Route>
-      </Route>
-      <Route path="/plaint/1" element={<DefamatinoPage />} />
-      <Route path="/plaint/2" element={<FraudPage />} />
-      <Route path="/plaint/3" element={<InsultPage />} />
-      <Route path="/plaint/edit/:id" element={<InsultEditPage />} />
-      <Route path="mylawsuit/:type/:id" element={<PrintLawsuit />} />
-      <Route path="/*" element={<NotFound />} />
-      {/* 다른 Route도 추가가능~ */}
-    </Routes>
+        <Route path="/plaint/1" element={<DefamatinoPage />} />
+        <Route path="/plaint/2" element={<FraudPage />} />
+        <Route path="/plaint/3" element={<InsultPage />} />
+        <Route path="/plaint/edit/:id" element={<InsultEditPage />} />
+        <Route path="mylawsuit/:type/:id" element={<PrintLawsuit />} />
+        <Route path="/*" element={<NotFound />} />
+        {/* 다른 Route도 추가가능~ */}
+      </Routes>
+      <Notification />
+    </>
   );
 }
 
