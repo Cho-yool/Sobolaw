@@ -34,6 +34,7 @@ import Notifications from "./pages/Notification.tsx";
 function App() {
   return (
     <>
+      <Notification />
       <Routes>
         {/* 레이아웃을 미리 짜놓고, 그 사이에 새로 만든 페이지들이 들어가게 함 */}
         <Route element={<LayoutPage />}>
@@ -75,7 +76,6 @@ function App() {
         <Route path="/*" element={<NotFound />} />
         {/* 다른 Route도 추가가능~ */}
       </Routes>
-      <Notification />
     </>
   );
 }

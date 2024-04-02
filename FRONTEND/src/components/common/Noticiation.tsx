@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { Button, Avatar } from "antd";
-import { CloseOutlined } from "@ant-design/icons";
+import { Avatar } from "antd";
 import { getMessaging, onMessage } from "firebase/messaging";
 import avatar from "/images/soboro_color.png";
 
@@ -11,9 +10,29 @@ const Notification = () => {
     body: string;
   }>({ title: "", body: "" });
 
+  useEffect(() => {
+    // Firebase messaging 객체 생성
+    const messaging = getMessaging();
+    // 알림 메시지 수신 시 실행될 콜백 등록
+    onMessage(messaging, (payload) => {
+      console.log(payload);
+      // 수신한 알림을 상태에 저장
+      setNotification({
+        title: payload.notification?.title || "",
+        body: payload.notification?.body || "",
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    // 알림 상태가 변경될 때마다 알림을 표시
+    notify();
+  }, [notification]);
+
+  console.log(notification);
   // react-hot-toast를 사용하여 알림을 표시하는 함수
   const notify = () =>
-    toast.custom((t) => (
+    toast.custom(() => (
       <div
         style={{
           maxWidth: "calc(100vw - 2rem)",
@@ -36,55 +55,19 @@ const Notification = () => {
                 style={{
                   fontSize: "0.875rem",
                   fontWeight: "500",
-                  color: "#000",
+                  color: "black",
                 }}
               >
-                {notification?.title}
+                {notification.title}
               </p>
               <p style={{ fontSize: "0.875rem", color: "#6B7280" }}>
-                {notification?.body}
+                {notification.body}
               </p>
             </div>
           </div>
         </div>
-        <div style={{ borderLeft: "1px solid rgba(0, 0, 0, 0.05)" }}>
-          <Button
-            type="text"
-            onClick={() => toast.dismiss(t.id)}
-            style={{
-              width: "100%",
-              border: "none",
-              borderRadius: "0",
-              borderTopLeftRadius: "8px",
-              borderBottomLeftRadius: "8px",
-              padding: "1rem",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "0.875rem",
-              color: "#4F46E5",
-              cursor: "pointer",
-            }}
-            icon={<CloseOutlined />}
-          />
-        </div>
       </div>
     ));
-
-  useEffect(() => {
-    // Firebase messaging 객체 생성
-    const messaging = getMessaging();
-    // 알림 메시지 수신 시 실행될 콜백 등록
-    onMessage(messaging, (payload) => {
-      // 수신한 알림을 상태에 저장
-      setNotification({
-        title: payload.notification?.title || "",
-        body: payload.notification?.body || "",
-      });
-      // 화면에 알림 표시
-      notify();
-    });
-  }, []);
 
   return <Toaster />;
 };
