@@ -6,6 +6,25 @@
 
 .tab-container {
   width: 100%;
+  position: relative;
+}
+
+.save-precedent {
+  color: #644419;
+  position: absolute;
+  font-size: 3rem;
+  cursor: pointer;
+  right: 5%;
+  top: 10%;
+}
+
+.remove-precedent {
+  color: #644419;
+  position: absolute;
+  font-size: 3rem;
+  cursor: pointer;
+  right: 5%;
+  top: 10%;
 }
 
 .tab {

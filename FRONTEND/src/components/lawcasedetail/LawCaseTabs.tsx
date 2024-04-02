@@ -1,5 +1,7 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import style from "../../styles/lawcasedetail/LawCaseTabs.module.css";
+import { AppDispatch, RootState } from "../../redux/store/store";
+import { updatePrecedents } from "../../redux/reducers/user/userSlice";
 import { Switch, Spin } from "antd";
 import {
   getHighLight,
@@ -7,8 +9,9 @@ import {
   saveHighLight,
   saveLawDetail,
 } from "../../api/lawdetail";
-import { store } from "../../redux/store/store";
 import { useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { StarFilled, StarOutlined } from "@ant-design/icons";
 
 interface TabMenusProps {
   id: number;
@@ -68,6 +71,8 @@ const LawCaseTabs = ({
   currentColor,
 }: getDataProps) => {
   const location = useLocation();
+  const dispatch: AppDispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user);
   const [activeTab, setActiveTab] = useState<number>(0);
   const [isSaved, setIsSaved] = useState<boolean>(false);
   const [onEditing, setOnEditing] = useState<boolean>(false);
@@ -81,56 +86,13 @@ const LawCaseTabs = ({
   const precedentRef = useRef<HTMLDivElement>(null);
   const [summaryData, setSummaryData] = useState<string>("");
   const [newRenderText, setNewRenderText] = useState<React.ReactNode[]>([]);
-  const [showOptions, setShowOptions] = useState<boolean>(false);
-  const [selectRange, setSelectRange] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [highLightLists, setHighLightLists] = useState<highLightProps[]>([]);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-  const [selectionPosition, setSelectionPosition] = useState<{
-    x: number;
-    y: number;
-  }>({ x: 0, y: 0 });
-
-  const optionSelectDiv = (x: number, y: number) => {
-    return (
-      <div
-        className={style["color-select"]}
-        style={{
-          left: x + "px",
-          top: y + "px",
-        }}>
-        <div
-          className={style["color-option"]}
-          style={{ backgroundColor: "#f3e7c0" }}
-          onClick={() => colorChange({ color: "#f3e7c0", value: 1 })}
-        />
-        <div
-          className={style["color-option"]}
-          style={{ backgroundColor: "#feda89" }}
-          onClick={() => colorChange({ color: "#feda89", value: 2 })}
-        />
-        <div
-          className={style["color-option"]}
-          style={{ backgroundColor: "#dba651" }}
-          onClick={() => colorChange({ color: "#dba651", value: 3 })}
-        />
-        <div
-          className={style["color-option"]}
-          style={{ backgroundColor: "#bf8538" }}
-          onClick={() => colorChange({ color: "#bf8538", value: 4 })}
-        />
-        <div
-          className={style["color-option"]}
-          style={{ backgroundColor: "#644419" }}
-          onClick={() => colorChange({ color: "#644419", value: 5 })}
-        />
-      </div>
-    );
-  };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-    const precedents = store.getState().user.precedents;
+    const precedents = user.precedents;
     const currentPrecedent =
       location.pathname.split("/")[location.pathname.split("/").length - 1];
     if (
@@ -145,44 +107,46 @@ const LawCaseTabs = ({
     }
   }, []);
 
+  //   color === "644419"
+  //     ? (modifiedText = modifiedText.replace(
+  //         new RegExp(
+  //           targetText.content.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+  //           "g"
+  //         ),
+  //         `<span style="background-color: #${targetText.highlightType.slice(2, targetText.highlightType.length)};">${targetText.content}</span>`
+  //       ))
+  //     : (modifiedText = modifiedText.replace(
+  //         new RegExp(
+  //           targetText.content.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+  //           "g"
+  //         ),
+  //         `<span style="background-color: #${targetText.highlightType.slice(2, targetText.highlightType.length)}; color=#${color}">${targetText.content}</span>`
+  //       ));
+  // }
   useEffect(() => {
     if (getData && Object.keys(getData).length !== 0) {
       const renderText = getData.caseContent.split("<br/>");
       const newText = renderText.map((text, index) => {
+        console.log(highLightLists);
         let modifiedText = text;
         highLightLists.forEach((targetText) => {
-          const color = targetText.highlightType.slice(
-            2,
-            targetText.highlightType.length
-          );
           if (modifiedText.includes(targetText.content)) {
+            console.log(modifiedText.includes(targetText.content));
             // 대상 텍스트를 찾아서 span 태그로 감싸고 스타일을 적용
             {
-              color === "644419"
-                ? (modifiedText = modifiedText.replace(
-                    new RegExp(
-                      targetText.content.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
-                      "g"
-                    ),
-                    `<span style="background-color: #${targetText.highlightType.slice(2, targetText.highlightType.length)};">${targetText.content}</span>`
-                  ))
-                : (modifiedText = modifiedText.replace(
-                    new RegExp(
-                      targetText.content.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
-                      "g"
-                    ),
-                    `<span style="background-color: #${targetText.highlightType.slice(2, targetText.highlightType.length)}; color=${color}">${targetText.content}</span>`
-                  ));
+              console.log("hi");
             }
           }
         });
+
         // 수정된 텍스트 반환
         return (
           <Fragment key={index}>
-            <span
+            <p
               dangerouslySetInnerHTML={{
                 __html: modifiedText.replace(/\n|\r/g, "").trim(),
-              }}></span>
+              }}
+            ></p>
             <div className={style["block"]}></div>
           </Fragment>
         );
@@ -211,45 +175,6 @@ const LawCaseTabs = ({
       console.error(error);
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const colorChange = ({ color, value }: { color: string; value: number }) => {
-    setShowOptions(false);
-    const span = document.createElement("span");
-    span.style.backgroundColor = color;
-    if (value === 5) {
-      span.style.color = "white";
-    } else {
-      span.style.color = "black";
-    }
-    span.innerText = selectionPos.toString();
-    selectionPos.deleteContents();
-    selectionPos.insertNode(span);
-    if (!isSaved) {
-      try {
-        savePrecedent(getData.precedentId);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        saveHighLight({
-          precedentId: getData.precedentId,
-          main: selectionPos.startContainer.textContent,
-          highlightType: value,
-          startPoint: selectRange[0],
-          endPoint: selectRange[1],
-          content: selectionPos.toString().trim(),
-        });
-      }
-    } else {
-      saveHighLight({
-        precedentId: getData.precedentId,
-        main: selectionPos.startContainer.textContent,
-        highlightType: value,
-        startPoint: selectRange[0],
-        endPoint: selectRange[1],
-        content: selectionPos.toString().trim(),
-      });
     }
   };
 
@@ -289,44 +214,11 @@ const LawCaseTabs = ({
       }
     }
   };
-  const onTouchStartHandler = () => {
-    setOnEditing(true);
-  };
 
-  const onTouchMoveHandler = () => {
-    if (onEditing) {
-      const selection = window.getSelection();
-      if (selection && selection.rangeCount > 0) {
-        setSelectionPos(selection.getRangeAt(0));
-        setSelectionNode(selection);
-      }
-    }
-  };
-
-  const onTouchEndHandler = (e: React.TouchEvent<HTMLDivElement>) => {
-    setOnEditing(false);
-    if (isEditMode) {
-      // Edit mode logic
-      // ...
-    } else {
-      const touch = e.touches[0];
-      if (touch) {
-        const { top, left } = selectionPos.getBoundingClientRect();
-        const parentTop = e.currentTarget.getBoundingClientRect().top;
-        const clientX = touch.clientX;
-        setSelectionPosition({
-          x: clientX - left,
-          y: -parentTop + top,
-        });
-        if (selectionPos) {
-          setShowOptions(true);
-        }
-        setSelectRange([selectionPos.startOffset, selectionPos.endOffset]);
-      }
-    }
-  };
   // 마우스 클릭이 끝났을때
-  const onMouseOutHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+  const onMouseOutHandler = () => {
+    console.log(selectionPos, selectionNode);
+
     setOnEditing(false);
     if (isEditMode) {
       const span = document.createElement("span");
@@ -353,13 +245,20 @@ const LawCaseTabs = ({
       selectionPos.insertNode(span);
       if (!isSaved) {
         try {
-          savePrecedent(getData.precedentId);
+          const fetchData = async () => {
+            await savePrecedent(getData.precedentId).then((res) => {
+              dispatch(
+                updatePrecedents([...user.precedents, getData.precedentId])
+              );
+            });
+          };
+          fetchData();
         } catch (error) {
           console.error(error);
         } finally {
           saveHighLight({
             precedentId: getData.precedentId,
-            main: selectionPos.startContainer.textContent,
+            main: selectionPos.commonAncestorContainer.outerHTML,
             highlightType: value,
             startPoint: selectionPos.startOffset,
             endPoint: selectionPos.endOffset,
@@ -369,27 +268,43 @@ const LawCaseTabs = ({
       } else {
         saveHighLight({
           precedentId: getData.precedentId,
-          main: selectionPos.startContainer.textContent,
+          main: selectionPos.commonAncestorContainer.outerHTML,
           highlightType: value,
           startPoint: selectionPos.startOffset,
           endPoint: selectionPos.endOffset,
           content: selectionPos.toString(),
         });
       }
+    }
+    if (selectionPos.commonAncestorContainer.outerHTML) {
+      console.log(selectionPos.commonAncestorContainer.outerHTML);
     } else {
-      const { top, left } = selectionPos.getBoundingClientRect();
-      const parentTop = e.currentTarget.getBoundingClientRect().top;
-
-      setSelectionPosition({
-        x: e.clientX - left,
-        y: -parentTop + top,
-      });
-      if (selectionPos) {
-        setShowOptions(true);
-      }
-      setSelectRange([selectionPos.startOffset, selectionPos.endOffset]);
+      console.log("inner", selectionPos.commonAncestorContainer);
     }
   };
+
+  const onTouchStartHandler = () => {
+    setOnEditing(true);
+  };
+
+  const onTouchMoveHandler = () => {
+    if (onEditing) {
+      const selection = window.getSelection();
+      if (selection && selection.rangeCount > 0) {
+        setSelectionPos(selection.getRangeAt(0));
+        setSelectionNode(selection);
+      }
+    }
+  };
+
+  const onTouchEndHandler = () => {
+    setOnEditing(false);
+    if (isEditMode) {
+      // Edit mode logic
+      // ...
+    }
+  };
+
   useEffect(() => {
     const updateScreenWidth = () => {
       setScreenWidth(window.innerWidth);
@@ -400,6 +315,11 @@ const LawCaseTabs = ({
 
   return (
     <div className={style["tab-container"]}>
+      {isSaved ? (
+        <StarOutlined className={style["save-precedent"]} />
+      ) : (
+        <StarFilled className={style["remove-precedent"]} />
+      )}
       <div className={style["tab-menu"]}>
         {TABMENUS.map((tab) => (
           <div
@@ -409,7 +329,8 @@ const LawCaseTabs = ({
                 ? `${style["tab"]} ${style["active"]}`
                 : style["tab"]
             }
-            onClick={() => handleTabClick(tab.id)}>
+            onClick={() => handleTabClick(tab.id)}
+          >
             <p className={style["tab-title"]}>{tab.title}</p>
           </div>
         ))}
@@ -435,7 +356,8 @@ const LawCaseTabs = ({
         className={style["content-box__contents"]}
         dangerouslySetInnerHTML={{
           __html: getData.judicialNotice,
-        }}></p>
+        }}
+      ></p>
       <br />
       <br />
       <p className={style["tab-menu__title"]} ref={rulingRef}>
@@ -447,7 +369,8 @@ const LawCaseTabs = ({
         className={style["content-box__contents"]}
         dangerouslySetInnerHTML={{
           __html: getData.verdictSummary,
-        }}></p>
+        }}
+      ></p>
       <br />
       <br />
       <p className={style["tab-menu__title"]} ref={precedentRef}>
@@ -460,7 +383,8 @@ const LawCaseTabs = ({
           isEditMode
             ? `${style["tab-menu__summary"]}  ${style["edit-mode"]}`
             : `${style["tab-menu__summary"]}`
-        }>
+        }
+      >
         <div className={style["tab-menu__summary__btn"]}>
           <p>요약 보기</p>
           <Switch
@@ -468,9 +392,6 @@ const LawCaseTabs = ({
             size={screenWidth <= 700 ? "small" : "default"}
           />
         </div>
-        {showOptions && !isEditMode
-          ? optionSelectDiv(selectionPosition.x, selectionPosition.y)
-          : null}
         {isSummary ? (
           isLoading ? (
             <div
@@ -478,7 +399,8 @@ const LawCaseTabs = ({
                 width: "100%",
                 display: "flex",
                 justifyContent: "center",
-              }}>
+              }}
+            >
               <Spin size="large" />
             </div>
           ) : (
@@ -486,7 +408,8 @@ const LawCaseTabs = ({
               className={style["content-box__contents"]}
               dangerouslySetInnerHTML={{
                 __html: summaryData,
-              }}></p>
+              }}
+            ></p>
           )
         ) : (
           <div
@@ -496,7 +419,8 @@ const LawCaseTabs = ({
             onMouseUp={onMouseOutHandler}
             onTouchStart={onTouchStartHandler}
             onTouchMove={onTouchMoveHandler}
-            onTouchEnd={onTouchEndHandler}>
+            onTouchEnd={onTouchEndHandler}
+          >
             {" "}
             {newRenderText ? <>{newRenderText}</> : null}
           </div>
