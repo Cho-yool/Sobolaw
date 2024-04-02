@@ -1,9 +1,0 @@
-fastapi
-uvicorn[standard]
-pymysql
-pydantic
-pymongo
-konlpy
-scikit-learn
-py-eureka-client
-httpx

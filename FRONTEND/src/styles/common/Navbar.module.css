@@ -1,6 +1,21 @@
 .contents {
   display: flex;
-  width: 40rem;
+  width: 42rem;
+}
+
+.contents>div:first-child {
+  max-width: fit-content !important;
+}
+
+.contents li {
+  opacity: 1 !important;
+  height: inherit !important;
+  position: relative !important;
+  pointer-events: all !important
+}
+
+.contents li:last-child {
+  display: none !important;
 }
 
 .contents2 {
@@ -11,12 +26,37 @@
 
 @media (max-width: 992px) {
   .contents {
-    width: 33rem;
-    justify-content: center;
+    width: 42rem;
+    justify-content: end;
+  }
+
+  .contents>div:first-child {
+    max-width: 70% !important;
+  }
+
+  .contents li {
+    font-size: .8rem;
+    padding: 0 1rem !important;
   }
 
   .content2 {
     display: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .contents {
+    width: 37rem;
+    justify-content: end;
+  }
+
+  .contents>div:first-child {
+    max-width: 60% !important;
+  }
+
+  .contents li {
+    font-size: .8rem;
+    padding: 0 .5rem !important;
   }
 }
 
