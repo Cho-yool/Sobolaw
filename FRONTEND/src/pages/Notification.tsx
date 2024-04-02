@@ -71,7 +71,7 @@ function NotificationList() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getNotifications(user.memberId);
+      const response = await getNotifications(user.userId);
       // const response = await getNotifications(28);
       response.sort(
         (a: NoticationAlert, b: NoticationAlert) => a.state - b.state

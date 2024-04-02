@@ -86,27 +86,6 @@ export function deleteTokenFromFirebase() {
     });
 }
 
-// // const response = null;
-// onMessage(messaging, (payload) => {
-//   console.log("Message received. ", payload);
-//   const response = payload.notification;
-//   if (Notification.permission === "granted") {
-//     navigator.serviceWorker.ready
-//       .then((registration) => {
-//         registration
-//           .showNotification(payload.notification.title, {
-//             body: payload.notification.body,
-//             icon: "/images/soboro_color.png",
-//             vibrate: [200, 100, 200, 100, 200, 100, 200],
-//           })
-//           .finally((arg) => console.log(arg));
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   }
-// });
-
 // Add a message to the messages element.
 function appendMessage(payload: MessagePayload) {
   const messagesElement = document.querySelector("#messages")!;

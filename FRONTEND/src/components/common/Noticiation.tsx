@@ -6,7 +6,10 @@ import { getMessaging, onMessage } from "firebase/messaging";
 import avatar from "/images/soboro_color.png";
 
 const Notification = () => {
-  const [notification, setNotification] = useState({ title: "", body: "" });
+  const [notification, setNotification] = useState<{
+    title: string;
+    body: string;
+  }>({ title: "", body: "" });
 
   // react-hot-toast를 사용하여 알림을 표시하는 함수
   const notify = () =>
@@ -75,8 +78,8 @@ const Notification = () => {
     onMessage(messaging, (payload) => {
       // 수신한 알림을 상태에 저장
       setNotification({
-        title: payload?.notification?.title || "",
-        body: payload?.notification?.body || "",
+        title: payload.notification?.title || "",
+        body: payload.notification?.body || "",
       });
       // 화면에 알림 표시
       notify();

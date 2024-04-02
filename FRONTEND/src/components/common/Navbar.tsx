@@ -279,7 +279,10 @@ const ResponsiveNav = ({
                 items={items}
               />
             </Col>
-            <Col xs={0} sm={0} md={4}>
+          </Row>
+
+          <Row className={style["contents2"]}>
+            <Col xs={0} sm={0} md={15}>
               <Row justify="space-around" align="middle">
                 {user.accessToken != "" && (
                   <>
@@ -290,24 +293,21 @@ const ResponsiveNav = ({
                         display: "flex",
                         alignItems: "center",
                       }}
-                      offset={[10, 0]}
                       size="small"
                     >
                       <Dropdown
                         overlay={<Menu>{alertItems}</Menu>}
                         placement="bottomRight"
-                        trigger={["click"]}
+                        trigger={["hover"]}
                       >
                         <BellOutlined
                           style={{
                             fontSize: "1rem",
-                            marginRight: "auto 3px",
                             cursor: "pointer",
                           }}
                         />
                       </Dropdown>
                     </Badge>
-
                     <MypageMenu
                       username={user.nickname}
                       mode={"horizontal"}
@@ -319,7 +319,8 @@ const ResponsiveNav = ({
                 )}
               </Row>
             </Col>
-            <Col xs={0} sm={0} md={2}>
+
+            <Col xs={0} sm={0} md={4}>
               {user.accessToken === "" ? (
                 <Button
                   type="primary"
