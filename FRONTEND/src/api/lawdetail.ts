@@ -18,7 +18,7 @@ export async function getLawDetailSummary(params: number) {
   return await http.get(url);
 }
 
-export async function saveLawDetail(precedentId: number) {
+export async function saveLawDetail(accessToken: string, precedentId: number) {
   const url = `/user-service/members/precedents`;
   return await http.post(
     url,
@@ -28,18 +28,21 @@ export async function saveLawDetail(precedentId: number) {
     {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLqt7zsmIEiLCJyb2xlIjoiUk9MRV9BRE1JTiIsIm1lbWJlcklkIjoxOCwiaWF0IjoxNzEyMDQyMjQ3LCJleHAiOjE3MTIwNDI4NDd9.XOuwy2aOuBSiztvRp3SFKwOgF9exJbCQGqjachH9RSteKZ-FvTgvZQGBZ7my2L8PB4vI2wJLgEb26BMMMQL3yw`,
+        Authorization: `Bearer ${accessToken}`,
       },
     }
   );
 }
 
-export async function deletePrecedent(precedentId: number) {
+export async function deletePrecedent(
+  accessToken: string,
+  precedentId: number
+) {
   const url = `/user-service/members/precedents/${precedentId}`;
   const response = await http.get(url, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLqt7zsmIEiLCJyb2xlIjoiUk9MRV9BRE1JTiIsIm1lbWJlcklkIjoxOCwiaWF0IjoxNzEyMDQyMjQ3LCJleHAiOjE3MTIwNDI4NDd9.XOuwy2aOuBSiztvRp3SFKwOgF9exJbCQGqjachH9RSteKZ-FvTgvZQGBZ7my2L8PB4vI2wJLgEb26BMMMQL3yw`,
+      Authorization: `Bearer ${accessToken}`,
     },
   });
 
@@ -48,7 +51,7 @@ export async function deletePrecedent(precedentId: number) {
   return await http.delete(deleteUrl, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLqt7zsmIEiLCJyb2xlIjoiUk9MRV9BRE1JTiIsIm1lbWJlcklkIjoxOCwiaWF0IjoxNzEyMDQyMjQ3LCJleHAiOjE3MTIwNDI4NDd9.XOuwy2aOuBSiztvRp3SFKwOgF9exJbCQGqjachH9RSteKZ-FvTgvZQGBZ7my2L8PB4vI2wJLgEb26BMMMQL3yw`,
+      Authorization: `Bearer ${accessToken}`,
     },
   });
 }
@@ -66,25 +69,28 @@ interface HighLightProps {
   content: string;
 }
 
-export async function getHighLight(precedentId: number) {
+export async function getHighLight(accessToken: string, precedentId: number) {
   const url = `/user-service/members/precedents/${precedentId}/highlights`;
 
   return await http.get(url, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLqt7zsmIEiLCJyb2xlIjoiUk9MRV9VU0VSIiwibWVtYmVySWQiOjE4LCJpYXQiOjE3MTE0NjEwMDUsImV4cCI6MTcxMjMyNTAwNX0.6HWhADwXr4nZelG8QpKP37Mwe-WVj1_pULlad_nuGsNELyWU73nMbMLnhOYk2a5Zs00wXTonh5LQ4J8Lo7JhXg`,
+      Authorization: `Bearer ${accessToken}`,
     },
   });
 }
 
-export async function saveHighLight({
-  precedentId,
-  main,
-  highlightType,
-  startPoint,
-  endPoint,
-  content,
-}: HighLightProps) {
+export async function saveHighLight(
+  {
+    precedentId,
+    main,
+    highlightType,
+    startPoint,
+    endPoint,
+    content,
+  }: HighLightProps,
+  accessToken: string
+) {
   const url = `/user-service/members/precedents/${precedentId}/highlights`;
 
   return await http.post(
@@ -99,7 +105,7 @@ export async function saveHighLight({
     {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLqt7zsmIEiLCJyb2xlIjoiUk9MRV9VU0VSIiwibWVtYmVySWQiOjE4LCJpYXQiOjE3MTE0NjEwMDUsImV4cCI6MTcxMjMyNTAwNX0.6HWhADwXr4nZelG8QpKP37Mwe-WVj1_pULlad_nuGsNELyWU73nMbMLnhOYk2a5Zs00wXTonh5LQ4J8Lo7JhXg`,
+        Authorization: `Bearer ${accessToken}`,
       },
     }
   );
