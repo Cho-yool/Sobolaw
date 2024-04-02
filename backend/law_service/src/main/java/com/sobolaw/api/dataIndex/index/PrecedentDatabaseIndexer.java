@@ -1,4 +1,4 @@
-package com.sobolaw.api.statute.index;
+package com.sobolaw.api.dataIndex.index;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -19,27 +19,27 @@ import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
-public class StatuteDatabaseIndexer {
+public class PrecedentDatabaseIndexer {
 
-    private static final Logger logger = LoggerFactory.getLogger(StatuteDatabaseIndexer.class);
+    private static final Logger logger = LoggerFactory.getLogger(PrecedentDatabaseIndexer.class);
     private final JdbcTemplate jdbcTemplate;
     private final RestClient restClient;
-    private final ObjectMapper objectMapper = new ObjectMapper(); // ObjectMapper 인스턴스 추가
+    private final ObjectMapper objectMapper;
 
     public void ensureIndexWithSettingsAndMappings() throws IOException {
-        Resource resource = new ClassPathResource("elastic/statute-setting-mapping.json");
+        Resource resource = new ClassPathResource("elastic/precedent-setting-mapping.json");
         String settingsAndMappingsJson = new String(Files.readAllBytes(resource.getFile().toPath()));
 
         try {
             // 인덱스 생성 요청
-            Request request = new Request("PUT", "/statute_index");
+            Request request = new Request("PUT", "/precedent_index");
             request.setJsonEntity(settingsAndMappingsJson);
             restClient.performRequest(request);
-            logger.info("Index statute_index created with custom settings and mappings.");
+            logger.info("Index precedent_index created with custom settings and mappings.");
         } catch (ResponseException e) {
             if (e.getResponse().getStatusLine().getStatusCode() == 400) {
                 // 인덱스가 이미 존재하는 경우의 처리
-                logger.info("Index statute_index already exists.");
+                logger.info("Index precedent_index already exists.");
             } else {
                 throw e;
             }
@@ -52,9 +52,9 @@ public class StatuteDatabaseIndexer {
         ensureIndexWithSettingsAndMappings();
 
         // 작업 시작 로그
-        logger.info("Starting the indexing : statute_index");
+        logger.info("Starting the indexing : precedent_index");
 
-        String query = "SELECT s.* FROM statute s";
+        String query = "SELECT p.* FROM precedent p";
 
         // 퀴리 결과 (MaridDB에서 데이터 select 한것들 )
         List<Map<String, Object>> queryResults = jdbcTemplate.queryForList(query);
@@ -62,23 +62,23 @@ public class StatuteDatabaseIndexer {
         int indexedCount = 0; // 성공적으로 색인된 문서의 수
 
         for (Map<String, Object> row : queryResults) {
-            String statuteNumber = String.valueOf(row.get("statute_number"));
+            String precedentId = String.valueOf(row.get("precedent_id"));
             try {
                 // ObjectMapper를 사용해 Map을 JSON 문자열로 변환
                 String jsonString = objectMapper.writeValueAsString(row);
 
                 // Elasticsearch에 데이터 색인을 위한 요청 생성
-                Request request = new Request("POST", "/statute_index/_doc/" + statuteNumber);
+                Request request = new Request("POST", "/precedent_index/_doc/" + precedentId);
                 request.setJsonEntity(jsonString);
 
                 // Elasticsearch에 요청 보내기
                 Response response = restClient.performRequest(request);
                 indexedCount++;
             } catch (IOException e) {
-                logger.error("Error indexing document with ID: " + statuteNumber, e);
+                logger.error("Error indexing document with ID: " + precedentId, e);
             }
         }
         // 작업 완료 로그
-        logger.info("Completed indexing data  : statute_index / Total documents indexed: " + indexedCount);
+        logger.info("Completed indexing data  : precedent_index / Total documents indexed: " + indexedCount);
     }
 }
