@@ -38,7 +38,7 @@ public class MemberPrecedentHighlight extends BaseEntity {
     private MemberPrecedent memberPrecedent;
 
     @Setter
-    @Column(nullable = false)
+    @Column(nullable = false, length = 3000)
     private String main;
 
     @Setter
