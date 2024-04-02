@@ -139,7 +139,7 @@ const LawCaseTabs = ({
               </>
             ) : (
               <>
-                <p>{modifiedText}</p>
+                <p>{modifiedText.replace(/\n/g, " ").trim()}</p>
                 <div className={style["block"]}></div>
               </>
             )}
@@ -212,8 +212,6 @@ const LawCaseTabs = ({
 
   // 마우스 클릭이 끝났을때
   const onMouseOutHandler = () => {
-    console.log(selectionPos, selectionNode);
-
     setOnEditing(false);
     if (isEditMode) {
       const span = document.createElement("span");
@@ -277,11 +275,6 @@ const LawCaseTabs = ({
           user.accessToken
         );
       }
-    }
-    if (selectionPos.commonAncestorContainer.outerHTML) {
-      console.log(selectionPos.commonAncestorContainer.outerHTML);
-    } else {
-      console.log("inner", selectionPos.commonAncestorContainer);
     }
   };
 
