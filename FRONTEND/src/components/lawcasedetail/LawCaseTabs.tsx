@@ -72,8 +72,8 @@ const LawCaseTabs = ({
   currentColor,
 }: getDataProps) => {
   const location = useLocation();
-  const dispatch: AppDispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
+  const dispatch: AppDispatch = useDispatch();
   const [activeTab, setActiveTab] = useState<number>(0);
   const [isSaved, setIsSaved] = useState<boolean>(false);
   const [onEditing, setOnEditing] = useState<boolean>(false);
@@ -103,7 +103,10 @@ const LawCaseTabs = ({
     ) {
       setIsSaved(true);
       const highLightData = async () => {
-        const response = await getHighLight(Number(currentPrecedent));
+        const response = await getHighLight(
+          user.accessToken,
+          Number(currentPrecedent)
+        );
         setHighLightLists(response.data.data);
       };
       highLightData();
@@ -149,7 +152,7 @@ const LawCaseTabs = ({
 
   const savePrecedent = async (precedentId: number) => {
     try {
-      await saveLawDetail(precedentId);
+      await saveLawDetail(user.accessToken, precedentId);
       setIsSaved(true);
     } catch (error) {
       console.error(error);
@@ -249,24 +252,30 @@ const LawCaseTabs = ({
         } catch (error) {
           console.error(error);
         } finally {
-          saveHighLight({
+          saveHighLight(
+            {
+              precedentId: getData.precedentId,
+              main: selectionPos.commonAncestorContainer.outerHTML,
+              highlightType: value,
+              startPoint: selectionPos.startOffset,
+              endPoint: selectionPos.endOffset,
+              content: selectionPos.toString(),
+            },
+            user.accessToken
+          );
+        }
+      } else {
+        saveHighLight(
+          {
             precedentId: getData.precedentId,
             main: selectionPos.commonAncestorContainer.outerHTML,
             highlightType: value,
             startPoint: selectionPos.startOffset,
             endPoint: selectionPos.endOffset,
             content: selectionPos.toString(),
-          });
-        }
-      } else {
-        saveHighLight({
-          precedentId: getData.precedentId,
-          main: selectionPos.commonAncestorContainer.outerHTML,
-          highlightType: value,
-          startPoint: selectionPos.startOffset,
-          endPoint: selectionPos.endOffset,
-          content: selectionPos.toString(),
-        });
+          },
+          user.accessToken
+        );
       }
     }
     if (selectionPos.commonAncestorContainer.outerHTML) {
@@ -277,7 +286,7 @@ const LawCaseTabs = ({
   };
 
   const deletePrecedentHandler = () => {
-    deletePrecedent(Number(currnetPage)).then(() => {
+    deletePrecedent(user.accessToken, Number(currnetPage)).then(() => {
       const filterPrecedents = user.precedents.filter(
         (precedent: number) => precedent !== Number(currnetPage)
       );
