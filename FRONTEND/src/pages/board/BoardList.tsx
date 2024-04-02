@@ -16,7 +16,6 @@ export default function BoardList() {
   useEffect(() => {
     const fetchData = async () => {
       const response = await getBoardList();
-      // console.log(response);
       const data = response.map((item: any, index: any) => ({
         key: index.toString(),
         boardId: item.boardId,
@@ -50,16 +49,14 @@ export default function BoardList() {
             padding: "5%",
             paddingBottom: "0%",
             backgroundColor: "#FCFCFC",
-          }}
-        >
+          }}>
           <Row style={{ justifyContent: "flex-end", margin: `0rem` }}>
             <Col>
               <SearchOutlined style={{ fontSize: `1.1rem` }} /> &nbsp;
               <Select
                 defaultValue="name"
                 style={{ width: 90, marginRight: 8 }}
-                onChange={setSearchField}
-              >
+                onChange={setSearchField}>
                 <Select.Option value="name">작성자</Select.Option>
                 <Select.Option value="title">제목</Select.Option>
               </Select>

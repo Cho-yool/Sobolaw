@@ -11,7 +11,6 @@ export default function LawsuitAll() {
   useEffect(() => {
     const fetchData = async () => {
       const response = await getLawsuitAll();
-      console.log(response);
       setLawsuitList(response);
     };
     fetchData();
