@@ -1,5 +1,7 @@
 package com.sobolaw.api.member.entity;
 
+import static jakarta.persistence.FetchType.LAZY;
+
 import com.sobolaw.global.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,7 +29,7 @@ public class MemberRecent extends BaseEntity {
     private Long recentPrecedentId;
 
     @Setter
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
