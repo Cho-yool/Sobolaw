@@ -4,6 +4,7 @@ import { AppDispatch, RootState } from "../../redux/store/store";
 import { updatePrecedents } from "../../redux/reducers/user/userSlice";
 import { Switch, Spin } from "antd";
 import {
+  deletePrecedent,
   getHighLight,
   getLawDetailSummary,
   saveHighLight,
@@ -89,16 +90,19 @@ const LawCaseTabs = ({
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [highLightLists, setHighLightLists] = useState<highLightProps[]>([]);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [currnetPage, setCurrentPage] = useState<string>("");
+  const [replaceText, setReplaceText] = useState<string>("");
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     const precedents = user.precedents;
     const currentPrecedent =
       location.pathname.split("/")[location.pathname.split("/").length - 1];
+    setCurrentPage(currentPrecedent);
     if (
       precedents.find((prece: number) => prece === Number(currentPrecedent))
     ) {
-      setIsSaved(!isSaved);
+      setIsSaved(true);
       const highLightData = async () => {
         const response = await getHighLight(Number(currentPrecedent));
         setHighLightLists(response.data.data);
@@ -127,27 +131,35 @@ const LawCaseTabs = ({
     if (getData && Object.keys(getData).length !== 0) {
       const renderText = getData.caseContent.split("<br/>");
       const newText = renderText.map((text, index) => {
-        console.log(highLightLists);
         let modifiedText = text;
         highLightLists.forEach((targetText) => {
           if (modifiedText.includes(targetText.content)) {
-            console.log(modifiedText.includes(targetText.content));
-            // 대상 텍스트를 찾아서 span 태그로 감싸고 스타일을 적용
-            {
-              console.log("hi");
-            }
+            setReplaceText(targetText.main);
           }
         });
 
         // 수정된 텍스트 반환
         return (
           <Fragment key={index}>
-            <p
-              dangerouslySetInnerHTML={{
-                __html: modifiedText.replace(/\n|\r/g, "").trim(),
-              }}
-            ></p>
-            <div className={style["block"]}></div>
+            {replaceText ? (
+              <>
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: replaceText,
+                  }}
+                ></p>
+                <div className={style["block"]}></div>
+              </>
+            ) : (
+              <>
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: getData.caseContent,
+                  }}
+                ></p>
+                <div className={style["block"]}></div>
+              </>
+            )}
           </Fragment>
         );
       });
@@ -304,6 +316,20 @@ const LawCaseTabs = ({
       // ...
     }
   };
+  const deletePrecedentHandler = () => {
+    deletePrecedent(Number(currnetPage)).then(() => {
+      const filterPrecedents = user.precedents.filter(
+        (precedent: number) => precedent !== Number(currnetPage)
+      );
+      dispatch(updatePrecedents(filterPrecedents));
+    });
+  };
+
+  const savePrecedentHandler = () => {
+    savePrecedent(Number(currnetPage)).then(() => {
+      dispatch(updatePrecedents([...user.precedents, getData.precedentId]));
+    });
+  };
 
   useEffect(() => {
     const updateScreenWidth = () => {
@@ -315,12 +341,18 @@ const LawCaseTabs = ({
 
   return (
     <div className={style["tab-container"]}>
-      {isSaved ? (
-        <StarOutlined className={style["save-precedent"]} />
-      ) : (
-        <StarFilled className={style["remove-precedent"]} />
-      )}
       <div className={style["tab-menu"]}>
+        {isSaved ? (
+          <StarFilled
+            className={style["remove-precedent"]}
+            onClick={deletePrecedentHandler}
+          />
+        ) : (
+          <StarOutlined
+            className={style["save-precedent"]}
+            onClick={savePrecedentHandler}
+          />
+        )}
         {TABMENUS.map((tab) => (
           <div
             key={tab.id}

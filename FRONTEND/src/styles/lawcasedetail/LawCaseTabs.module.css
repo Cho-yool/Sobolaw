@@ -2,11 +2,11 @@
   display: flex;
   margin-bottom: 1rem;
   width: 100%;
+  position: relative;
 }
 
 .tab-container {
   width: 100%;
-  position: relative;
 }
 
 .save-precedent {
@@ -14,8 +14,9 @@
   position: absolute;
   font-size: 3rem;
   cursor: pointer;
-  right: 5%;
-  top: 10%;
+  transform: translateY(120%);
+  right: 2%;
+  top: 3%;
 }
 
 .remove-precedent {
@@ -23,8 +24,9 @@
   position: absolute;
   font-size: 3rem;
   cursor: pointer;
-  right: 5%;
-  top: 10%;
+  transform: translateY(120%);
+  right: 2%;
+  top: 3%;
 }
 
 .tab {
