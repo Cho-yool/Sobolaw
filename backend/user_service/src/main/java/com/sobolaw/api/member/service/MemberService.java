@@ -264,7 +264,7 @@ public class MemberService {
 
         // 판례 정보를 DTO에 담기
         MemberPrecedentContentResponseDTO responseDTO = new MemberPrecedentContentResponseDTO(
-            precedentId,
+            memberPrecedent.getMemberPrecedentId(),
             precedentDTO.precedentId(),
             precedentDTO.caseName(),
             precedentDTO.caseNumber(),
@@ -309,7 +309,7 @@ public class MemberService {
 
         // 판례 정보를 DTO에 담기
         MemberRecentContentResponseDTO responseDTO = new MemberRecentContentResponseDTO(
-            recentId,
+            memberRecent.getRecentPrecedentId(),
             precedentDTO.precedentId(),
             precedentDTO.caseName(),
             precedentDTO.caseNumber(),
@@ -624,6 +624,14 @@ public class MemberService {
             memberKeyword.softDelete();
         }
 
+        List<MemberPrecedentHighlight> listByMemberPrecedent = memberPrecedentHighlightRepository.findListByMemberPrecedent(precedent);
+        if (!listByMemberPrecedent.isEmpty()) {
+            for (MemberPrecedentHighlight memberPrecedentHighlight : listByMemberPrecedent) {
+                memberPrecedentHighlight.softDelete();
+                // 업데이트된 MemberPrecedentHighlight 엔티티를 저장하여 soft delete가 수행됨을 표시
+                memberPrecedentHighlightRepository.save(memberPrecedentHighlight);
+            }
+        }
         // 판례를 삭제 처리
         precedent.softDelete();
 
