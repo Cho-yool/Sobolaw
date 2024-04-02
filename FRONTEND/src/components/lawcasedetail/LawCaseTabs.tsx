@@ -131,7 +131,7 @@ const LawCaseTabs = ({
               <>
                 <p
                   dangerouslySetInnerHTML={{
-                    __html: renderingText,
+                    __html: renderingText.replace(/\n/g, " ").trim(),
                   }}
                 ></p>
                 <div className={style["block"]}></div>
