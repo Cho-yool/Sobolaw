@@ -8,6 +8,7 @@ import com.sobolaw.api.repository.FCMTokenRepository;
 import com.sobolaw.api.repository.NotificationRepository;
 import com.sobolaw.feign.dto.Member;
 import com.sobolaw.feign.service.UserServiceClient;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,10 +36,21 @@ public class NotificationService {
     }
 
     public Notification sendNotification(Message message) {
+        try {
+            userServiceClient.getMember(message.getMemberId()).getData();
+        }catch (Exception e){
+            return null;
+        }
+
+        Notification saveNotification = new Notification();
+        saveNotification.setMemberId(message.getMemberId());
+        saveNotification.setTitle(message.getTitle());
+        saveNotification.setBody(message.getBody());
+        registerNotification(saveNotification);
 
         FCMToken fcmToken = fcmTokenRepository.findById(message.getMemberId()).orElse(null);
         if (fcmToken == null)
-            return null;
+            return new Notification();
 
         com.google.firebase.messaging.Notification notification = com.google.firebase.messaging.Notification.builder()
                 .setTitle(message.getTitle())
@@ -52,15 +64,9 @@ public class NotificationService {
         try {
             firebaseMessaging.send(msg);
 
-            Notification saveNotification = new Notification();
-            saveNotification.setMemberId(message.getMemberId());
-            saveNotification.setTitle(message.getTitle());
-            saveNotification.setBody(message.getBody());
-            registerNotification(saveNotification);
-
             return saveNotification;
         } catch (Exception e) {
-            return null;
+            return new Notification();
         }
 
     }

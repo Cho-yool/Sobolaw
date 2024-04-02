@@ -44,10 +44,12 @@ public class NotificationController {
     @PostMapping("/notifications")
     public BaseResponse<?> sendNotification(@RequestBody Message message) {
         Notification data = notificationService.sendNotification(message);
-        if (data != null)
-            return new BaseResponse<>(201, "알림이 전송되었습니다", data);
+        if (data == null)
+            return new BaseResponse<>(404, "존재하지 않는 대상 입니다.", null);
+        else if (data.getMemberId() == 0)
+            return new BaseResponse<>(201, "알림이 저장되었고, 실시간 전송은 실패했습니다.", null);
         else
-            return new BaseResponse<>(400, "알림 전송에 실패했습니다", null);
+            return new BaseResponse<>(201, "알림이 실시간으로 전송되었습니다.", null);
     }
 
     @Operation(summary = "알림 목록 반환")
