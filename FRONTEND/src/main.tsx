@@ -60,7 +60,12 @@ const theme = {
       borderRadius: 20,
       fontSize: 15,
       algorithm: true,
-    }
+    },
+    Badge: {
+      statusSize: 2,
+      indicatorHeightSM: 14,
+      textFontSizeSM: 9,
+    },
   },
 };
 const queryClient = new QueryClient();

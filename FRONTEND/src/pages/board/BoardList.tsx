@@ -16,7 +16,7 @@ export default function BoardList() {
   useEffect(() => {
     const fetchData = async () => {
       const response = await getBoardList();
-      console.log(response);
+      // console.log(response);
       const data = response.map((item: any, index: any) => ({
         key: index.toString(),
         boardId: item.boardId,

@@ -34,6 +34,7 @@
   background-color: #a68b60;
   color: white;
   text-decoration-line: none;
+  cursor: pointer;
 }
 
 .nav-link.active {
@@ -41,10 +42,24 @@
   font-weight: bold;
 }
 
+.mypaper-box {
+  padding-top: 3rem;
+  padding-left: 7rem;
+  padding-right: 7rem;
+  padding-bottom: 3rem;
+}
+
 @media (max-width: 700px) {
   .tab-categories {
     padding-left: 2rem;
     padding-right: 2rem;
     font-size: small;
+  }
+
+  .mypaper-box {
+    padding-top: 3rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-bottom: 3rem;
   }
 }
