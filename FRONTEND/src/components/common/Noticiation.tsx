@@ -26,7 +26,9 @@ const Notification = () => {
 
   useEffect(() => {
     // 알림 상태가 변경될 때마다 알림을 표시
-    notify();
+    if (notification.title || notification.body) {
+      notify();
+    }
   }, [notification]);
 
   console.log(notification);
