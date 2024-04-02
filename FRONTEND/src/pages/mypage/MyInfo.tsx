@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Button, Divider, Modal, Tooltip, Tag } from "antd";
+import { Button, Divider, Modal, Tooltip, Tag, message } from "antd";
 import {
   SmileTwoTone,
   MailTwoTone,
@@ -27,6 +27,7 @@ export default function MyInfo() {
   const refreshToken = useSelector(
     (state: RootState) => state.user.refreshToken
   );
+  const [messageApi, contextHolder] = message.useMessage();
   const [userInfo, setUserInfo] = useState<MemberInfo>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
@@ -110,7 +111,13 @@ export default function MyInfo() {
 
   const handleDetAccount = () => {
     deleteUser(accessToken, refreshToken).then(() => {
-      alert("회원탈퇴가 정상적으로 처리되었습니다.");
+      const success = () => {
+        messageApi.open({
+          type: "success",
+          content: "회원탈퇴가 정상적으로 처리되었습니다.",
+        });
+      };
+      success();
       dispatch(resetAuth());
       navigate("/");
     });
@@ -119,6 +126,7 @@ export default function MyInfo() {
   return (
     <>
       <div className="pages">
+        {contextHolder}
         <div className={style["myinfo-box"]}>
           <div className={style["box1"]}>
             <div className={style["box-title"]}>기본정보</div>
@@ -171,8 +179,7 @@ export default function MyInfo() {
                       type="primary"
                       size="small"
                       className={style["mypaper-button"]}
-                      onClick={showApplyModal}
-                    >
+                      onClick={showApplyModal}>
                       전환 신청하기
                     </Button>
                   </>
@@ -188,8 +195,7 @@ export default function MyInfo() {
                   <Button key="submit" onClick={handleApplyOk}>
                     취소
                   </Button>,
-                ]}
-              >
+                ]}>
                 <Divider />
                 <ApplyLawyer onUpdate={handleApplyOkUpdate} />
               </Modal>
@@ -215,8 +221,7 @@ export default function MyInfo() {
                   title={
                     "내가 저장한 판례를 바탕으로 관련 높은 키워드를 보여드려요!"
                   }
-                  arrow={true}
-                >
+                  arrow={true}>
                   <QuestionCircleOutlined />
                 </Tooltip>
               </div>
@@ -227,8 +232,7 @@ export default function MyInfo() {
                       bordered={false}
                       closable
                       color={tagColors[index]}
-                      style={{ fontSize: "1rem" }}
-                    >
+                      style={{ fontSize: "1rem" }}>
                       {item.word}
                     </Tag>
                   ))}
@@ -250,8 +254,7 @@ export default function MyInfo() {
                   onClick={() => {
                     navigate("/search");
                   }}
-                  style={{ color: "#BF8438" }}
-                >
+                  style={{ color: "#BF8438" }}>
                   소보로 친구들이 많이 찾은 판례 보러가기
                 </Button>
               </div>
@@ -274,12 +277,10 @@ export default function MyInfo() {
                   key="submit"
                   type="primary"
                   danger
-                  onClick={handleDetAccount}
-                >
+                  onClick={handleDetAccount}>
                   탈퇴하기
                 </Button>,
-              ]}
-            >
+              ]}>
               <Divider />
               <p>
                 탈퇴 시 모든 회원정보는 삭제되며, 저장했던 자료들은 복구되지

@@ -12,8 +12,7 @@ import { useState } from "react";
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#f7cac9",
-  }}
-></div>;
+  }}></div>;
 
 export default function FormPage() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -44,8 +43,7 @@ export default function FormPage() {
               backgroundColor: "#bf8438",
               padding: "12px 24px",
               color: "white",
-            }}
-          >
+            }}>
             중고거래 사기
           </Link>
           <Link
@@ -56,8 +54,7 @@ export default function FormPage() {
               backgroundColor: "#bf8438",
               padding: "12px 24px",
               color: "white",
-            }}
-          >
+            }}>
             온라인 모욕
           </Link>
           <Link
@@ -69,8 +66,7 @@ export default function FormPage() {
               padding: "12px 24px",
               color: "white",
             }}
-            onClick={(e) => clickHandler(e)}
-          >
+            onClick={(e) => clickHandler(e)}>
             명예훼손
           </Link>
           <Modal
@@ -81,8 +77,7 @@ export default function FormPage() {
               <Button key="submit" type="primary" onClick={handleOk}>
                 OK
               </Button>,
-            ]}
-          >
+            ]}>
             <p>준비중입니다....ㅜㅜ</p>
           </Modal>
         </div>

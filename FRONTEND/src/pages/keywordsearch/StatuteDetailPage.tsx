@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import style from '../../styles/search/StatuteDetail.module.css';
-import { getStatuteDetail } from '../../api/lawsearch';
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import style from "../../styles/search/StatuteDetail.module.css";
+import { getStatuteDetail } from "../../api/lawsearch";
 
 interface Statute {
   statuteNumber: number;
@@ -45,7 +45,9 @@ interface ArticleItem {
 const StatuteDetailPage: React.FC = () => {
   const { statuteNumber } = useParams<{ statuteNumber: string }>();
   const [statute, setStatute] = useState<Statute | null>(null);
-  const [visibleContentSub, setVisibleContentSub] = useState<{ [key: number]: boolean }>({});
+  const [visibleContentSub, setVisibleContentSub] = useState<{
+    [key: number]: boolean;
+  }>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -55,11 +57,10 @@ const StatuteDetailPage: React.FC = () => {
         if (statuteNumber) {
           const data = await getStatuteDetail(Number(statuteNumber));
           setStatute(data);
-          // console.log('법령 정보:', data);
           setLoading(false);
         }
       } catch (error) {
-        setError('법령 정보를 불러오는 중 오류가 발생했습니다.');
+        setError("법령 정보를 불러오는 중 오류가 발생했습니다.");
         setLoading(false);
       }
     };
@@ -80,10 +81,10 @@ const StatuteDetailPage: React.FC = () => {
     try {
       const validJsonString = articleContentSub
         .replace(/'/g, '"')
-        .replace(/None/g, 'null')
-        .replace(/t/g, '')
-        .replace(/n/g, '')
-        .replace(/ntttt/g, '    ');
+        .replace(/None/g, "null")
+        .replace(/t/g, "")
+        .replace(/n/g, "")
+        .replace(/ntttt/g, "    ");
 
       const contentSubObject: ArticleSection[] = JSON.parse(validJsonString);
 
@@ -114,7 +115,7 @@ const StatuteDetailPage: React.FC = () => {
       return <p>해당 법령 세부내용이 존재하지 않습니다.</p>;
     }
   };
-  
+
   if (error) {
     return <div>{error}</div>;
   }
@@ -127,12 +128,18 @@ const StatuteDetailPage: React.FC = () => {
     <div className={style.container}>
       <h1 className={style.title}>{statute.statuteName}</h1>
       <p className={style.subtitle}>
-        [공포일 {statute.enforcementDate ? statute.enforcementDate.slice(0, 4) : ''}.{''}
-        {statute.enforcementDate ? statute.enforcementDate.slice(4, 6) : ''}.{''}
-        {statute.enforcementDate ? statute.enforcementDate.slice(6, 8) : ''},
-        시행일 {statute.publicationDate ? statute.publicationDate.slice(0, 4) : ''}.{''}
-        {statute.publicationDate ? statute.publicationDate.slice(4, 6) : ''}.{''}
-        {statute.publicationDate ? statute.publicationDate.slice(6, 8) : ''}]
+        [공포일{" "}
+        {statute.enforcementDate ? statute.enforcementDate.slice(0, 4) : ""}.
+        {""}
+        {statute.enforcementDate ? statute.enforcementDate.slice(4, 6) : ""}.
+        {""}
+        {statute.enforcementDate ? statute.enforcementDate.slice(6, 8) : ""},
+        시행일{" "}
+        {statute.publicationDate ? statute.publicationDate.slice(0, 4) : ""}.
+        {""}
+        {statute.publicationDate ? statute.publicationDate.slice(4, 6) : ""}.
+        {""}
+        {statute.publicationDate ? statute.publicationDate.slice(6, 8) : ""}]
       </p>
       <div className={style.info}>
         <p>분문 : {statute.statuteType}</p>
@@ -143,12 +150,13 @@ const StatuteDetailPage: React.FC = () => {
         <div key={article.statuteId}>
           <h3
             className={style.articleTitle}
-            onClick={() => article.articleContentSub && toggleContentSubVisibility(index)}
-          >
+            onClick={() =>
+              article.articleContentSub && toggleContentSubVisibility(index)
+            }>
             {article.articleTitle}
             {article.articleContentSub && (
               <span className={style.toggleIcon}>
-                {visibleContentSub[index] ? '▲' : '▼'}
+                {visibleContentSub[index] ? "▲" : "▼"}
               </span>
             )}
           </h3>

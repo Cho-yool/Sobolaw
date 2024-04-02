@@ -20,7 +20,6 @@ const SearchInput: React.FC = () => {
         const response = await getAllWords();
         if (Array.isArray(response.data)) {
           setWords(response.data);
-          console.log("법령 용어명 목록 조회:", response);
         } else {
           console.error("법령 용어명 데이터는 배열이 아닙니다.", response.data);
         }
@@ -71,7 +70,7 @@ const SearchInput: React.FC = () => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       if (isDropdownOpen) {
         setIsDropdownOpen(false);
       } else {
@@ -88,8 +87,7 @@ const SearchInput: React.FC = () => {
   return (
     <div
       className={style.container}
-      style={{ background: `url("/images/SearchInputImage.png")` }}
-    >
+      style={{ background: `url("/images/SearchInputImage.png")` }}>
       <h3 className={style.title}>
         소보로의 고도화된 검색 환경으로
         <br />
@@ -111,14 +109,13 @@ const SearchInput: React.FC = () => {
         onKeyDown={handleKeyDown}
         className={style.searchInput}
         popupClassName={style.dropdownMenu}
-        open={isDropdownOpen}
-        >
-       <Input
-         prefix={<SearchOutlined style={{fontSize: 25}} />}
-         className={style.searchInputInner}
-         placeholder="키워드를 검색하세요"
-       />
-     </AutoComplete>
+        open={isDropdownOpen}>
+        <Input
+          prefix={<SearchOutlined style={{ fontSize: 25 }} />}
+          className={style.searchInputInner}
+          placeholder="키워드를 검색하세요"
+        />
+      </AutoComplete>
     </div>
   );
 };
