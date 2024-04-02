@@ -68,8 +68,7 @@
 
 @media screen and (max-width: 768px) {
   .recentLawCaseContainer {
-    
-    width: 100px;
+    width: 100%;
     margin: 10px 20px;
   }
 

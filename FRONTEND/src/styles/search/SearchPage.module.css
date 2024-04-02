@@ -82,8 +82,9 @@
   }
 
   .recentLawCaseContainer {
-    width: 100%;
-    margin: 10px auto;
+    width: 60%;
+    margin: 10px 0;
+    margin-right: 40%;
   }
 
   .singleCategoryCard {

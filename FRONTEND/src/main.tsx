@@ -56,6 +56,11 @@ const theme = {
       colorPrimary: "#644419",
       algorithm: true, // Enable algorithm
     },
+    Select: {
+      borderRadius: 20,
+      fontSize: 15,
+      algorithm: true,
+    }
   },
 };
 const queryClient = new QueryClient();

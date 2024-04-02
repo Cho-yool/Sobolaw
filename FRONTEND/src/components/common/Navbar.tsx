@@ -47,6 +47,7 @@ const items: MenuProps["items"] = [
   { key: "3", label: <Link to="/cal">비용계산</Link> },
   { key: "4", label: <Link to="/plaint">소장작성</Link> },
   { key: "5", label: <Link to="/board/list">상담소</Link> },
+  { key: "6", label: <Link to="/news">뉴스</Link> },
 ];
 
 interface ResponsiveNavProps {
@@ -271,7 +272,7 @@ const ResponsiveNav = ({
           </Col>
 
           <Row className={style["contents"]}>
-            <Col xs={0} sm={0} md={16} lg={16}>
+            <Col xs={0} sm={0} md={12} lg={18}>
               <Menu
                 mode="horizontal"
                 selectedKeys={selectedKeys}

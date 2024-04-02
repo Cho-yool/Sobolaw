@@ -195,4 +195,25 @@
   .newsCards {
     grid-template-columns: repeat(1, 1fr);
   }
+
+  .slideContent {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    background-color: rgba(100, 68, 25, 0.9);
+    color: #F3E7C0;
+    text-align: center;
+    box-sizing: border-box;
+    border-radius: 10px;
+  }
+  
+  
+  .slideContent h2 {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+
 }

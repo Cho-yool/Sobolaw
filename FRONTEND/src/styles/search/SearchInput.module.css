@@ -20,13 +20,24 @@
 }
 
 .searchInput {
-  padding: 15px;
   margin: 20px 0px;
-  border: 1px solid #d9d9d9;
-  border-radius: 30px;
-  width: 70%;
-  font-size: 16px;
+  border-radius: 20px;
+  width: 60%;
+  height: 60px;
+  font-size: 18px;
   font-weight: 600;
+}
+
+.searchInputInner {
+  height: 60px;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: bold;
+  gap: 20px;
+}
+
+.dropdownMenu {
+  font-size: 10px;
 }
 
 .searchInput::placeholder {
@@ -40,7 +51,7 @@
 @media (max-width: 768px) {
 
   .title {
-    font-size: 20px; /* 모바일 화면에서 글씨 크기 줄임 */
+    font-size: 16px; /* 모바일 화면에서 글씨 크기 줄임 */
   }
 
   .searchInput, .searchInput::placeholder {
@@ -53,5 +64,11 @@
   .tabContainer {
     font-size: 12px;
   }
+
+  .searchInputInner {
+    font-size: 15px;
+    height: 40px;
+  }
+  
 }
 

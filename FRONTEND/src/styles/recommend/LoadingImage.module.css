@@ -140,3 +140,47 @@
     opacity: 0;
   }
 }
+
+  @media (max-width: 768px){
+    
+    .loadingText {
+      position: absolute;
+      bottom: 15%; /* 위치 조정 */
+      font-size: 16px; /* 글자 크기 */
+      color: #644419; /* 글자 색상 */
+      font-weight: bold; /* 글자 굵기 */
+    }
+
+    .progress {
+      height: 100%;
+      width: 100%;
+      margin-bottom: 20%;
+      background: linear-gradient(60deg, #ff9a9e, #fad0c4, #fad961, #f76b1c);
+      background-size: 400% 400%;
+      border-radius: 8px;
+      animation: waveEffect 3s ease infinite; /* 애니메이션 추가 */
+      transition: width 0.3s ease; /* 너비 변화 시 부드러운 전환 효과 추가 */
+    }
+
+    .progressBar {
+      position: absolute;
+      bottom: 25%; /* 위치 조정 */
+      width: 70%;
+      height: 20px;
+      background-color: #eee;
+      border-radius: 8px;
+      overflow: hidden; /* 넘치는 부분 숨김 */
+    }
+
+    .fullImage,
+    .maskedImage {
+      position: absolute;
+      width: 60%; /* 이미지 크기, 필요에 따라 조정 */
+      max-width: 400px; /* 최대 너비 */
+      overflow: hidden;
+}
+
+
+
+  }
+
