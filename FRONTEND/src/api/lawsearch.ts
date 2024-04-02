@@ -27,7 +27,7 @@ async function searchPrecedent(searchKeyword: string, pageNumber: number) {
     const response = await http.get(`/precedents/search/${searchKeyword}?pageNumber=${pageNumber}`);
     // console.log('판례 검색 결과:', response.data, pageNumber);
     return response.data;
-  }
+}
 
 
 // 판례 목록 조회

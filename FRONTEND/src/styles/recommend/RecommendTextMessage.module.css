@@ -26,8 +26,8 @@
 
 .received {
   align-self: flex-start;
-  background-color: #e5e5ea;
-  color: black;
+  background-color: #F3E7C0;
+  color: #644419;
 }
 
 @keyframes fadeInUp {

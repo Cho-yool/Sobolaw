@@ -25,10 +25,6 @@ const theme = {
       horizontalMargin: "10px 0 30px 0",
       algorithm: true,
     },
-    AutoComplete: {
-      borderRadius: "30px",
-      algorithm: true,
-    },
   },
   components: {
     Radio: {
@@ -60,14 +56,11 @@ const theme = {
       colorPrimary: "#644419",
       algorithm: true, // Enable algorithm
     },
-    AutoComplete: {
-      borderRadius: "30px",
-      algorithm: true, // Enable algorithm
-    },
-    Input: {
-      borderRadius: "30px",
-      algorithm: true, // Enable algorithm
-    },
+    Select: {
+      borderRadius: 20,
+      fontSize: 15,
+      algorithm: true,
+    }
   },
 };
 const queryClient = new QueryClient();

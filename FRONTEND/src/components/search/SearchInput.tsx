@@ -1,7 +1,8 @@
 // src/components/search/SearchInput.tsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Tabs, AutoComplete } from "antd";
+import { Tabs, Input, AutoComplete } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import style from "../../styles/search/SearchInput.module.css";
 import CountUp from "react-countup";
 import { getAllWords } from "../../api/lawsearch";
@@ -92,7 +93,7 @@ const SearchInput: React.FC = () => {
       <h3 className={style.title}>
         소보로의 고도화된 검색 환경으로
         <br />
-        <CountUp end={270222} duration={3} separator="," />
+        <CountUp end={270222} duration={4} separator="," />
         건의 법률 데이터를 찾아보세요.
       </h3>
       <Tabs
@@ -108,11 +109,16 @@ const SearchInput: React.FC = () => {
         onSelect={handleSelect}
         onSearch={handleInputChange}
         onKeyDown={handleKeyDown}
-        placeholder="키워드를 검색하세요"
         className={style.searchInput}
         popupClassName={style.dropdownMenu}
         open={isDropdownOpen}
-      />
+        >
+       <Input
+         prefix={<SearchOutlined style={{fontSize: 25}} />}
+         className={style.searchInputInner}
+         placeholder="키워드를 검색하세요"
+       />
+     </AutoComplete>
     </div>
   );
 };
