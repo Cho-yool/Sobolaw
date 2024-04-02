@@ -3,6 +3,7 @@ package com.sobolaw.api.statute.service;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
+import com.sobolaw.api.precedent.entity.Precedent;
 import com.sobolaw.api.statute.document.StatuteDocument;
 import com.sobolaw.api.statute.document.StatuteTextDocument;
 import com.sobolaw.api.statute.dto.StatuteDTO;
@@ -27,6 +28,32 @@ public class StatuteService {
     private final StatuteRepository statuteRepository;
     private final ElasticsearchClient elasticsearchClient;
 
+    // 기능 : statuteNumber로 법령 내용 조회
+    public StatuteDTO getStatuteByNumber(Long statuteNumber) {
+        Statute statute = statuteRepository.findByStatuteNumber(statuteNumber)
+            .orElseThrow(() -> new IllegalArgumentException("해당 법령이 없습니다. statute = " + statuteNumber));
+        updateHit(statuteNumber);
+        return convertToStatuteDTO(statute);
+    }
+
+    // 조회수 + 1
+    @Transactional
+    public void updateHit(Long statuteNumber){
+        Statute statute = statuteRepository.findByStatuteNumber(statuteNumber)
+            .orElseThrow(() -> new IllegalArgumentException("해당 법령이 없습니다. statuteNumber=" + statuteNumber));
+        statute.setHit(statute.getHit()+1);
+    }
+
+    // 기능 : 조회수 높은 순으로 20개 반환
+    public List<StatuteDTO> findTop20ByOrderByHitDesc(){
+        List<Statute> statutes = statuteRepository.findTop20ByOrderByHitDesc();
+
+        return statutes.stream()
+            .map(this::convertToStatuteDTO)
+            .collect(Collectors.toList());
+    }
+
+    // 기능 : elasticsearch 법령 검색
     public List<StatuteDTO> searchByKeyword(String searchKeyword, int pageNumber) throws Exception {
         // 첫 번째 단계: 검색 키워드로 statuteNumbers 검색
         Set<Long> statuteNumbers = searchAndGetStatuteNumbers(searchKeyword);
@@ -51,7 +78,7 @@ public class StatuteService {
                 )
             )
             .source(src -> src
-                .fetch(true) // ㅅㅂ 여기서 statueNumber만 가져와야한다고!!!!!!!!!!!!!!!!!!
+                .fetch(true) // 여기서 statueNumber만 가져오면 좋다고!!
             ),
             StatuteDocument.class
         );
@@ -66,7 +93,7 @@ public class StatuteService {
                 )
             )
             .source(src -> src
-                .fetch(true) // ㅅㅂ 여기서 statueNumber만 가져와야한다고!!!!!!!!!!!!!!!!!!
+                .fetch(true) //여기서 statueNumber만 가져오면 좋다고!!
             ),
             StatuteTextDocument.class
         );
@@ -77,7 +104,6 @@ public class StatuteService {
 
         return statuteNumbers;
     }
-
 
     public List<StatuteDTO> fetchStatutesWithTexts(Set<Long> statuteNumbers, int pageNumber) throws IOException {
 
@@ -146,24 +172,6 @@ public class StatuteService {
             document.getArticleType()
         );
     }
-
-    // statuteNumber로 법령 내용 조회
-    public StatuteDTO getStatuteByNumber(Long statuteNumber) {
-        Statute statute = statuteRepository.findByStatuteNumber(statuteNumber)
-                .orElseThrow(() -> new IllegalArgumentException("해당 법령이 없습니다. statute = " + statuteNumber));
-
-        return convertToStatuteDTO(statute);
-    }
-
-    // 법령 조회수 높은 순으로 20개 반환
-    public List<StatuteDTO> findTop20ByOrderByHitDesc(){
-        List<Statute> statutes = statuteRepository.findTop20ByOrderByHitDesc();
-
-        return statutes.stream()
-                .map(this::convertToStatuteDTO)
-                .collect(Collectors.toList());
-    }
-
 
     // entity -> DTO 변환
     private StatuteDTO convertToStatuteDTO(Statute entity) {
