@@ -1,0 +1,34 @@
+{
+  "properties": {
+    "statute_number": {
+      "type": "long"
+    },
+    "statute_id": {
+      "type": "long"
+    },
+    "article_content": {
+      "type": "text",
+      "analyzer": "nori_ngram_analyzer"
+    },
+    "article_content_sub": {
+      "type": "text",
+      "analyzer": "nori_ngram_analyzer"
+    },
+    "article_effective_date": {
+      "type": "keyword"
+    },
+    "article_number": {
+      "type": "keyword"
+    },
+    "article_number_sub": {
+      "type": "keyword"
+    },
+    "article_title": {
+      "type": "text",
+      "analyzer": "nori_ngram_analyzer"
+    },
+    "article_type": {
+      "type": "keyword"
+    }
+  }
+}
