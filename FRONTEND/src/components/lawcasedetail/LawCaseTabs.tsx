@@ -237,31 +237,26 @@ const LawCaseTabs = ({
       selectionPos.deleteContents();
       selectionPos.insertNode(span);
       if (!isSaved) {
-        try {
-          const fetchData = async () => {
-            await savePrecedent(getData.precedentId).then(() => {
-              dispatch(
-                updatePrecedents([...user.precedents, getData.precedentId])
-              );
-            });
-            setIsSaved(true);
-          };
-          fetchData();
-        } catch (error) {
-          console.error(error);
-        } finally {
-          saveHighLight(
-            {
-              precedentId: getData.precedentId,
-              main: selectionPos.commonAncestorContainer.outerHTML,
-              highlightType: value,
-              startPoint: selectionPos.startOffset,
-              endPoint: selectionPos.endOffset,
-              content: selectionPos.toString(),
-            },
-            user.accessToken
-          );
-        }
+        const fetchData = async () => {
+          await savePrecedent(getData.precedentId).then(() => {
+            dispatch(
+              updatePrecedents([...user.precedents, getData.precedentId])
+            );
+            saveHighLight(
+              {
+                precedentId: getData.precedentId,
+                main: selectionPos.commonAncestorContainer.outerHTML,
+                highlightType: value,
+                startPoint: selectionPos.startOffset,
+                endPoint: selectionPos.endOffset,
+                content: selectionPos.toString(),
+              },
+              user.accessToken
+            );
+          });
+          setIsSaved(true);
+        };
+        fetchData();
       } else {
         saveHighLight(
           {
