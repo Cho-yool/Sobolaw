@@ -2,10 +2,31 @@
   display: flex;
   margin-bottom: 1rem;
   width: 100%;
+  position: relative;
 }
 
 .tab-container {
   width: 100%;
+}
+
+.save-precedent {
+  color: #644419;
+  position: absolute;
+  font-size: 3rem;
+  cursor: pointer;
+  transform: translateY(120%);
+  right: 2%;
+  top: 3%;
+}
+
+.remove-precedent {
+  color: #644419;
+  position: absolute;
+  font-size: 3rem;
+  cursor: pointer;
+  transform: translateY(120%);
+  right: 2%;
+  top: 3%;
 }
 
 .tab {
