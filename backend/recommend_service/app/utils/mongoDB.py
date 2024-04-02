@@ -67,7 +67,7 @@ def find_keywords(arr):
         },
         {
             "$match": {
-                "total": {"$gte": 0.4}  # 'total' 필드의 값이 0.4 이상인 문서만 필터링
+                "total": {"$gte": 0.5}  # 'total' 필드의 값이 0.5 이상인 문서만 필터링
             }
         },
         {
