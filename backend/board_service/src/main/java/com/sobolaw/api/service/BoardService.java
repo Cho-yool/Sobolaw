@@ -6,9 +6,13 @@ import com.sobolaw.api.model.entity.Board;
 import com.sobolaw.api.model.entity.Comment;
 import com.sobolaw.api.repository.BoardRepository;
 import com.sobolaw.api.repository.CommentRepository;
+import com.sobolaw.feign.dto.BaseResponse;
 import com.sobolaw.feign.dto.Member;
+import com.sobolaw.feign.dto.Notification;
+import com.sobolaw.feign.service.NotificationServiceClient;
 import com.sobolaw.feign.service.UserServiceClient;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,11 +21,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BoardService {
 
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
     private final UserServiceClient userServiceClient;
+    private final NotificationServiceClient notificationServiceClient;
 
     // ---------------------------------Board-------------------------------------
     public List<BoardResponseDto> getBoardList() {
@@ -70,10 +76,15 @@ public class BoardService {
 
     public CommentResponseDto registerComment(Comment comment) {
         Board board = boardRepository.findByBoardId(comment.getBoardId(), Board.class).orElse(null);
-        if(board == null)
+        if(board == null){
             return null;
-        else
+        }
+        else{
+            BaseResponse<Notification> response = notificationServiceClient.sendNotification(new Notification(board.getMemberId(),
+                    "댓글 생성 알림", "["+board.getTitle()+"] 상담글에 답변이 작성되었습니다."));
+            log.info("notificationServiceClient response: {}", response);
             return changeComment(commentRepository.save(comment));
+        }
     }
 
     @Transactional

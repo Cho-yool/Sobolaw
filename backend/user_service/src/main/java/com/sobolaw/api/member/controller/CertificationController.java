@@ -5,6 +5,8 @@ import com.sobolaw.api.member.dto.response.RoleUpdateListResponseDTO;
 import com.sobolaw.api.member.dto.response.RoleUpdateResponseDTO;
 import com.sobolaw.api.member.entity.Type.RoleType;
 import com.sobolaw.api.member.service.CertificationService;
+import com.sobolaw.feign.dto.response.Notification;
+import com.sobolaw.feign.service.NotificationServiceClient;
 import com.sobolaw.global.common.response.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CertificationController {
 
     private final CertificationService certificationService;
+    private final NotificationServiceClient notificationServiceClient;
 
     /**
      * 변호사 등업 리스트 조회.
@@ -60,6 +63,7 @@ public class CertificationController {
         Long lawyerId = certificationService.findLawyerIdByArticleId(articleId);
         RoleUpdateResponseDTO result = certificationService.updateRole(lawyerId, RoleType.ROLE_LAWYER);
         certificationService.deleteLawyerArticleByArticleId(articleId);
+        notificationServiceClient.sendNotification(new Notification(lawyerId, "변호사 등업 승인 알림", "변호사 등업요청이 승인되었습니다."));
         return BaseResponse.success(HttpStatus.OK.value(), "변호사 등업 성공", result);
     }
 
@@ -73,6 +77,7 @@ public class CertificationController {
         Long lawyerId = certificationService.findLawyerIdByArticleId(articleId);
         RoleUpdateResponseDTO result = certificationService.updateRole(lawyerId, RoleType.ROLE_USER);
         certificationService.deleteLawyerArticleByArticleId(articleId);
+        notificationServiceClient.sendNotification(new Notification(lawyerId, "변호사 등업 거절 알림", "변호사 등업요청이 거절되었습니다."));
         return BaseResponse.success(HttpStatus.OK.value(), "변호사 등업 거절. 요청 삭제.", result);
     }
 }
