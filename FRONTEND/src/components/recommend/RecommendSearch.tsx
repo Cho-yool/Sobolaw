@@ -126,7 +126,6 @@ const RecommendSearch: React.FC = () => {
 
   const handleSubmit = async () => {
     const situation = `${selectedCaseType} ${stepTwoValue} ${stepThreeValue} ${stepFourValue}`;
-    console.log("Submitting", situation);
 
     setIsLoading(true); // 로딩 상태를 true로 설정
     setProgress(0); // 진행률을 0으로 초기화
@@ -134,7 +133,6 @@ const RecommendSearch: React.FC = () => {
     try {
       // simulateLoadingProcess(); // 로딩 프로세스를 시뮬레이션하는 함수 호출
       const searchResults = await searchPrecedents(situation);
-      console.log("Search results:", searchResults);
       // TODO: 검색 결과 페이지로 이동
       // 예: 결과 페이지로 이동하면서 검색 결과 데이터 전달
 
@@ -209,8 +207,7 @@ const RecommendSearch: React.FC = () => {
                 .toLowerCase()
                 .includes(input.toLowerCase())
             }
-            style={{ width: "35%", height: "50px", fontSize: "15px" }}
-          >
+            style={{ width: "35%", height: "50px", fontSize: "15px" }}>
             <Option value="손해배상">손해배상</Option>
             <Option value="사기">사기</Option>
             <Option value="횡령">횡령</Option>
@@ -234,7 +231,9 @@ const RecommendSearch: React.FC = () => {
                   autoSize={{ minRows: 5, maxRows: 5 }}
                   className={stepTwoValue.length < 6 ? style.redBorder : ""}
                 />
-                <div className={style.inputCount}>{stepTwoValue.length}/6자 이상</div>
+                <div className={style.inputCount}>
+                  {stepTwoValue.length}/6자 이상
+                </div>
               </div>
               <div className={style.recommendTextMessageWrapper}>
                 <RecommendTextMessage messages={placeMessages} />
@@ -278,7 +277,9 @@ const RecommendSearch: React.FC = () => {
                   autoSize={{ minRows: 5, maxRows: 5 }}
                   className={stepFourValue.length < 6 ? style.redBorder : ""}
                 />
-                <div className={style.inputCount}>{stepFourValue.length}/6글자 이상</div>
+                <div className={style.inputCount}>
+                  {stepFourValue.length}/6글자 이상
+                </div>
               </div>
               <div className={style.recommendTextMessageWrapper}>
                 <RecommendTextMessage messages={personMessages} />
@@ -293,9 +294,7 @@ const RecommendSearch: React.FC = () => {
                 className={style.submitButton}
                 data-text="Ready?"
                 data-hover-text="Confirm!"
-                onClick={handleSubmit}
-              >
-              </a>
+                onClick={handleSubmit}></a>
             </div>
           </div>
         )}

@@ -76,11 +76,7 @@ const ResponsiveNav = ({
   const [alertList, setAlertList] = useState<NoticationAlert[]>([]);
   const [alertCount, setAlertCount] = useState(0);
   const [handleUpdate, setHandleUpdate] = useState(false);
-  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
-  const changeSize = () => {
-    setScreenWidth(window.innerWidth);
-  };
-  window.addEventListener("resize", changeSize);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
