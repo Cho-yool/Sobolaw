@@ -2,7 +2,7 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import style from "../../styles/lawcasedetail/LawCaseTabs.module.css";
 import { AppDispatch, RootState } from "../../redux/store/store";
 import { updatePrecedents } from "../../redux/reducers/user/userSlice";
-import { Switch, Spin } from "antd";
+import { Switch, Spin, message } from "antd";
 import {
   deletePrecedent,
   getHighLight,
@@ -74,11 +74,10 @@ const LawCaseTabs = ({
   const location = useLocation();
   const user = useSelector((state: RootState) => state.user);
   const dispatch: AppDispatch = useDispatch();
+  const [messageApi, contextHolder] = message.useMessage();
   const [activeTab, setActiveTab] = useState<number>(0);
   const [isSaved, setIsSaved] = useState<boolean>(false);
   const [onEditing, setOnEditing] = useState<boolean>(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [selectionNode, setSelectionNode] = useState<any>("");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectionPos, setSelectionPos] = useState<any>();
   const [isSummary, setIsSummary] = useState<boolean>(false);
@@ -205,7 +204,6 @@ const LawCaseTabs = ({
       const selection = window.getSelection();
       if (selection) {
         setSelectionPos(selection.getRangeAt(0));
-        setSelectionNode(selection);
       }
     }
   };
@@ -281,6 +279,13 @@ const LawCaseTabs = ({
       dispatch(updatePrecedents(filterPrecedents));
       setIsSaved(false);
       setHighLightLists([]);
+      const success = () => {
+        messageApi.open({
+          type: "error",
+          content: "판례가 삭제되었습니다.",
+        });
+      };
+      success();
     });
   };
 
@@ -288,6 +293,13 @@ const LawCaseTabs = ({
     savePrecedent(Number(currnetPage)).then(() => {
       dispatch(updatePrecedents([...user.precedents, getData.precedentId]));
       setIsSaved(true);
+      const success = () => {
+        messageApi.open({
+          type: "success",
+          content: "판례가 저장되었습니다.",
+        });
+      };
+      success();
     });
   };
 
@@ -301,6 +313,7 @@ const LawCaseTabs = ({
 
   return (
     <div className={style["tab-container"]}>
+      {contextHolder}
       <div className={style["tab-menu"]}>
         {isSaved ? (
           <StarFilled

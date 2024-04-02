@@ -101,7 +101,17 @@
   .block {
     display: none;
   }
+  .save-precedent {
+    font-size: 2rem;
+    top: 30%;
+    right: 3%;
+  }
 
+  .remove-precedent {
+    font-size: 2rem;
+    top: 30%;
+    right: 3%;
+  }
   .tab-menu__title {
     font-size: 1.2rem;
   }
@@ -150,7 +160,17 @@
     height: fit-content;
     line-height: 1rem;
   }
+  .save-precedent {
+    font-size: 1rem;
+    top: 70%;
+    right: 5%;
+  }
 
+  .remove-precedent {
+    font-size: 1rem;
+    top: 70%;
+    right: 5%;
+  }
   .tab {
     border-radius: 0;
     padding: 1rem 0.5rem;
