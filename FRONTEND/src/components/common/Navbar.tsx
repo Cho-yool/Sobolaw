@@ -391,55 +391,85 @@ const ResponsiveNav = ({
                 </Button>
               </Flex>
             ) : (
-              <Flex vertical gap={5}>
-                {user.nickname}님! 안녕하세요
-                <Button
-                  shape="round"
-                  style={{ marginRight: "10px" }}
-                  onClick={showModal}
+              <Flex vertical gap={15}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                    fontWeight: "bold",
+                  }}
                 >
-                  메시지보내기
-                </Button>
-                <Modal
-                  title="메시지 보내깅깅깅구이궁깅"
-                  open={isModalOpen}
-                  onOk={handleOk}
-                  footer={[
-                    <Button key="submit" onClick={handleOk}>
-                      취소
-                    </Button>,
-                  ]}
-                >
-                  <Divider />
-                  <Input
-                    prefix="받을 사람"
-                    value={memberId}
-                    id="memberId"
-                    onChange={handleMemberId}
-                    suffix={memberIdCheck ? <DownOutlined /> : null}
-                  />
-                  <Input
-                    prefix="제목"
-                    value={title}
-                    id="title"
-                    onChange={handleTitle}
-                  />
-                  <Input
-                    prefix="내용"
-                    value={content}
-                    id="content"
-                    onChange={handleContent}
-                  />
-                  <Button onClick={onSubmit}>알람보내깅</Button>
-                </Modal>
-                <Button
-                  type="primary"
-                  shape="round"
-                  style={{ marginRight: "10px" }}
-                  onClick={handlelogout}
-                >
-                  로그아웃
-                </Button>
+                  {user.nickname}님! 안녕하세요
+                  <Button
+                    onClick={() => {
+                      navigate("/notifications");
+                    }}
+                    style={{ marginLeft: "20px" }}
+                  >
+                    <Badge
+                      count={alertCount}
+                      overflowCount={999}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        zIndex: 1,
+                      }}
+                      size="small"
+                    >
+                      <BellOutlined />
+                    </Badge>
+                  </Button>
+                </div>
+                <div style={{ display: "flex" }}>
+                  <Button
+                    shape="round"
+                    style={{ marginRight: "10px" }}
+                    onClick={showModal}
+                  >
+                    메시지보내기
+                  </Button>
+                  <Modal
+                    title="메시지 보내깅깅깅구이궁깅"
+                    open={isModalOpen}
+                    onOk={handleOk}
+                    footer={[
+                      <Button key="submit" onClick={handleOk}>
+                        취소
+                      </Button>,
+                    ]}
+                  >
+                    <Divider />
+                    <Input
+                      prefix="받을 사람"
+                      value={memberId}
+                      id="memberId"
+                      onChange={handleMemberId}
+                      suffix={memberIdCheck ? <DownOutlined /> : null}
+                    />
+                    <Input
+                      prefix="제목"
+                      value={title}
+                      id="title"
+                      onChange={handleTitle}
+                    />
+                    <Input
+                      prefix="내용"
+                      value={content}
+                      id="content"
+                      onChange={handleContent}
+                    />
+                    <Button onClick={onSubmit}>알람보내깅</Button>
+                  </Modal>
+                  <Button
+                    type="primary"
+                    shape="round"
+                    style={{ marginRight: "10px" }}
+                    onClick={handlelogout}
+                  >
+                    로그아웃
+                  </Button>
+                </div>
               </Flex>
             )}
           </div>
