@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -14,6 +14,8 @@ import {
   Modal,
   Divider,
   Input,
+  Dropdown,
+  Badge,
 } from "antd";
 import type { MenuProps } from "antd";
 import {
@@ -22,9 +24,16 @@ import {
   EditTwoTone,
   CopyTwoTone,
   DownOutlined,
+  BellOutlined,
 } from "@ant-design/icons";
 import { postLogout } from "../../api/members";
-import { postNotifications } from "../../api/notification";
+import {
+  postNotifications,
+  getNotifications,
+  patchNotification,
+  delNotification,
+} from "../../api/notification";
+import { NoticationAlert } from "../../types/DataTypes";
 import { RootState, AppDispatch } from "../../redux/store/store";
 import { resetAuth } from "../../redux/reducers/user/userSlice";
 import logo from "/NavLogo.png";
@@ -62,6 +71,86 @@ const ResponsiveNav = ({
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [memberIdCheck, setMemberIdCheck] = useState(false);
+  const [alertList, setAlertList] = useState<NoticationAlert[]>([]);
+  const [alertCount, setAlertCount] = useState(0);
+  const [handleUpdate, setHandleUpdate] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // const response = await getNotifications(user.memberId);
+        const response = await getNotifications(28);
+        const filteredAlerts = response.filter(
+          (item: NoticationAlert) => item.state === 0
+        );
+        const topFourAlerts = filteredAlerts.slice(0, 3);
+        setAlertList(topFourAlerts);
+        setAlertCount(filteredAlerts.length);
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+      }
+    };
+    fetchData();
+  }, [user.memberId]);
+
+  const alertItems = alertList.map((item, index) => (
+    <Menu.Item
+      key={index}
+      style={{
+        // width: "200px",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}
+    >
+      {item.title}
+
+      <Button
+        onClick={() => handleApply(item.notificationId)}
+        style={{ marginLeft: "1.5rem" }}
+        shape="round"
+      >
+        읽음
+      </Button>
+      <Button
+        onClick={() => handleDeny(item.notificationId)}
+        shape="round"
+        type="primary"
+      >
+        삭제
+      </Button>
+    </Menu.Item>
+  ));
+
+  alertItems.push(
+    <Menu.Item key="more">
+      <Link to="/notifications">알람 전체 보기</Link>
+    </Menu.Item>
+  );
+
+  const handleApply = (notificationId: number): void => {
+    patchNotification(notificationId)
+      .then(() => {
+        setHandleUpdate(!handleUpdate);
+        setAlertCount(alertCount - 1);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleDeny = (notificationId: number) => {
+    delNotification(notificationId)
+      .then(() => {
+        setHandleUpdate(!handleUpdate);
+        setAlertCount(alertCount - 1);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const showDrawer = () => {
     setVisible(true);
   };
@@ -71,7 +160,6 @@ const ResponsiveNav = ({
   };
 
   const handlelogout = () => {
-    // postLogout(user.accessToken, user.refreshToken);
     postLogout(user.accessToken, user.refreshToken)
       .then(() => {
         dispatch(resetAuth());
@@ -134,9 +222,6 @@ const ResponsiveNav = ({
     } else {
       const Data = {
         memberId: parseInt(memberId),
-        // 28번 아이디 토큰
-        // token:
-        //   "cNsYgdXPWmrUgkwy-Yz-V-:APA91bEsgSL6A31bRHFS83424j4TJK7lm34ux8ZC7hsgooowGMcYjNDpIBK41sD2ADzzQJfCHdBg3vwZFQWCXNB1-I7bdX89KqC6RVh7HLqx4ORSMdzbgWV_TdYG5VBA_FHq3OTVR6Wz",
         title: title,
         body: content,
       };
@@ -184,8 +269,9 @@ const ResponsiveNav = ({
               }}
             />
           </Col>
+
           <Row className={style["contents"]}>
-            <Col xs={0} sm={0} md={12} lg={16}>
+            <Col xs={0} sm={0} md={16} lg={16}>
               <Menu
                 mode="horizontal"
                 selectedKeys={selectedKeys}
@@ -193,15 +279,44 @@ const ResponsiveNav = ({
               />
             </Col>
             <Col xs={0} sm={0} md={4}>
-              {user.accessToken != "" && (
-                <MypageMenu
-                  username={user.nickname}
-                  mode={"horizontal"}
-                  setSelectedKeys={setSelectedKeys}
-                  selectedSubKeys={selectedSubKeys}
-                  setSelectedSubKeys={setSelectedSubKeys}
-                />
-              )}
+              <Row justify="space-around" align="middle">
+                {user.accessToken != "" && (
+                  <>
+                    <Badge
+                      count={alertCount}
+                      overflowCount={999}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                      offset={[10, 0]}
+                      size="small"
+                    >
+                      <Dropdown
+                        overlay={<Menu>{alertItems}</Menu>}
+                        placement="bottomRight"
+                        trigger={["click"]}
+                      >
+                        <BellOutlined
+                          style={{
+                            fontSize: "1rem",
+                            marginRight: "auto 3px",
+                            cursor: "pointer",
+                          }}
+                        />
+                      </Dropdown>
+                    </Badge>
+
+                    <MypageMenu
+                      username={user.nickname}
+                      mode={"horizontal"}
+                      setSelectedKeys={setSelectedKeys}
+                      selectedSubKeys={selectedSubKeys}
+                      setSelectedSubKeys={setSelectedSubKeys}
+                    />
+                  </>
+                )}
+              </Row>
             </Col>
             <Col xs={0} sm={0} md={2}>
               {user.accessToken === "" ? (
@@ -227,10 +342,6 @@ const ResponsiveNav = ({
               )}
             </Col>
           </Row>
-          {/* 로그인시 활성화 */}
-          {/* <Col xs={0} sm={0} md={2}></Col>
-
-          <Col xs={0} sm={0} md={2}></Col> */}
 
           {/* 핸드폰 사이즈 네브바 */}
           <Col
