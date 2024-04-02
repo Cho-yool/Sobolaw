@@ -68,8 +68,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/user-service/swagger-ui/**").permitAll()
                 .requestMatchers("/api/user-service/swagger-ui/index.html").permitAll()
                 .requestMatchers("/api/user-service/lawsuit/**").permitAll()
-                .requestMatchers("/api/user-service/members/**").authenticated()
                 .requestMatchers("/api/user-service/").permitAll()
+                .anyRequest().permitAll()
             )
 
             // 인증 예외 처리

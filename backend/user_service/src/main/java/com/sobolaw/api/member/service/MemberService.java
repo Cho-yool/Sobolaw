@@ -9,9 +9,9 @@ import com.sobolaw.api.member.dto.request.HighlightCreateUpdateRequestDTO;
 import com.sobolaw.api.member.dto.request.KeywordSaveRequestDTO;
 import com.sobolaw.api.member.dto.request.MemberUpdateRequestDto;
 import com.sobolaw.api.member.dto.request.PrecedentSaveRequestDTO;
-import com.sobolaw.api.member.dto.response.AdminMemberResponseDto;
-import com.sobolaw.api.member.dto.response.MemberPrecedentResponseDTO;
-import com.sobolaw.api.member.dto.response.MemberRecentResponseDTO;
+import com.sobolaw.api.member.dto.response.AdminMemberResponseDTO;
+import com.sobolaw.api.member.dto.response.MemberPrecedentContentResponseDTO;
+import com.sobolaw.api.member.dto.response.MemberRecentContentResponseDTO;
 import com.sobolaw.api.member.dto.response.MemberResponseDTO;
 import com.sobolaw.api.member.entity.Member;
 import com.sobolaw.api.member.entity.MemberKeyword;
@@ -87,7 +87,7 @@ public class MemberService {
     public MemberResponseDTO getMemberInfo(Long memberId) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
-
+        log.info("게이세이야");
         return MemberResponseDTO.from(member);
     }
 
@@ -96,14 +96,14 @@ public class MemberService {
      *
      * @return 최근 본 판례 리스트.
      */
-    public List<MemberRecentResponseDTO> getMemberRecents() {
+    public List<MemberRecentContentResponseDTO> getMemberRecents() {
         Long currentMemberId = jwtProvider.getMemberId();
         Member member = memberRepository.findById(currentMemberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
         List<MemberRecent> recentList = member.getMemberRecents();
 
-        List<MemberRecentResponseDTO> responseDTOs = new ArrayList<>();
+        List<MemberRecentContentResponseDTO> responseDTOs = new ArrayList<>();
 
         // 최근 본 판례마다 정보를 가져와서 DTO에 담기
         for (MemberRecent recent : recentList) {
@@ -120,7 +120,7 @@ public class MemberService {
             }
 
             // 판례 정보를 DTO에 담기
-            MemberRecentResponseDTO responseDTO = new MemberRecentResponseDTO(
+            MemberRecentContentResponseDTO responseDTO = new MemberRecentContentResponseDTO(
                 recentPrecedentId,
                 precedentDTO.precedentId(),
                 precedentDTO.caseName(),
@@ -173,14 +173,14 @@ public class MemberService {
      *
      * @return 저장한 판례 리스트.
      */
-    public List<MemberPrecedentResponseDTO> getMemberPrecedents() {
+    public List<MemberPrecedentContentResponseDTO> getMemberPrecedents() {
         Long currentMemberId = jwtProvider.getMemberId();
         Member member = memberRepository.findById(currentMemberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
 
         List<MemberPrecedent> precedentIds = member.getMemberPrecedents();
 
-        List<MemberPrecedentResponseDTO> responseDTOs = new ArrayList<>();
+        List<MemberPrecedentContentResponseDTO> responseDTOs = new ArrayList<>();
 
         // 최근 본 판례마다 정보를 가져와서 DTO에 담기
         for (MemberPrecedent memberPrecedent : precedentIds) {
@@ -197,7 +197,7 @@ public class MemberService {
             }
 
             // 판례 정보를 DTO에 담기
-            MemberPrecedentResponseDTO responseDTO = new MemberPrecedentResponseDTO(
+            MemberPrecedentContentResponseDTO responseDTO = new MemberPrecedentContentResponseDTO(
                 memberPrecedentId,
                 precedentDTO.precedentId(),
                 precedentDTO.caseName(),
@@ -246,7 +246,7 @@ public class MemberService {
      * @param precedentId 판례Id
      * @return 특정 저장 판례.
      */
-    public MemberPrecedentResponseDTO getMemberPrecedentDetail(Long precedentId) {
+    public MemberPrecedentContentResponseDTO getMemberPrecedentDetail(Long precedentId) {
         MemberPrecedent memberPrecedent = memberPrecedentRepository.findById(precedentId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_PRECEDENT));
 
@@ -259,7 +259,7 @@ public class MemberService {
         }
 
         // 판례 정보를 DTO에 담기
-        MemberPrecedentResponseDTO responseDTO = new MemberPrecedentResponseDTO(
+        MemberPrecedentContentResponseDTO responseDTO = new MemberPrecedentContentResponseDTO(
             precedentId,
             precedentDTO.precedentId(),
             precedentDTO.caseName(),
@@ -286,7 +286,7 @@ public class MemberService {
      * @param recentId 최근 판례Id
      * @return 특정 최근 본 판례.
      */
-    public MemberRecentResponseDTO getMemberRecentDetail(Long recentId) {
+    public MemberRecentContentResponseDTO getMemberRecentDetail(Long recentId) {
         Long currentMemberId = jwtProvider.getMemberId();
         Member member = memberRepository.findById(currentMemberId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
@@ -304,7 +304,7 @@ public class MemberService {
         }
 
         // 판례 정보를 DTO에 담기
-        MemberRecentResponseDTO responseDTO = new MemberRecentResponseDTO(
+        MemberRecentContentResponseDTO responseDTO = new MemberRecentContentResponseDTO(
             recentId,
             precedentDTO.precedentId(),
             precedentDTO.caseName(),
@@ -357,10 +357,10 @@ public class MemberService {
     /**
      * 저장된 판례 전체 조회(괸리자).
      */
-    public List<MemberPrecedentResponseDTO> getAllMemberPrecedents() {
+    public List<MemberPrecedentContentResponseDTO> getAllMemberPrecedents() {
         checkAdmin();
         List<MemberPrecedent> allPrecedents = memberPrecedentRepository.findAll();
-        List<MemberPrecedentResponseDTO> responseDTOs = new ArrayList<>();
+        List<MemberPrecedentContentResponseDTO> responseDTOs = new ArrayList<>();
 
         // 최근 본 판례마다 정보를 가져와서 DTO에 담기
         for (MemberPrecedent memberPrecedent : allPrecedents) {
@@ -377,7 +377,7 @@ public class MemberService {
             }
 
             // 판례 정보를 DTO에 담기
-            MemberPrecedentResponseDTO responseDTO = new MemberPrecedentResponseDTO(
+            MemberPrecedentContentResponseDTO responseDTO = new MemberPrecedentContentResponseDTO(
                 memberPrecedentId,
                 precedentDTO.precedentId(),
                 precedentDTO.caseName(),
@@ -405,11 +405,11 @@ public class MemberService {
     /**
      * 최근 본 판례 전체 조회(관리자).
      */
-    public List<MemberRecentResponseDTO> getAllMemberRecents() {
+    public List<MemberRecentContentResponseDTO> getAllMemberRecents() {
         checkAdmin();
         List<MemberRecent> allRecents = memberRecentRepository.findAll();
 
-        List<MemberRecentResponseDTO> responseDTOs = new ArrayList<>();
+        List<MemberRecentContentResponseDTO> responseDTOs = new ArrayList<>();
 
         // 최근 본 판례마다 정보를 가져와서 DTO에 담기
         for (MemberRecent recent : allRecents) {
@@ -426,7 +426,7 @@ public class MemberService {
             }
 
             // 판례 정보를 DTO에 담기
-            MemberRecentResponseDTO responseDTO = new MemberRecentResponseDTO(
+            MemberRecentContentResponseDTO responseDTO = new MemberRecentContentResponseDTO(
                 recentPrecedentId,
                 precedentDTO.precedentId(),
                 precedentDTO.caseName(),
@@ -765,7 +765,7 @@ public class MemberService {
      * 멤버 정보 수정 메서드(관리자).
      */
     @Transactional
-    public AdminMemberResponseDto updateMember(Long memberId, MemberUpdateRequestDto updatedMemberDto) {
+    public AdminMemberResponseDTO updateMember(Long memberId, MemberUpdateRequestDto updatedMemberDto) {
         checkAdmin();
 
         // 해당 memberId로 멤버 엔티티를 찾아옴
@@ -781,7 +781,7 @@ public class MemberService {
         if (updatedMemberDto.role() != null) {
             member.setRole(updatedMemberDto.role());
         }
-        return AdminMemberResponseDto.from(member);
+        return AdminMemberResponseDTO.from(member);
     }
 
 

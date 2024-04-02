@@ -22,14 +22,23 @@ public class PrecedentService {
     private final PrecedentRepository precedentRepository;
     private final ElasticsearchClient elasticsearchClient;
 
-    // precedentId로 판례 내용 조회
+    // 기능 : precedentId로 판례 내용 조회
     public PrecedentDTO findPrecedentById(Long precedentId) {
         Precedent precedent = precedentRepository.findByPrecedentId(precedentId)
             .orElseThrow(() -> new IllegalArgumentException("해당 판례가 없습니다. precedentId=" + precedentId));
+        updateHit(precedentId);
         return convertToPrecedentDTO(precedent);
     }
 
-    // precedentIds로 판례 목록 조회
+    // 조회수 + 1
+    @Transactional
+    public void updateHit(Long precedentId){
+        Precedent precedent = precedentRepository.findByPrecedentId(precedentId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 판례가 없습니다. precedentId=" + precedentId));
+        precedent.setHit(precedent.getHit()+1);
+    }
+
+    // 기능 : precedentIds로 판례 목록 조회
     public List<PrecedentDTO> findPrecedentsById(List<Long> precedentIds) {
         List<Precedent> precedents = precedentRepository.findByPrecedentIdIn(precedentIds);
 
@@ -42,7 +51,16 @@ public class PrecedentService {
             .collect(Collectors.toList());
     }
 
-    // elasticsearch 판례검색
+    // 기능 : 조회수 높은 순으로 20개 반환
+    public List<PrecedentDTO> findTop20ByOrderByHitDesc(){
+        List<Precedent> precedents = precedentRepository.findTop20ByOrderByHitDesc();
+
+        return precedents.stream()
+            .map(this::convertToPrecedentDTO)
+            .collect(Collectors.toList());
+    }
+
+    // 기능 : elasticsearch 판례검색
     public List<PrecedentDTO> searchByKeyword(String searchKeyword, int pageNumber) throws IOException {
 
         int pageSize = 10; // 기본 10개씩
@@ -91,20 +109,6 @@ public class PrecedentService {
 
         return precedents;
     }
-    @Transactional
-    public void updateHit(Long precedentId){
-        Precedent precedent = precedentRepository.findByPrecedentId(precedentId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 판례가 없습니다. precedentId=" + precedentId));
-        precedent.setHit(precedent.getHit()+1);
-    }
-
-    public List<PrecedentDTO> findTop20ByOrderByHitDesc(){
-        List<Precedent> precedents = precedentRepository.findTop20ByOrderByHitDesc();
-
-        return precedents.stream()
-                .map(this::convertToPrecedentDTO)
-                .collect(Collectors.toList());
-    }
 
     // entity -> DTO 변환
     private PrecedentDTO convertToPrecedentDTO(Precedent entity) { // 아래 변환방식 사용할 때 : DTO랑 순서 동일하게 작성
@@ -126,5 +130,4 @@ public class PrecedentService {
             0L
         );
     }
-
 }
