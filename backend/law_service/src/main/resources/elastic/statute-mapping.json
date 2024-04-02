@@ -1,0 +1,32 @@
+{
+  "properties": {
+    "statute_number": {
+      "type": "long"
+    },
+    "statute_name": {
+      "type": "text",
+      "analyzer": "nori_ngram_analyzer"
+    },
+    "statute_type": {
+      "type": "keyword"
+    },
+    "department": {
+      "type": "keyword"
+    },
+    "amendment_type": {
+      "type": "keyword"
+    },
+    "publication_number": {
+      "type": "keyword"
+    },
+    "publication_date": {
+      "type": "keyword"
+    },
+    "enforcement_date": {
+      "type": "keyword"
+    },
+    "hit": {
+      "type": "long"
+    }
+  }
+}
