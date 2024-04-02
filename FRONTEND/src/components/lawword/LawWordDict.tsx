@@ -17,6 +17,7 @@ const LawWordDict = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isSearch, setIsSearch] = useState<boolean>(false);
   const [searchKeyword, setSearchKeyword] = useState<string>("");
+  const [baseWord, setBaseWord] = useState<wordListProps[]>([]);
 
   const searchInfo = (title: string, content: string) => {
     setWordTitle(title);
@@ -28,6 +29,7 @@ const LawWordDict = () => {
       const wordLists = async () => {
         const response = await getWordList();
         setWordList(response.data.data.content);
+        setBaseWord(response.data.data.content);
         setTotalPages(response.data.data.totalPages);
       };
       wordLists();
@@ -58,6 +60,7 @@ const LawWordDict = () => {
       const wordLists = async () => {
         const response = await getWordList(page);
         setWordList(response.data.data.content);
+        setBaseWord(response.data.data);
         setTotalPages(response.data.data.totalPages);
         setCurrentPage(page);
       };
@@ -69,6 +72,7 @@ const LawWordDict = () => {
 
   const searchHandler = (value: string) => {
     if (value.trim()) {
+      setIsDetail(false);
       try {
         const searchWord = async () => {
           const response = await getSearchList(value);
@@ -78,6 +82,7 @@ const LawWordDict = () => {
             setSearchKeyword("");
           } else {
             alert("검색 결과가 없습니다");
+            setSearchKeyword("");
           }
         };
         searchWord();
@@ -86,6 +91,8 @@ const LawWordDict = () => {
       }
     } else {
       alert("검색어를 입력해주세요.");
+      setIsSearch(false);
+      setWordList(baseWord);
     }
   };
 
