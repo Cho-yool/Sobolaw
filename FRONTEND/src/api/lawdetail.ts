@@ -46,7 +46,7 @@ export async function deletePrecedent(
     },
   });
 
-  const deleteUrl = `/user-service/members/precedents/${response.data.memberPrecedentId}`;
+  const deleteUrl = `/user-service/members/precedents/${response.data.data.memberPrecedentId}`;
 
   return await http.delete(deleteUrl, {
     headers: {
