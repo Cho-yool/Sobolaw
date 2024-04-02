@@ -14,7 +14,7 @@
       "type": "text",
       "analyzer": "nori_ngram_analyzer"
     },
-    "article_effectiveDate": {
+    "article_effective_date": {
       "type": "keyword"
     },
     "article_number": {
