@@ -1,4 +1,4 @@
-import { lawAxios, mainAxios } from "./http";
+import { mainAxios } from "./http";
 import { AxiosHeaders } from "axios";
 
 const http = mainAxios();

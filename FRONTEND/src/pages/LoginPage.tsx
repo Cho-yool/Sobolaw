@@ -16,8 +16,7 @@ function LoginPage() {
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
-  // const tokenURL = `https://j10a604.p.ssafy.io/api/user-service/oauth2/authorization`;
-  const tokenURL = `http://70.12.247.27:8001/api/user-service/oauth2/authorization`;
+  const tokenURL = `https://j10a604.p.ssafy.io/api/user-service/oauth2/authorization`;
 
   useEffect(() => {
     const aT = new URL(window.location.href).searchParams.get("accessToken");
