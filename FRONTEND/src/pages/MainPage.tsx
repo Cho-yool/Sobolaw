@@ -46,7 +46,7 @@ export default function MainPage() {
                     data-aos-delay="100"
                     className={style["box1-content-title-left-title-b"]}
                   >
-                    송
+                    송&nbsp;
                   </div>
                   <div
                     data-aos="flip-up"
@@ -74,7 +74,7 @@ export default function MainPage() {
                     data-aos-delay="200"
                     className={style["box1-content-title-left-title-b"]}
                   >
-                    은
+                    은&nbsp;
                   </div>
                   <div
                     data-aos="flip-up"

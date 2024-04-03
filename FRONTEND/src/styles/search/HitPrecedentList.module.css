@@ -10,7 +10,7 @@
   
   .hitLawCaseItem {
     width: 70%;
-    height: 150px;
+    height: 180px;
     display: flex;
     align-items: center;
     padding: 20px;
@@ -25,6 +25,7 @@
     box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.3);
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
+    line-height: 1.5;
   }
   
   .hitLawCaseItem:hover {
@@ -83,6 +84,7 @@
     margin-bottom: 20px;
     cursor: pointer;
     transition: color 0.3s ease-in-out;
+  
   }
   
   .content {
@@ -96,7 +98,7 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
-    line-height: 1.5;
+    line-height: 1.9;
   }
   
   .hit {

@@ -14,15 +14,15 @@ import ko_KR from "antd/es/locale/ko_KR";
 
 const theme = {
   token: {
-    fontFamily: "Orbit-Regular",
+    fontFamily: "NPSfontRegular, sans-serif",
     Tabs: {
       itemColor: "#aaaaaa",
       itemActiveColor: "#E0B88A",
       itemHoverColor: "#E0B88A",
       itemSelectedColor: "#E0B88A",
       inkBarColor: "#E0B88A",
-      titleFontSize: "20px",
-      horizontalMargin: "10px 0 30px 0",
+      titleFontSize: "18px",
+      horizontalMargin: "20px auto",
       algorithm: true,
     },
   },
