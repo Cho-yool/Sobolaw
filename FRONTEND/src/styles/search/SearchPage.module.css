@@ -13,7 +13,7 @@
   background-color: #F3E7C0; /* 새 배경 색상 */
   width: 90%;
   padding: 10px; /* 내부 요소와의 간격 */
-  margin: 30px auto; /* 상단 간격 추가 */
+  margin: 50px auto; /* 상단 간격 추가 */
 }
 
 .categoryCardsContainer {

@@ -28,6 +28,13 @@
   font-weight: 600;
 }
 
+.tabContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
 .searchInputInner {
   height: 60px;
   border-radius: 30px;
