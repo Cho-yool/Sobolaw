@@ -63,8 +63,8 @@ const theme = {
     },
     Badge: {
       statusSize: 2,
-      indicatorHeightSM: 14,
-      textFontSizeSM: 9,
+      indicatorHeightSM: 11,
+      textFontSizeSM: 13,
     },
   },
 };

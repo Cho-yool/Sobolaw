@@ -8,6 +8,7 @@ const initialState: UserState = {
   refreshToken: "",
   precedents: [],
   auth: "",
+  alertCount: 0,
 };
 
 // 초기값 선언
@@ -25,6 +26,7 @@ const userSlice = createSlice({
       state.refreshToken = "";
       state.precedents = [];
       state.auth = "";
+      state.alertCount = 0;
     },
     // 처음 user의 정보를 저장하는 함수
     loadInfo(state, action) {
@@ -46,6 +48,9 @@ const userSlice = createSlice({
     updateAuth(state, action) {
       state.auth = action.payload;
     },
+    updateAlertCount(state, action) {
+      state.alertCount = action.payload;
+    },
   },
 });
 
@@ -56,5 +61,6 @@ export const {
   updateToken,
   updatePrecedents,
   updateAuth,
+  updateAlertCount,
 } = userSlice.actions;
 export default userSlice.reducer;

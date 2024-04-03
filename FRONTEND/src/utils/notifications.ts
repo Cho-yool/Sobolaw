@@ -56,10 +56,12 @@ export function requestPermission() {
           })
           .catch((err) => {
             console.error("푸시 토큰 가져오는 중에 에러 발생:", err);
+            alert("크롬 알람을 설정해주세요!");
             reject(err); // 에러 발생시 reject하여 Promise 완료
           });
       } else if (permission === "denied") {
         console.log("푸시 권한 차단");
+        alert("알람을 허용하지 않으면 실시간 알림을 받을 수 없습니다!");
         reject(new Error("푸시 알림이 거부되었습니다.")); // 거부 시에도 reject하여 Promise 완료
       } else {
         console.log("푸시 허용을 기다리는 중...");
