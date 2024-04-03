@@ -36,6 +36,7 @@ public class PrecedentService {
         Precedent precedent = precedentRepository.findByPrecedentId(precedentId)
             .orElseThrow(() -> new IllegalArgumentException("해당 판례가 없습니다. precedentId=" + precedentId));
         precedent.setHit(precedent.getHit()+1);
+        precedentRepository.save(precedent);
     }
 
     // 기능 : precedentIds로 판례 목록 조회
