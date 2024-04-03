@@ -67,6 +67,8 @@
     margin-left: auto; /* 왼쪽 마진 자동 */
     margin-right: auto; /* 오른쪽 마진 자동 */
     transition: background-color 0.3s, color 0.3s; /* 배경색과 글자색 전환 효과 */
+    font-family: inherit; /* 상위 요소의 폰트 상속 */
+
   }
 
   .startSearchButton:hover {
