@@ -22,9 +22,7 @@
 <div id="1"></div>
 
 ## 소개 영상
-<iframe width="810" height="515" src="https://www.youtube.com/embed/qVXYmLCqA2I?si=7D6CAqI2-eq0sjLM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-단순 검색 기능만이 아닌, 승소에 필요한 부가기능을 통해 보다 더 편히 법률 서비스를 이용할 수 있도록 도움을 제공합니다.
+🎥 [UCC 보러가기](https://www.notion.so/UCC-5a80f52cef1740d69b4eec4eaf9d9a37)
 
 <div id="2"></div>
 
