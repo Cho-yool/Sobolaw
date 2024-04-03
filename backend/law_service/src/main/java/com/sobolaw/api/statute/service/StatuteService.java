@@ -42,6 +42,7 @@ public class StatuteService {
         Statute statute = statuteRepository.findByStatuteNumber(statuteNumber)
             .orElseThrow(() -> new IllegalArgumentException("해당 법령이 없습니다. statuteNumber=" + statuteNumber));
         statute.setHit(statute.getHit()+1);
+        statuteRepository.save(statute);
     }
 
     // 기능 : 조회수 높은 순으로 20개 반환
