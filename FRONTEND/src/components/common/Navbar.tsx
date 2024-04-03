@@ -104,19 +104,22 @@ const ResponsiveNav = ({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
-      }}>
+      }}
+    >
       {item.title}
 
       <Button
         onClick={() => handleApply(item.notificationId)}
         style={{ marginLeft: "1.5rem" }}
-        shape="round">
+        shape="round"
+      >
         읽음
       </Button>
       <Button
         onClick={() => handleDeny(item.notificationId)}
         shape="round"
-        type="primary">
+        type="primary"
+      >
         삭제
       </Button>
     </Menu.Item>
@@ -243,7 +246,8 @@ const ResponsiveNav = ({
             headerBg: "#ffffff",
           },
         },
-      }}>
+      }}
+    >
       {/* 웹사이즈 네브바 위치 수정해야함 */}
       {/* <Layout> */}
       <Header style={{ padding: 0, height: "auto" }}>
@@ -256,7 +260,8 @@ const ResponsiveNav = ({
               marginLeft: "2rem",
               display: "flex",
               alignItems: "center",
-            }}>
+            }}
+          >
             <img
               src={logo}
               alt="로고"
@@ -288,12 +293,16 @@ const ResponsiveNav = ({
                         style={{
                           display: "flex",
                           alignItems: "center",
+                          justifyContent: "center",
+                          padding: ".5rem .3rem .3rem .3rem",
                         }}
-                        size="small">
+                        size="small"
+                      >
                         <Dropdown
                           overlay={<Menu>{alertItems}</Menu>}
                           placement="bottomRight"
-                          trigger={["hover"]}>
+                          trigger={["hover"]}
+                        >
                           <BellOutlined
                             style={{
                               fontSize: "1rem",
@@ -322,7 +331,8 @@ const ResponsiveNav = ({
                     style={{ marginRight: "10px" }}
                     onClick={() => {
                       navigate("/login");
-                    }}>
+                    }}
+                  >
                     로그인
                   </Button>
                 ) : (
@@ -330,7 +340,8 @@ const ResponsiveNav = ({
                     type="primary"
                     shape="round"
                     style={{ marginRight: "10px" }}
-                    onClick={handlelogout}>
+                    onClick={handlelogout}
+                  >
                     로그아웃
                   </Button>
                 )}
@@ -342,7 +353,8 @@ const ResponsiveNav = ({
             xs={2}
             sm={2}
             md={0}
-            style={{ paddingRight: "30px", marginRight: "15px" }}>
+            style={{ paddingRight: "30px", marginRight: "15px" }}
+          >
             <Button type="primary" onClick={showDrawer}>
               <MenuOutlined />
             </Button>
@@ -354,7 +366,8 @@ const ResponsiveNav = ({
           placement="right"
           onClick={onClose}
           onClose={onClose}
-          open={visible}>
+          open={visible}
+        >
           <div
             style={{
               display: "flex",
@@ -364,7 +377,8 @@ const ResponsiveNav = ({
               height: "8rem",
               backgroundColor: "#fffbf0",
               color: "644419",
-            }}>
+            }}
+          >
             {user.accessToken === "" ? (
               <Flex vertical gap={15}>
                 로그인이 필요합니다
@@ -374,7 +388,8 @@ const ResponsiveNav = ({
                   style={{ marginRight: "10px" }}
                   onClick={() => {
                     navigate("/login");
-                  }}>
+                  }}
+                >
                   로그인
                 </Button>
               </Flex>
@@ -386,13 +401,15 @@ const ResponsiveNav = ({
                     justifyContent: "space-around",
                     alignItems: "center",
                     fontWeight: "bold",
-                  }}>
+                  }}
+                >
                   {user.nickname}님! 안녕하세요
                   <Button
                     onClick={() => {
                       navigate("/notifications");
                     }}
-                    style={{ marginLeft: "20px" }}>
+                    style={{ marginLeft: "20px" }}
+                  >
                     <Badge
                       count={alertCount}
                       overflowCount={999}
@@ -401,7 +418,8 @@ const ResponsiveNav = ({
                         alignItems: "center",
                         zIndex: 1,
                       }}
-                      size="small">
+                      size="small"
+                    >
                       <BellOutlined />
                     </Badge>
                   </Button>
@@ -410,7 +428,8 @@ const ResponsiveNav = ({
                   <Button
                     shape="round"
                     style={{ marginRight: "10px" }}
-                    onClick={showModal}>
+                    onClick={showModal}
+                  >
                     메시지보내기
                   </Button>
                   <Modal
@@ -421,7 +440,8 @@ const ResponsiveNav = ({
                       <Button key="submit" onClick={handleOk}>
                         취소
                       </Button>,
-                    ]}>
+                    ]}
+                  >
                     <Divider />
                     <Input
                       prefix="받을 사람"
@@ -448,7 +468,8 @@ const ResponsiveNav = ({
                     type="primary"
                     shape="round"
                     style={{ marginRight: "10px" }}
-                    onClick={handlelogout}>
+                    onClick={handlelogout}
+                  >
                     로그아웃
                   </Button>
                 </div>
@@ -462,7 +483,8 @@ const ResponsiveNav = ({
                 display: "flex",
                 justifyContent: "space-around",
                 margin: "1.5rem",
-              }}>
+              }}
+            >
               <div
                 style={{
                   display: "flex",
@@ -473,7 +495,8 @@ const ResponsiveNav = ({
                 }}
                 onClick={() => {
                   navigate("/mypage/user");
-                }}>
+                }}
+              >
                 <SmileTwoTone
                   style={{ fontSize: "3rem" }}
                   twoToneColor="#BF8438"
@@ -490,7 +513,8 @@ const ResponsiveNav = ({
                 }}
                 onClick={() => {
                   navigate("/mypage/papers");
-                }}>
+                }}
+              >
                 <EditTwoTone
                   style={{ fontSize: "3rem" }}
                   twoToneColor="#BF8438"
@@ -507,7 +531,8 @@ const ResponsiveNav = ({
                 }}
                 onClick={() => {
                   navigate("/mypage/case");
-                }}>
+                }}
+              >
                 <CopyTwoTone
                   style={{ fontSize: "3rem" }}
                   twoToneColor="#BF8438"
@@ -520,7 +545,8 @@ const ResponsiveNav = ({
           <Menu
             mode="vertical"
             items={items}
-            defaultSelectedKeys={["1"]}></Menu>
+            defaultSelectedKeys={["1"]}
+          ></Menu>
         </Drawer>
       </Header>
       {/* </Layout> */}

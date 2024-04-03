@@ -177,6 +177,70 @@ export type InsultForm = {
   policeStationTeam: string;
 };
 
+export type submitType = {
+  title?: string | undefined;
+  contactDate?: string;
+  contactTime?: string;
+  tradeSite?: string;
+  tradedItem?: string;
+  depositDate?: string;
+  depositTime?: string;
+  depositAmount?: number;
+  contactMethod?: string;
+  isCashDeposit?: boolean;
+  bankName?: string;
+  accountNumber?: string;
+  plaintiffName?: string;
+  plaintiffResidentRegistrationNumber?: string;
+  plaintiffAddress?: string;
+  plaintiffPhoneNumber?: string;
+  plaintiffNickname?: string;
+  defendantName?: string;
+  defendantNickname?: string;
+  defendantAddress?: string;
+  defendantPhoneNumber?: string;
+  incidentDate?: string;
+  incidentTime?: string;
+  onlineServiceType?: string;
+  webServiceDetails?: string;
+  problemSpeech?: string;
+  reasonsForInsult?: string;
+  relatedPeopleCount?: string;
+  witness1?: string;
+  witness2?: string;
+  witness3?: string;
+  insultDuration?: string;
+  insultFrequency?: string;
+  circumstancesForIdentification?: string;
+  evidence?: string;
+  submissionDate?: string;
+  policeStationTeam?: string;
+};
+
+export type fraudType = {
+  title: string;
+  plaintiffName: string;
+  plaintiffResidentRegistrationNumber: string;
+  plaintiffAddress: string;
+  plaintiffPhoneNumber: string;
+  defendantName: string;
+  defendantAddress: string;
+  defendantPhoneNumber: string;
+  contactDate: string;
+  contactTime: string;
+  tradeSite: string;
+  tradedItem: string;
+  depositDate: string;
+  depositTime: string;
+  depositAmount: 0;
+  contactMethod: string;
+  isCashDeposit: boolean;
+  bankName: string;
+  accountNumber: string;
+  evidence: string;
+  policeStationTeam: string;
+};
+
 export interface TimeContent {
   hour: number;
   minute: number;
@@ -217,8 +281,8 @@ export interface FraudDetails {
   setDefendantPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
   incidentDate: string;
   setIncidentDate: React.Dispatch<React.SetStateAction<string>>;
-  incidentTime: TimeContent;
-  setIncidentTime: React.Dispatch<React.SetStateAction<TimeContent>>;
+  incidentTime: string;
+  setIncidentTime: React.Dispatch<React.SetStateAction<string>>;
   paperIDate: string;
   setPaperIDate: React.Dispatch<React.SetStateAction<string>>;
   paperITime: string;
