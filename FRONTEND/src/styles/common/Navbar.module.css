@@ -22,6 +22,10 @@
   display: flex;
 }
 
+.move-badge bdi {
+  transform: translateY(20%);
+}
+
 @media (max-width: 992px) {
   .contents {
     width: 45rem;

@@ -11,9 +11,6 @@ import {
   Col,
   ConfigProvider,
   Flex,
-  Modal,
-  Divider,
-  Input,
   Dropdown,
   Badge,
 } from "antd";
@@ -23,13 +20,11 @@ import {
   SmileTwoTone,
   EditTwoTone,
   CopyTwoTone,
-  DownOutlined,
   BellOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
 import { postLogout } from "../../api/members";
 import {
-  postNotifications,
   getNotifications,
   patchNotification,
   delNotification,
@@ -72,11 +67,6 @@ const ResponsiveNav = ({
   const dispatch: AppDispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
   const [visible, setVisible] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [memberId, setMemberId] = useState("");
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [memberIdCheck, setMemberIdCheck] = useState(false);
   const [alertList, setAlertList] = useState<NoticationAlert[]>([]);
   const [alertCount, setAlertCount] = useState(0);
   const [handleUpdate, setHandleUpdate] = useState(false);
@@ -177,66 +167,6 @@ const ResponsiveNav = ({
       });
   };
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  function handleMemberId(e: React.ChangeEvent<HTMLInputElement>) {
-    const inputValue = e.target.value;
-    setMemberId(inputValue); // 상태를 업데이트합니다.
-    const numCheck = /^[0-9]*$/;
-    if (numCheck.test(inputValue)) {
-      // 입력값이 숫자인 경우
-      setMemberIdCheck(true);
-    } else {
-      setMemberId(inputValue);
-      setMemberIdCheck(false);
-    }
-  }
-
-  function handleTitle(e: React.ChangeEvent<HTMLInputElement>) {
-    const inputValue = e.target.value;
-    const limitedValue = inputValue.substring(0, 10);
-    if (inputValue.length > 10) {
-      return;
-    }
-    setTitle(limitedValue);
-  }
-
-  function handleContent(e: React.ChangeEvent<HTMLInputElement>) {
-    const inputValue = e.target.value;
-    const limitedValue = inputValue.substring(0, 20);
-    if (inputValue.length > 20) {
-      return;
-    }
-    setContent(limitedValue);
-  }
-
-  async function onSubmit(event: React.SyntheticEvent): Promise<void> {
-    event.preventDefault();
-    // TODO: 회원가입 비동기 통신
-    // 모든 조건이 True일 때 회원가입 제출
-    if (memberId === "") {
-      alert("누구한테 보낼거얌!");
-    } else if (title === "") {
-      alert("제목!!");
-    } else if (content === "") {
-      alert("내용!");
-    } else {
-      const Data = {
-        memberId: parseInt(memberId),
-        title: title,
-        body: content,
-      };
-      const response = await postNotifications(Data);
-      console.log(response);
-    }
-  }
-
   return (
     // 컬러 지정
     <ConfigProvider
@@ -301,6 +231,7 @@ const ResponsiveNav = ({
                           justifyContent: "center",
                           padding: ".5rem .3rem .3rem .3rem",
                         }}
+                        className={style["move-badge"]}
                         size="small"
                       >
                         <Dropdown
@@ -422,62 +353,24 @@ const ResponsiveNav = ({
                         display: "flex",
                         alignItems: "center",
                         zIndex: 1,
+                        padding: ".5rem .3rem .3rem .3rem",
+                        fontSize: ".6rem",
                       }}
+                      className={style["move-badge"]}
                       size="small"
                     >
                       <BellOutlined />
                     </Badge>
                   </Button>
                 </div>
-                <div style={{ display: "flex" }}>
-                  <Button
-                    shape="round"
-                    style={{ marginRight: "10px" }}
-                    onClick={showModal}
-                  >
-                    메시지보내기
-                  </Button>
-                  <Modal
-                    title="메시지 보내깅깅깅구이궁깅"
-                    open={isModalOpen}
-                    onOk={handleOk}
-                    footer={[
-                      <Button key="submit" onClick={handleOk}>
-                        취소
-                      </Button>,
-                    ]}
-                  >
-                    <Divider />
-                    <Input
-                      prefix="받을 사람"
-                      value={memberId}
-                      id="memberId"
-                      onChange={handleMemberId}
-                      suffix={memberIdCheck ? <DownOutlined /> : null}
-                    />
-                    <Input
-                      prefix="제목"
-                      value={title}
-                      id="title"
-                      onChange={handleTitle}
-                    />
-                    <Input
-                      prefix="내용"
-                      value={content}
-                      id="content"
-                      onChange={handleContent}
-                    />
-                    <Button onClick={onSubmit}>알람보내깅</Button>
-                  </Modal>
-                  <Button
-                    type="primary"
-                    shape="round"
-                    style={{ marginRight: "10px" }}
-                    onClick={handlelogout}
-                  >
-                    로그아웃
-                  </Button>
-                </div>
+                <Button
+                  type="primary"
+                  shape="round"
+                  style={{ marginRight: "10px" }}
+                  onClick={handlelogout}
+                >
+                  로그아웃
+                </Button>
               </Flex>
             )}
           </div>
