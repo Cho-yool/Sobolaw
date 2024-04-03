@@ -16,6 +16,7 @@ import { RootState } from "../../redux/store/store";
 import { getInsult, postMail } from "../../api/lawsuit";
 import { InsultForm } from "../../types/DataTypes";
 import InsultPrint from "../../components/lawsuit/insult/InsultPrint";
+import { message } from "antd";
 
 const PrintLawsuit = () => {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const PrintLawsuit = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [lawsuitType, setLawsuitType] = useState<string>("");
   const [fileName, setFileName] = useState<string>("");
-
+  const [messageApi, contextHolder] = message.useMessage();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -56,7 +57,17 @@ const PrintLawsuit = () => {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     documentTitle: `${lawsuitType}죄 고소장_${fileName}`,
-    onAfterPrint: () => alert("파일 다운로드가 완료되었습니다"),
+    onAfterPrint: () => {
+      const success = () => {
+        messageApi.open({
+          type: "success",
+          content: "파일 다운로드가 완료되었습니다",
+        });
+      };
+      success();
+    },
+
+    // alert("파일 다운로드가 완료되었습니다"),
   });
 
   const convertToPdf = async (element: HTMLElement) => {
@@ -111,16 +122,30 @@ const PrintLawsuit = () => {
         //   console.log(key, ":", formData.get(key));
         // }
         await postMail(formData, accessToken);
-        alert("전송이 완료되었습니다");
+        const success = () => {
+          messageApi.open({
+            type: "success",
+            content: "전송이 완료되었습니다",
+          });
+        };
+        success();
         // console.log("전송 완료!");
       } catch (error) {
         console.error("이메일 전송 실패:", error);
+        const success = () => {
+          messageApi.open({
+            type: "error",
+            content: "이메일 전송 실패",
+          });
+        };
+        success();
       }
     }
   };
 
   return (
     <div>
+      {contextHolder}
       <div className={style["container"]}>
         <div className={style["container-mini"]}>
           <div className={style["container-title"]}>
@@ -131,8 +156,7 @@ const PrintLawsuit = () => {
           </Button>
           <Button
             className={style["container-button"]}
-            onClick={handleSendEmail}
-          >
+            onClick={handleSendEmail}>
             <MailOutlined /> 이메일로 보내기
           </Button>
         </div>
@@ -140,8 +164,7 @@ const PrintLawsuit = () => {
           <Button
             onClick={() => {
               navigate("/mypage/papers");
-            }}
-          >
+            }}>
             <CloseOutlined /> 나가기
           </Button>
         </div>

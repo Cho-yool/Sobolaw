@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -14,6 +14,8 @@ import {
   Modal,
   Divider,
   Input,
+  Dropdown,
+  Badge,
 } from "antd";
 import type { MenuProps } from "antd";
 import {
@@ -22,9 +24,17 @@ import {
   EditTwoTone,
   CopyTwoTone,
   DownOutlined,
+  BellOutlined,
+  MoreOutlined,
 } from "@ant-design/icons";
 import { postLogout } from "../../api/members";
-import { postNotifications } from "../../api/notification";
+import {
+  postNotifications,
+  getNotifications,
+  patchNotification,
+  delNotification,
+} from "../../api/notification";
+import { NoticationAlert } from "../../types/DataTypes";
 import { RootState, AppDispatch } from "../../redux/store/store";
 import { resetAuth } from "../../redux/reducers/user/userSlice";
 import logo from "/NavLogo.png";
@@ -63,6 +73,83 @@ const ResponsiveNav = ({
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [memberIdCheck, setMemberIdCheck] = useState(false);
+  const [alertList, setAlertList] = useState<NoticationAlert[]>([]);
+  const [alertCount, setAlertCount] = useState(0);
+  const [handleUpdate, setHandleUpdate] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // const response = await getNotifications(user.memberId);
+        const response = await getNotifications(28);
+        const filteredAlerts = response.filter(
+          (item: NoticationAlert) => item.state === 0
+        );
+        const topFourAlerts = filteredAlerts.slice(0, 3);
+        setAlertList(topFourAlerts);
+        setAlertCount(filteredAlerts.length);
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+      }
+    };
+    fetchData();
+  }, [user.memberId]);
+
+  const alertItems = alertList.map((item, index) => (
+    <Menu.Item
+      key={index}
+      style={{
+        // width: "200px",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}>
+      {item.title}
+
+      <Button
+        onClick={() => handleApply(item.notificationId)}
+        style={{ marginLeft: "1.5rem" }}
+        shape="round">
+        읽음
+      </Button>
+      <Button
+        onClick={() => handleDeny(item.notificationId)}
+        shape="round"
+        type="primary">
+        삭제
+      </Button>
+    </Menu.Item>
+  ));
+
+  alertItems.push(
+    <Menu.Item key="more">
+      <Link to="/notifications">알람 전체 보기</Link>
+    </Menu.Item>
+  );
+
+  const handleApply = (notificationId: number): void => {
+    patchNotification(notificationId)
+      .then(() => {
+        setHandleUpdate(!handleUpdate);
+        setAlertCount(alertCount - 1);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleDeny = (notificationId: number) => {
+    delNotification(notificationId)
+      .then(() => {
+        setHandleUpdate(!handleUpdate);
+        setAlertCount(alertCount - 1);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const showDrawer = () => {
     setVisible(true);
   };
@@ -72,7 +159,6 @@ const ResponsiveNav = ({
   };
 
   const handlelogout = () => {
-    // postLogout(user.accessToken, user.refreshToken);
     postLogout(user.accessToken, user.refreshToken)
       .then(() => {
         dispatch(resetAuth());
@@ -135,9 +221,6 @@ const ResponsiveNav = ({
     } else {
       const Data = {
         memberId: parseInt(memberId),
-        // 28번 아이디 토큰
-        // token:
-        //   "cNsYgdXPWmrUgkwy-Yz-V-:APA91bEsgSL6A31bRHFS83424j4TJK7lm34ux8ZC7hsgooowGMcYjNDpIBK41sD2ADzzQJfCHdBg3vwZFQWCXNB1-I7bdX89KqC6RVh7HLqx4ORSMdzbgWV_TdYG5VBA_FHq3OTVR6Wz",
         title: title,
         body: content,
       };
@@ -160,8 +243,7 @@ const ResponsiveNav = ({
             headerBg: "#ffffff",
           },
         },
-      }}
-    >
+      }}>
       {/* 웹사이즈 네브바 위치 수정해야함 */}
       {/* <Layout> */}
       <Header style={{ padding: 0, height: "auto" }}>
@@ -174,8 +256,7 @@ const ResponsiveNav = ({
               marginLeft: "2rem",
               display: "flex",
               alignItems: "center",
-            }}
-          >
+            }}>
             <img
               src={logo}
               alt="로고"
@@ -185,61 +266,83 @@ const ResponsiveNav = ({
               }}
             />
           </Col>
+
           <Row className={style["contents"]}>
-            <Col xs={0} sm={0} md={12} lg={18}>
+            <Col xs={0} sm={0} md={16} lg={18}>
               <Menu
                 mode="horizontal"
                 selectedKeys={selectedKeys}
                 items={items}
+                overflowedIndicator={<MoreOutlined />}
               />
             </Col>
-            <Col xs={0} sm={0} md={2}>
-              {user.accessToken != "" && (
-                <MypageMenu
-                  username={user.nickname}
-                  mode={"horizontal"}
-                  setSelectedKeys={setSelectedKeys}
-                  selectedSubKeys={selectedSubKeys}
-                  setSelectedSubKeys={setSelectedSubKeys}
-                />
-              )}
-            </Col>
-            <Col xs={0} sm={0} md={2}>
-              {user.accessToken === "" ? (
-                <Button
-                  type="primary"
-                  shape="round"
-                  style={{ marginRight: "10px" }}
-                  onClick={() => {
-                    navigate("/login");
-                  }}
-                >
-                  로그인
-                </Button>
-              ) : (
-                <Button
-                  type="primary"
-                  shape="round"
-                  style={{ marginRight: "10px" }}
-                  onClick={handlelogout}
-                >
-                  로그아웃
-                </Button>
-              )}
-            </Col>
+
+            <Row className={style["contents2"]}>
+              <Col xs={0} sm={0} md={15}>
+                <Row justify="space-around" align="middle">
+                  {user.accessToken != "" && (
+                    <>
+                      <Badge
+                        count={alertCount}
+                        overflowCount={999}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                        size="small">
+                        <Dropdown
+                          overlay={<Menu>{alertItems}</Menu>}
+                          placement="bottomRight"
+                          trigger={["hover"]}>
+                          <BellOutlined
+                            style={{
+                              fontSize: "1rem",
+                              cursor: "pointer",
+                            }}
+                          />
+                        </Dropdown>
+                      </Badge>
+                      <MypageMenu
+                        username={user.nickname}
+                        mode={"horizontal"}
+                        setSelectedKeys={setSelectedKeys}
+                        selectedSubKeys={selectedSubKeys}
+                        setSelectedSubKeys={setSelectedSubKeys}
+                      />
+                    </>
+                  )}
+                </Row>
+              </Col>
+
+              <Col xs={0} sm={0} md={8}>
+                {user.accessToken === "" ? (
+                  <Button
+                    type="primary"
+                    shape="round"
+                    style={{ marginRight: "10px" }}
+                    onClick={() => {
+                      navigate("/login");
+                    }}>
+                    로그인
+                  </Button>
+                ) : (
+                  <Button
+                    type="primary"
+                    shape="round"
+                    style={{ marginRight: "10px" }}
+                    onClick={handlelogout}>
+                    로그아웃
+                  </Button>
+                )}
+              </Col>
+            </Row>
           </Row>
-          {/* 로그인시 활성화 */}
-          {/* <Col xs={0} sm={0} md={2}></Col>
-
-          <Col xs={0} sm={0} md={2}></Col> */}
-
           {/* 핸드폰 사이즈 네브바 */}
           <Col
             xs={2}
             sm={2}
             md={0}
-            style={{ paddingRight: "30px", marginRight: "15px" }}
-          >
+            style={{ paddingRight: "30px", marginRight: "15px" }}>
             <Button type="primary" onClick={showDrawer}>
               <MenuOutlined />
             </Button>
@@ -251,8 +354,7 @@ const ResponsiveNav = ({
           placement="right"
           onClick={onClose}
           onClose={onClose}
-          open={visible}
-        >
+          open={visible}>
           <div
             style={{
               display: "flex",
@@ -262,8 +364,7 @@ const ResponsiveNav = ({
               height: "8rem",
               backgroundColor: "#fffbf0",
               color: "644419",
-            }}
-          >
+            }}>
             {user.accessToken === "" ? (
               <Flex vertical gap={15}>
                 로그인이 필요합니다
@@ -273,61 +374,84 @@ const ResponsiveNav = ({
                   style={{ marginRight: "10px" }}
                   onClick={() => {
                     navigate("/login");
-                  }}
-                >
+                  }}>
                   로그인
                 </Button>
               </Flex>
             ) : (
-              <Flex vertical gap={5}>
-                {user.nickname}님! 안녕하세요
-                <Button
-                  shape="round"
-                  style={{ marginRight: "10px" }}
-                  onClick={showModal}
-                >
-                  메시지보내기
-                </Button>
-                <Modal
-                  title="메시지 보내깅깅깅구이궁깅"
-                  open={isModalOpen}
-                  onOk={handleOk}
-                  footer={[
-                    <Button key="submit" onClick={handleOk}>
-                      취소
-                    </Button>,
-                  ]}
-                >
-                  <Divider />
-                  <Input
-                    prefix="받을 사람"
-                    value={memberId}
-                    id="memberId"
-                    onChange={handleMemberId}
-                    suffix={memberIdCheck ? <DownOutlined /> : null}
-                  />
-                  <Input
-                    prefix="제목"
-                    value={title}
-                    id="title"
-                    onChange={handleTitle}
-                  />
-                  <Input
-                    prefix="내용"
-                    value={content}
-                    id="content"
-                    onChange={handleContent}
-                  />
-                  <Button onClick={onSubmit}>알람보내깅</Button>
-                </Modal>
-                <Button
-                  type="primary"
-                  shape="round"
-                  style={{ marginRight: "10px" }}
-                  onClick={handlelogout}
-                >
-                  로그아웃
-                </Button>
+              <Flex vertical gap={15}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                    fontWeight: "bold",
+                  }}>
+                  {user.nickname}님! 안녕하세요
+                  <Button
+                    onClick={() => {
+                      navigate("/notifications");
+                    }}
+                    style={{ marginLeft: "20px" }}>
+                    <Badge
+                      count={alertCount}
+                      overflowCount={999}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        zIndex: 1,
+                      }}
+                      size="small">
+                      <BellOutlined />
+                    </Badge>
+                  </Button>
+                </div>
+                <div style={{ display: "flex" }}>
+                  <Button
+                    shape="round"
+                    style={{ marginRight: "10px" }}
+                    onClick={showModal}>
+                    메시지보내기
+                  </Button>
+                  <Modal
+                    title="메시지 보내깅깅깅구이궁깅"
+                    open={isModalOpen}
+                    onOk={handleOk}
+                    footer={[
+                      <Button key="submit" onClick={handleOk}>
+                        취소
+                      </Button>,
+                    ]}>
+                    <Divider />
+                    <Input
+                      prefix="받을 사람"
+                      value={memberId}
+                      id="memberId"
+                      onChange={handleMemberId}
+                      suffix={memberIdCheck ? <DownOutlined /> : null}
+                    />
+                    <Input
+                      prefix="제목"
+                      value={title}
+                      id="title"
+                      onChange={handleTitle}
+                    />
+                    <Input
+                      prefix="내용"
+                      value={content}
+                      id="content"
+                      onChange={handleContent}
+                    />
+                    <Button onClick={onSubmit}>알람보내깅</Button>
+                  </Modal>
+                  <Button
+                    type="primary"
+                    shape="round"
+                    style={{ marginRight: "10px" }}
+                    onClick={handlelogout}>
+                    로그아웃
+                  </Button>
+                </div>
               </Flex>
             )}
           </div>
@@ -338,8 +462,7 @@ const ResponsiveNav = ({
                 display: "flex",
                 justifyContent: "space-around",
                 margin: "1.5rem",
-              }}
-            >
+              }}>
               <div
                 style={{
                   display: "flex",
@@ -350,8 +473,7 @@ const ResponsiveNav = ({
                 }}
                 onClick={() => {
                   navigate("/mypage/user");
-                }}
-              >
+                }}>
                 <SmileTwoTone
                   style={{ fontSize: "3rem" }}
                   twoToneColor="#BF8438"
@@ -368,8 +490,7 @@ const ResponsiveNav = ({
                 }}
                 onClick={() => {
                   navigate("/mypage/papers");
-                }}
-              >
+                }}>
                 <EditTwoTone
                   style={{ fontSize: "3rem" }}
                   twoToneColor="#BF8438"
@@ -386,8 +507,7 @@ const ResponsiveNav = ({
                 }}
                 onClick={() => {
                   navigate("/mypage/case");
-                }}
-              >
+                }}>
                 <CopyTwoTone
                   style={{ fontSize: "3rem" }}
                   twoToneColor="#BF8438"
@@ -400,8 +520,7 @@ const ResponsiveNav = ({
           <Menu
             mode="vertical"
             items={items}
-            defaultSelectedKeys={["1"]}
-          ></Menu>
+            defaultSelectedKeys={["1"]}></Menu>
         </Drawer>
       </Header>
       {/* </Layout> */}

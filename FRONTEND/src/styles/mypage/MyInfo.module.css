@@ -34,6 +34,24 @@
   margin-bottom: 2.5rem;
 }
 
+@media (max-width:1000px) {
+  .box2>div:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .box2>div:nth-child(2)>div:nth-child(2) {
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .box2>div:nth-child(2)>div:nth-child(2)>button {
+    transform: rotate(90deg);
+  }
+
+}
+
 @media (max-width: 768px) {
   .myinfo-box {
     padding-left: 2rem;
