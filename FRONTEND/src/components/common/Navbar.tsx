@@ -298,6 +298,8 @@ const ResponsiveNav = ({
                         style={{
                           display: "flex",
                           alignItems: "center",
+                          justifyContent: "center",
+                          padding: ".5rem .3rem .3rem .3rem",
                         }}
                         size="small"
                       >
