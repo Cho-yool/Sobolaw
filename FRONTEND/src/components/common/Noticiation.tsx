@@ -39,9 +39,10 @@ const Notification = () => {
       <div
         style={{
           maxWidth: "calc(100vw - 2rem)",
-          width: "100%",
+          width: "50%",
           backgroundColor: "#fff",
           boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+          marginTop: "3rem",
           borderRadius: "8px",
           pointerEvents: "auto",
           border: "1px solid rgba(0, 0, 0, 0.05)",
@@ -77,7 +78,7 @@ const Notification = () => {
       </div>
     ));
 
-  return <Toaster />;
+  return <Toaster position="top-right" />;
 };
 
 export default Notification;
