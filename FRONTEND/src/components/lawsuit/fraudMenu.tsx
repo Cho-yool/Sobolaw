@@ -100,18 +100,17 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
       const [hourStr, minuteStr, secondStr] = timePart.split(":");
       const hour = parseInt(hourStr, 10);
       const minute = parseInt(minuteStr, 10);
-      const second = parseInt(secondStr, 10);
       // incidentTime 상태 변수에 시간 요소를 할당합니다.
-      fraudDetails.setIncidentTime({ hour, minute, second, nano: 0 });
+      fraudDetails.setIncidentTime(timePart);
       // 고소장에 파싱될 용도의 날짜/시간도 할당합니다
       // 용도에 맞게 날짜 형식을 변경합니다.
       const modifiedDatePart = datePart.replace(/-/g, ".");
       // 용도에 맞게 시간 형식을 변경합니다.
       if (minuteStr == "00") {
-        const modifiedTimePart = `${hourStr}시 경`;
+        const modifiedTimePart = `${hour}시 경`;
         fraudDetails.setPaperITime(modifiedTimePart);
       } else {
-        const modifiedTimePart = `${hourStr}시 ${minuteStr}분 경`;
+        const modifiedTimePart = `${hour}시 ${minute}분 경`;
         fraudDetails.setPaperITime(modifiedTimePart);
       }
       // 변경된 날짜와 시간을 상태 변수에 할당합니다.
@@ -130,18 +129,18 @@ const FraudMenu = ({ fraudDetails }: { fraudDetails: FraudDetails }) => {
       const [hourStr, minuteStr, secondStr] = timePart.split(":");
       const hour = parseInt(hourStr, 10);
       const minute = parseInt(minuteStr, 10);
-      const second = parseInt(secondStr, 10);
+
       // incidentTime 상태 변수에 시간 요소를 할당합니다.
-      fraudDetails.setIncidentTime({ hour, minute, second, nano: 0 });
+      fraudDetails.setIncidentTime(timePart);
       // 고소장에 파싱될 용도의 날짜/시간도 할당합니다
       // 용도에 맞게 날짜 형식을 변경합니다.
       const modifiedDatePart = datePart.replace(/-/g, ".");
       // 용도에 맞게 시간 형식을 변경합니다.
       if (minuteStr == "00") {
-        const modifiedTimePart = `${hourStr}시 경`;
+        const modifiedTimePart = `${hour}시 경`;
         fraudDetails.setMoneyTime(modifiedTimePart);
       } else {
-        const modifiedTimePart = `${hourStr}시 ${minuteStr}분 경`;
+        const modifiedTimePart = `${hour}시 ${minute}분 경`;
         fraudDetails.setMoneyTime(modifiedTimePart);
       }
       // 변경된 날짜와 시간을 상태 변수에 할당합니다.
