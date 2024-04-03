@@ -22,6 +22,7 @@
 <div id="1"></div>
 
 ## 소개 영상
+
 🎥 [UCC 보러가기](https://www.notion.so/UCC-5a80f52cef1740d69b4eec4eaf9d9a37)
 
 <div id="2"></div>
@@ -29,9 +30,11 @@
 ## 시스템 아키텍쳐
 
 ### 시스템 구성
+
 ![아키텍쳐](./upload/image/소보로%20아키텍쳐.png)
 
 ### ERD
+
 ![ERD](./upload/image/Sobolaw%20ERD.png)
 
 <div id="3"></div>
@@ -150,28 +153,28 @@
 
 #### 전체 구성
 
-| 프로그램 | 버전|
-| --- | --- |
-| Ubuntu | Ubuntu 20.04.6 LTS |
-| Docker | 25.0.4 |
-| Docker-compose | 1.29.2 |
-| Jenkins | 2.440.1 |
-| Jenkins Java | 17 |
-| Spring Boot | 3.2.3 |
-| Java | Correto-17 java version “17.0.10” |
-| Gradle | Gradle-8.5-bin |
-| Spring Cloud | 2023.0.0 |
-| Querydsl | 5.0.0 |
-| Node.js | 20.10.0 |
-| Yarn | 1.22.21 |
-| React | 18.2.0 |
-| Vite | 5.1.4 |
-| TypeScript | 5.2.2 |
-| Ant Design | 5.14.2 |
-| Redux | 2.2.1 |
-| MariaDB | MariaDB 11.2 |
-| MongoDB | 5.0.6 |
-| Redis | 7.2.4 |
+| 프로그램       | 버전                              |
+| -------------- | --------------------------------- |
+| Ubuntu         | Ubuntu 20.04.6 LTS                |
+| Docker         | 25.0.4                            |
+| Docker-compose | 1.29.2                            |
+| Jenkins        | 2.440.1                           |
+| Jenkins Java   | 17                                |
+| Spring Boot    | 3.2.3                             |
+| Java           | Correto-17 java version “17.0.10” |
+| Gradle         | Gradle-8.5-bin                    |
+| Spring Cloud   | 2023.0.0                          |
+| Querydsl       | 5.0.0                             |
+| Node.js        | 20.10.0                           |
+| Yarn           | 1.22.21                           |
+| React          | 18.2.0                            |
+| Vite           | 5.1.4                             |
+| TypeScript     | 5.2.2                             |
+| Ant Design     | 5.14.2                            |
+| Redux          | 2.2.1                             |
+| MariaDB        | MariaDB 11.2                      |
+| MongoDB        | 5.0.6                             |
+| Redis          | 7.2.4                             |
 
 ---
 
@@ -222,9 +225,8 @@
 - **VisualStudio Code (up to 1.86.1)**
   https://code.visualstudio.com/Download
 
-- **DBeaver 23.3.1** 
+- **DBeaver 23.3.1**
   https://dbeaver.io/download/
-
 
 <div id="7"></div>
 
@@ -255,15 +257,15 @@
 
 ## 프로젝트 관련 문서
 
-| 구분      |                                                                                        링크                                                                                        |
-|:--------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
-| 기획서   |                                                   [기획서 바로가기](https://www.notion.so/f9de39e44297445da8074f63d45ce5de)                                                    |
-| 요구사항정의서 |                                                  [요구사항정의서 바로가기](https://www.notion.so/055a755987de4d1db57a00e935238ad3)                                                   |
-| 기능명세서   |                                                   [기능명세서 바로가기](https://www.notion.so/27c1c372fda8479fb78d41776fa113f0)                                                    |
-| API명세서  | [API명세서 바로가기](https://www.notion.so/API-46be09ec9d6b4e41a3c9a10d161464a6) |
-|화면정의서     |                                                      [화면정의서 바로가기](https://docs.google.com/spreadsheets/d/1qCgAPlU9wz-RW0pP60K7Ob6Be6cQOX0YMfgii7YH50U/edit#gid=0)                                                      |
-| 와이어프레임    |                                              [와이어프레임 바로가기](https://www.figma.com/file/SUE0cYTv1tI8OXvykMrvUv/SoboLaw's-team-library?type=design&node-id=0-1&mode=design&t=h2IzQjwTPD57neB0-0)                                              |
-| 포팅 메뉴얼    |                                                    [포팅 메뉴얼 바로가기](https://www.notion.so/0048c21d34c64f8db1e307aae886149c)                                                    |
+| 구분           |                                                                            링크                                                                            |
+| :------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| 기획서         |                                         [기획서 바로가기](https://www.notion.so/f9de39e44297445da8074f63d45ce5de)                                          |
+| 요구사항정의서 |                                     [요구사항정의서 바로가기](https://www.notion.so/055a755987de4d1db57a00e935238ad3)                                      |
+| 기능명세서     |                                       [기능명세서 바로가기](https://www.notion.so/27c1c372fda8479fb78d41776fa113f0)                                        |
+| API명세서      |                                      [API명세서 바로가기](https://www.notion.so/API-46be09ec9d6b4e41a3c9a10d161464a6)                                      |
+| 화면정의서     |                   [화면정의서 바로가기](https://docs.google.com/spreadsheets/d/1qCgAPlU9wz-RW0pP60K7Ob6Be6cQOX0YMfgii7YH50U/edit#gid=0)                    |
+| 와이어프레임   | [와이어프레임 바로가기](https://www.figma.com/file/SUE0cYTv1tI8OXvykMrvUv/SoboLaw's-team-library?type=design&node-id=0-1&mode=design&t=h2IzQjwTPD57neB0-0) |
+| 포팅 메뉴얼    |                                       [포팅 메뉴얼 바로가기](https://www.notion.so/0048c21d34c64f8db1e307aae886149c)                                       |
 
 <div id="9"></div>
 
@@ -286,10 +288,10 @@
     </tr>
     <tr>
         <td align="center">PM<br>Infra<br/>FCM<br/>MSA 설계<br/>추천 알고리즘
-        <td align="center">Elasticsearch<br/>데이터 가공<br/>뉴스 api</td>
-        <td align="center">Spring Security<br/>소셜 로그인<br/>JWT<br/>S3<br/>SMTP</td>
-        <td align="center">제발</td>
-        <td align="center">알려</td>
-        <td align="center">줘</td>
+        <td align="center">Elasticsearch<br/>빅 데이터 가공<br/>뉴스 api</td>
+        <td align="center">유저 관련 데이터 설계<br/>Spring Security<br/>소셜 로그인(JWT)<br/>S3, SMTP, Redis<br/>Open Ai API</td>
+        <td align="center">판례 상세페이지<br/>하이라이트 처리<br/>챗봇<br/>법령용어사전<br/>데이터 API 수집</td>
+        <td align="center">유저 로그인<br/>메인 페이지<br/>알림<br/>PWA</td>
+        <td align="center">판례/법령 검색<br/>인기순 판례/법령<br/>추천검색<br/>추천 결과목록<br/>뉴스 API</td>
     </tr>
 </table>
