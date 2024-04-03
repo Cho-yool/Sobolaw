@@ -193,7 +193,7 @@ const ResponsiveNav = ({
                 items={items}
               />
             </Col>
-            <Col xs={0} sm={0} md={1}>
+            <Col xs={0} sm={0} md={2}>
               {user.accessToken != "" && (
                 <MypageMenu
                   username={user.nickname}
