@@ -27,7 +27,7 @@ const LawWordModal = ({ modalHandler }: LawWordModalProps) => {
         <Flex className={style["modal-header"]}>
           <img className={style["modal-header__icon"]} src={CHARACTER} alt="" />
           <p className={style["modal-header__title"]}>
-            {currentSelect ? "법령 용어 사전" : "무물보~"}
+            {currentSelect ? "법령 용어 사전" : "보로Law"}
           </p>
           <img
             className={style["modal-header__close"]}
@@ -49,8 +49,7 @@ const LawWordModal = ({ modalHandler }: LawWordModalProps) => {
                 ? `${style["active"]} ${style["footer-btn__1"]}`
                 : style["footer-btn__1"]
             }
-            onClick={() => setCurrentSelect(true)}
-          >
+            onClick={() => setCurrentSelect(true)}>
             <img
               className={style["footer-btn__image"]}
               src={DICTIONARY}
@@ -64,8 +63,7 @@ const LawWordModal = ({ modalHandler }: LawWordModalProps) => {
                 ? style["footer-btn__2"]
                 : `${style["active"]} ${style["footer-btn__2"]}`
             }
-            onClick={() => setCurrentSelect(false)}
-          >
+            onClick={() => setCurrentSelect(false)}>
             <img className={style["footer-btn__image"]} src={CHAT} alt="" />
           </Button>
         </Flex>

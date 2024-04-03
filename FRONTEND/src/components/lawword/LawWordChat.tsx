@@ -1,5 +1,6 @@
 import { Flex } from "antd";
 import style from "../../styles/lawword/LawWordChat.module.css";
+import styled from "../../styles/lawword/LawWordChatCard.module.css";
 import SEND from "../../assets/send.png";
 import LawWordChatCard from "./LawWordChatCard";
 import { useEffect, useRef, useState } from "react";
@@ -47,14 +48,17 @@ const LawWordChat = () => {
       className={style["chat-body"]}
       justify="space-around"
       align="center"
-      vertical
-    >
+      vertical>
       <Flex
         className={style["chat-body__content"]}
         ref={chatRef}
         vertical
-        align="center"
-      >
+        align="center">
+        <div className={styled["chat-card__answer"]}>
+          <span className={styled["chat-card__answer__text"]}>
+            안녕하세요! 무엇을 도와드릴까요?
+          </span>
+        </div>
         {chatList.length > 0 ? chatList : <p>　</p>}
       </Flex>
       <Flex className={style["chat-body__input"]}>
