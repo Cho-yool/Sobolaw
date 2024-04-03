@@ -3,8 +3,13 @@ import style from "../../styles/papers/Lawsuit.module.css";
 import LawsuitTab from "../../components/lawsuit/lawsuitTab";
 import FraudA4 from "../../components/lawsuit/fraudA4";
 import FraudMenu from "../../components/lawsuit/fraudMenu";
-import { useState } from "react";
-import { FraudDetails, TimeContent } from "../../types/DataTypes";
+import { useEffect, useState } from "react";
+import {
+  FraudDetails,
+  TimeContent,
+  fraudType,
+  submitType,
+} from "../../types/DataTypes";
 
 export default function FraudPage() {
   const [title, setTitle] = useState<string>(""); // 제목
@@ -26,12 +31,7 @@ export default function FraudPage() {
   const [defendantSubAddress, setDefendantSubAddress] = useState<string>(""); // 피고소인 상세주소
   const [defendantPhoneNumber, setDefendantPhoneNumber] = useState<string>(""); // 피고소인 전화번호
   const [incidentDate, setIncidentDate] = useState<string>("");
-  const [incidentTime, setIncidentTime] = useState<TimeContent>({
-    hour: 0,
-    minute: 0,
-    second: 0,
-    nano: 0,
-  });
+  const [incidentTime, setIncidentTime] = useState<string>("");
   const [paperIDate, setPaperIDate] = useState<string>("");
   const [paperITime, setPaperITime] = useState<string>("");
   const [tradedItem, setTradedItem] = useState<string>(""); // 물건
@@ -48,7 +48,7 @@ export default function FraudPage() {
   const [evidenceEtc, setEvidenceEtc] = useState<boolean>(false); // 기타 체크시
   const [evidenceList, setEvidenceList] = useState<string[]>([]); // 출력할 증거리스트
   const [policeStation, setPoliceStation] = useState<string>("");
-
+  const [saveData, setSaveData] = useState<fraudType>({});
   const FraudDetails: FraudDetails = {
     title: title,
     setTitle: setTitle,
@@ -117,9 +117,57 @@ export default function FraudPage() {
     setPoliceStation: setPoliceStation,
   };
 
+  useEffect(() => {
+    setSaveData({
+      title: title,
+      plaintiffName: plaintiffName,
+      plaintiffResidentRegistrationNumber: plaintiffResidentRegistrationNumber,
+      plaintiffAddress: plaintiffMainAddress + "/" + plaintiffSubAddress,
+      plaintiffPhoneNumber: plaintiffPhoneNumber,
+      defendantName: defendantName,
+      defendantAddress: defendantMainAddress + "/" + defendantSubAddress,
+      defendantPhoneNumber: defendantPhoneNumber,
+      contactDate: incidentDate,
+      contactTime: incidentTime,
+      tradeSite: directSite,
+      tradedItem: tradedItem,
+      depositDate: moneyDate,
+      depositTime: moneyTime,
+      depositAmount: 0,
+      contactMethod: disposalMethod === 1 ? "현금 직거래" : "계좌이체",
+      isCashDeposit: disposalMethod === 1 ? true : false,
+      bankName: bankName,
+      accountNumber: accountNumber,
+      evidence: evidence,
+      policeStationTeam: policeStation,
+    });
+  }, [
+    title,
+    plaintiffName,
+    plaintiffResidentRegistrationNumber,
+    plaintiffMainAddress,
+    plaintiffSubAddress,
+    plaintiffPhoneNumber,
+    defendantName,
+    defendantMainAddress,
+    defendantSubAddress,
+    defendantPhoneNumber,
+    incidentDate,
+    incidentTime,
+    directSite,
+    tradedItem,
+    moneyDate,
+    moneyTime,
+    disposalMethod,
+    bankName,
+    accountNumber,
+    evidence,
+    policeStation,
+  ]);
+
   return (
     <div>
-      <LawsuitTab cates="사기죄" />
+      <LawsuitTab cates="사기죄" saveData={saveData} />
       <div className={style["container"]}>
         <div className={style["left-menu"]}>
           <FraudMenu fraudDetails={FraudDetails} />

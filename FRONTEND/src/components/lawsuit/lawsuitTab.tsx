@@ -6,20 +6,26 @@ import {
   CloseOutlined,
   ExclamationCircleOutlined,
 } from "@ant-design/icons";
-import { Button, Modal, Divider, Input } from "antd";
+import { Button, Modal, Divider, Input, message } from "antd";
 import { RootState } from "../../redux/store/store";
 import style from "../../styles/papers/Tab.module.css";
+import { fraudType, submitType } from "../../types/DataTypes";
+import { postFraud, postInsult } from "../../api/lawsuit";
 
 interface LawsuitTabProps {
   cates: string;
+  saveData: submitType;
 }
 
-export default function LawsuitTab({ cates }: LawsuitTabProps) {
+export default function LawsuitTab({ cates, saveData }: LawsuitTabProps) {
+  console.log(saveData);
   const navigate = useNavigate();
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
+  const [messageApi, contextHolder] = message.useMessage();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCloseModalOpen, setIsCloseModalOpen] = useState(false);
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+  const [title, setTitle] = useState<string>("");
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -43,15 +49,44 @@ export default function LawsuitTab({ cates }: LawsuitTabProps) {
       navigate("/plaint");
     }
   };
-  const [title, setTitle] = useState("");
 
-  // 저장 제출 함수
   async function onSubmit(event: React.SyntheticEvent): Promise<void> {
     event.preventDefault();
-    // TODO: 소장작성 비동기 통신
-    // 모든 조건이 True일 때 제출 가능 (필수입력 공백확인)
     if (accessToken === "") {
       alert("로그인 시 이용 가능합니다! ");
+    } else {
+      console.log("hi", cates);
+      if (cates == "모욕죄") {
+        const sendData: submitType = {
+          ...saveData,
+          title: title,
+        };
+        postInsult(accessToken, sendData).then(() => {
+          const success = () => {
+            messageApi.open({
+              type: "success",
+              content: "고소장(모욕죄)이 저장되었습니다",
+            });
+          };
+          success();
+          navigate("/mypage/papers");
+        });
+      } else if (cates == "사기죄") {
+        const sendData = {
+          ...saveData,
+          title: title,
+        };
+        postFraud(accessToken, sendData).then(() => {
+          const success = () => {
+            messageApi.open({
+              type: "success",
+              content: "고소장(사기죄)가 저장되었습니다",
+            });
+          };
+          success();
+          navigate("/mypage/papers");
+        });
+      }
     }
   }
   useEffect(() => {
@@ -64,6 +99,7 @@ export default function LawsuitTab({ cates }: LawsuitTabProps) {
 
   return (
     <div className={style["container"]}>
+      {contextHolder}
       {screenWidth > 1000 ? (
         <>
           <div className={style["container-mini"]}>
@@ -229,7 +265,6 @@ export default function LawsuitTab({ cates }: LawsuitTabProps) {
             )}
           </div>
           <div className={style["contents-center"]}>
-            {/* 상단 저장 버튼 */}
             <Input
               className={style["button"]}
               placeholder="고소장 저장 제목"

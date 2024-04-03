@@ -1,12 +1,9 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { josa } from "josa";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
 import type { DatePickerProps, CheckboxProps, GetProp } from "antd";
 import {
-  Button,
   Input,
   DatePicker,
   Cascader,
@@ -16,25 +13,22 @@ import {
   Checkbox,
 } from "antd";
 import locale from "antd/es/date-picker/locale/ko_KR";
-import { RootState } from "../../../redux/store/store";
-import { postInsult } from "../../../api/lawsuit";
 import { options } from "../../../types/LawsuitTypes";
 import style from "../../../styles/papers/Insult.module.css";
+import { submitType } from "../../../types/DataTypes";
 
 const { Option } = Select;
 
-export default function LawsuitInsult() {
-  const navigate = useNavigate();
-  const accessToken = useSelector((state: RootState) => state.user.accessToken);
-
+export default function LawsuitInsult({
+  setSaveData,
+}: {
+  setSaveData: React.Dispatch<React.SetStateAction<submitType>>;
+}) {
   // 데이터 입력용 인풋모음들
 
   // 추후 아래로 전환하세요!!!!
   // const [product, setProduct] = useState({});
   // setProduct({...product, [e.target.name]: e.target.value})
-
-  // 소장 임시저장명
-  const [title, setTitle] = useState("");
   // 피해자
   const [plaintiffName, setPlaintiffName] = useState("");
   const [plaintiffRRNumber, setPlaintiffRRNumber] = useState("");
@@ -286,131 +280,61 @@ export default function LawsuitInsult() {
     }
   };
 
-  // 저장 제출 함수
-  async function onSubmit(event: React.SyntheticEvent): Promise<void> {
-    event.preventDefault();
-    // TODO: 소장작성 비동기 통신
-    // 모든 조건이 True일 때 제출 가능 (필수입력 공백확인)
-    if (accessToken === "") {
-      alert("로그인 시 이용 가능합니다! ");
-    } else if (title === "") {
-      alert("소장 저장명을 확인해주세요!");
-    } else if (plaintiffName === "") {
-      alert("원고 성명을 확인해주세요!");
-    } else if (plaintiffRRNumber === "") {
-      alert("원고 주민등록번호를 확인해주세요!");
-    } else if (plaintiffAddress === "") {
-      alert("원고 주소를 확인해주세요!");
-    } else if (plaintiffPhoneNumber === "") {
-      alert("원고 연락처를 확인해주세요!");
-    } else if (plaintiffNickname === "") {
-      alert("원고 닉네임을 확인해주세요!");
-    } else if (defendantName === "") {
-      alert("피고 성명을 확인해주세요!");
-    } else if (defendantNickname === "") {
-      alert("피고 닉네임을 확인해주세요!");
-    } else if (defendantAddress === "") {
-      alert("피고 주소를 확인해주세요!");
-    } else if (defendantPhoneNumber === "") {
-      alert("피고 연락처를 확인해주세요!");
-    } else if (incidentDate === "") {
-      alert("사건 발생일을 확인해주세요!");
-    } else if (incidentTime === "") {
-      alert("사건 발생시간을 확인해주세요!");
-    } else if (onlineServiceType === "") {
-      alert("온라인 서비스 종류를 확인해주세요!");
-    } else if (webServiceDetails === "") {
-      alert("웹 서비스 상세정보를 확인해주세요!");
-    } else if (problemSpeech === "") {
-      alert("문제 발언 내용을 확인해주세요!");
-    } else if (reasonsForInsult === "") {
-      alert("모욕사유를 확인해주세요!");
-    } else if (relatedPeopleCount === "") {
-      alert("관련인원 수를 확인해주세요!");
-    } else if (witness1 === "") {
-      alert("증인1을 확인해주세요!");
-    } else if (witness2 === "") {
-      alert("증인2를 확인해주세요!");
-    } else if (witness3 === "") {
-      alert("증인3을 확인해주세요!");
-    } else if (insultDuration === "") {
-      alert("모욕기간을 확인해주세요!");
-    } else if (insultFrequency === "") {
-      alert("모욕빈도를 확인해주세요!");
-    } else if (circumstance === "") {
-      alert("식별 사정을 확인해주세요!");
-    } else if (evidence === "") {
-      alert("증거를 확인해주세요!");
-    } else if (submissionDate === "") {
-      alert("제출일을 확인해주세요!");
-    } else if (policeStationTeam === "") {
-      alert("관할 경찰서/단체를 확인해주세요!");
-    } else {
-      const insultContent = {
-        title: title,
-        plaintiffName: plaintiffName,
-        plaintiffResidentRegistrationNumber: plaintiffRRNumber,
-        plaintiffAddress: plaintiffAddress,
-        plaintiffPhoneNumber: plaintiffPhoneNumber,
-        plaintiffNickname: plaintiffNickname,
-        defendantName: defendantName,
-        defendantNickname: defendantNickname,
-        defendantAddress: defendantAddress,
-        defendantPhoneNumber: defendantPhoneNumber,
-        incidentDate: incidentDate,
-        incidentTime: incidentTime,
-        onlineServiceType: onlineServiceType,
-        webServiceDetails: webServiceDetails,
-        problemSpeech: problemSpeech,
-        reasonsForInsult: reasonsForInsult,
-        relatedPeopleCount: relatedPeopleCount,
-        witness1: witness1,
-        witness2: witness2,
-        witness3: witness3,
-        insultDuration: insultDuration,
-        insultFrequency: insultFrequency,
-        circumstancesForIdentification: circumstance,
-        evidence: evidence,
-        submissionDate: submissionDate,
-        policeStationTeam: policeStationTeam,
-      };
-      await postInsult(accessToken, insultContent)
-        .then(() => {
-          alert("소장 저장이 완료되었습니다");
-          navigate("/mypage/papers");
-        })
-        .catch(() => {
-          alert("저장에 실패하였습니다. 내용을 다시 한 번 확인해주세요");
-        });
-    }
-  }
-
-  // console.log("title:", title);
-  // console.log("plaintiffName:", plaintiffName);
-  // console.log("plaintiffResidentRegistrationNumber:", plaintiffRRNumber);
-  // console.log("plaintiffAddress:", plaintiffAddress);
-  // console.log("plaintiffPhoneNumber:", plaintiffPhoneNumber);
-  // console.log("plaintiffNickname:", plaintiffNickname);
-  // console.log("defendantName:", defendantName);
-  // console.log("defendantNickname:", defendantNickname);
-  // console.log("defendantAddress:", defendantAddress);
-  // console.log("defendantPhoneNumber:", defendantPhoneNumber);
-  // console.log("incidentDate:", incidentDate);
-  // console.log("incidentTime:", incidentTime);
-  // console.log("onlineServiceType:", onlineServiceType);
-  // console.log("webServiceDetails:", webServiceDetails);
-  // console.log("problemSpeech:", problemSpeech);
-  // console.log("reasonsForInsult:", reasonsForInsult);
-  // console.log("relatedPeopleCount:", relatedPeopleCount);
-  // console.log("witness1:", witness1);
-  // console.log("witness2:", witness2);
-  // console.log("witness3:", witness3);
-  // console.log("insultDuration:", insultDuration);
-  // console.log("insultFrequency:", insultFrequency);
-  // console.log("circumstancesForIdentification:", circumstance);
-  // console.log("evidence:", evidence);
-  // console.log("submissionDate:", submissionDate);
-  // console.log("policeStationTeam:", policeStationTeam);
+  useEffect(() => {
+    setSaveData({
+      plaintiffName: plaintiffName,
+      plaintiffResidentRegistrationNumber: plaintiffRRNumber,
+      plaintiffAddress: plaintiffAddress,
+      plaintiffPhoneNumber: plaintiffPhoneNumber,
+      plaintiffNickname: plaintiffNickname,
+      defendantName: defendantName,
+      defendantNickname: defendantNickname,
+      defendantAddress: defendantAddress,
+      defendantPhoneNumber: defendantPhoneNumber,
+      incidentDate: incidentDate,
+      incidentTime: incidentTime,
+      onlineServiceType: onlineServiceType,
+      webServiceDetails: webServiceDetails,
+      problemSpeech: problemSpeech,
+      reasonsForInsult: reasonsForInsult,
+      relatedPeopleCount: relatedPeopleCount,
+      witness1: witness1,
+      witness2: witness2,
+      witness3: witness3,
+      insultDuration: insultDuration,
+      insultFrequency: insultFrequency,
+      circumstancesForIdentification: circumstance,
+      evidence: evidence,
+      submissionDate: submissionDate,
+      policeStationTeam: policeStationTeam,
+    });
+  }, [
+    plaintiffName,
+    plaintiffRRNumber,
+    plaintiffAddress,
+    plaintiffPhoneNumber,
+    plaintiffNickname,
+    defendantName,
+    defendantNickname,
+    defendantAddress,
+    defendantPhoneNumber,
+    incidentDate,
+    incidentTime,
+    onlineServiceType,
+    webServiceDetails,
+    problemSpeech,
+    reasonsForInsult,
+    relatedPeopleCount,
+    witness1,
+    witness2,
+    witness3,
+    insultDuration,
+    insultFrequency,
+    circumstance,
+    evidence,
+    submissionDate,
+    policeStationTeam,
+  ]);
 
   return (
     <div className={style["container"]}>

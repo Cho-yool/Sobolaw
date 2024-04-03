@@ -1,6 +1,11 @@
 import { userAxios } from "./http";
 import { AxiosHeaders } from "axios";
-import { DefamationForm, FraudForm, InsultForm } from "../types/DataTypes";
+import {
+  DefamationForm,
+  FraudForm,
+  InsultForm,
+  submitType,
+} from "../types/DataTypes";
 
 const http = userAxios();
 const headers = new AxiosHeaders();
@@ -24,7 +29,7 @@ async function getLawsuitList(accessToken: string) {
 // const insult = "insult";
 
 // 멤버의 모욕죄 소장 추가
-async function postInsult(accessToken: string, data: InsultForm) {
+async function postInsult(accessToken: string, data: submitType) {
   await http.post(`${url}/insults`, data, {
     headers: {
       "Content-Type": "application/json",
@@ -68,12 +73,14 @@ async function deleteInsult(insultId: number, accessToken: string) {
   });
 }
 
-// // 사기죄
-// const fraud = "fraud";
-
 // 멤버의 사기죄 소장 추가
-async function postFraud(memberId: number, data: FraudForm) {
-  await http.post(`${url}/frauds`, data);
+async function postFraud(accessToken: string, data: FraudForm) {
+  await http.post(`${url}/frauds`, data, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 }
 
 // // 명예훼손죄
