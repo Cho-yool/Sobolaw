@@ -9,7 +9,7 @@ import {
 import { Button, Modal, Divider, Input, message } from "antd";
 import { RootState } from "../../redux/store/store";
 import style from "../../styles/papers/Tab.module.css";
-import { fraudType, submitType } from "../../types/DataTypes";
+import { submitType } from "../../types/DataTypes";
 import { postFraud, postInsult } from "../../api/lawsuit";
 
 interface LawsuitTabProps {
@@ -72,7 +72,7 @@ export default function LawsuitTab({ cates, saveData }: LawsuitTabProps) {
           navigate("/mypage/papers");
         });
       } else if (cates == "사기죄") {
-        const sendData = {
+        const sendData: submitType = {
           ...saveData,
           title: title,
         };

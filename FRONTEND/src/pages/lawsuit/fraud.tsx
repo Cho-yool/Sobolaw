@@ -4,12 +4,7 @@ import LawsuitTab from "../../components/lawsuit/lawsuitTab";
 import FraudA4 from "../../components/lawsuit/fraudA4";
 import FraudMenu from "../../components/lawsuit/fraudMenu";
 import { useEffect, useState } from "react";
-import {
-  FraudDetails,
-  TimeContent,
-  fraudType,
-  submitType,
-} from "../../types/DataTypes";
+import { FraudDetails, submitType } from "../../types/DataTypes";
 
 export default function FraudPage() {
   const [title, setTitle] = useState<string>(""); // 제목
@@ -48,7 +43,7 @@ export default function FraudPage() {
   const [evidenceEtc, setEvidenceEtc] = useState<boolean>(false); // 기타 체크시
   const [evidenceList, setEvidenceList] = useState<string[]>([]); // 출력할 증거리스트
   const [policeStation, setPoliceStation] = useState<string>("");
-  const [saveData, setSaveData] = useState<fraudType>({});
+  const [saveData, setSaveData] = useState<submitType>({});
   const FraudDetails: FraudDetails = {
     title: title,
     setTitle: setTitle,
