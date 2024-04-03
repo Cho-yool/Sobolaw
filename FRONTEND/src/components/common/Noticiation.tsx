@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { Avatar } from "antd";
 import { getMessaging, onMessage } from "firebase/messaging";
 import avatar from "/images/soboro_color.png";
 
 const Notification = () => {
+  const navigate = useNavigate();
   const [notification, setNotification] = useState<{
     title: string;
     body: string;
@@ -31,16 +33,16 @@ const Notification = () => {
     }
   }, [notification]);
 
-  console.log(notification);
   // react-hot-toast를 사용하여 알림을 표시하는 함수
   const notify = () =>
     toast.custom(() => (
       <div
         style={{
           maxWidth: "calc(100vw - 2rem)",
-          width: "100%",
+          width: "50%",
           backgroundColor: "#fff",
           boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+          marginTop: "3rem",
           borderRadius: "8px",
           pointerEvents: "auto",
           border: "1px solid rgba(0, 0, 0, 0.05)",
@@ -62,7 +64,12 @@ const Notification = () => {
               >
                 {notification.title}
               </p>
-              <p style={{ fontSize: "0.875rem", color: "#6B7280" }}>
+              <p
+                style={{ fontSize: "0.875rem", color: "#6B7280" }}
+                onClick={() => {
+                  navigate("/notifications");
+                }}
+              >
                 {notification.body}
               </p>
             </div>
@@ -71,7 +78,7 @@ const Notification = () => {
       </div>
     ));
 
-  return <Toaster />;
+  return <Toaster position="top-right" />;
 };
 
 export default Notification;

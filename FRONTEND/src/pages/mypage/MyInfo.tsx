@@ -12,7 +12,7 @@ import {
 import "../../App.css";
 import style from "../../styles/mypage/MyInfo.module.css";
 import { RootState, AppDispatch } from "../../redux/store/store";
-import { resetAuth } from "../../redux/reducers/user/userSlice";
+import { resetAuth, updateAuth } from "../../redux/reducers/user/userSlice";
 import { MemberInfo, MemberKeyword } from "../../types/DataTypes";
 import { getUserInfo, deleteUser } from "../../api/members";
 import MyKeyword from "../../components/mypage/MyKeyword";
@@ -49,7 +49,7 @@ export default function MyInfo() {
   ];
 
   let buttonText;
-  switch (user.auth) {
+  switch (userInfo?.role) {
     case "ROLE_USER":
       buttonText = "X";
       break;
@@ -63,7 +63,7 @@ export default function MyInfo() {
       buttonText = "요청 승인을 기다리는 중입니다";
       break;
     default:
-      buttonText = ""; // 특별한 역할이 없을 경우에 대비하여 기본값을 설정합니다.
+      buttonText = "요청 승인을 기다리는 중입니다"; // 특별한 역할이 없을 경우에 대비하여 기본값을 설정합니다.
   }
 
   useEffect(() => {
@@ -87,7 +87,10 @@ export default function MyInfo() {
       setDirectKeyword(direct);
       setRelatedKeyword(related);
     }
-  }, [userInfo]); // userInfo가 업데이트될 때마다 실행됨
+    if (userInfo && userInfo.role != user.auth) {
+      dispatch(updateAuth(userInfo.role));
+    }
+  }, [userInfo, dispatch]); // userInfo가 업데이트될 때마다 실행됨
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -107,6 +110,9 @@ export default function MyInfo() {
 
   const handleApplyOkUpdate = () => {
     setIsApplyModalOpen(false);
+    if (userInfo) {
+      setUserInfo({ ...userInfo, role: "ROLE_WAITING" });
+    }
   };
 
   const handleDetAccount = () => {
@@ -171,7 +177,7 @@ export default function MyInfo() {
                 변호사 전환 신청하기
               </Button> */}
               <div>
-                {user.auth === "ROLE_USER" ? (
+                {userInfo?.role === "ROLE_USER" ? (
                   <>
                     {buttonText}{" "}
                     <Button
@@ -179,7 +185,8 @@ export default function MyInfo() {
                       type="primary"
                       size="small"
                       className={style["mypaper-button"]}
-                      onClick={showApplyModal}>
+                      onClick={showApplyModal}
+                    >
                       전환 신청하기
                     </Button>
                   </>
@@ -195,7 +202,8 @@ export default function MyInfo() {
                   <Button key="submit" onClick={handleApplyOk}>
                     취소
                   </Button>,
-                ]}>
+                ]}
+              >
                 <Divider />
                 <ApplyLawyer onUpdate={handleApplyOkUpdate} />
               </Modal>
@@ -221,7 +229,8 @@ export default function MyInfo() {
                   title={
                     "내가 저장한 판례를 바탕으로 관련 높은 키워드를 보여드려요!"
                   }
-                  arrow={true}>
+                  arrow={true}
+                >
                   <QuestionCircleOutlined />
                 </Tooltip>
               </div>
@@ -232,7 +241,8 @@ export default function MyInfo() {
                       bordered={false}
                       closable
                       color={tagColors[index]}
-                      style={{ fontSize: "1rem" }}>
+                      style={{ fontSize: "1rem" }}
+                    >
                       {item.word}
                     </Tag>
                   ))}
@@ -254,7 +264,8 @@ export default function MyInfo() {
                   onClick={() => {
                     navigate("/search");
                   }}
-                  style={{ color: "#BF8438" }}>
+                  style={{ color: "#BF8438" }}
+                >
                   소보로 친구들이 많이 찾은 판례 보러가기
                 </Button>
               </div>
@@ -277,10 +288,12 @@ export default function MyInfo() {
                   key="submit"
                   type="primary"
                   danger
-                  onClick={handleDetAccount}>
+                  onClick={handleDetAccount}
+                >
                   탈퇴하기
                 </Button>,
-              ]}>
+              ]}
+            >
               <Divider />
               <p>
                 탈퇴 시 모든 회원정보는 삭제되며, 저장했던 자료들은 복구되지

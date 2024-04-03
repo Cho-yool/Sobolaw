@@ -5,6 +5,7 @@ export type UserState = {
   refreshToken: string;
   precedents: number[];
   auth: string;
+  alertCount: number;
 };
 
 export type MypaperWide = {
