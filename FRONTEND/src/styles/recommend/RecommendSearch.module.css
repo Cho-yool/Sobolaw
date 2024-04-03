@@ -116,6 +116,7 @@
   text-transform: uppercase;
   letter-spacing: 2px;
   background: #ccc;
+  cursor: pointer;
 }
 
 .submitButton:before {

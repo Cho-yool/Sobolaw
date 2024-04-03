@@ -14,7 +14,7 @@ import ko_KR from "antd/es/locale/ko_KR";
 
 const theme = {
   token: {
-    fontFamily: "NPSfontRegular, sans-serif",
+    fontFamily: "NPSfontRegular",
     Tabs: {
       itemColor: "#aaaaaa",
       itemActiveColor: "#E0B88A",
@@ -22,7 +22,6 @@ const theme = {
       itemSelectedColor: "#E0B88A",
       inkBarColor: "#E0B88A",
       titleFontSize: "18px",
-      horizontalMargin: "20px auto",
       algorithm: true,
     },
   },

@@ -1,5 +1,5 @@
-import React, { useState, ReactNode } from "react";
-import { Select, Input, Button, Steps } from "antd";
+import React, { useState, ReactNode, useRef } from "react";
+import { Select, Input, Steps } from "antd";
 import {
   ClusterOutlined,
   HomeOutlined,
@@ -124,38 +124,46 @@ const RecommendSearch: React.FC = () => {
     },
   ];
 
+
   const handleSubmit = async () => {
     const situation = `${selectedCaseType} ${stepTwoValue} ${stepThreeValue} ${stepFourValue}`;
-
-    setIsLoading(true); // 로딩 상태를 true로 설정
-    setProgress(0); // 진행률을 0으로 초기화
-
+  
+    setIsLoading(true);
+    setProgress(0);
+  
+    let loadingCompleted = false;
+  
+    const interval = setInterval(() => {
+      setProgress((prevProgress) => {
+        if (prevProgress >= 100) {
+          loadingCompleted = true;
+          clearInterval(interval);
+          return 100;
+        }
+        return prevProgress + 1;
+      });
+    }, 70);
+  
     try {
-      // simulateLoadingProcess(); // 로딩 프로세스를 시뮬레이션하는 함수 호출
       const searchResults = await searchPrecedents(situation);
-      // TODO: 검색 결과 페이지로 이동
-      // 예: 결과 페이지로 이동하면서 검색 결과 데이터 전달
-
-      const interval = setInterval(() => {
-        setProgress((prevProgress) => {
-          if (prevProgress >= 100) {
-            clearInterval(interval);
-            // 로딩이 100%에 도달한 후 1.5초 기다린 다음 결과 페이지로 이동
-            setTimeout(() => {
-              setIsLoading(false);
-              window.scrollTo(0, 0);
-              navigate("/recommend-results", {
-                state: { searchResults: searchResults.data },
-              });
-            }, 1500);
-            return 100;
-          }
-          return prevProgress + 1;
-        });
-      }, 70);
+  
+      const loadingTimeout = setTimeout(() => {
+        if (loadingCompleted) {
+          setIsLoading(false);
+          window.scrollTo(0, 0);
+          navigate("/recommend-results", {
+            state: { searchResults: searchResults.data },
+          });
+        }
+      }, 5000);
+  
+      return () => {
+        clearTimeout(loadingTimeout);
+      };
     } catch (error) {
       console.error("검색 중 오류가 발생하였습니다", error);
       setIsLoading(false);
+      clearInterval(interval);
     }
   };
 
