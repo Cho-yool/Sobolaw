@@ -176,7 +176,7 @@
     .maskedImage {
       position: absolute;
       width: 60%; /* 이미지 크기, 필요에 따라 조정 */
-      max-width: 400px; /* 최대 너비 */
+      max-width: 450px; /* 최대 너비 */
       overflow: hidden;
 }
 

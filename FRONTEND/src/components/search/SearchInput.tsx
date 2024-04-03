@@ -94,13 +94,14 @@ const SearchInput: React.FC = () => {
         <CountUp end={270222} duration={4} separator="," />
         건의 법률 데이터를 찾아보세요.
       </h3>
-      <Tabs
-        defaultActiveKey={activeTab}
-        onChange={onTabChange}
-        items={tabItems}
-        tabBarGutter={60}
-        className={style.tabContainer}
-      />
+      <div className={style.tabContainer}>
+        <Tabs
+          defaultActiveKey={activeTab}
+          onChange={onTabChange}
+          items={tabItems}
+          tabBarGutter={50}
+        />
+      </div>
       <AutoComplete
         value={searchTerm}
         options={renderOptions()}

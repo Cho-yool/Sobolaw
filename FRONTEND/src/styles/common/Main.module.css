@@ -46,6 +46,7 @@ strong {
 .box1-content-title-left-content {
   white-space: pre-line;
   font-size: 1.5rem;
+  line-height: 1.5;
 }
 
 /* 이 아래부분 수정함 */
@@ -72,6 +73,7 @@ strong {
   flex-direction: column;
   position: relative;
   cursor: pointer;
+  line-height: 1.5;
 }
 
 /* 화살표 호버시 속성 */
@@ -254,6 +256,7 @@ strong {
   padding: 40px;
   opacity: 1;
   transition: opacity 0.2s ease; /* 투명도 전환 효과 추가 */
+  line-height: 1.5;
 }
 
 /* .image-card에 hover될 때 .image-card-text의 투명도를 1로 설정하여 텍스트 표시 */
