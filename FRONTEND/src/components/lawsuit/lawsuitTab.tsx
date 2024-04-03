@@ -14,7 +14,7 @@ import { postFraud, postInsult } from "../../api/lawsuit";
 
 interface LawsuitTabProps {
   cates: string;
-  saveData: submitType;
+  saveData?: submitType;
 }
 
 export default function LawsuitTab({ cates, saveData }: LawsuitTabProps) {
