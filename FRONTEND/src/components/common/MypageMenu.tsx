@@ -24,7 +24,7 @@ const MypageMenu: React.FC<RightMenuProps> = ({
 
   return (
     <Menu
-      style={{ width: "83px" }}
+      style={{ width: "85px" }}
       mode={mode}
       selectedKeys={selectedSubKeys}
       onSelect={subClickHandler}
