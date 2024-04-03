@@ -119,8 +119,11 @@ const LawCaseTabs = ({
         const modifiedText = text;
         let renderingText = "";
         highLightLists.forEach((targetText) => {
-          if (modifiedText.includes(targetText.content)) {
-            renderingText = targetText.main;
+          if (
+            modifiedText.replace(/\n/g, " ").trim().includes(targetText.content)
+          ) {
+            renderingText = targetText.main.replace(/\n/g, " ").trim();
+            console.log(renderingText);
           }
         });
 
@@ -132,8 +135,7 @@ const LawCaseTabs = ({
                 <p
                   dangerouslySetInnerHTML={{
                     __html: renderingText.replace(/\n/g, " ").trim(),
-                  }}
-                ></p>
+                  }}></p>
                 <div className={style["block"]}></div>
               </>
             ) : (
@@ -240,33 +242,63 @@ const LawCaseTabs = ({
             dispatch(
               updatePrecedents([...user.precedents, getData.precedentId])
             );
-            saveHighLight(
-              {
-                precedentId: getData.precedentId,
-                main: selectionPos.commonAncestorContainer.outerHTML,
-                highlightType: value,
-                startPoint: selectionPos.startOffset,
-                endPoint: selectionPos.endOffset,
-                content: selectionPos.toString(),
-              },
-              user.accessToken
-            );
+            if (selectionPos.commonAncestorContainer.nodeName === "SPAN") {
+              saveHighLight(
+                {
+                  precedentId: getData.precedentId,
+                  main: selectionPos.commonAncestorContainer.parentElement
+                    .outerHTML,
+                  highlightType: value,
+                  startPoint: selectionPos.startOffset,
+                  endPoint: selectionPos.endOffset,
+                  content: selectionPos.toString(),
+                },
+                user.accessToken
+              );
+            } else {
+              saveHighLight(
+                {
+                  precedentId: getData.precedentId,
+                  main: selectionPos.commonAncestorContainer.outerHTML,
+                  highlightType: value,
+                  startPoint: selectionPos.startOffset,
+                  endPoint: selectionPos.endOffset,
+                  content: selectionPos.toString(),
+                },
+                user.accessToken
+              );
+            }
           });
           setIsSaved(true);
         };
         fetchData();
       } else {
-        saveHighLight(
-          {
-            precedentId: getData.precedentId,
-            main: selectionPos.commonAncestorContainer.outerHTML,
-            highlightType: value,
-            startPoint: selectionPos.startOffset,
-            endPoint: selectionPos.endOffset,
-            content: selectionPos.toString(),
-          },
-          user.accessToken
-        );
+        if (selectionPos.commonAncestorContainer.nodeName === "SPAN") {
+          saveHighLight(
+            {
+              precedentId: getData.precedentId,
+              main: selectionPos.commonAncestorContainer.parentElement
+                .outerHTML,
+              highlightType: value,
+              startPoint: selectionPos.startOffset,
+              endPoint: selectionPos.endOffset,
+              content: selectionPos.toString(),
+            },
+            user.accessToken
+          );
+        } else {
+          saveHighLight(
+            {
+              precedentId: getData.precedentId,
+              main: selectionPos.commonAncestorContainer.outerHTML,
+              highlightType: value,
+              startPoint: selectionPos.startOffset,
+              endPoint: selectionPos.endOffset,
+              content: selectionPos.toString(),
+            },
+            user.accessToken
+          );
+        }
       }
     }
   };
@@ -334,8 +366,7 @@ const LawCaseTabs = ({
                 ? `${style["tab"]} ${style["active"]}`
                 : style["tab"]
             }
-            onClick={() => handleTabClick(tab.id)}
-          >
+            onClick={() => handleTabClick(tab.id)}>
             <p className={style["tab-title"]}>{tab.title}</p>
           </div>
         ))}
@@ -361,8 +392,7 @@ const LawCaseTabs = ({
         className={style["content-box__contents"]}
         dangerouslySetInnerHTML={{
           __html: getData.judicialNotice,
-        }}
-      ></p>
+        }}></p>
       <br />
       <br />
       <p className={style["tab-menu__title"]} ref={rulingRef}>
@@ -374,8 +404,7 @@ const LawCaseTabs = ({
         className={style["content-box__contents"]}
         dangerouslySetInnerHTML={{
           __html: getData.verdictSummary,
-        }}
-      ></p>
+        }}></p>
       <br />
       <br />
       <p className={style["tab-menu__title"]} ref={precedentRef}>
@@ -388,8 +417,7 @@ const LawCaseTabs = ({
           isEditMode
             ? `${style["tab-menu__summary"]}  ${style["edit-mode"]}`
             : `${style["tab-menu__summary"]}`
-        }
-      >
+        }>
         <div className={style["tab-menu__summary__btn"]}>
           <p>요약 보기</p>
           <Switch
@@ -404,8 +432,7 @@ const LawCaseTabs = ({
                 width: "100%",
                 display: "flex",
                 justifyContent: "center",
-              }}
-            >
+              }}>
               <Spin size="large" />
             </div>
           ) : (
@@ -413,16 +440,14 @@ const LawCaseTabs = ({
               className={style["content-box__contents"]}
               dangerouslySetInnerHTML={{
                 __html: summaryData,
-              }}
-            ></p>
+              }}></p>
           )
         ) : (
           <div
             className={style["content-box__contents"]}
             onMouseDown={onMouseClickHandler}
             onMouseMove={onMouseMoveHandler}
-            onMouseUp={onMouseOutHandler}
-          >
+            onMouseUp={onMouseOutHandler}>
             {" "}
             {newRenderText ? <>{newRenderText}</> : null}
           </div>
