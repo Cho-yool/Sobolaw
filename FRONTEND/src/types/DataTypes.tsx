@@ -178,7 +178,7 @@ export type InsultForm = {
 };
 
 export type submitType = {
-  title?: string | undefined;
+  title?: string;
   contactDate?: string;
   contactTime?: string;
   tradeSite?: string;
@@ -215,30 +215,6 @@ export type submitType = {
   evidence?: string;
   submissionDate?: string;
   policeStationTeam?: string;
-};
-
-export type fraudType = {
-  title: string;
-  plaintiffName: string;
-  plaintiffResidentRegistrationNumber: string;
-  plaintiffAddress: string;
-  plaintiffPhoneNumber: string;
-  defendantName: string;
-  defendantAddress: string;
-  defendantPhoneNumber: string;
-  contactDate: string;
-  contactTime: string;
-  tradeSite: string;
-  tradedItem: string;
-  depositDate: string;
-  depositTime: string;
-  depositAmount: 0;
-  contactMethod: string;
-  isCashDeposit: boolean;
-  bankName: string;
-  accountNumber: string;
-  evidence: string;
-  policeStationTeam: string;
 };
 
 export interface TimeContent {

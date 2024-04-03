@@ -1,11 +1,6 @@
 import { userAxios } from "./http";
 import { AxiosHeaders } from "axios";
-import {
-  DefamationForm,
-  FraudForm,
-  InsultForm,
-  submitType,
-} from "../types/DataTypes";
+import { DefamationForm, InsultForm, submitType } from "../types/DataTypes";
 
 const http = userAxios();
 const headers = new AxiosHeaders();
@@ -74,7 +69,7 @@ async function deleteInsult(insultId: number, accessToken: string) {
 }
 
 // 멤버의 사기죄 소장 추가
-async function postFraud(accessToken: string, data: FraudForm) {
+async function postFraud(accessToken: string, data: submitType) {
   await http.post(`${url}/frauds`, data, {
     headers: {
       "Content-Type": "application/json",
