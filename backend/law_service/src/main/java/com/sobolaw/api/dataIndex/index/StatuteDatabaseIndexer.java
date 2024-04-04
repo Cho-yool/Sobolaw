@@ -24,7 +24,8 @@ public class StatuteDatabaseIndexer {
     private static final Logger logger = LoggerFactory.getLogger(StatuteDatabaseIndexer.class);
     private final JdbcTemplate jdbcTemplate;
     private final RestClient restClient;
-    private final ObjectMapper objectMapper = new ObjectMapper(); // ObjectMapper 인스턴스 추가
+    private final ObjectMapper objectMapper;
+
 
     public void ensureIndexWithSettingsAndMappings() throws IOException {
         Resource resource = new ClassPathResource("elastic/statute-setting-mapping.json");
@@ -34,9 +35,19 @@ public class StatuteDatabaseIndexer {
             // 인덱스 생성 요청
             Request request = new Request("PUT", "/statute_index");
             request.setJsonEntity(settingsAndMappingsJson);
-            restClient.performRequest(request);
-            logger.info("Index statute_index created with custom settings and mappings.");
+            Response response = restClient.performRequest(request);
+            logger.info("Index statute_index created with custom settings and mappings.Response: " + response.getStatusLine().getStatusCode());
         } catch (ResponseException e) {
+            String responseBody = "";
+            try {
+                // Response 본문을 문자열로 변환
+                responseBody = EntityUtils.toString(e.getResponse().getEntity());
+            } catch (IOException ioException) {
+                logger.error("Error reading response body", ioException);
+            }
+            logger.error("Failed to create index statute_index. Status: " + e.getResponse().getStatusLine().getStatusCode());
+            logger.error("Response body: " + responseBody);
+
             if (e.getResponse().getStatusLine().getStatusCode() == 400) {
                 // 인덱스가 이미 존재하는 경우의 처리
                 logger.info("Index statute_index already exists.");

@@ -12,13 +12,23 @@
           "type": "ngram",
           "min_gram": 2,
           "max_gram": 3
+        },
+        "synonym_filter": {
+          "type": "synonym",
+          "synonyms": [
+            "사기 => 사기, 전세사기, 중고사기"
+          ]
+        },
+        "stopword_filter": {
+          "type": "stop",
+          "stopwords": ["보조반사기", "후방반사기", "조사기획관"]
         }
       },
       "analyzer": {
         "nori_ngram_analyzer": {
           "type": "custom",
           "tokenizer": "nori_tokenizer_mixed",
-          "filter": ["ngram_filter"]
+          "filter": ["synonym_filter", "lowercase", "ngram_filter", "stopword_filter"]
         }
       }
     }

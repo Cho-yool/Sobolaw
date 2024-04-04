@@ -34,9 +34,19 @@ public class PrecedentDatabaseIndexer {
             // 인덱스 생성 요청
             Request request = new Request("PUT", "/precedent_index");
             request.setJsonEntity(settingsAndMappingsJson);
-            restClient.performRequest(request);
-            logger.info("Index precedent_index created with custom settings and mappings.");
+            Response response = restClient.performRequest(request);
+            logger.info("Index precedent_index created with custom settings and mappings. Response: " + response.getStatusLine().getStatusCode());
         } catch (ResponseException e) {
+            String responseBody = "";
+            try {
+                // Response 본문을 문자열로 변환
+                responseBody = EntityUtils.toString(e.getResponse().getEntity());
+            } catch (IOException ioException) {
+                logger.error("Error reading response body", ioException);
+            }
+            logger.error("Failed to create index precedent_index. Status: " + e.getResponse().getStatusLine().getStatusCode());
+            logger.error("Response body: " + responseBody);
+
             if (e.getResponse().getStatusLine().getStatusCode() == 400) {
                 // 인덱스가 이미 존재하는 경우의 처리
                 logger.info("Index precedent_index already exists.");

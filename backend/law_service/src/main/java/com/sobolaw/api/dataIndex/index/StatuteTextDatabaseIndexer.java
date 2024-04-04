@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
+import org.apache.http.util.EntityUtils;
 import org.elasticsearch.client.Request;
 import org.elasticsearch.client.Response;
 import org.elasticsearch.client.ResponseException;
@@ -34,9 +35,19 @@ public class StatuteTextDatabaseIndexer {
             // 인덱스 생성 요청
             Request request = new Request("PUT", "/statutetext_index");
             request.setJsonEntity(settingsAndMappingsJson);
-            restClient.performRequest(request);
-            logger.info("Index statutetext_index created with custom settings and mappings.");
+            Response response = restClient.performRequest(request);
+            logger.info("Index statutetext_index created with custom settings and mappings. Response: " + response.getStatusLine().getStatusCode());
         } catch (ResponseException e) {
+            String responseBody = "";
+            try {
+                // Response 본문을 문자열로 변환
+                responseBody = EntityUtils.toString(e.getResponse().getEntity());
+            } catch (IOException ioException) {
+                logger.error("Error reading response body", ioException);
+            }
+            logger.error("Failed to create index statutetext_index. Status: " + e.getResponse().getStatusLine().getStatusCode());
+            logger.error("Response body: " + responseBody);
+
             if (e.getResponse().getStatusLine().getStatusCode() == 400) {
                 // 인덱스가 이미 존재하는 경우의 처리
                 logger.info("Index statutetext_index already exists.");
