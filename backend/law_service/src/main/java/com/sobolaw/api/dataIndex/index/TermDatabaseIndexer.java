@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
+import org.apache.http.util.EntityUtils;
 import org.elasticsearch.client.Request;
 import org.elasticsearch.client.Response;
 import org.elasticsearch.client.ResponseException;
